@@ -43,7 +43,7 @@ public class Toolbox extends JInternalFrame {
 				setSize(600,500);
 				setLocation(xOffset * toolCounter, yOffset * toolCounter);
 				setVisible(true);
-//				add(tool);
+				add(tool);
 			}
 		});
 	}

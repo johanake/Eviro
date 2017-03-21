@@ -29,7 +29,7 @@ public class Client {
 				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				window.setVisible(true);
 				window.setJMenuBar(new Menu()); // Example, might not be instantiated like this. 
-				window.add(new Toolbox("Tool 1", null)); // Example, will not be instantiated like this. 
+				window.add(new Toolbox("Tool 1", new Tool())); // Example, will not be instantiated like this. 
 				window.add(new Toolbox("Tool 2", null)); // Example, will not be instantiated like this. 
 				window.add(new Toolbox("Tool 3", null)); // Example, will not be instantiated like this. 
 			}
