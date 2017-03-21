@@ -1,4 +1,11 @@
 *.class
+/bin/
+/doc/
+*.log
+*.lck
+*.1
+*.2
+*.3
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
