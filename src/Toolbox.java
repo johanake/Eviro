@@ -1,3 +1,5 @@
+import java.awt.Dimension;
+
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -40,10 +42,11 @@ public class Toolbox extends JInternalFrame {
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				setSize(600,500);
 				setLocation(xOffset * toolCounter, yOffset * toolCounter);
-				setVisible(true);
+				setMinimumSize(new Dimension(300,300));
 				add(tool);
+				pack();
+				setVisible(true);
 			}
 		});
 	}
