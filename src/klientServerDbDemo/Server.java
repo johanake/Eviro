@@ -2,60 +2,59 @@ package klientServerDbDemo;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Server extends Thread{
+public class Server extends Thread  {
+	private Controller controller;
 	private ServerSocket serverSocket;
-	private HashMap<String, Connection> connections;
-	private ArrayList<Message> messages;
-	
-	public Server() throws IOException {
-		serverSocket = new ServerSocket(1234);
-		connections = new HashMap<String,Connection>();
-		messages = new ArrayList<Message>();
-		this.start();
+	private HashMap<String, SocketConnection> socketConnections;
+
+	public Server(Controller controller) {
+		this.controller = controller;
+		try {
+			serverSocket = new ServerSocket(1234);
+			setSocketConnections(new HashMap<String, SocketConnection>());
+			this.start();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public void run(){
-		System.out.println("Server running"); 
-		while(true) {
+	public void run() {
+		System.out.println("Server running");
+		while (true) {
 			try {
 				Socket socket = serverSocket.accept();
-				Connection con = new Connection(socket, this);
-				System.out.println("ny connection skapad");
-			} catch(IOException e) 
-				{ System.err.println(e);
-				} 
-		}	
-	}
-	
-	public HashMap<String, Connection> getConnections() {
-		return connections;
-	}
-	
-	public void setConnections(HashMap<String, Connection> connections) {
-		this.connections = connections;
-	}
-	
-
-	public ServerSocket getServerSocket() {
-		return serverSocket;
+				SocketConnection con = new SocketConnection(socket, this);
+				String user = con.getUser();
+				socketConnections.put(user, con);
+				System.out.println("ny connection skapad: " + user);
+			} catch (IOException e) {
+				System.err.println(e);
+			}
+		}
 	}
 
-	public void setServerSocket(ServerSocket serverSocket) {
-		this.serverSocket = serverSocket;
+	public HashMap<String, SocketConnection> getSocketConnections() {
+		return socketConnections;
 	}
 
-	public ArrayList<Message> getMessages() {
-		return messages;
+	public void setSocketConnections(HashMap<String, SocketConnection> socketConnections) {
+		this.socketConnections = socketConnections;
 	}
 
-	public void setMessages(ArrayList<Message> messages) {
-		this.messages = messages;
+	public Controller getController() {
+		return controller;
 	}
 
-	public static void main(String[] args) throws IOException{
-		new Server();
+	public void setController(Controller controller) {
+		this.controller = controller;
 	}
+
+
+
+
+
 }
