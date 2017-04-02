@@ -21,6 +21,7 @@ public class Client extends Thread {
 	private Socket socket;
 	private ObjectOutputStream oos;
 	private DataOutputStream dos; 
+	
 	public Client(String name, String ipAddress, int serverPort) {
 		this.name = name;
 		this.ipAddress = ipAddress;
