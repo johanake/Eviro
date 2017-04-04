@@ -47,17 +47,7 @@ public class ClientController {
 				window.setMinimumSize(new Dimension(800, 600));
 				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				window.setVisible(true);
-
 				window.setJMenuBar(new Menu()); 
-//				desktop.add(new Toolbox("Tool 1", new Tool())); 
-				desktop.add(new Toolbox("Tool 2", new Demotool(), false)); 
-//				desktop.add(new Toolbox("Tool 3", new Tool())); 
-
-				desktop.add(new Toolbox("Create Costumer", new SearchCustomerGUI(), false));
-				desktop.add(new Toolbox("Invoice", new InvoiceGUI(), true));
-
-
-				
 
 			}
 		});
@@ -163,13 +153,13 @@ public class ClientController {
 		
 		private JPanel createComponentPanel(JComponent[] objects, String title) {
 			
-			JPanel pnlToolGroup = new JPanel();
+			JPanel pnl = new JPanel();
 			
-			pnlToolGroup.setLayout(new GridLayout(objects.length, 1));
-			pnlToolGroup.setBorder(new TitledBorder(title));
+			pnl.setLayout(new GridLayout(objects.length, 1));
+			pnl.setBorder(new TitledBorder(title));
 			
 			for (JComponent b : objects) {
-				pnlToolGroup.add(b);
+				pnl.add(b);
 				
 				if (b instanceof JButton) {
 					((JButton) b).addActionListener(this);
@@ -177,15 +167,28 @@ public class ClientController {
 				}
 			}
 			
-			return pnlToolGroup;
+			return pnl;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-			JOptionPane.showMessageDialog(null, "You clicked on: " + e.getActionCommand() + "!");
+			System.out.println("You clicked on: " + e.getActionCommand());
 			
+			switch (e.getActionCommand()) {
 			
+			case "Customers":
+				desktop.add(new Toolbox("Create Costumer", new SearchCustomerGUI(), false));
+				break;
+			
+			case "Invoice":
+				desktop.add(new Toolbox("Invoice", new InvoiceGUI(), true));
+				break;
+				
+			default:
+				JOptionPane.showMessageDialog(null, "You clicked on: " + e.getActionCommand() + "!");
+				break;
+			}
 			
 		}
 		
