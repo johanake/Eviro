@@ -46,7 +46,7 @@ public class SocketConnection extends Thread{
 			while (!socket.isClosed()) {
 				try {
 					Object[] data = (Object[]) ois.readObject();
-					System.out.println("meddelande mottaget i server" + data[0]);
+					System.out.println("meddelande mottaget i server");
 					server.getController().getConnectDB().commandHandler(data);
 				} catch (IOException | ClassNotFoundException e) {
 					try {
