@@ -57,6 +57,7 @@ public class SearchCustomerGUI extends JPanel{
 			public void run() {
 				setLayout(new BorderLayout());
 				setPreferredSize(new Dimension(600,300));
+				
 				displayContent();
 				addListeners();
 				setEditable(editable);

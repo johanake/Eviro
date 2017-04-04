@@ -2,14 +2,19 @@ import java.awt.BorderLayout;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+
 
 public class InvoiceGUI extends JPanel{
 	
@@ -43,8 +48,8 @@ public class InvoiceGUI extends JPanel{
 	JButton btnCreate = new JButton("Create");
 	JButton btnAddProduct = new JButton("ADD");
 
-	
-	
+	JTextArea txtPnProducts = new JTextArea();
+
 	
 	public InvoiceGUI(){
 		setLayout(new BorderLayout());
@@ -86,7 +91,29 @@ public class InvoiceGUI extends JPanel{
 		pnlAddProduct.add(txtQuantity);
 		pnlAddProduct.add(btnAddProduct);
 		
+		pnlProduct.add(new JScrollPane(txtPnProducts));
+	
 		
+		addListeners();
+	}
+	
+	private class ButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+
+			if (e.getSource() == btnAddProduct) {			
+				txtPnProducts.append("LOL \n");
+			}
+
+		}
+
+	}
+	
+	public void addListeners() {
+		ButtonListener listener = new ButtonListener();
+		btnAddProduct.addActionListener(listener);
+
 	}
 
 }
+
+

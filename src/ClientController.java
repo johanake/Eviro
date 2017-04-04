@@ -53,7 +53,6 @@ public class ClientController {
 				desktop.add(new Toolbox("Tool 2", new Demotool(), false)); 
 //				desktop.add(new Toolbox("Tool 3", new Tool())); 
 
-				desktop.add(new Toolbox("Create Costumer", new SearchCustomerGUI(), true));
 				desktop.add(new Toolbox("Create Costumer", new SearchCustomerGUI(), false));
 				desktop.add(new Toolbox("Invoice", new InvoiceGUI(), true));
 
