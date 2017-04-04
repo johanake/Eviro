@@ -1,12 +1,16 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -45,9 +49,9 @@ public class ClientController {
 
 				window.setJMenuBar(new Menu()); 
 //				desktop.add(new Toolbox("Tool 1", new Tool())); 
-				desktop.add(new Toolbox("Tool 2", new Demotool())); 
+				desktop.add(new Toolbox("Tool 2", new Demotool(), false)); 
 //				desktop.add(new Toolbox("Tool 3", new Tool())); 
-				desktop.add(new Toolbox("Create Costumer", new SearchCustomerGUI()));
+				desktop.add(new Toolbox("Create Costumer", new SearchCustomerGUI(), true));
 
 
 				
@@ -93,7 +97,7 @@ public class ClientController {
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */
-	private class Sidebar extends JPanel {
+	private class Sidebar extends JPanel implements ActionListener{
 		
 		private JPanel pnlSideNorth = new JPanel();
 		private JPanel pnlSideSouth = new JPanel();
@@ -157,9 +161,23 @@ public class ClientController {
 			
 			for (JComponent b : objects) {
 				pnlToolGroup.add(b);
+				
+				if (b instanceof JButton) {
+					((JButton) b).addActionListener(this);
+					((JButton) b).setActionCommand(((JButton) b).getText());
+				}
 			}
 			
 			return pnlToolGroup;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			JOptionPane.showMessageDialog(null, "You clicked on: " + e.getActionCommand() + "!");
+			
+			
+			
 		}
 		
 	}
