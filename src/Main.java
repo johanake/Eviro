@@ -1,6 +1,5 @@
 /**
- * Contains constants and code to setup and instantiate the main components of
- * the system.
+ * Contains constants and code to setup and instantiate the main components of the system.
  * 
  * @author Robin Overgaard
  * @version 0.1
@@ -23,8 +22,8 @@ public class Main {
 	 */
 	private void start() {
 
-		new Client();
-		// new Server();
+		new Server(3500);
+		new Client("127.0.0.1", 3500);
 
 	}
 
@@ -35,5 +34,5 @@ public class Main {
 		app.start();
 
 	}
-	
+
 }
