@@ -26,9 +26,9 @@ public class Toolbox extends JInternalFrame {
 	 * @param title title of the tool
 	 * @param tool panel containt toll specifics
 	 */
-	public Toolbox(String title, JPanel tool) {
+	public Toolbox(String title, JPanel tool, boolean resizable) {
 		
-		super(title, true, true, true, true);
+		super(title, resizable, true, false, true);
 		
 		this.tool = tool;
 		this.toolCounter = ++globalToolCounter;
