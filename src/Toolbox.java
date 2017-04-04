@@ -16,6 +16,7 @@ public class Toolbox extends JInternalFrame {
 	static final int xOffset = 50, yOffset = 50;
 	
 	//HEJ HEJ
+	//Hej hej igen haha
 	
 	private int toolCounter;
 	private JPanel tool;
