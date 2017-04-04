@@ -42,10 +42,15 @@ public class ClientController {
 				window.setMinimumSize(new Dimension(800, 600));
 				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				window.setVisible(true);
+
 				window.setJMenuBar(new Menu()); 
 //				desktop.add(new Toolbox("Tool 1", new Tool())); 
 				desktop.add(new Toolbox("Tool 2", new Demotool())); 
 //				desktop.add(new Toolbox("Tool 3", new Tool())); 
+				desktop.add(new Toolbox("Create Costumer", new SearchCustomerGUI()));
+
+
+				
 
 			}
 		});
