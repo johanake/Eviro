@@ -26,6 +26,7 @@ import javax.swing.border.TitledBorder;
  */
 
 public class ClientController {
+	private JDesktopPane desktop;
 
 	/**
 	 * Constructs the client, instantiates a new main workspace window.
@@ -38,7 +39,7 @@ public class ClientController {
 				setSystemLookAndFeel();
 				JFrame window = new JFrame(Main.APP_NAME + " " + Main.APP_VERSION);
 				JPanel pnlMain = new JPanel(new BorderLayout());
-				JDesktopPane desktop = new JDesktopPane();
+				desktop = new JDesktopPane();
 				pnlMain.add(desktop, BorderLayout.CENTER);
 				pnlMain.add(new Sidebar(), BorderLayout.WEST);
 				window.setContentPane(pnlMain);
@@ -51,7 +52,10 @@ public class ClientController {
 //				desktop.add(new Toolbox("Tool 1", new Tool())); 
 				desktop.add(new Toolbox("Tool 2", new Demotool(), false)); 
 //				desktop.add(new Toolbox("Tool 3", new Tool())); 
+
 				desktop.add(new Toolbox("Create Costumer", new SearchCustomerGUI(), true));
+				desktop.add(new Toolbox("Create Costumer", new SearchCustomerGUI()));
+				desktop.add(new Toolbox("Invoice", new InvoiceGUI()));
 
 
 				
@@ -59,6 +63,12 @@ public class ClientController {
 			}
 		});
 
+	}
+	
+	// Lägga desktop som instansvariabel så kan vi starta rutor via metodanrop??? /JÅ
+	public void showCreateCustomer(){
+		
+		
 	}
 
 	
