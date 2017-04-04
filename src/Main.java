@@ -1,3 +1,5 @@
+import server.Server;
+
 /**
  * Contains constants and code to setup and instantiate the main components of the system.
  * 
