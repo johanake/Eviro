@@ -32,7 +32,8 @@ public class Menu extends JMenuBar implements ActionListener {
 	 */
 	private void setupMenu() {
 		
-		JMenu menu = new JMenu("Menu");
+		JMenu menu = new JMenu("Menu");		
+
 
 		JMenuItem menuItem = new JMenuItem("Option");
 		menuItem.setActionCommand("Option");
