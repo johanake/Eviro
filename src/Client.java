@@ -22,7 +22,7 @@ public class Client {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				setSystemLookAndFeel();
-				Window window = new Window(Main.APP_NAME + " " + Main.APP_VERSION);
+				JFrame window = new JFrame(Main.APP_NAME + " " + Main.APP_VERSION);
 				window.setExtendedState(JFrame.MAXIMIZED_BOTH);
 				window.setContentPane(new JDesktopPane());
 				window.setMinimumSize(new Dimension(800, 600));
