@@ -32,7 +32,7 @@ public class ClientController {
 				window.add(new Toolbox("Tool 1", new Tool())); // Example, will not be instantiated like this. 
 				window.add(new Toolbox("Tool 2", new Demotool())); // Example, will not be instantiated like this. 
 				window.add(new Toolbox("Tool 3", new Tool())); // Example, will not be instantiated like this.
-				window.add(new Toolbox("Johan", new SearchCustomerGUI()));
+				window.add(new Toolbox("Create Costumer", new SearchCustomerGUI()));
 			}
 		});
 

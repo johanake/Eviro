@@ -4,19 +4,22 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 
 public class SearchCustomerGUI extends JPanel{
+	
 	JPanel pnlLeft = new JPanel(new GridLayout(7, 1));
 	JPanel pnlMiddle = new JPanel(new GridLayout(7, 1));
 	JPanel pnlRight = new JPanel(new GridLayout(7, 1));
 	JPanel pnlZipTown = new JPanel(new GridLayout(1, 2));
-	JPanel empty = new JPanel();
 	
 	JLabel lblCustomerID = new JLabel("Customer ID: ");
 	JLabel lblname = new JLabel("Name: ");
@@ -25,14 +28,15 @@ public class SearchCustomerGUI extends JPanel{
 	JLabel lblPhoneNbr = new JLabel("Phone number: ");
 	JLabel lblEmail = new JLabel("Email: ");
 	JLabel lblVatNbr = new JLabel("Vat-number: ");
+	JLabel lblCreditLimit = new JLabel("5000", SwingConstants.CENTER);
 
 	
-	JTextField txtcustomerID = new JTextField("CustomerID");
-	JTextField txtname = new JTextField("Name");
-	JTextField txtaddress = new JTextField("Address");
-	JTextField txtzipCode = new JTextField("ZipCode");
-	JTextField txttown = new JTextField("Town");
-	JTextField txtphoneNbr = new JTextField("Phonenumber");
+	JTextField txtCustomerID = new JTextField("CustomerID");
+	JTextField txtName = new JTextField("Name");
+	JTextField txtAddress = new JTextField("Address");
+	JTextField txtZipCode = new JTextField("ZipCode");
+	JTextField txtTown = new JTextField("Town");
+	JTextField txtPhoneNbr = new JTextField("Phonenumber");
 	JTextField txtEmail = new JTextField("Email");
 	JTextField txtVATNbr = new JTextField("VAT-nbr");
 	
@@ -79,16 +83,21 @@ public class SearchCustomerGUI extends JPanel{
 		pnlLeft.add(lblEmail);						
 		pnlLeft.add(lblVatNbr);	
 		
-		pnlMiddle.add(txtcustomerID);
-		pnlMiddle.add(txtname);
-		pnlMiddle.add(txtaddress);
-		pnlMiddle.add(pnlZipTown);		
-		pnlZipTown.add(txtzipCode);
-		pnlZipTown.add(txttown);
-		pnlMiddle.add(txtphoneNbr);	
+		pnlMiddle.add(txtCustomerID);
+		pnlMiddle.add(txtName);
+		pnlMiddle.add(txtAddress);
+		pnlMiddle.add(pnlZipTown);	
+		pnlZipTown.add(txtZipCode);
+		pnlZipTown.add(txtTown);
+		pnlMiddle.add(txtPhoneNbr);	
 		pnlMiddle.add(txtEmail);
 		pnlMiddle.add(txtVATNbr);
 		
+		TitledBorder centerBorder = BorderFactory.createTitledBorder("Credit Limit");
+		centerBorder.setTitleJustification(TitledBorder.CENTER);		
+		lblCreditLimit.setBorder(centerBorder);		
+				
+		pnlRight.add(lblCreditLimit);
 		pnlRight.add(btnClosedInvoice);
 		pnlRight.add(btnOpenInvoice);
 		pnlRight.add(btnCreateInvoice);
@@ -101,12 +110,12 @@ public class SearchCustomerGUI extends JPanel{
 	
 	public void setEditable(Boolean editable){
 		this.editable = editable;
-		txtcustomerID.setEditable(editable);
-		txtname.setEditable(editable);
-		txtaddress.setEditable(editable);
-		txtzipCode.setEditable(editable);
-		txttown.setEditable(editable);
-		txtphoneNbr.setEditable(editable);
+		txtCustomerID.setEditable(editable);
+		txtName.setEditable(editable);
+		txtAddress.setEditable(editable);
+		txtZipCode.setEditable(editable);
+		txtTown.setEditable(editable);
+		txtPhoneNbr.setEditable(editable);
 		txtEmail.setEditable(editable);
 		txtVATNbr.setEditable(editable);
 		
