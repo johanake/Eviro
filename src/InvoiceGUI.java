@@ -16,7 +16,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 
-public class InvoiceGUI extends JPanel{
+public class InvoiceGUI extends JPanel implements Tool {
 	
 	JPanel pnlTop = new JPanel(new GridLayout(1,3));
 	JPanel pnlTopLeft = new JPanel(new GridLayout(6, 1));
@@ -112,6 +112,11 @@ public class InvoiceGUI extends JPanel{
 		ButtonListener listener = new ButtonListener();
 		btnAddProduct.addActionListener(listener);
 
+	}
+
+	@Override
+	public String getTitle() {
+		return null;
 	}
 
 }

@@ -14,7 +14,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-public class SearchCustomerGUI extends JPanel{
+public class SearchCustomerGUI extends JPanel implements Tool {
 	
 	JPanel pnlLeft = new JPanel(new GridLayout(7, 1));
 	JPanel pnlMiddle = new JPanel(new GridLayout(7, 1));
@@ -143,6 +143,11 @@ public class SearchCustomerGUI extends JPanel{
 		ButtonListener listener = new ButtonListener();
 		btnEdit.addActionListener(listener);
 
+	}
+
+	@Override
+	public String getTitle() {
+		return null;
 	}
 
 }

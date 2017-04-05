@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -120,24 +121,19 @@ public class ClientController {
 	 */
 	private class Sidebar extends JPanel implements ActionListener {
 		
+		private ArrayList<Toolbox> activeTools = new ArrayList<Toolbox>();
 		private JPanel pnlSideNorth = new JPanel();
 		private JPanel pnlSideSouth = new JPanel();
 		
-		private JComponent exampleTools[] = new JComponent[] { 
-				new ActionJButton("Customers"), 
-				new ActionJButton("Products"),
-				new ActionJButton("Invoice"), 
-				new ActionJButton("Transactions") };
-		
-		private JComponent exampleTools2[] = new JComponent[] { 
-				new ActionJButton("Products"),
-				new ActionJButton("Adjust"), 
-				new ActionJButton("Stocktake") };
-		
-		private JComponent exampleTools3[] = new JComponent[] { 
-				new ActionJButton("Users"),
-				new ActionJButton("Database"),
-				new ActionJButton("Settings") };
+		private JComponent quick[] = new JComponent[] { 
+				new ActionJButton("Customer", "find_cust"), 
+				new ActionJButton("Invoice", "find_inv"),
+				new ActionJButton("Transaction", "find_trans"), 
+				new ActionJButton("Article", "find_art") };
+
+		private JComponent tools[] = new JComponent[] { 
+				new ActionJButton("Customer", "tool_customer"), 
+				new ActionJButton("Invoice", "tool_invoice") };
 
 		private JComponent exampleInfo[] = new JComponent[] { 
 			
@@ -148,22 +144,23 @@ public class ClientController {
 		
 		private JComponent exampleShortcuts[] = new JComponent[] { 
 				
-				new ActionJButton("Log out"), 
-				new ActionJButton("Shutdown") };
+				new ActionJButton("Settings", "tool_settings"), 
+				new ActionJButton("Quit", "link_exit") };
 		
 		public Sidebar() {
-			
+		
+			setPreferredSize(new Dimension(175,0));
 			setLayout(new BorderLayout());
 			setBorder(new EmptyBorder(10,10,10,10));
 			
 			pnlSideNorth.setLayout(new BoxLayout(pnlSideNorth, BoxLayout.Y_AXIS));
 			pnlSideSouth.setLayout(new BoxLayout(pnlSideSouth, BoxLayout.Y_AXIS));
 			
-			pnlSideNorth.add(createComponentPanel(exampleTools, "Tools"));
-			pnlSideNorth.add(createComponentPanel(exampleTools2, "Storage"));
-			pnlSideNorth.add(createComponentPanel(exampleTools3, "Admin Tools"));
-			pnlSideSouth.add(createComponentPanel(exampleInfo, "Information"));
-			pnlSideSouth.add(createComponentPanel(exampleShortcuts, "Shortcuts"));
+			pnlSideNorth.add(createComponentPanel(tools, "Tools"));
+			pnlSideNorth.add(createComponentPanel(quick, "Find"));
+			
+//			pnlSideSouth.add(createComponentPanel(exampleInfo, "Information"));
+			pnlSideSouth.add(createComponentPanel(exampleShortcuts, "System"));
 			
 			add(pnlSideNorth, BorderLayout.NORTH);
 			add(pnlSideSouth, BorderLayout.SOUTH);
@@ -182,6 +179,7 @@ public class ClientController {
 				if (b instanceof JButton) {
 					((JButton) b).addActionListener(this);
 				}
+				
 			}
 			
 			return pnl;
@@ -189,26 +187,25 @@ public class ClientController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
-			System.out.println("You clicked on: " + e.getActionCommand());
-			
+
 			switch (e.getActionCommand()) {
-			
-			case "Customers":
-				desktop.add(new Toolbox("Create Costumer", new SearchCustomerGUI(), false));
+
+			case "tool_customer":
+				desktop.add(new Toolbox(new SearchCustomerGUI(), false));
 				break;
-			
-			case "Invoice":
-				desktop.add(new Toolbox("Invoice", new InvoiceGUI(), true));
+
+			case "tool_invoice":
+				desktop.add(new Toolbox(new InvoiceGUI(), true));
 				break;
-				
+
+			case "link_exit":
+				System.exit(0);
+				break;
+
 			default:
-				JOptionPane.showMessageDialog(null, "You clicked on: " + e.getActionCommand() + "!");
+				JOptionPane.showMessageDialog(desktop, "You clicked on: " + e.getActionCommand());
 				break;
 			}
-			
 		}
-		
 	}
-
 }
