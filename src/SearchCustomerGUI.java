@@ -51,7 +51,7 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	private boolean editable = false;
 
 	
-	public SearchCustomerGUI(){
+	public SearchCustomerGUI(ClientController clientController){
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -148,6 +148,11 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	@Override
 	public String getTitle() {
 		return null;
+	}
+
+	@Override
+	public boolean getRezizable() {
+		return false;
 	}
 
 }

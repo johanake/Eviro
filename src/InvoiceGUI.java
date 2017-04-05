@@ -51,7 +51,8 @@ public class InvoiceGUI extends JPanel implements Tool {
 	JTextArea txtPnProducts = new JTextArea();
 
 	
-	public InvoiceGUI(){
+	public InvoiceGUI(ClientController clientController){
+		
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(600,300));		
 		pnlTopLeft.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -117,6 +118,11 @@ public class InvoiceGUI extends JPanel implements Tool {
 	@Override
 	public String getTitle() {
 		return null;
+	}
+
+	@Override
+	public boolean getRezizable() {
+		return true;
 	}
 
 }
