@@ -25,10 +25,10 @@ public class Toolbox extends JInternalFrame {
 	 * @param tool panel containt toll specifics
 	 * @param whether the toolbox should be resizable or not
 	 */
-	public Toolbox(JPanel tool, boolean resizable) {
+	public Toolbox(Tool tool, boolean resizable) {
 
-		super(tool.getName(), resizable, true, false, true);
-		this.tool = tool;
+		super(tool.getTitle(), resizable, true, false, true);
+		this.tool = (JPanel) tool;
 //		this.toolCounter = ++globalToolCounter;
 		
 		setup();
