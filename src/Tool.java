@@ -8,11 +8,15 @@
 public interface Tool {
 
 	/**
-	 * Returns the name of the tool
+	 * Returns the name of the tool.
 	 * @return the name of the tool
 	 */
 	public String getTitle();
-	
-	// public String sendDataToClient();
+
+	/**
+	 * Returns whether the tool should be rezizable or not.
+	 * @return whether the tool should be rezizable or not
+	 */
+	public boolean getRezizable();
 
 }
