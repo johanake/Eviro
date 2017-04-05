@@ -12,12 +12,10 @@ import javax.swing.SwingUtilities;
  */
 public class Toolbox extends JInternalFrame {
 
-	static int globalToolCounter = 0;
-	static final int xOffset = 50, yOffset = 50;
+//	static int globalToolCounter = 0;
+//	static final int xOffset = 50, yOffset = 50;
+//	private int toolCounter;
 	
-	//HEJ HEJ
-	
-	private int toolCounter;
 	private JPanel tool;
 
 	/**
@@ -30,22 +28,21 @@ public class Toolbox extends JInternalFrame {
 	public Toolbox(String title, JPanel tool, boolean resizable) {
 		
 		super(title, resizable, true, false, true);
-		
 		this.tool = tool;
-		this.toolCounter = ++globalToolCounter;
+//		this.toolCounter = ++globalToolCounter;
 		
 		setup();
-
+	
 	}
 
 	/**
-	 * Set up UI using the edt. 
+	 * Set up UI using the EDT. 
 	 */
 	private void setup() {
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				setLocation(xOffset * toolCounter, yOffset * toolCounter);
+//				setLocation(xOffset * toolCounter, yOffset * toolCounter);
 				setMinimumSize(new Dimension(300,300));
 				add(tool);
 				pack();

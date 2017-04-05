@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 /**
- * The main menu of the main workspace in the system. 
+ * The main menu of the workspace in the system. 
  * @author Robin Overgaard
  * @version 0.1
  */
