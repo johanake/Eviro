@@ -12,10 +12,13 @@ public class Client extends Thread {
 	private ObjectOutputStream output;
 
 	public Client(String ip, int port) {
-		new ClientController();
+		
+		new GUIController(new ClientController(this));
+		
 		this.ip = ip;
 		this.port = port;
 		connectToServer();
+		
 	}
 
 	private void connectToServer() {
