@@ -6,9 +6,8 @@ import javax.swing.SwingUtilities;
 
 /**
  * Floating container for the tools used in the system.
- * 
  * @author Robin Overgaard
- * @version 0.1
+ * @version 1.0
  */
 public class Toolbox extends JInternalFrame {
 
@@ -20,14 +19,12 @@ public class Toolbox extends JInternalFrame {
 
 	/**
 	 * Constructs a tool, adds generals and tool specifics.
-	 * 
-	 * @param title title of the tool
 	 * @param tool panel containt toll specifics
 	 * @param whether the toolbox should be resizable or not
 	 */
-	public Toolbox(Tool tool, boolean resizable) {
+	public Toolbox(Tool tool) {
 
-		super(tool.getTitle(), resizable, true, false, true);
+		super(tool.getTitle(), tool.getRezizable(), true, false, true);
 		this.tool = (JPanel) tool;
 //		this.toolCounter = ++globalToolCounter;
 		
