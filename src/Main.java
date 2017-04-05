@@ -1,22 +1,23 @@
 import server.Server;
 
 /**
- * Contains constants and code to setup and instantiate the main components of the system.
+ * Contains constants and code to setup and instantiate the system.
  * 
  * @author Robin Overgaard
- * @version 0.1
+ * @version 1.0
  */
 public class Main {
 
 	// Constants
 	public static final String APP_NAME = "Eviro Enterprise System";
 	public static final String APP_VERSION = "v0.1";
+	public static final String APP_ICON = "/eviro_icon.png";
 
 	/**
 	 * Setup system before instantiation.
 	 */
 	private void setup() {
-
+		
 	}
 
 	/**
