@@ -26,9 +26,11 @@ public class ClientController {
 //	}
 	
 	private void send(Object obj) {
-	//	client.sendMessage(obj);
-		Customer c = (Customer)obj; 
-		System.out.println(c.getAdress());
+		
+		client.sendMessage(new Object[]{1,obj});
+		
+//		Customer c = (Customer)obj; 
+//		System.out.println(c.getAdress());
 	}
 
 }
