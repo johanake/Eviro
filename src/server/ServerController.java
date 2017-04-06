@@ -22,15 +22,14 @@ public class ServerController {
 	}
 	
 	public void getMessageFromServer(Object obj) {
-		Object[] data = new Object[2];
-		data[0] = 1;
-		data[1] = obj;
+		Object[] data = (Object[]) obj;
 		commandHandler(data);
 	}
 	
 	private void addCustomer(Object[] data) {
+		Customer c = (Customer) data[1];
 		String commandstring = "INSERT INTO customer (name, adress, postCode, city, phoneNumber, email, organisationNumber, creditLimit) "
-				+ "VALUES (\"" + data[1] + "\")";
+				+ "VALUES (\"" + c.getName() + "\",\"" + c.getAdress() + "\",\"" + c.getZipCode() + "\",\"" + c.getTown() + "\")";
 		
 	}
 

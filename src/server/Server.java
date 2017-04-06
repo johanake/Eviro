@@ -119,7 +119,7 @@ public class Server extends Thread {
 			while (!interrupted()) {
 
 				try {
-					serverController.getMessageFromServer(input.readObject());
+					serverController.(input.readObject());
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
 				}
