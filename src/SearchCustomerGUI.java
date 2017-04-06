@@ -16,6 +16,8 @@ import javax.swing.border.TitledBorder;
 
 public class SearchCustomerGUI extends JPanel implements Tool {
 	
+	public final String TOOL_NAME = "Search Customer/Create";
+	
 	JPanel pnlLeft = new JPanel(new GridLayout(7, 1));
 	JPanel pnlMiddle = new JPanel(new GridLayout(7, 1));
 	JPanel pnlRight = new JPanel(new GridLayout(7, 1));
@@ -48,10 +50,13 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	JButton btnEdit = new JButton("Edit Customer");
 	JButton btnCreate = new JButton("Create Customer");
 	
+	ClientController clientController; 
+	
 	private boolean editable = false;
 
 	
 	public SearchCustomerGUI(ClientController clientController){
+		this.clientController = clientController; 
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -128,11 +133,14 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 
 			if (e.getSource() == btnEdit) {
 				if(editable == false){
+					System.out.println("hej");
 					setEditable(true);
 				}else{
 					setEditable(false);
 				}
 
+			}else if(e.getSource() == btnCreate){
+				clientController.createCustomer(Integer.parseInt(txtCustomerID.getText()), txtName.getText(), txtAddress.getText(), Integer.parseInt(txtZipCode.getText()), txtTown.getText(), txtPhoneNbr.getText(), txtEmail.getText(), Integer.parseInt(txtVATNbr.getText()));
 			}
 
 		}
@@ -142,12 +150,13 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	public void addListeners() {
 		ButtonListener listener = new ButtonListener();
 		btnEdit.addActionListener(listener);
+		btnCreate.addActionListener(listener);
 
 	}
 
 	@Override
 	public String getTitle() {
-		return null;
+		return TOOL_NAME;
 	}
 
 	@Override
