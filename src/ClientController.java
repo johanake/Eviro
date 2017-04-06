@@ -27,6 +27,7 @@ public class ClientController {
 	
 	private void send(Object obj) {
 		client.sendMessage(obj);
+		
 	}
 
 }
