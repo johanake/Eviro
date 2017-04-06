@@ -1,5 +1,6 @@
 package client;
-import server.Server;
+
+import enteties.Customer;
 
 /**
  * Creates and sends objects to the client. 

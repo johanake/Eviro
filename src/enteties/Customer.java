@@ -1,6 +1,4 @@
-
-package client;
-
+package enteties;
 import java.io.Serializable;
 
 /**

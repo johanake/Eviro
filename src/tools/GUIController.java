@@ -1,4 +1,4 @@
-package client;
+package tools;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -21,6 +21,12 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+
+import client.ClientController;
+import client.InvoiceGUI;
+import client.Main;
+import client.Menu;
+import client.Toolbox;
 
 /**
  * Handles client side gui operations of the system.
