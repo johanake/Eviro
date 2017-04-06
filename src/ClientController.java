@@ -28,10 +28,10 @@ public class ClientController {
 	
 	private void send(int operation, Object obj) {
 		
-//		client.sendMessage(new Object[]{operation, obj});
+		client.sendMessage(new Object[]{operation, obj});
 		
-		Customer c = (Customer)obj; 
-		System.out.println(c.getAdress());
+//		Customer c = (Customer)obj; 
+//		System.out.println(c.getAdress());
 	}
 
 }
