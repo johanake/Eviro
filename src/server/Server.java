@@ -24,6 +24,7 @@ public class Server extends Thread {
 	private Logger log = Logger.getLogger("log");
 	private FileHandler fhLog;
 	private SimpleFormatter sfLog = new SimpleFormatter();
+	private ServerController serverController;
 
 	/**
 	 * Sets up the logger and starts the server.
@@ -32,6 +33,7 @@ public class Server extends Thread {
 	 *            The port to which the server will be listening
 	 */
 	public Server(int port) {
+		serverController = new ServerController();
 		try {
 			File logDir = new File("logs");
 			logDir.mkdir();
@@ -114,16 +116,13 @@ public class Server extends Thread {
 		public void run() {
 
 			log.info("Client Connected from " + socket.getLocalAddress());
-			Object obj;
 			while (!interrupted()) {
 
 				try {
-					obj = input.readObject();
+					serverController.getMessageFromServer(input.readObject());
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
 				}
-
-				// Send object to ServerController
 
 			}
 			disconnect();
