@@ -2,6 +2,8 @@ package server;
 
 import java.sql.SQLException;
 
+import client.Customer;
+
 
 public class ServerController {
 	

@@ -1,3 +1,4 @@
+package client;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -35,17 +36,17 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	JLabel lblCreditLimit = new JLabel("5000", SwingConstants.CENTER);
 
 	
-	JTextField txtCustomerID = new JTextField("CustomerID");
+	JTextField txtCustomerID = new JTextField("0");
 //	JFormattedTextField txtCustomerID = new JFormattedTextField(NumberFormat.getInstance());
 	
-	JTextField txtName = new JTextField("Name");
-	JTextField txtAddress = new JTextField("Address");
-	JTextField txtZipCode = new JTextField("ZipCode");
+	JTextField txtName = new JTextField("Robin");
+	JTextField txtAddress = new JTextField("Nygatan");
+	JTextField txtZipCode = new JTextField("27461");
 //	JFormattedTextField txtZipCode = new JFormattedTextField(NumberFormat.getInstance());
-	JTextField txtTown = new JTextField("Town");
-	JTextField txtPhoneNbr = new JTextField("Phonenumber");
+	JTextField txtTown = new JTextField("Rydsgård");
+	JTextField txtPhoneNbr = new JTextField("0761164333");
 	JTextField txtEmail = new JTextField("Email");
-	JTextField txtVATNbr = new JTextField("VAT-nbr");
+	JTextField txtVATNbr = new JTextField("930116");
 	
 	JButton txtBalance = new JButton("Balance");	
 	JButton btnClosedInvoice = new JButton("Closed Invoice");

@@ -1,3 +1,4 @@
+package client;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -72,7 +73,7 @@ public class Client extends Thread {
 	 * @param message
 	 *            The object to be sent to the server.
 	 */
-	public void sendMessage(Object message) {
+	public void sendMessage(Object[] message) {
 
 		try {
 			output.writeObject(message);
