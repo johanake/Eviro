@@ -3,9 +3,11 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -33,10 +35,13 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	JLabel lblCreditLimit = new JLabel("5000", SwingConstants.CENTER);
 
 	
-	JTextField txtCustomerID = new JTextField("CustomerID");
+	//JTextField txtCustomerID = new JTextField("CustomerID");
+	JFormattedTextField txtCustomerID = new JFormattedTextField(NumberFormat.getInstance());
+	
 	JTextField txtName = new JTextField("Name");
 	JTextField txtAddress = new JTextField("Address");
-	JTextField txtZipCode = new JTextField("ZipCode");
+//	JTextField txtZipCode = new JTextField("ZipCode");
+	JFormattedTextField txtZipCode = new JFormattedTextField(NumberFormat.getInstance());
 	JTextField txtTown = new JTextField("Town");
 	JTextField txtPhoneNbr = new JTextField("Phonenumber");
 	JTextField txtEmail = new JTextField("Email");
@@ -116,6 +121,7 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	
 	public void setEditable(Boolean editable){
 		this.editable = editable;
+
 		txtCustomerID.setEditable(editable);
 		txtName.setEditable(editable);
 		txtAddress.setEditable(editable);
@@ -127,13 +133,14 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 		
 	}
 	
+	
+	
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == btnEdit) {
 				if(editable == false){
-					System.out.println("hej");
 					setEditable(true);
 				}else{
 					setEditable(false);
