@@ -2,7 +2,6 @@ package server;
 
 import java.sql.SQLException;
 
-import klientServerDbDemo.ConnectDB;
 
 public class ServerController {
 	
@@ -31,6 +30,7 @@ public class ServerController {
 		String commandstring = "INSERT INTO customer (name, adress, zipCode, city, phoneNumber, email, organisationNumber, creditLimit) "
 				+ "VALUES (\"" + c.getName() + "\",\"" + c.getAdress() + "\",\"" + c.getZipCode() + "\",\"" + c.getTown() + "\",\"" 
 				+ c.getPhoneNumber() + "\",\"" + c.getEmail() + "\",\"" + c.getVatNumber() + "\"," + 0  + ")";
+		dataBase.executeInsertQuery(commandstring);
 		
 	}
 
