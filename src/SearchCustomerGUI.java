@@ -35,13 +35,13 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	JLabel lblCreditLimit = new JLabel("5000", SwingConstants.CENTER);
 
 	
-	//JTextField txtCustomerID = new JTextField("CustomerID");
-	JFormattedTextField txtCustomerID = new JFormattedTextField(NumberFormat.getInstance());
+	JTextField txtCustomerID = new JTextField("CustomerID");
+//	JFormattedTextField txtCustomerID = new JFormattedTextField(NumberFormat.getInstance());
 	
 	JTextField txtName = new JTextField("Name");
 	JTextField txtAddress = new JTextField("Address");
-//	JTextField txtZipCode = new JTextField("ZipCode");
-	JFormattedTextField txtZipCode = new JFormattedTextField(NumberFormat.getInstance());
+	JTextField txtZipCode = new JTextField("ZipCode");
+//	JFormattedTextField txtZipCode = new JFormattedTextField(NumberFormat.getInstance());
 	JTextField txtTown = new JTextField("Town");
 	JTextField txtPhoneNbr = new JTextField("Phonenumber");
 	JTextField txtEmail = new JTextField("Email");
