@@ -14,8 +14,9 @@ public class ClientController {
 	}
 	
 	public void createCustomer(int customerId, String name, String adress, int zipCode, String town, String phoneNumber, String email, int vatNumber) {
-		send(new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber));
+		send(1,new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber));
 	}
+	
 	
 //	public void createInvoice() {
 //		send(new Invoice());
@@ -25,9 +26,9 @@ public class ClientController {
 //		send(new Product());
 //	}
 	
-	private void send(Object obj) {
+	private void send(int operation, Object obj) {
 		
-		client.sendMessage(new Object[]{1,obj});
+		client.sendMessage(new Object[]{obj,operation});
 		
 //		Customer c = (Customer)obj; 
 //		System.out.println(c.getAdress());
