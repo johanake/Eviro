@@ -1,4 +1,4 @@
-package client;
+package tools;
 import java.awt.BorderLayout;
 
 import java.awt.Dimension;
@@ -15,6 +15,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+
+import client.ClientController;
+import client.Tool;
 
 
 public class InvoiceGUI extends JPanel implements Tool {
