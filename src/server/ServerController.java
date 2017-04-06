@@ -4,14 +4,17 @@ import klientServerDbDemo.ConnectDB;
 
 public class ServerController {
 	
-	private ConnectDB database;
+	private ConnectDB dataBase;
 
 	public ServerController() {
-		ConnectDB = new ConnectDB(controller); // Ska controllern i parametern användas?
+		dataBase = new ConnectDB();
 	}
 	
 	public void getMessageFromServer(Object obj) {
-		// Add Object array and send to database.
+		Object[] data = new Object[2];
+		data[0] = 1;
+		data[1] = obj;
+		dataBase.commandHandler(data);
 	}
 
 }

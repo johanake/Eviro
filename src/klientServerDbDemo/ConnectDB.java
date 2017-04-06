@@ -10,7 +10,7 @@ public class ConnectDB {
 	private static Connection connection;
 	private static Statement stmt;
 
-	public ConnectDB(Controller controller) {
+	public ConnectDB() {
 		this.controller = controller;
 		try {
 			connection = DriverManager.getConnection(connectionString, "m10p4305", "ultraultra");
