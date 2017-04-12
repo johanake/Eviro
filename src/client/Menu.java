@@ -16,7 +16,7 @@ import javax.swing.SwingUtilities;
 public class Menu extends JMenuBar implements ActionListener {
 
 	/**
-	 * 
+	 * Constructor
 	 */
 	public Menu() {
 
@@ -29,12 +29,11 @@ public class Menu extends JMenuBar implements ActionListener {
 	}
 
 	/**
-	 * 
+	 * Builds the menu. 
 	 */
 	private void setupMenu() {
 		
 		JMenu menu = new JMenu("Menu");		
-
 
 		JMenuItem menuItem = new JMenuItem("Option");
 		menuItem.setActionCommand("Option");

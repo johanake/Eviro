@@ -12,10 +12,6 @@ import javax.swing.SwingUtilities;
  */
 public class Toolbox extends JInternalFrame {
 
-//	static int globalToolCounter = 0;
-//	static final int xOffset = 50, yOffset = 50;
-//	private int toolCounter;
-	
 	private JPanel tool;
 
 	/**
@@ -27,7 +23,6 @@ public class Toolbox extends JInternalFrame {
 
 		super(tool.getTitle(), tool.getRezizable(), true, false, true);
 		this.tool = (JPanel) tool;
-//		this.toolCounter = ++globalToolCounter;
 		
 		setup();
 	
@@ -40,7 +35,6 @@ public class Toolbox extends JInternalFrame {
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-//				setLocation(xOffset * toolCounter, yOffset * toolCounter);
 				setMinimumSize(new Dimension(300,300));
 				add(tool);
 				pack();
