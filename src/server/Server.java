@@ -29,8 +29,7 @@ public class Server extends Thread {
 	/**
 	 * Sets up the logger and starts the server.
 	 * 
-	 * @param port
-	 *            The port to which the server will be listening
+	 * @param port The port to which the server will be listening
 	 */
 	public Server(int port) {
 		serverController = new ServerController();
@@ -73,21 +72,20 @@ public class Server extends Thread {
 	 */
 	private class ClientConnection extends Thread {
 
-		private ObjectOutputStream output;
-		private ObjectInputStream input;
+		private ObjectOutputStream objOutput;
+		private ObjectInputStream objInput;
 		private Socket socket;
 
 		/**
 		 * Sets up input and output streams and starts a new Thread.
 		 * 
-		 * @param socket
-		 *            The client which connected to the server.
+		 * @param socket The client which connected to the server.
 		 */
 		public ClientConnection(Socket socket) {
 			this.socket = socket;
 			try {
-				output = new ObjectOutputStream(socket.getOutputStream());
-				input = new ObjectInputStream(socket.getInputStream());
+				objOutput = new ObjectOutputStream(socket.getOutputStream());
+				objInput = new ObjectInputStream(socket.getInputStream());
 				start();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -101,8 +99,8 @@ public class Server extends Thread {
 
 			try {
 				socket.close();
-				output.close();
-				input.close();
+				objOutput.close();
+				objInput.close();
 				interrupt();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -119,7 +117,7 @@ public class Server extends Thread {
 			while (!interrupted()) {
 
 				try {
-					serverController.getMessageFromServer(input.readObject());
+					serverController.getMessageFromServer(objInput.readObject());
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
 				}

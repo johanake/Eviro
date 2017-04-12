@@ -16,16 +16,14 @@ public class Client extends Thread {
 	private String ip;
 	private int port;
 	private Socket socket;
-	private ObjectInputStream input;
-	private ObjectOutputStream output;
+	private ObjectInputStream objInput;
+	private ObjectOutputStream objOutput;
 
 	/**
 	 * Gives this client a GUI and connects it to the server.
 	 * 
-	 * @param ip
-	 *            The IP of the server.
-	 * @param port
-	 *            The port of the server.
+	 * @param ip The IP of the server.
+	 * @param port The port of the server.
 	 */
 	public Client(String ip, int port) {
 
@@ -44,8 +42,8 @@ public class Client extends Thread {
 
 		try {
 			socket = new Socket(ip, port);
-			input = new ObjectInputStream(socket.getInputStream());
-			output = new ObjectOutputStream(socket.getOutputStream());
+			objInput = new ObjectInputStream(socket.getInputStream());
+			objOutput = new ObjectOutputStream(socket.getOutputStream());
 			start();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -61,8 +59,8 @@ public class Client extends Thread {
 		try {
 			interrupt();
 			socket.close();
-			output.close();
-			input.close();
+			objOutput.close();
+			objInput.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -71,13 +69,12 @@ public class Client extends Thread {
 	/**
 	 * Streams a message object to the server.
 	 * 
-	 * @param message
-	 *            The object to be sent to the server.
+	 * @param message The object to be sent to the server.
 	 */
 	public void sendMessage(Object[] message) {
 
 		try {
-			output.writeObject(message);
+			objOutput.writeObject(message);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -89,7 +86,7 @@ public class Client extends Thread {
 	private void waitForMessage() {
 
 		try {
-			input.readObject();
+			objInput.readObject();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
