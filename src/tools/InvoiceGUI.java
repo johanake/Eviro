@@ -1,6 +1,8 @@
 package tools;
 import java.awt.BorderLayout;
 
+
+
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -20,41 +22,48 @@ import client.ClientController;
 import client.Tool;
 
 
+/*
+ * Graphical class to create invoice interface
+ * @author Johan Åkesson
+ */
+
 public class InvoiceGUI extends JPanel implements Tool {
 	
-	JPanel pnlTop = new JPanel(new GridLayout(1,3));
-	JPanel pnlTopLeft = new JPanel(new GridLayout(6, 1));
-	JPanel pnlTopMiddle = new JPanel(new GridLayout(6, 1));
-	JPanel pnlTopRight = new JPanel(new BorderLayout());
-	JPanel pnlZipTown = new JPanel(new GridLayout(1, 2));
-	JPanel pnlProduct = new JPanel(new BorderLayout());
-	JPanel pnlAddProduct = new JPanel(new GridLayout(1,5));
+	private JPanel pnlTop = new JPanel(new GridLayout(1,3));
+	private JPanel pnlTopLeft = new JPanel(new GridLayout(6, 1));
+	private JPanel pnlTopMiddle = new JPanel(new GridLayout(6, 1));
+	private JPanel pnlTopRight = new JPanel(new BorderLayout());
+	private JPanel pnlZipTown = new JPanel(new GridLayout(1, 2));
+	private JPanel pnlProduct = new JPanel(new BorderLayout());
+	private JPanel pnlAddProduct = new JPanel(new GridLayout(1,5));
 	
-	JLabel lblInvoice = new JLabel("Invoice number: ");
-	JLabel lblName = new JLabel("Name: ");
-	JLabel lblAddress = new JLabel("Address: ");
-	JLabel lblZipTown = new JLabel("ZipCode/Town: ");
-	JLabel lblContact = new JLabel("Contact: ");
-	JLabel lblInvoiceRef = new JLabel("Invoice reference: ");
-	JLabel lblProductNbr = new JLabel("Product number: ", SwingConstants.CENTER);
-	JLabel lblQuantity = new JLabel("Quantity: ", SwingConstants.CENTER);
+	private JLabel lblInvoice = new JLabel("Invoice number: ");
+	private JLabel lblName = new JLabel("Name: ");
+	private JLabel lblAddress = new JLabel("Address: ");
+	private JLabel lblZipTown = new JLabel("ZipCode/Town: ");
+	private JLabel lblContact = new JLabel("Contact: ");
+	private JLabel lblInvoiceRef = new JLabel("Invoice reference: ");
+	private JLabel lblProductNbr = new JLabel("Product number: ", SwingConstants.CENTER);
+	private JLabel lblQuantity = new JLabel("Quantity: ", SwingConstants.CENTER);
 	
-	JTextField txtInvoice = new JTextField("Invoice number");
-	JTextField txtName = new JTextField("Name");
-	JTextField txtAddress = new JTextField("Address");
-	JTextField txtZipCode = new JTextField("Zip Code");
-	JTextField txtTown = new JTextField("Town");
-	JTextField txtContact = new JTextField("Contact");
-	JTextField txtInvoiceRef = new JTextField("Invoice reference");
-	JTextField txtProductNbr = new JTextField();
-	JTextField txtQuantity = new JTextField();
+	private JTextField txtInvoice = new JTextField("Invoice number");
+	private JTextField txtName = new JTextField("Name");
+	private JTextField txtAddress = new JTextField("Address");
+	private JTextField txtZipCode = new JTextField("Zip Code");
+	private JTextField txtTown = new JTextField("Town");
+	private JTextField txtContact = new JTextField("Contact");
+	private JTextField txtInvoiceRef = new JTextField("Invoice reference");
+	private JTextField txtProductNbr = new JTextField();
+	private JTextField txtQuantity = new JTextField();
 	
-	JButton btnCreate = new JButton("Create");
-	JButton btnAddProduct = new JButton("ADD");
+	private JButton btnCreate = new JButton("Create");
+	private JButton btnAddProduct = new JButton("ADD");
 
-	JTextArea txtPnProducts = new JTextArea();
+	private JTextArea txtPnProducts = new JTextArea();
 
-	
+	/*
+	 * Constructs the GUI with swing components
+	 */
 	public InvoiceGUI(ClientController clientController){
 		
 		setLayout(new BorderLayout());
@@ -102,6 +111,10 @@ public class InvoiceGUI extends JPanel implements Tool {
 		addListeners();
 	}
 	
+	/*
+	 * Class to enable button functions
+	 */
+	
 	private class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
@@ -112,8 +125,11 @@ public class InvoiceGUI extends JPanel implements Tool {
 		}
 
 	}
+	/*
+	 * Method adds listeners
+	 */
 	
-	public void addListeners() {
+	private void addListeners() {
 		ButtonListener listener = new ButtonListener();
 		btnAddProduct.addActionListener(listener);
 

@@ -1,19 +1,21 @@
 package tools;
 import java.awt.BorderLayout;
+
+/*
+ * Graphical class to create and search for customers 
+ * @author Johan Åkesson
+ * 
+ */
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.NumberFormat;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
@@ -22,44 +24,44 @@ import client.Tool;
 
 public class SearchCustomerGUI extends JPanel implements Tool {
 	
-	public final String TOOL_NAME = "Search Customer/Create";
+	public final String TOOLNAME = "Search Customer/Create";
 	
-	JPanel pnlLeft = new JPanel(new GridLayout(7, 1));
-	JPanel pnlMiddle = new JPanel(new GridLayout(7, 1));
-	JPanel pnlRight = new JPanel(new GridLayout(7, 1));
-	JPanel pnlZipTown = new JPanel(new GridLayout(1, 2));
+	private JPanel pnlLeft = new JPanel(new GridLayout(7, 1));
+	private JPanel pnlMiddle = new JPanel(new GridLayout(7, 1));
+	private JPanel pnlRight = new JPanel(new GridLayout(7, 1));
+	private JPanel pnlZipTown = new JPanel(new GridLayout(1, 2));
 	
-	JLabel lblCustomerID = new JLabel("Customer ID: ");
-	JLabel lblname = new JLabel("Name: ");
-	JLabel lblAddress= new JLabel("Address: ");
-	JLabel lblZipTown = new JLabel("Zip/Town: ");
-	JLabel lblPhoneNbr = new JLabel("Phone number: ");
-	JLabel lblEmail = new JLabel("Email: ");
-	JLabel lblVatNbr = new JLabel("Vat-number: ");
-	JLabel lblCreditLimit = new JLabel("5000", SwingConstants.CENTER);
+	private JLabel lblCustomerID = new JLabel("Customer ID: ");
+	private JLabel lblname = new JLabel("Name: ");
+	private JLabel lblAddress= new JLabel("Address: ");
+	private JLabel lblZipTown = new JLabel("Zip/Town: ");
+	private JLabel lblPhoneNbr = new JLabel("Phone number: ");
+	private JLabel lblEmail = new JLabel("Email: ");
+	private JLabel lblVatNbr = new JLabel("Vat-number: ");
+	private JLabel lblCreditLimit = new JLabel("5000", SwingConstants.CENTER);
 
 	
-	JTextField txtCustomerID = new JTextField("0");
+	private JTextField txtCustomerID = new JTextField("0");
 //	JFormattedTextField txtCustomerID = new JFormattedTextField(NumberFormat.getInstance());
 	
-	JTextField txtName = new JTextField("Robin");
-	JTextField txtAddress = new JTextField("Nygatan");
-	JTextField txtZipCode = new JTextField("27461");
+	private JTextField txtName = new JTextField("Robin");
+	private JTextField txtAddress = new JTextField("Nygatan");
+	private JTextField txtZipCode = new JTextField("27461");
 //	JFormattedTextField txtZipCode = new JFormattedTextField(NumberFormat.getInstance());
-	JTextField txtTown = new JTextField("Rydsgård");
-	JTextField txtPhoneNbr = new JTextField("0761164333");
-	JTextField txtEmail = new JTextField("Email");
-	JTextField txtVATNbr = new JTextField("930116");
+	private JTextField txtTown = new JTextField("Rydsgård");
+	private JTextField txtPhoneNbr = new JTextField("0761164333");
+	private JTextField txtEmail = new JTextField("Email");
+	private JTextField txtVATNbr = new JTextField("930116");
 	
-	JButton txtBalance = new JButton("Balance");	
-	JButton btnClosedInvoice = new JButton("Closed Invoice");
-	JButton btnOpenInvoice = new JButton("Open Invoice");
-	JButton btnCreateInvoice = new JButton("Create Invoice");
-	JButton btnComments = new JButton("Open Comments");
-	JButton btnEdit = new JButton("Edit Customer");
-	JButton btnCreate = new JButton("Create Customer");
+	private JButton txtBalance = new JButton("Balance");	
+	private JButton btnClosedInvoice = new JButton("Closed Invoice");
+	private JButton btnOpenInvoice = new JButton("Open Invoice");
+	private JButton btnCreateInvoice = new JButton("Create Invoice");
+	private JButton btnComments = new JButton("Open Comments");
+	private JButton btnEdit = new JButton("Edit Customer");
+	private JButton btnCreate = new JButton("Create Customer");
 	
-	ClientController clientController; 
+	private ClientController clientController; 
 	
 	private boolean editable = false;
 
@@ -67,22 +69,19 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	public SearchCustomerGUI(ClientController clientController){
 		this.clientController = clientController; 
 		
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				setLayout(new BorderLayout());
-				setPreferredSize(new Dimension(600,300));
-				
-				displayContent();
-				addListeners();
-				setEditable(editable);
+		setLayout(new BorderLayout());
+		setPreferredSize(new Dimension(600,300));
+		displayContent();
+		addListeners();
+		setEditable(editable);
 
-
-			}
-		});
-		
 	}
 	
-	public void displayContent(){
+	/*
+	 * Method used to create layout and add component
+	 */
+	
+	private void displayContent(){
 		add(pnlLeft, BorderLayout.WEST);
 		add(pnlMiddle, BorderLayout.CENTER);
 		add(pnlRight, BorderLayout.EAST);
@@ -123,7 +122,11 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 		
 	}
 	
-	public void setEditable(Boolean editable){
+	/*
+	 * Method to enable or disable the editable textfields
+	 */
+	
+	private void setEditable(Boolean editable){
 		this.editable = editable;
 
 		txtCustomerID.setEditable(editable);
@@ -136,8 +139,32 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 		txtVATNbr.setEditable(editable);
 		
 	}
+	/*
+	 *Method to add listeners 
+	 */
+	
+	private void addListeners() {
+		ButtonListener listener = new ButtonListener();
+		btnEdit.addActionListener(listener);
+		btnCreate.addActionListener(listener);
+
+	}
+
+	@Override
+	public String getTitle() {
+		return TOOLNAME;
+	}
+
+	@Override
+	public boolean getRezizable() {
+		return false;
+	}
 	
 	
+	/*
+	 * Class to enable button components
+	 * @author Johan Åkesson
+	 */
 	
 	private class ButtonListener implements ActionListener {
 
@@ -156,23 +183,6 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 
 		}
 
-	}
-	
-	public void addListeners() {
-		ButtonListener listener = new ButtonListener();
-		btnEdit.addActionListener(listener);
-		btnCreate.addActionListener(listener);
-
-	}
-
-	@Override
-	public String getTitle() {
-		return TOOL_NAME;
-	}
-
-	@Override
-	public boolean getRezizable() {
-		return false;
 	}
 
 }
