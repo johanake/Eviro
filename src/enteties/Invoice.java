@@ -14,17 +14,17 @@ public class Invoice implements Serializable{
 	private String contact;
 	private String noteInvoice;
 	private Timestamp timeStamp;
-	private int idk;
+	private int paymentPeriod;
 	private double price;
 	
-	public Invoice(int incoiveId, int customerId, String contact, String noteInvoice, Timestamp timeStamp, int idk,
+	public Invoice(int incoiveId, int customerId, String contact, String noteInvoice, Timestamp timeStamp, int paymentPeriod,
 			double price) {
 		this.incoiveId = incoiveId;
 		this.customerId = customerId;
 		this.contact = contact;
 		this.noteInvoice = noteInvoice;
 		this.timeStamp = timeStamp;
-		this.idk = idk;
+		this.paymentPeriod = paymentPeriod;
 		this.price = price;
 	}
 
@@ -60,10 +60,10 @@ public class Invoice implements Serializable{
 		this.timeStamp = made;
 	}
 	public int getIdk() {
-		return idk;
+		return paymentPeriod;
 	}
 	public void setIdk(int idk) {
-		this.idk = idk;
+		this.paymentPeriod = idk;
 	}
 	public double getPrice() {
 		return price;
