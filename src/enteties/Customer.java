@@ -93,6 +93,12 @@ public class Customer implements Serializable {
 		this.vatNumber = vatNumber;
 	}
 	
-	
+	public String toString() {
+		String res = "INSERT INTO customer (name, adress, zipCode, city, phoneNumber, email, organisationNumber, creditLimit) "
+				+ "VALUES (\"" + getName() + "\",\"" + getAdress() + "\",\"" + getZipCode() + "\",\""
+				+ getTown() + "\",\"" + getPhoneNumber() + "\",\"" + getEmail() + "\",\"" + getVatNumber()
+				+ "\"," + 0 + ")";
+		return res;
+	}
 
 }

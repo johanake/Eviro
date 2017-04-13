@@ -48,10 +48,7 @@ public class ServerController {
 		if (data[1] instanceof Customer) {
 			c = (Customer) data[1];
 
-			String commandstring = "INSERT INTO customer (name, adress, zipCode, city, phoneNumber, email, organisationNumber, creditLimit) "
-					+ "VALUES (\"" + c.getName() + "\",\"" + c.getAdress() + "\",\"" + c.getZipCode() + "\",\""
-					+ c.getTown() + "\",\"" + c.getPhoneNumber() + "\",\"" + c.getEmail() + "\",\"" + c.getVatNumber()
-					+ "\"," + 0 + ")";
+			String commandstring = c.toString();
 			database.executeInsertQuery(commandstring);
 		}
 
