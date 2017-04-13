@@ -2,7 +2,7 @@ package enteties;
 import java.io.Serializable;
 
 /**
- * 
+ * A class that represents a Customer in the system.
  * @author nadiaelhaddaoui
  *
  */
@@ -11,17 +11,28 @@ public class Customer implements Serializable {
 
 	private int customerId;
 	private String name;
-	private String adress;
+	private String address;
 	private int zipCode;
 	private String town;
 	private String phoneNumber;
 	private String email;
 	private int vatNumber;
 	
+	/**
+	 * Customers constructor.
+	 * @param customerId A unique Id
+	 * @param name The name of the customer
+	 * @param adress The address of the customer
+	 * @param zipCode The zipcode of the customer
+	 * @param town The town in which the customer lives in
+	 * @param phoneNumber The customers phonenumber
+	 * @param email The customers email
+	 * @param vatNumber The organizationnumber for the customer
+	 */
 	public Customer(int customerId, String name, String adress, int zipCode, String town, String phoneNumber, String email, int vatNumber){
 		this.customerId=customerId;
 		this.name=name;
-		this.adress=adress;
+		this.address=adress;
 		this.zipCode=zipCode;
 		this.town=town;
 		this.phoneNumber=phoneNumber;
@@ -46,11 +57,11 @@ public class Customer implements Serializable {
 	}
 
 	public String getAdress() {
-		return adress;
+		return address;
 	}
 
 	public void setAdress(String adress) {
-		this.adress = adress;
+		this.address = adress;
 	}
 
 	public int getZipCode() {
