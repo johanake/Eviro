@@ -2,6 +2,8 @@ package server;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -16,7 +18,8 @@ public class ConnectDB {
 	private String connectionString = "jdbc:mysql://195.178.232.16:3306/m10p4305";
 	private Connection connection;
 	private Statement stmt;
-
+	private PreparedStatement ps;
+	
 	/**
 	 * Connects to the database
 	 */
@@ -34,13 +37,33 @@ public class ConnectDB {
 	 * 
 	 * @param query The information to add to the database.
 	 */
-	public synchronized void executeInsertQuery(String query) {
-
+	public synchronized void executeInsertDeleteQuery(String query) {
 		try {
 			stmt.execute(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+/// exempel på att hämta resultset för att kunna skicka tilbaka antingen i sin helhet eller utbruten data.	
+	public synchronized ResultSet executeSelectQuery(String query){
+		ResultSet rs = null;
+		try {
+			rs = stmt.executeQuery(query); 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return rs;
+	}
+	
+	public synchronized PreparedStatement executeUpdateQuery(String query){
+		try {
+			ps = connection.prepareStatement(query);			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return ps;
 	}
 
 }

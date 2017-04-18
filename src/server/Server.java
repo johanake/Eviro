@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.FileHandler;
@@ -117,15 +118,13 @@ public class Server extends Thread {
 			while (!interrupted()) {
 
 				try {
-					serverController.commandHandler(objInput.readObject());
+//					serverController.commandHandler(objInput.readObject());
+					serverController.commandHandler(objInput.readObject(), this.objOutput);
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
 				}
-
 			}
 			disconnect();
 		}
-
 	}
-
 }
