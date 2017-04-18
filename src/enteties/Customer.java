@@ -8,10 +8,10 @@ import java.io.Serializable;
  */
 
 public class Customer implements Serializable {
-
+	private int command;
 	private int customerId;
 	private String name;
-	private String address;
+	private String adress;
 	private int zipCode;
 	private String town;
 	private String phoneNumber;
@@ -32,7 +32,7 @@ public class Customer implements Serializable {
 	public Customer(int customerId, String name, String adress, int zipCode, String town, String phoneNumber, String email, int vatNumber){
 		this.customerId=customerId;
 		this.name=name;
-		this.address=adress;
+		this.adress=adress;
 		this.zipCode=zipCode;
 		this.town=town;
 		this.phoneNumber=phoneNumber;
@@ -57,11 +57,11 @@ public class Customer implements Serializable {
 	}
 
 	public String getAdress() {
-		return address;
+		return adress;
 	}
 
 	public void setAdress(String adress) {
-		this.address = adress;
+		this.adress = adress;
 	}
 
 	public int getZipCode() {
@@ -103,13 +103,17 @@ public class Customer implements Serializable {
 	public void setVatNumber(int vatNumber) {
 		this.vatNumber = vatNumber;
 	}
-	
-	public String toString() {
-		String res = "INSERT INTO customer (name, adress, zipCode, city, phoneNumber, email, organisationNumber, creditLimit) "
-				+ "VALUES (\"" + getName() + "\",\"" + getAdress() + "\",\"" + getZipCode() + "\",\""
-				+ getTown() + "\",\"" + getPhoneNumber() + "\",\"" + getEmail() + "\",\"" + getVatNumber()
-				+ "\"," + 0 + ")";
-		return res;
+	public int getCommand() {
+		return command;
 	}
+
+	public void setCommand(int command) {
+		this.command = command;
+	}
+
+	public String toString() {
+
+			return null;
+		}
 
 }

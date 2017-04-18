@@ -15,38 +15,57 @@ public class Test extends Thread{
 	private Socket socket;
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
+	public static final int AddCustomer = 1;
+	public static final int GetCustomer = 2;
+	public static final int GetAllCustomers = 3;
+	public static final int UpdateCustomer = 4;
 	
 	public Test() {
 		try {
 			socket = new Socket("localhost", 1234);
 			oos = new ObjectOutputStream(socket.getOutputStream());
 			ois = new ObjectInputStream(socket.getInputStream());
-			Object[] msg = {2, new Customer(0, null, null, 0, null, null, "work@robinovergaard.com", 0)};
-			oos.writeObject(msg);
+			
+			//Hämtar alla kunder med email work@robinovergaard.com
+			Customer c1 = new Customer(0, null, null, 0, null, null, "work@robinovergaard.com", 0);
+			c1.setCommand(GetCustomer);
+			oos.writeObject(c1);
 			oos.flush();
-			Customer c = (Customer) ois.readObject();
-			System.out.println(c.getCustomerId() + " " + c.getName() + " " + c.getAdress() + " " + c.getEmail());
 			
-			Thread.sleep(1000);
+			ArrayList<Customer> customerList = ((ArrayList<Customer>) ois.readObject());
+			for (Customer c: customerList){
+				System.out.println("Från ArrayList genom GetCustomer: " + c.getCustomerId() + " " + c.getName() + " " + c.getAdress() + " " + c.getEmail());
+			}
 			
-			Object[] msg2 = {3};
-			oos.writeObject(msg2);
+			Thread.sleep(2000);
+			
+			//Hämtar alla kunder
+			Customer c2 = new Customer(0, null, null, 0, null, null, null, 0);
+			c2.setCommand(GetAllCustomers);
+			oos.writeObject(c2);
 			oos.flush();
 			HashMap<Integer, Customer> customerMap = (HashMap<Integer, Customer>) ois.readObject();
-			Customer c2 = customerMap.get(1);
-			System.out.println(c2.getCustomerId() + c2.getName());
+			for (Customer c : customerMap.values()){
+				System.out.println("Från HashMap genom GetAllCustomers: " + c.getCustomerId() + " " + c.getName() + " " + c.getAdress() + " " + c.getEmail());
+			}
 			
-			c2.setVatNumber(1234567);
-			Object[] msg3 = {4,c2};
-			oos.writeObject(msg3);
+			Thread.sleep(2000);
+			
+			//Updaterar organisationsnummer för customer med id 1
+			Customer c3 = customerMap.get(1);
+			c3.setVatNumber((int) (1000000*Math.random()));
+			c3.setCommand(UpdateCustomer);
+			oos.writeObject(c3);
 			oos.flush();
+			c3 = (Customer) ois.readObject();
+			System.out.println("Uppdaterat vatNumber genom UpdateCustomers: " + c3.getCustomerId() + " " + c3.getName() + " " + c3.getAdress() + " " + c3.getEmail() + " "  + c3.getVatNumber());
+		
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

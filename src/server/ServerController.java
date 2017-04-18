@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import enteties.Customer;
+import enteties.Invoice;
+import enteties.Product;
 
 /**
  * Handles most of the logic between the server and the database.
@@ -17,6 +19,10 @@ import enteties.Customer;
  *
  */
 public class ServerController {
+	public static final int AddCustomer = 1;
+	public static final int GetCustomer = 2;
+	public static final int GetAllCustomers = 3;
+	public static final int UpdateCustomer = 4;
 
 	private ConnectDB database;
 
@@ -33,14 +39,45 @@ public class ServerController {
 	 * 
 	 * @param obj The object coming from the server.
 	 */
-	public void commandHandler(Object obj) {
-
-		Object[] data = (Object[]) obj;
-		switch ((int) data[0]) {
-		case 1:
-			addCustomer(data);
-			break;
+	public Object commandHandler(Object obj) {
+		Customer customer = null;
+		Invoice invoice = null;
+		Product product = null;
+		int command = 0;
+		Object returnObj = null;
+		
+		//kontrollerar vilken typ av objekt som tas emot, castar objekt till rätt variabel och hämtar sedan command från det
+		if (Customer.class.isInstance((Customer) obj)){
+			customer = (Customer) obj;
+			command = customer.getCommand();
+		} else if (Invoice.class.isInstance((Invoice) obj)){
+			invoice = (Invoice) obj;
+//			com = invoice.getCom();
+		} else if (Product.class.isInstance((Product) obj)){
+			product = (Product) obj;
+//			com = product.getCom();
 		}
+		
+		//switchsatsen kollar vad kommandot är, skickar sedan objektet till rätt metod som returnerar det som skall
+		//skickas tillbak till klienten
+		switch ((int) command) {
+			case AddCustomer:
+				returnObj = addCustomer(customer);
+				break;
+			
+			case GetCustomer:	
+				returnObj = getCustomer(customer);
+				break;
+			
+			case GetAllCustomers:
+				returnObj = getAllCustomers();
+				break;
+			
+			case UpdateCustomer:
+				returnObj = updateCustomer(customer);
+		}
+		
+		return returnObj;				
 	}
 
 	/**
@@ -50,22 +87,18 @@ public class ServerController {
 	 * 
 	 * @param data The data which is to be transformed and sent to the database.
 	 */
-	private void addCustomer(Object[] data) {
-
-		Customer c;
-		if (data[1] instanceof Customer) {
-			c = (Customer) data[1];
-
-			String commandstring = c.toString();
-			database.executeInsertDeleteQuery(commandstring);
-		}
-
+	private Customer addCustomer(Customer c) {
+		String query = "INSERT INTO customer (name, adress, zipCode, city, phoneNumber, email, organisationNumber, creditLimit) "
+					+ "VALUES (\"" + c.getName() + "\",\"" + c.getAdress() + "\",\"" + c.getZipCode() + "\",\""
+					+ c.getTown() + "\",\"" + c.getPhoneNumber() + "\",\"" + c.getEmail() + "\",\"" + c.getVatNumber()
+					+ "\"," + 0 + ")";
+		database.executeInsertDeleteQuery(query);
+		return c;
 	}
 
 
-	//exempelmetod för att hämta något ur databasen
-	private Customer getCustomer(Customer c){
-
+	//exempelmetod för att hämta en eller flera kunder ur databasen med hjälp av valfritt fält
+	private ArrayList<Customer> getCustomer(Customer c){
 		String query = "SELECT * FROM customer WHERE ";
 		if (c.getCustomerId() > 0){
 			query += "customerId = " + c.getCustomerId();
@@ -82,18 +115,17 @@ public class ServerController {
 		else if (c.getEmail() != null){
 			query += "email = '" + c.getEmail() + "'";
 		}
-		c = createCustomerObject(database.executeSelectQuery(query));
-
-		return c;
+		return createCustomerList(database.executeSelectQuery(query));
 	}
 
-	
+
+	// hämtar alla kunder returnerar dem i en HashMap med customerId som nyckel
 	private HashMap<Integer, Customer> getAllCustomers(){
-		
 		HashMap<Integer, Customer> customerMap = new HashMap<Integer, Customer>();
 		String query = "SELECT * FROM customer";
 		ResultSet rs = database.executeSelectQuery(query);
 		Customer c;
+		
 		try {
 			while(rs.next()){
 				c = createCustomerObject(rs);
@@ -102,12 +134,11 @@ public class ServerController {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return  customerMap;
+		return customerMap;
 	}
-	
-	
-	private void updateCustomer(Customer c){ 
-		
+
+	//test och exempel på en updatemetod som avnvänder PreparedStatement
+	private Customer updateCustomer(Customer c){ 
 		String query = "UPDATE customer SET name = ?, adress = ?, zipCode = ?, city = ?, phoneNumber = ?, email = ?, organisationNumber = ? WHERE customerId = ?";
 		PreparedStatement ps = database.executeUpdateQuery(query);
 		try {
@@ -123,11 +154,11 @@ public class ServerController {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return c;
 	}
 
-	//generera ett customer-objekt
+	//genererar ett customer-objekt från den första raden i en ResultSet
 	private Customer createCustomerObject(ResultSet rs){
-		
 		Customer c = null;
 		try {
 			if (rs.isBeforeFirst()){
@@ -139,35 +170,20 @@ public class ServerController {
 			e.printStackTrace();
 		}		
 		return c;
-	}
-
-	//exempel på hur commandHandler kan skicka tillbaka data
-	public void commandHandler(Object obj, ObjectOutputStream oos) {
-		Object[] data = (Object[]) obj;
-		
-		switch ((int) data[0]) {
-		case 1:
-			addCustomer(data);
-			break;
-		case 2:	
-			try {
-				oos.writeObject(getCustomer((Customer) data[1]));
-				oos.flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			break;
-		case 3:
-			try {
-				oos.writeObject(getAllCustomers());
-				oos.flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			break;
-		case 4:
-			updateCustomer((Customer) data[1]);
-		}				
-	}
+	}	
+	
+	//genererar en lista med alla customer-objekt som finns i ResultSet 
+	private ArrayList<Customer> createCustomerList(ResultSet rs){
+		ArrayList<Customer> customerList = new ArrayList<Customer>();
+		try {
+			while (rs.next()) {
+				customerList.add(new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), 
+						rs.getString(5), rs.getString(6), rs.getString(7), rs.getInt(8)));
+			}			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+		return customerList;
+	}	
 
 }

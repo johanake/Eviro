@@ -37,12 +37,15 @@ public class ConnectDB {
 	 * 
 	 * @param query The information to add to the database.
 	 */
-	public synchronized void executeInsertDeleteQuery(String query) {
+	public synchronized boolean executeInsertDeleteQuery(String query) {
+		boolean executed = false;
 		try {
-			stmt.execute(query);
+			executed = !stmt.execute(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return executed;
+				
 	}
 	
 /// exempel på att hämta resultset för att kunna skicka tilbaka antingen i sin helhet eller utbruten data.	
