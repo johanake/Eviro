@@ -1,18 +1,24 @@
-package client;
+package gui;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultDesktopManager;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -22,13 +28,17 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import client.ClientController;
+import client.Main;
+import tools.CustomerGUI;
+import tools.CustomerGUI2;
 import tools.InvoiceGUI;
 import tools.SearchCustomerGUI;
 
 /**
  * Handles client side gui operations of the system.
  * @author Robin Overgaard
- * @version 0.1
+ * @version 1.0
  */
 
 public class GUIController {
@@ -50,6 +60,13 @@ public class GUIController {
 				JFrame window = new JFrame(Main.APP_NAME + " " + Main.APP_VERSION);
 				JPanel pnlMain = new JPanel(new BorderLayout());
 				desktop = new JDesktopPane();
+				   desktop.setDesktopManager(new DefaultDesktopManager() {
+					      @Override protected Rectangle getBoundsForIconOf(JInternalFrame f) {
+					        Rectangle r = super.getBoundsForIconOf(f);
+					        r.width = 200;
+					        return r;
+					      }
+					    });
 				
 				window.setContentPane(pnlMain);
 				window.add(desktop, BorderLayout.CENTER);
@@ -58,7 +75,7 @@ public class GUIController {
 				window.setMinimumSize(new Dimension(800, 600));
 				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				window.setVisible(true);
-				window.setJMenuBar(new Menu()); 
+//				window.setJMenuBar(new Menu()); 
 				window.setIconImage(new ImageIcon(Main.APP_ICON).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
 			}
 		});
@@ -72,22 +89,24 @@ public class GUIController {
 
 		try {
 
+//			UIManager.put("nimbusBase", new Color(50,50,50));
+			
 			for (LookAndFeelInfo lnfi : UIManager.getInstalledLookAndFeels()) {
 
 				if ("Nimbus".equals(lnfi.getName())) {
 					UIManager.setLookAndFeel(lnfi.getClassName());
 					break;
 				}
+				
+				else {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				}
 
 			}
 
 		} catch (Exception e) {
 
-			try {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
+			e.printStackTrace();
 
 		}
 
@@ -112,6 +131,7 @@ public class GUIController {
 
 		private JComponent tools[] = new JComponent[] { 
 				new ActionJButton("Customer", "tool_customer"), 
+				new ActionJButton("Kund", "tool_customer2"), 
 				new ActionJButton("Invoice", "tool_invoice") };
 
 		private JComponent exampleInfo[] = new JComponent[] { 
@@ -170,8 +190,13 @@ public class GUIController {
 			switch (e.getActionCommand()) {
 
 			case "tool_customer":
-				desktop.add(new Toolbox(new SearchCustomerGUI(clientController)));
+				desktop.add(new Toolbox(new CustomerGUI(clientController)));
 				break;
+				
+			case "tool_customer2":
+				desktop.add(new Toolbox(new CustomerGUI2(clientController)));
+				break;
+
 
 			case "tool_invoice":
 				desktop.add(new Toolbox(new InvoiceGUI(clientController)));
@@ -214,4 +239,6 @@ public class GUIController {
 			
 		}
 	}
+
+
 }

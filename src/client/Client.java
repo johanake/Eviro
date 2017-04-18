@@ -5,13 +5,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import gui.GUIController;
+
 /**
- * Handles all traffic to and from the server.
- * 
+ * Handles communication with the server. 
  * @author Mattias Sundquist
- *
+ * @author Robin Overgaard
+ * @version 1.0
  */
-public class Client extends Thread {
+public class Client {
 
 	private String ip;
 	private int port;
@@ -21,7 +23,6 @@ public class Client extends Thread {
 
 	/**
 	 * Gives this client a GUI and connects it to the server.
-	 * 
 	 * @param ip The IP of the server.
 	 * @param port The port of the server.
 	 */
@@ -36,7 +37,7 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * Creates input and output streams and starts a new Thread.
+	 * Creates input and output streams. 
 	 */
 	private void connectToServer() {
 
@@ -44,7 +45,6 @@ public class Client extends Thread {
 			socket = new Socket(ip, port);
 			objInput = new ObjectInputStream(socket.getInputStream());
 			objOutput = new ObjectOutputStream(socket.getOutputStream());
-			start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -52,12 +52,11 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * Closes all streams and threads to disconnect this client from the server.
+	 * Closes all streams to disconnect this client from the server.
 	 */
 	public void disconnect() {
 
 		try {
-			interrupt();
 			socket.close();
 			objOutput.close();
 			objInput.close();
@@ -67,39 +66,32 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * Streams a message object to the server.
-	 * 
-	 * @param message The object to be sent to the server.
+	 * Sends an object to the server using the outputstream.
+	 * @param obj the object to send
 	 */
-	public void sendMessage(Object[] message) {
-
+	public void sendObject(Object obj) {
 		try {
-			objOutput.writeObject(message);
+			objOutput.writeObject(obj);
+			objOutput.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * Waits for incoming messages from the server. Is called in the run method.
-	 */
-	private void waitForMessage() {
 
+	/**
+	 * Waits for an object to arrive on the inputstream. 
+	 * @return the object that was recieved or null if no object is recieved. 
+	 */
+	public Object waitForResponse() {
 		try {
-			objInput.readObject();
+			socket.setSoTimeout(1000);
+			return objInput.readObject();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
+			return null;
 		}
 	}
-
-	/**
-	 * The run method for this clients thread. Calls the "waitForMessage()" method.
-	 */
-	public void run() {
-
-		while (!interrupted()) {
-			waitForMessage();
-		}
-	}
+	
 
 }

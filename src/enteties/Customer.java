@@ -1,13 +1,18 @@
 package enteties;
+
 import java.io.Serializable;
+
+import server.Queryable;
 
 /**
  * A class that represents a Customer in the system.
+ * 
  * @author nadiaelhaddaoui
+ * @autor Robin Overgaard
  *
  */
 
-public class Customer implements Serializable {
+public class Customer implements Serializable, Queryable {
 
 	private int customerId;
 	private String name;
@@ -17,27 +22,53 @@ public class Customer implements Serializable {
 	private String phoneNumber;
 	private String email;
 	private int vatNumber;
-	
+	private int operation;
+	private String query;
+
 	/**
 	 * Customers constructor.
-	 * @param customerId A unique Id
-	 * @param name The name of the customer
-	 * @param adress The address of the customer
-	 * @param zipCode The zipcode of the customer
-	 * @param town The town in which the customer lives in
-	 * @param phoneNumber The customers phonenumber
-	 * @param email The customers email
-	 * @param vatNumber The organizationnumber for the customer
+	 * 
+	 * @param customerId
+	 *            A unique Id
+	 * @param name
+	 *            The name of the customer
+	 * @param adress
+	 *            The address of the customer
+	 * @param zipCode
+	 *            The zipcode of the customer
+	 * @param town
+	 *            The town in which the customer lives in
+	 * @param phoneNumber
+	 *            The customers phonenumber
+	 * @param email
+	 *            The customers email
+	 * @param vatNumber
+	 *            The organizationnumber for the customer
 	 */
-	public Customer(int customerId, String name, String adress, int zipCode, String town, String phoneNumber, String email, int vatNumber){
-		this.customerId=customerId;
-		this.name=name;
-		this.address=adress;
-		this.zipCode=zipCode;
-		this.town=town;
-		this.phoneNumber=phoneNumber;
-		this.email=email;
-		this.vatNumber=vatNumber;
+	public Customer(int customerId, String name, String adress, int zipCode, String town, String phoneNumber,
+		String email, int vatNumber) {
+		this.customerId = customerId;
+		this.name = name;
+		this.address = adress;
+		this.zipCode = zipCode;
+		this.town = town;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.vatNumber = vatNumber;
+	}
+
+	public Customer(int id) {
+		this.customerId = id;
+		//TODO Set default values for not null columns in db.
+	}
+	
+	public Customer(int operation, int customerId) {
+		this.operation = operation;
+		this.customerId = customerId;
+	}
+	
+	public Customer() {
+		//TODO Set default values for not null columns in db.
 	}
 
 	public int getCustomerId() {
@@ -103,13 +134,28 @@ public class Customer implements Serializable {
 	public void setVatNumber(int vatNumber) {
 		this.vatNumber = vatNumber;
 	}
-	
+
 	public String toString() {
-		String res = "INSERT INTO customer (name, adress, zipCode, city, phoneNumber, email, organisationNumber, creditLimit) "
-				+ "VALUES (\"" + getName() + "\",\"" + getAdress() + "\",\"" + getZipCode() + "\",\""
-				+ getTown() + "\",\"" + getPhoneNumber() + "\",\"" + getEmail() + "\",\"" + getVatNumber()
-				+ "\"," + 0 + ")";
-		return res;
+		return String.format("Customer with id %s, operation %s and query \"%s\".", customerId, operation, query);
+	}
+	
+	@Override
+	public int getOperation() {
+		return this.operation;
+	}
+	
+	@Override
+	public void setOperation(int operation) {
+		this.operation = operation;
 	}
 
+	@Override
+	public void setQuery(String query) {
+		this.query = query;
+	}
+
+	@Override
+	public String getQuery() {
+		return this.query;
+	}
 }

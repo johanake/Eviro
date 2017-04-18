@@ -16,6 +16,7 @@ import java.util.logging.SimpleFormatter;
  * Handles all Client and logs all traffic.
  * 
  * @author Mattias Sundquist
+ * @author Robin Overgaard
  *
  */
 public class Server extends Thread {
@@ -24,7 +25,6 @@ public class Server extends Thread {
 	private Logger log = Logger.getLogger("log");
 	private FileHandler fhLog;
 	private SimpleFormatter sfLog = new SimpleFormatter();
-	private ServerController serverController;
 
 	/**
 	 * Sets up the logger and starts the server.
@@ -32,7 +32,7 @@ public class Server extends Thread {
 	 * @param port The port to which the server will be listening
 	 */
 	public Server(int port) {
-		serverController = new ServerController();
+		
 		try {
 			File logDir = new File("logs");
 			logDir.mkdir();
@@ -70,11 +70,12 @@ public class Server extends Thread {
 	 * @author Mattias Sundquist
 	 *
 	 */
-	private class ClientConnection extends Thread {
+	public class ClientConnection extends Thread {
 
 		private ObjectOutputStream objOutput;
 		private ObjectInputStream objInput;
 		private Socket socket;
+		private ServerController controller;
 
 		/**
 		 * Sets up input and output streams and starts a new Thread.
@@ -82,6 +83,7 @@ public class Server extends Thread {
 		 * @param socket The client which connected to the server.
 		 */
 		public ClientConnection(Socket socket) {
+			controller = new ServerController();
 			this.socket = socket;
 			try {
 				objOutput = new ObjectOutputStream(socket.getOutputStream());
@@ -108,6 +110,26 @@ public class Server extends Thread {
 			log.info("Client disconnected");
 		}
 
+		
+		/**
+		 * Sends an object to the client using the outputstream.
+		 * @param obj the object to send
+		 */
+		private void send(Object obj) {
+			
+			try {
+				
+				if (obj != null) {
+					objOutput.writeObject(obj);
+					objOutput.flush();
+				}
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
 		/**
 		 * The run method for this clients thread. Listens for incoming messages and sends them to the ServerController.
 		 */
@@ -117,7 +139,7 @@ public class Server extends Thread {
 			while (!interrupted()) {
 
 				try {
-					serverController.commandHandler(objInput.readObject());
+					send(controller.getDataFromDb(objInput.readObject()));
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
 				}
@@ -125,6 +147,7 @@ public class Server extends Thread {
 			}
 			disconnect();
 		}
+		
 
 	}
 

@@ -20,7 +20,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import client.ClientController;
-import client.Tool;
+import gui.Tool;
 
 public class SearchCustomerGUI extends JPanel implements Tool {
 	
@@ -178,7 +178,8 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 				}
 
 			}else if(e.getSource() == btnCreate){
-				clientController.createCustomer(Integer.parseInt(txtCustomerID.getText()), txtName.getText(), txtAddress.getText(), Integer.parseInt(txtZipCode.getText()), txtTown.getText(), txtPhoneNbr.getText(), txtEmail.getText(), Integer.parseInt(txtVATNbr.getText()));
+				
+				clientController.updateCustomer(Integer.parseInt(txtCustomerID.getText()), txtName.getText(), txtAddress.getText(), Integer.parseInt(txtZipCode.getText()), txtTown.getText(), txtPhoneNbr.getText(), txtEmail.getText(), Integer.parseInt(txtVATNbr.getText()));
 			}
 
 		}

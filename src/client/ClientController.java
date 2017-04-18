@@ -1,55 +1,58 @@
 package client;
 
+import java.util.HashMap;
+
 import enteties.Customer;
+import server.Database;
 
 /**
- * Creates and sends objects to the client. 
+ * Builds querys thats is passed to the client.
  * @author Robin Overgaard
  * @version 1.0
  */
 public class ClientController {
 
 	private Client client;
-	
+
 	/**
-	 * Constructs the ClientController. 
-	 * @param client the client for the system
+	 * Constructs the ClientController.
+	 * 
+	 * @param client
+	 *            the client for the system
 	 */
 	public ClientController(Client client) {
 		this.client = client;
 	}
-	
-	/**
-	 * Creates a new customer. 
-	 * @param customerId customer id
-	 * @param name customer name
-	 * @param adress customer adress
-	 * @param zipCode customer zip code
-	 * @param town customer town
-	 * @param phoneNumber customer phone number
-	 * @param email customer email
-	 * @param vatNumber customer vat number
-	 */
-	public void createCustomer(int customerId, String name, String adress, int zipCode, String town, String phoneNumber, String email, int vatNumber) {
-		send(1,new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber));
-	}
-	
-//	public void createInvoice() {
-//		send(new Invoice());
-//	}
-	
-//	public void createProduct() {
-//		send(new Product());
-//	}
-	
-	/**
-	 * Sends an operation and entity to the client. 
-	 * @param operation the operation to be executed by the client
-	 * @param obj the entity that the client will execute the operation on
-	 */
-	private void send(int operation, Object obj) {
-		
-		client.sendMessage(new Object[]{operation, obj});
+
+	public void updateCustomer(int id, String name, String adress, int zip, String city, String phone,
+			String mail, int vat) {
+
+		Customer customer = new Customer(id, name, adress, zip, city, phone, mail, vat);
+		customer.setOperation(Database.INSERT);
+		customer.setQuery("UPDATE customer SET name = '" + customer.getName() + "', adress = '" + customer.getAdress()
+				+ "', zipCode = '" + customer.getZipCode() + "', city = '" + customer.getTown() + "', phoneNumber = '"
+				+ customer.getPhoneNumber() + "', email = '" + customer.getEmail() + "', organisationNumber = '"
+				+ customer.getVatNumber() + "' WHERE customerId = " + customer.getCustomerId());
+		client.sendObject(customer);
 		
 	}
+
+	public HashMap<String, String> createCustomer() {
+
+		Customer customer = new Customer();
+		customer.setOperation(Database.INSERT);
+		customer.setQuery("INSERT INTO customer (customerId) VALUES (NULL)");
+		client.sendObject(customer);
+		return selectCustomer(Integer.parseInt((String) client.waitForResponse()));
+
+	}
+
+	public HashMap<String, String> selectCustomer(int customerId) {
+		Customer customer = new Customer(customerId);
+		customer.setOperation(Database.SELECT);
+		customer.setQuery("SELECT * FROM customer WHERE customerId = " + customer.getCustomerId());
+		client.sendObject(customer);
+		return (HashMap<String, String>) client.waitForResponse();
+	}
+
 }

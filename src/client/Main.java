@@ -3,7 +3,6 @@ import server.Server;
 
 /**
  * Contains constants and code to setup and start the system.
- * 
  * @author Robin Overgaard
  * @version 1.0
  */

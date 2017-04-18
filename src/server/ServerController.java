@@ -1,56 +1,49 @@
 package server;
 
-import enteties.Customer;
-
 /**
- * Handles most of the logic between the server and the database.
- * 
- * @author Mattias Sundquist, Peter Folke
- *
+ * Serverside controller class for logic and data transportation between server and database. 
+ * @author Robin Overgaard
+ * @version 1.0
  */
 public class ServerController {
 
-	private ConnectDB database;
+	private Database database;
 
 	/**
-	 * Gets an instance of the ConnectDB class
+	 * Constructor that instatntiates the database connection. 
 	 */
 	public ServerController() {
-		database = new ConnectDB();
+		database = new Database();
 	}
 
 	/**
-	 * Handles objects coming from the server. Finds out what operation to perform based on the first element in the
-	 * object array.
-	 * 
-	 * @param obj The object coming from the server.
+	 * Extracts query information and executes query on the database. 
+	 * @param data the object that contains query information
+	 * @return the result of the database query
 	 */
-	public void commandHandler(Object obj) {
-
-		Object[] data = (Object[]) obj;
-		switch ((int) data[0]) {
-			case 1:
-				addCustomer(data);
-				break;
-		}
+	public Object getDataFromDb(Object data) {
+		Queryable queryable =(Queryable) data;
+		return query(queryable.getOperation(), queryable.getQuery());
 	}
-
+	
 	/**
-	 * Objects are sent here by the commandHandler method if the first element in the object array represents adding a
-	 * new customer to the database. The data in the Object is transformed into Strings which is then sent to the
-	 * database.
-	 * 
-	 * @param data The data which is to be transformed and sent to the database.
+	 * Passes a query to the database connection.
+	 * @param operation the operation type
+	 * @param query the query to be passed
+	 * @return the result of the query execution or null if the query has no return result
 	 */
-	private void addCustomer(Object[] data) {
+	public synchronized Object query(int operation, String query) {
 
-		Customer c;
-		if (data[1] instanceof Customer) {
-			c = (Customer) data[1];
+		switch (operation) {
 
-			String commandstring = c.toString();
-			database.executeInsertQuery(commandstring);
+		case Database.INSERT:
+			return database.insert(query);
+
+		case Database.SELECT:
+			return database.select(query);	
 		}
+
+		return null;
 
 	}
 
