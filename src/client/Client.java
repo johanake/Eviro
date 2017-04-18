@@ -85,7 +85,7 @@ public class Client {
 	 */
 	public Object waitForResponse() {
 		try {
-			socket.setSoTimeout(1000);
+			socket.setSoTimeout(5000);
 			return objInput.readObject();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
