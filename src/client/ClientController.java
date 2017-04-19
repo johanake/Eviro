@@ -70,12 +70,14 @@ public class ClientController {
 		for (Map.Entry<String, String> entry : args.entrySet()) {
 
 			if (i++ == 0) {
-				query += "WHERE " +  entry.getKey() + " = '" + entry.getValue() + "'";
+				query += "WHERE " +  entry.getKey() + " LIKE '%" + entry.getValue() + "%'";
 			}
 			
 			else if (i++ <= args.entrySet().size()) {
-				query += " AND " + entry.getKey() + " = '" + entry.getValue() + "'";
+				query += " AND " + entry.getKey() + " LIKE '%" + entry.getValue() + "%'";
 			}
+			
+			query += "ORDER BY customerId";
 		}
 
 		System.out.println(query);

@@ -21,6 +21,10 @@ public class Database {
 	public static final int INSERT = 0;
 	public static final int SELECT = 1;
 	public static final int DELETE = 2;
+	
+//	public static final String[] CUSTOMER = {"customerId", "name"};
+//	public static final String[] ARTICLE = {};
+//	public static final String[] INVOICE = {};
 
 	private String connectionString = "jdbc:mysql://195.178.232.16:3306/m10p4305";
 	private Connection connection;
@@ -37,8 +41,6 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
-
-
 
 	/**
 	 * Execute a query that selects data from the database. 

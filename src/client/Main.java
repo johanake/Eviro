@@ -10,7 +10,7 @@ public class Main {
 
 	// Constants
 	public static final String APP_NAME = "Eviro Enterprise System";
-	public static final String APP_VERSION = "v0.1";
+	public static final String APP_VERSION = "v1337 - Pr0b1n";
 	public static final String APP_ICON = "/eviro_icon.png";
 
 	/**

@@ -252,8 +252,7 @@ public class CustomerGUI extends JPanel implements Tool {
 		public ListGUI(Object[][] data, String[] columns) {
 
 			table = new JTable(data, columns);
-			// setPreferredSize(new Dimension(300,300));
-			// setLayout(new BorderLayout());
+			 setLayout(new BorderLayout());
 			add(new JScrollPane(table), BorderLayout.CENTER);
 		}
 

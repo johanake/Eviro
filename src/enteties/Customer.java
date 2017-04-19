@@ -62,10 +62,10 @@ public class Customer implements Serializable, Queryable {
 		//TODO Set default values for not null columns in db.
 	}
 	
-	public Customer(int operation, int customerId) {
-		this.operation = operation;
-		this.customerId = customerId;
-	}
+//	public Customer(int operation, int customerId) {
+//		this.operation = operation;
+//		this.customerId = customerId;
+//	}
 	
 	public Customer() {
 		//TODO Set default values for not null columns in db.
@@ -133,10 +133,6 @@ public class Customer implements Serializable, Queryable {
 
 	public void setVatNumber(int vatNumber) {
 		this.vatNumber = vatNumber;
-	}
-
-	public String toString() {
-		return String.format("Customer with id %s, operation %s and query \"%s\".", customerId, operation, query);
 	}
 	
 	@Override
