@@ -91,7 +91,7 @@ public class GUIController {
 
 		try {
 
-//			UIManager.put("nimbusBase", new Color(50,50,50));
+			UIManager.put("nimbusBase", new Color(50,50,50));
 			
 			for (LookAndFeelInfo lnfi : UIManager.getInstalledLookAndFeels()) {
 
