@@ -1,5 +1,6 @@
 package client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import enteties.Customer;
@@ -16,9 +17,7 @@ public class ClientController {
 
 	/**
 	 * Constructs the ClientController.
-	 * 
-	 * @param client
-	 *            the client for the system
+	 * @param client the client for the system
 	 */
 	public ClientController(Client client) {
 		this.client = client;
@@ -37,22 +36,27 @@ public class ClientController {
 		
 	}
 
-	public HashMap<String, String> createCustomer() {
+	public ArrayList<HashMap> createCustomer() {
 
 		Customer customer = new Customer();
 		customer.setOperation(Database.INSERT);
 		customer.setQuery("INSERT INTO customer (customerId) VALUES (NULL)");
 		client.sendObject(customer);
-		return selectCustomer(Integer.parseInt((String) client.waitForResponse()));
+		return selectCustomers(Integer.parseInt((String) client.waitForResponse()));
 
 	}
 
-	public HashMap<String, String> selectCustomer(int customerId) {
-		Customer customer = new Customer(customerId);
+	public ArrayList<HashMap> selectCustomers(int id) {
+		
+		String query = "SELECT * FROM customer";
+		
+		Customer customer = new Customer(id);
 		customer.setOperation(Database.SELECT);
-		customer.setQuery("SELECT * FROM customer WHERE customerId = " + customer.getCustomerId());
+//		customer.setQuery("SELECT * FROM customer WHERE customerId = " + customer.getCustomerId());
+		customer.setQuery(query);
+
 		client.sendObject(customer);
-		return (HashMap<String, String>) client.waitForResponse();
+		return (ArrayList<HashMap>) client.waitForResponse();
 	}
 
 }

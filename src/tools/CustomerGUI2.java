@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
@@ -53,7 +54,7 @@ public class CustomerGUI2 extends JPanel implements Tool {
 	private JTextField[] txtInfoAll = {txtIdNbr,txtName,txtAddress,txtCity,txtZipNbr,txtPhoneNbr,txtEmail,txtVatNbr};
 
 	private JButton btnNew = new JButton("Skapa ny");
-	private JButton btnGet = new JButton("Hämta");
+	private JButton btnGet = new JButton("Sök kund");
 	private JButton btnSave = new JButton("Spara");
 	private JButton[] btnAll = {btnNew,btnGet,btnSave};
 	
@@ -69,7 +70,7 @@ public class CustomerGUI2 extends JPanel implements Tool {
 	
 	public CustomerGUI2(ClientController controller, int IdNbr) {
 		this(controller);
-		setValues(controller.selectCustomer(IdNbr));
+		setValues(controller.selectCustomers(IdNbr));
 	}
 
 	private void setupLayout() {
@@ -132,20 +133,38 @@ public class CustomerGUI2 extends JPanel implements Tool {
 
 	}
 
-	private void setValues(HashMap<String, String> values) {
+	private void setValues(ArrayList<HashMap> values) {
 
-		txtIdNbr.setText(values.get("customerId"));
-		txtName.setText(values.get("name"));
-		txtAddress.setText(values.get("adress"));
-		txtZipNbr.setText(values.get("zipCode"));
-		txtCity.setText(values.get("city"));
-		txtPhoneNbr.setText(values.get("phoneNumber"));
-		txtEmail.setText(values.get("email"));
-		txtVatNbr.setText(values.get("organisationNumber"));
-		lblIdNbr.setText(values.get("customerId"));
-		lblName.setText(" " + txtName.getText());
-		
-	}
+		if (values.size() > 1) {
+			
+			for (HashMap map : values) {
+				
+				System.out.println(map);
+
+			}
+			
+			
+		}
+		else {
+			
+			HashMap<String, String> customerData = values.get(0);
+				
+				txtIdNbr.setText(customerData.get("customerId"));
+				txtName.setText(customerData.get("name"));
+				txtAddress.setText(customerData.get("adress"));
+				txtZipNbr.setText(customerData.get("zipCode"));
+				txtCity.setText(customerData.get("city"));
+				txtPhoneNbr.setText(customerData.get("phoneNumber"));
+				txtEmail.setText(customerData.get("email"));
+				txtVatNbr.setText(customerData.get("organisationNumber"));
+				lblIdNbr.setText(customerData.get("customerId"));
+				lblName.setText(" " + txtName.getText());
+			}
+			
+		}
+	
+	
+
 	
 	@Override
 	public String getTitle() {
@@ -172,7 +191,7 @@ public class CustomerGUI2 extends JPanel implements Tool {
 			}
 			
 			if (e.getSource() == btnGet) {
-				setValues(controller.selectCustomer(Integer.parseInt(txtIdNbr.getText())));
+				setValues(controller.selectCustomers(Integer.parseInt(txtIdNbr.getText())));
 			}
 			
 			if (e.getSource() == btnSave) {

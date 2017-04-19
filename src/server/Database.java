@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.sql.ResultSetMetaData;
 
@@ -46,26 +47,31 @@ public class Database {
 	 */
 	Object select(String query) {
 
-
-		HashMap<String, String> result = new HashMap<String, String>();
-
+		ArrayList<HashMap> results = new ArrayList<HashMap>();
+	
 		try {
 
 			ResultSet rs = stmt.executeQuery(query);
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int cols = rsmd.getColumnCount();
 
-			rs.next();
-
-			for (int i = 1; i <= cols; i++) {
-				result.put(rsmd.getColumnName(i), rs.getString(i));
+			while (rs.next()) {
+				
+				HashMap<String, String> result = new HashMap<String, String>();
+				
+				for (int i = 1; i <= cols; i++) {
+					result.put(rsmd.getColumnName(i), rs.getString(i));
+				}
+				
+				results.add(result);
+				
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return result;
+		return results;
 
 	}
 
