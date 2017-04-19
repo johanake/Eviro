@@ -1,135 +1,172 @@
 package tools;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 
 import client.ClientController;
 import gui.Tool;
 
 public class CustomerGUI extends JPanel implements Tool {
 
-	public final String TOOLNAME = "Customer";
+	public final String TOOLNAME = "Kund";
 
-	private JPanel pnlLeft = new JPanel(new GridLayout(7, 1));
-	private JPanel pnlMiddle = new JPanel(new GridLayout(7, 1));
-	private JPanel pnlRight = new JPanel(new GridLayout(7, 1));
-	private JPanel pnlZipTown = new JPanel(new GridLayout(1, 2));
-	private JLabel lblCustomerID = new JLabel("Customer ID: ");
-	private JLabel lblname = new JLabel("Name: ");
-	private JLabel lblAddress = new JLabel("Address: ");
-	private JLabel lblZipTown = new JLabel("Zip/Town: ");
-	private JLabel lblPhoneNbr = new JLabel("Phone number: ");
-	private JLabel lblEmail = new JLabel("Email: ");
-	private JLabel lblVatNbr = new JLabel("Vat-number: ");
-	private JLabel lblCreditLimit = new JLabel("5000", SwingConstants.CENTER);
-	private JTextField txtCustomerID = new JTextField("");
-	private JTextField txtName = new JTextField("");
-	private JTextField txtAddress = new JTextField("");
-	private JTextField txtZipCode = new JTextField("");
-	private JTextField txtTown = new JTextField("");
-	private JTextField txtPhoneNbr = new JTextField("");
-	private JTextField txtEmail = new JTextField("");
-	private JTextField txtVATNbr = new JTextField("");
-	private JButton txtBalance = new JButton("Balance");
-	private JButton btnClosedInvoice = new JButton("Closed Invoice");
-	private JButton btnOpenInvoice = new JButton("Open Invoice");
-	private JButton btnSelect = new JButton("SELECT");
-	private JButton btnUpdate = new JButton("UPDATE");
-	private JButton btnEdit = new JButton("Edit Customer");
-	private boolean editable = false;
-	private ClientController clientController;
+	private ClientController controller;
+	
+	private JPanel pnlNorth = new JPanel(new BorderLayout());
+	private JPanel pnlInfo = new JPanel(new BorderLayout());
+	private JPanel pnlInfoCenter;
+	private JPanel pnlInfoNorth = new JPanel(new BorderLayout());
+	private JPanel pnlInfoNorthLeft = new JPanel(new GridLayout(8,1,0,0));
+	private JPanel pnlInfoNorthRight = new JPanel(new GridLayout(8,1,0,0));
+	
+	private JPanel pnlFinance = new JPanel(new BorderLayout());
+	private JPanel pnlFinanceCenter;
+	private JPanel pnlFinanceNorth = new JPanel(new BorderLayout());
+	private JPanel pnlFinanceNorthLeft = new JPanel(new GridLayout(1,1,0,0));
+	private JPanel pnlFinanceNorthRight = new JPanel(new GridLayout(1,1,0,0));
+	
+	private JPanel pnlComments = new JPanel(new BorderLayout());
+	private JTextField txtIdNbr = new JTextField("Kundnummer:");
+	private JTextField txtName = new JTextField("Namn:");
+	private JTextField txtAddress = new JTextField("Adress:");
+	private JTextField txtCity = new JTextField("Stad:");
+	private JTextField txtZipNbr = new JTextField("Postnummer:");
+	private JTextField txtPhoneNbr = new JTextField("Telefonnummer:");
+	private JTextField txtEmail = new JTextField("Epost:");
+	private JTextField txtVatNbr = new JTextField("Org-nummer:");
+	private JTextField[] txtInfoAll = {txtIdNbr,txtName,txtAddress,txtCity,txtZipNbr,txtPhoneNbr,txtEmail,txtVatNbr};
 
-	private JButton btnCreate = new JButton("CREATE NEW");
+	private JButton btnNew = new JButton("Skapa ny");
+	private JButton btnGet = new JButton("Sök kund");
+	private JButton btnSave = new JButton("Spara");
+	private JButton[] btnAll = {btnNew,btnGet,btnSave};
+	
+	private JLabel lblIdNbr = new JLabel("Ingen kund vald, skapa eller hämta en kund nedan.");
+	private JLabel lblName = new JLabel("");
+	
 
-	public CustomerGUI(ClientController clientController) {
-		this.clientController = clientController;
+	public CustomerGUI(ClientController controller) {
+		this.controller = controller;
+		new ButtonListener();
+		setupLayout();
+	}
+	
+	public CustomerGUI(ClientController controller, int IdNbr) {
+		this(controller);
+		setValues(controller.selectCustomers(IdNbr));
+	}
+
+	private void setupLayout() {
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(600, 300));
+		setPreferredSize(new Dimension(400,350));
+		pnlNorth.setBorder(BorderFactory.createEmptyBorder(10, 10, 6, 10));
+		pnlNorth.add(lblIdNbr, BorderLayout.WEST);	
+		pnlNorth.add(lblName, BorderLayout.CENTER);	
+		pnlInfoNorthLeft.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 30));
+		addLabeledTextFields(pnlInfoNorthLeft,pnlInfoNorthRight,txtInfoAll);
+		pnlInfoNorth.add(pnlInfoNorthLeft, BorderLayout.WEST);
+		pnlInfoNorth.add(pnlInfoNorthRight, BorderLayout.CENTER);
+		pnlInfoNorth.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		pnlInfo.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		pnlInfo.add(pnlInfoNorth, BorderLayout.NORTH);
+		pnlInfoCenter = Buttons();
+		pnlInfo.add(pnlInfoCenter, BorderLayout.SOUTH);
+		add(pnlNorth, BorderLayout.NORTH);
+		add(TabbedPane());
+	}
+	
+	private void addLabeledTextFields(JPanel left, JPanel right, JTextField[] textFields) {
 		
-		txtCustomerID = new JTextField("");
-		txtName = new JTextField("");
-		txtAddress = new JTextField("");
-		txtZipCode = new JTextField("");
-		txtTown = new JTextField("");
-		txtPhoneNbr = new JTextField("");
-		txtEmail = new JTextField("");
-		txtVATNbr = new JTextField("");
-		displayContent();
-		addListeners();
-		setEditable(editable);
+		for (JTextField txt : textFields) {
+			left.add(new JLabel(txt.getText()));
+			right.add(txt);
+			txt.setText("");
+		}
 
 	}
 
-	private void displayContent() {
+	private JPanel Buttons() {
 
-		add(pnlLeft, BorderLayout.WEST);
-		add(pnlMiddle, BorderLayout.CENTER);
-		add(pnlRight, BorderLayout.EAST);
-		pnlLeft.setBorder(new EmptyBorder(10, 10, 10, 10));
-		pnlMiddle.setBorder(new EmptyBorder(10, 10, 10, 10));
-		pnlRight.setBorder(new EmptyBorder(10, 10, 10, 10));
-		pnlLeft.add(lblCustomerID);
-		pnlLeft.add(lblname);
-		pnlLeft.add(lblAddress);
-		pnlLeft.add(lblZipTown);
-		pnlLeft.add(lblPhoneNbr);
-		pnlLeft.add(lblEmail);
-		pnlLeft.add(lblVatNbr);
-		pnlMiddle.add(txtCustomerID);
-		pnlMiddle.add(txtName);
-		pnlMiddle.add(txtAddress);
-		pnlMiddle.add(pnlZipTown);
-		pnlZipTown.add(txtZipCode);
-		pnlZipTown.add(txtTown);
-		pnlMiddle.add(txtPhoneNbr);
-		pnlMiddle.add(txtEmail);
-		pnlMiddle.add(txtVATNbr);
-		TitledBorder centerBorder = BorderFactory.createTitledBorder("Credit Limit");
-		centerBorder.setTitleJustification(TitledBorder.CENTER);
-		lblCreditLimit.setBorder(centerBorder);
-		pnlRight.add(lblCreditLimit);
-		pnlRight.add(btnClosedInvoice);
-		pnlRight.add(btnOpenInvoice);
-		pnlRight.add(btnSelect);
-		pnlRight.add(btnUpdate);
-		pnlRight.add(btnEdit);
-		pnlRight.add(btnCreate);
+		JPanel pnl = new JPanel(new GridLayout());
+		pnl.setBorder(BorderFactory.createCompoundBorder(
+		BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(146, 151, 161)),
+		BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		
+		pnl.add(btnNew);
+		pnl.add(btnGet);
+		pnl.add(btnSave);
+		
+		return pnl;
+
 	}
 
-	private void setEditable(Boolean editable) {
-		this.editable = editable;
-		txtCustomerID.setEditable(editable);
-		txtName.setEditable(editable);
-		txtAddress.setEditable(editable);
-		txtZipCode.setEditable(editable);
-		txtTown.setEditable(editable);
-		txtPhoneNbr.setEditable(editable);
-		txtEmail.setEditable(editable);
-		txtVATNbr.setEditable(editable);
+	private JTabbedPane TabbedPane() {
+
+		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.addTab("Information", pnlInfo);
+		tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
+
+		tabbedPane.addTab("Ekonomi", pnlFinance);
+		tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
+
+		tabbedPane.addTab("Kommentarer", pnlComments);
+		tabbedPane.setMnemonicAt(2, KeyEvent.VK_3);
+
+		return tabbedPane;
+
 	}
 
-	private void addListeners() {
-		ButtonListener listener = new ButtonListener();
-		btnEdit.addActionListener(listener);
-		btnCreate.addActionListener(listener);
-		btnUpdate.addActionListener(listener);
-		btnSelect.addActionListener(listener);
-	}
+	private void setValues(ArrayList<HashMap> values) {
 
+		if (values.size() > 1) {
+			
+			for (HashMap map : values) {
+				
+				System.out.println(map);
+
+			}
+			
+			
+		}
+		else {
+			
+			HashMap<String, String> customerData = values.get(0);
+				
+				txtIdNbr.setText(customerData.get("customerId"));
+				txtName.setText(customerData.get("name"));
+				txtAddress.setText(customerData.get("adress"));
+				txtZipNbr.setText(customerData.get("zipCode"));
+				txtCity.setText(customerData.get("city"));
+				txtPhoneNbr.setText(customerData.get("phoneNumber"));
+				txtEmail.setText(customerData.get("email"));
+				txtVatNbr.setText(customerData.get("organisationNumber"));
+				lblIdNbr.setText(customerData.get("customerId"));
+				lblName.setText(" " + txtName.getText());
+			}
+			
+		}
+	
+	
+
+	
 	@Override
 	public String getTitle() {
 		return TOOLNAME;
@@ -137,79 +174,55 @@ public class CustomerGUI extends JPanel implements Tool {
 
 	@Override
 	public boolean getRezizable() {
-		return false;
-	}
-
-	private void setFields(HashMap<String, String> values) {
-
-		txtCustomerID.setText(values.get("customerId"));
-		txtName.setText(values.get("name"));
-		txtAddress.setText(values.get("adress"));
-		txtZipCode.setText(values.get("zipCode"));
-		txtTown.setText(values.get("city"));
-		txtPhoneNbr.setText(values.get("phoneNumber"));
-		txtEmail.setText(values.get("email"));
-		txtVATNbr.setText(values.get("organisationNumber"));
-
-	}
-
-	private void setFields() {
-
-		txtName.setText("");
-		txtAddress.setText("");
-		txtZipCode.setText("");
-		txtTown.setText("");
-		txtPhoneNbr.setText("");
-		txtEmail.setText("");
-		txtVATNbr.setText("");
-
+		return true;
 	}
 
 	private class ButtonListener implements ActionListener {
 
-		public void actionPerformed(ActionEvent e) {
-
-			if (e.getSource() == btnEdit) {
-				if (editable == false) {
-					setEditable(true);
-				} else {
-					setEditable(false);
-				}
-
-			} else if (e.getSource() == btnCreate) {
-
-				// setFields();
-				setEditable(true);
-
-				setFields(clientController.createCustomer());
-
-			} else if (e.getSource() == btnUpdate) {
-
-				clientController.updateCustomer(Integer.parseInt(txtCustomerID.getText()), txtName.getText(),
-						txtAddress.getText(), Integer.parseInt(txtZipCode.getText()), txtTown.getText(),
-						txtPhoneNbr.getText(), txtEmail.getText(), Integer.parseInt(txtVATNbr.getText()));
-
-			} else if (e.getSource() == btnSelect) {
-				
-				try {
-					int id = Integer.parseInt(txtCustomerID.getText());
-					setFields(clientController.selectCustomers(id));
-				} 
-				catch(Exception e1) {
-					e1.printStackTrace();
-					
-				}
-				
-				
-				
-				
-				
-				
+		public ButtonListener() {
+			for (JButton btn : btnAll) {
+				btn.addActionListener(this);
 			}
 		}
 
+		public void actionPerformed(ActionEvent e) {
+			
+			if (e.getSource() == btnNew) {
+				setValues(controller.createCustomer());
+			}
+			
+			if (e.getSource() == btnGet) {
+//				setValues(controller.selectCustomers(Integer.parseInt(txtIdNbr.getText())));
+				
+				if (txtIdNbr.getText().length() > 0) {
+					int id = Integer.parseInt(txtIdNbr.getText());
+					setValues(controller.selectCustomers(id));
+				}
+				
+				else {
+					TreeMap<String, String> args = new TreeMap<String, String>();
+				
+					args.put("name", txtName.getText());
+					args.put("adress", txtAddress.getText());
+					args.put("zipCode", txtZipNbr.getText());
+					args.put("city", txtCity.getText());
+					args.put("phoneNumber", txtPhoneNbr.getText());
+					args.put("email", txtEmail.getText());
+					args.put("organisationNumber", txtVatNbr.getText());
+					
+					setValues(controller.selectCustomers(args));
+				}
+
+				
+			}
+			
+			if (e.getSource() == btnSave) {
+				controller.updateCustomer(Integer.parseInt(lblIdNbr.getText()), txtName.getText(),
+						txtAddress.getText(), Integer.parseInt(txtZipNbr.getText()), txtCity.getText(),
+						txtPhoneNbr.getText(), txtEmail.getText(), Integer.parseInt(txtVatNbr.getText()));
+			}
+			
+		}
+
 	}
-
-
-
 }

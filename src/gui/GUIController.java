@@ -31,9 +31,7 @@ import javax.swing.border.TitledBorder;
 import client.ClientController;
 import client.Main;
 import tools.CustomerGUI;
-import tools.CustomerGUI2;
 import tools.InvoiceGUI;
-import tools.SearchCustomerGUI;
 
 /**
  * Handles client side gui operations of the system.
@@ -130,8 +128,7 @@ public class GUIController {
 				new ActionJButton("Article", "find_art") };
 
 		private JComponent tools[] = new JComponent[] { 
-				new ActionJButton("Customer", "tool_customer"), 
-				new ActionJButton("Kund", "tool_customer2"), 
+				new ActionJButton("Kund", "tool_customer"), 
 				new ActionJButton("Invoice", "tool_invoice") };
 
 		private JComponent exampleInfo[] = new JComponent[] { 
@@ -191,10 +188,6 @@ public class GUIController {
 
 			case "tool_customer":
 				desktop.add(new Toolbox(new CustomerGUI(clientController)));
-				break;
-				
-			case "tool_customer2":
-				desktop.add(new Toolbox(new CustomerGUI2(clientController)));
 				break;
 
 
