@@ -191,8 +191,20 @@ public class CustomerGUI extends JPanel implements Tool {
 
 			} else if (e.getSource() == btnSelect) {
 				
-				int id = Integer.parseInt(txtCustomerID.getText());
-				setFields(clientController.selectCustomer(id));
+				try {
+					int id = Integer.parseInt(txtCustomerID.getText());
+					setFields(clientController.selectCustomers(id));
+				} 
+				catch(Exception e1) {
+					e1.printStackTrace();
+					
+				}
+				
+				
+				
+				
+				
+				
 			}
 		}
 

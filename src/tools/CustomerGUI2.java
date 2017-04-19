@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -191,7 +192,28 @@ public class CustomerGUI2 extends JPanel implements Tool {
 			}
 			
 			if (e.getSource() == btnGet) {
-				setValues(controller.selectCustomers(Integer.parseInt(txtIdNbr.getText())));
+//				setValues(controller.selectCustomers(Integer.parseInt(txtIdNbr.getText())));
+				
+				if (txtIdNbr.getText().length() > 0) {
+					int id = Integer.parseInt(txtIdNbr.getText());
+					setValues(controller.selectCustomers(id));
+				}
+				
+				else {
+					TreeMap<String, String> args = new TreeMap<String, String>();
+				
+					args.put("name", txtName.getText());
+					args.put("adress", txtAddress.getText());
+					args.put("zipCode", txtZipNbr.getText());
+					args.put("city", txtCity.getText());
+					args.put("phoneNumber", txtPhoneNbr.getText());
+					args.put("email", txtEmail.getText());
+					args.put("organisationNumber", txtVatNbr.getText());
+					
+					setValues(controller.selectCustomers(args));
+				}
+
+				
 			}
 			
 			if (e.getSource() == btnSave) {

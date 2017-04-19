@@ -2,6 +2,9 @@ package client;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import enteties.Customer;
 import server.Database;
@@ -47,12 +50,30 @@ public class ClientController {
 	}
 
 	public ArrayList<HashMap> selectCustomers(int id) {
-		
-		String query = "SELECT * FROM customer";
-		
 		Customer customer = new Customer(id);
 		customer.setOperation(Database.SELECT);
-//		customer.setQuery("SELECT * FROM customer WHERE customerId = " + customer.getCustomerId());
+		customer.setQuery("SELECT * FROM customer WHERE customerId = " + customer.getCustomerId());
+
+		client.sendObject(customer);
+		return (ArrayList<HashMap>) client.waitForResponse();
+	}
+	
+	public ArrayList<HashMap> selectCustomers(TreeMap<String, String> args) {
+		
+		String query = "SELECT * FROM customer WHERE ";
+
+		for(Map.Entry<String, String> entry : args.entrySet()) {
+			
+			if (entry.getValue().length() > 0) {
+				query += entry.getKey() + " = '" + entry.getValue() + "'";
+			}
+			
+		}
+		
+		System.out.println(query);
+		
+		Customer customer = new Customer();
+		customer.setOperation(Database.SELECT);
 		customer.setQuery(query);
 
 		client.sendObject(customer);
