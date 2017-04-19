@@ -80,6 +80,10 @@ public class GUIController {
 
 	}
 	
+	public GUIController getGuiController() {
+		return this;
+	}
+	
 	/**
 	 * Sets the overall look and field for the system.
 	 */
@@ -110,6 +114,10 @@ public class GUIController {
 
 	}
 
+	public void popup(Tool tool) {
+		desktop.add(new Toolbox(tool));
+	}
+	
 	/**
 	 * The sidebar.
 	 * @author Robin Overgaard
@@ -187,7 +195,7 @@ public class GUIController {
 			switch (e.getActionCommand()) {
 
 			case "tool_customer":
-				desktop.add(new Toolbox(new CustomerGUI(clientController)));
+				desktop.add(new Toolbox(new CustomerGUI(clientController, getGuiController())));
 				break;
 
 
