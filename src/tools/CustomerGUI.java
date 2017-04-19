@@ -9,7 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -144,24 +146,27 @@ public class CustomerGUI extends JPanel implements Tool {
 
 	private void setValues(ArrayList<HashMap> rows) {
 
-		Object[][] data = new Object[rows.get(0).keySet().size()][rows.size()];
-		Object[][] columns = new Object[rows.get(0).keySet().size()][];
-		
-		int index = 0;
-
-		
-		
 		if (rows.size() > 1) {
-
-			ListGUI searchResultList = new ListGUI();
-
-			for (HashMap<String, String> row : rows) {
-				System.out.println(row.toString());
-				 searchResultList.append(row.toString());
+			
+			Object[][] data = new Object[rows.size()][rows.get(0).keySet().size()];
+			String[] columns = new String[rows.get(0).keySet().size()];
+		
+			
+			for (int i = 0; i < columns.length; i++) {
+				columns[i] = "TEST";
 			}
 
-			 guiController.popup(searchResultList);
-
+			
+			for (int i = 0; i < rows.size(); i++) {
+				data[i] = rows.get(i).values().toArray();
+			}
+			
+//			for (HashMap<String, String> row : rows) {
+//				
+//			}
+			
+			guiController.popup(new ListGUI(data, columns));
+			// guiController.popup(new ListGUI(data, columns));
 		}
 
 		else {
@@ -246,7 +251,7 @@ public class CustomerGUI extends JPanel implements Tool {
 
 		public ListGUI(Object[][] data, String[] columns) {
 
-			 table = new JTable(data, columns);
+			table = new JTable(data, columns);
 			// setPreferredSize(new Dimension(300,300));
 			// setLayout(new BorderLayout());
 			add(new JScrollPane(table), BorderLayout.CENTER);
