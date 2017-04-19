@@ -76,10 +76,11 @@ public class ClientController {
 			else if (i++ <= args.entrySet().size()) {
 				query += " AND " + entry.getKey() + " LIKE '%" + entry.getValue() + "%'";
 			}
-			
-			query += "ORDER BY customerId";
-		}
 
+		}
+		
+		query += "ORDER BY customerId";
+		
 		System.out.println(query);
 
 		Customer customer = new Customer();
