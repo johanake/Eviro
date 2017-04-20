@@ -19,6 +19,16 @@ public class ServerController {
 	public static final int SEARCHCUSTOMER = 3;
 	public static final int UPDATECUSTOMER = 4;
 	public static final int DELETECUSTOMER = 5;
+	public static final int ADDINVOICE = 6;
+	public static final int GETINVOICE = 7;
+	public static final int SEARCHINVOICE = 8;
+	public static final int UPDATEINVOICE = 9;
+	public static final int DELETEINVOICE = 10;
+	public static final int ADDPRODUCT = 11;
+	public static final int GETPRODUCT = 12;
+	public static final int SEARCHPRODUCT = 13;
+	public static final int UPDATEPRODUCT = 14;
+	public static final int DELETEPRODUCT = 15;
 
 	private ConnectDB database;
 
@@ -56,8 +66,10 @@ public class ServerController {
 		case DELETECUSTOMER:
 			returnObject = deleteCustomer((Customer) obj);
 			break;
+		case ADDINVOICE:
+			returnObject = null;
+			break;
 		}
-
 		return returnObject;
 	}
 
@@ -70,31 +82,39 @@ public class ServerController {
 	 * @param data
 	 *            The data which is to be transformed and sent to the database.
 	 */
-	private Customer addCustomer(Customer customer) {
+	private ArrayList<Customer> addCustomer(Customer customer) {
 		String query = "INSERT INTO customer (name, address, zipCode, city, phoneNumber, email, vatNumber, creditLimit) "
 				+ "VALUES (\"" + customer.getName() + "\",\"" + customer.getAddress() + "\",\"" + customer.getZipCode()
 				+ "\",\"" + customer.getCity() + "\",\"" + customer.getPhoneNumber() + "\",\"" + customer.getEmail()
 				+ "\",\"" + customer.getVatNumber() + "\"," + customer.getCreditLimit() + ")";
 		database.executeInsertOrDeleteQuery(query);
 
-		return customer;
-
+		return searchCustomer(customer);
 	}
 
 	/**
+	 * Builds a SELECT-query with the customerId from the incoming
+	 * customer-object, executes the query and sends the returning ResultSet to
+	 * createCustomerList which returns an ArrayList<Customer> with a single
+	 * Customer-object that is created from the ResultSet
 	 * 
-	 * @param customer
-	 * @return
+	 * @param customer incoming Customer-object wich only has a customerId
+	 * @return ArrayList with a single  Customer-object.
 	 */
 	private ArrayList<Customer> getCustomer(Customer customer) {
 		String query = "SELECT * FROM customer WHERE customerId = " + customer.getCustomerId();
+
 		return createCustomerList(database.executeGetQuery(query));
 	}
 
 	/**
+	 * Builds a SELECT-query from all current information in the incoming
+	 * customer-object, executes the query and sends the returning ResultSet to
+	 * createCustomerList which returns an ArrayList<Customer> with all
+	 * Customer-objects that are created from the ResultSet
 	 * 
-	 * @param customer
-	 * @return
+	 * @param customer incomimg Customer-object with different kinds of data
+	 * @return ArrayList with all Customers that corresponds with the data in the incoming Customer-object.
 	 */
 	private ArrayList<Customer> searchCustomer(Customer customer) {
 		String query = "SELECT * FROM customer WHERE ";
