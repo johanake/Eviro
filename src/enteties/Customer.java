@@ -7,7 +7,7 @@ import java.io.Serializable;
  *
  */
 
-public class Customer implements Serializable {
+public class Customer implements Serializable, EntityInterface {
 
 	private int customerId;
 	private String name;
@@ -18,7 +18,7 @@ public class Customer implements Serializable {
 	private String email;
 	private String vatNumber;
 	private int creditLimit;
-	private int operation;
+	
 	
 	/**
 	 * Customers constructor.
