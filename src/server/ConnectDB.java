@@ -52,5 +52,14 @@ public class ConnectDB {
 		}
 		return rs;
 	}
+	
+	public synchronized void executeUpdateQuery(String query) {
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 }

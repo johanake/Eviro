@@ -14,7 +14,7 @@ public class ClientController {
 	public static final int ADDCUSTOMER = 1;
 	public static final int GETCUSTOMER = 2;
 	public static final int SEARCHCUSTOMER = 3;
-	public static final int UpdateCustomer = 4;
+	public static final int UPDATECUSTOMER = 4;
 	private Client client;
 	
 	/**
@@ -57,17 +57,16 @@ public class ClientController {
 //		client.sendObject(c);
 		ArrayList <Customer> customerList;
 		customerList = (ArrayList <Customer>) client.sendObject(c);
-		
-		
-	
-		
 		System.out.println(customerList.toString());
-		
-		
-		// TODO Auto-generated method stub
-		
 	}
 	
+	public void updateCustomer (int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
+		Customer c = new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit);
+		c.setOperation(UPDATECUSTOMER);
+		String temp = (String) client.sendObject(c);
+		System.out.println(temp);
+		
+	}
 //	public void createInvoice() {
 //		send(new Invoice());
 //	}

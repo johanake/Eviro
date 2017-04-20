@@ -17,7 +17,7 @@ public class ServerController {
 	public static final int ADDCUSTOMER = 1;
 	public static final int GETCUSTOMER = 2;
 	public static final int SEARCHCUSTOMER = 3;
-	public static final int UpdateCustomer = 4;
+	public static final int UPDATECUSTOMER = 4;
 
 	private ConnectDB database;
 
@@ -48,7 +48,12 @@ public class ServerController {
 			break;
 		case SEARCHCUSTOMER:
 			returnObject = searchCustomer((Customer) obj);
+			break;
+		case UPDATECUSTOMER:
+			returnObject = updateCustomer((Customer) obj);
+			break;
 		}
+		
 		return returnObject;
 	}
 
@@ -75,19 +80,6 @@ public class ServerController {
 	private ArrayList<Customer> getCustomer(Customer customer) {
 		String query = "SELECT * FROM customer WHERE customerId = " + customer.getCustomerId();
 		return createCustomerList(database.executeGetQuery(query));
-	}
-
-	private ArrayList<Customer> createCustomerList(ResultSet rs) {
-		ArrayList<Customer> customerList = new ArrayList<Customer>();
-		try {
-			while (rs.next()) {
-				customerList.add(new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
-						rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9)));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return customerList;
 	}
 
 	private ArrayList<Customer> searchCustomer(Customer customer) {
@@ -132,5 +124,28 @@ public class ServerController {
 
 		return createCustomerList(database.executeGetQuery(query));
 	}
+	
+	public String updateCustomer(Customer customer){
+		String query = "UPDATE customer SET name = '" + customer.getName() + "', address = '" + customer.getAddress() + "', zipCode = '" + customer.getZipCode() + "', city = '" + customer.getCity() + "', phoneNumber = '" + customer.getPhoneNumber() + "', vatNumber = '" + customer.getVatNumber() + "', creditLimit = " + customer.getCreditLimit(); 
+		database.executeUpdateQuery(query);
+		
+		return "Update done";
+	}
+
+	
+	private ArrayList<Customer> createCustomerList(ResultSet rs) {
+		ArrayList<Customer> customerList = new ArrayList<Customer>();
+		try {
+			while (rs.next()) {
+				customerList.add(new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
+						rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return customerList;
+	}
+	
+	
 
 }
