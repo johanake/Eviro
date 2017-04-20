@@ -53,7 +53,7 @@ public class ServerController {
 			returnObject = updateCustomer((Customer) obj);
 			break;
 		}
-		
+
 		return returnObject;
 	}
 
@@ -117,22 +117,25 @@ public class ServerController {
 			query += and + "vatNumber LIKE '%" + customer.getVatNumber() + "%'";
 			and = " AND ";
 		}
-//		if (customer.getCreditLimit() != 0) {
-//			query += and + "creditLimit LIKE '%" + customer.getCreditLimit() + "%'";
-//		}
+		// if (customer.getCreditLimit() != 0) {
+		// query += and + "creditLimit LIKE '%" + customer.getCreditLimit() +
+		// "%'";
+		// }
 		System.out.print(query);
 
 		return createCustomerList(database.executeGetQuery(query));
 	}
-	
-	public String updateCustomer(Customer customer){
-		String query = "UPDATE customer SET name = '" + customer.getName() + "', address = '" + customer.getAddress() + "', zipCode = '" + customer.getZipCode() + "', city = '" + customer.getCity() + "', phoneNumber = '" + customer.getPhoneNumber() + "', vatNumber = '" + customer.getVatNumber() + "', creditLimit = " + customer.getCreditLimit(); 
+
+	public String updateCustomer(Customer customer) {
+		String query = "UPDATE customer SET name = '" + customer.getName() + "', address = '" + customer.getAddress()
+				+ "', zipCode = '" + customer.getZipCode() + "', city = '" + customer.getCity() + "', phoneNumber = '"
+				+ customer.getPhoneNumber() + "', vatNumber = '" + customer.getVatNumber() + "', creditLimit = "
+				+ customer.getCreditLimit() + " WHERE customerId = " + customer.getCustomerId();
 		database.executeUpdateQuery(query);
-		
+
 		return "Update done";
 	}
 
-	
 	private ArrayList<Customer> createCustomerList(ResultSet rs) {
 		ArrayList<Customer> customerList = new ArrayList<Customer>();
 		try {
@@ -145,7 +148,5 @@ public class ServerController {
 		}
 		return customerList;
 	}
-	
-	
 
 }
