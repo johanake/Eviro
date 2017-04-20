@@ -25,14 +25,16 @@ public class ServerController {
 	 * 
 	 * @param obj The object coming from the server.
 	 */
-	public void commandHandler(Object obj) {
-
-		Object[] data = (Object[]) obj;
-		switch ((int) data[0]) {
+	public Object operationHandler(Object obj) {
+		Object returnObject = null;
+		int operation = 0;
+		
+		switch ((int) operation) {
 			case 1:
-				addCustomer(data);
+				addCustomer(null);
 				break;
 		}
+		return returnObject;
 	}
 
 	/**
@@ -42,15 +44,14 @@ public class ServerController {
 	 * 
 	 * @param data The data which is to be transformed and sent to the database.
 	 */
-	private void addCustomer(Object[] data) {
-
-		Customer c;
-		if (data[1] instanceof Customer) {
-			c = (Customer) data[1];
-
-			String commandstring = c.toString();
-			database.executeInsertQuery(commandstring);
-		}
+	private Customer addCustomer(Customer c) {
+			String query = "INSERT INTO customer (name, address, zipCode, city, phoneNumber, email, vatNumber, creditLimit) "
+					+ "VALUES (\"" + c.getName() + "\",\"" + c.getAddress() + "\",\"" + c.getZipCode() + "\",\""
+					+ c.getCity() + "\",\"" + c.getPhoneNumber() + "\",\"" + c.getEmail() + "\",\"" + c.getVatNumber() + "\"," +
+					c.getCreditLimit() + ")";
+			database.executeInsertQuery(query);
+			
+			return null;
 
 	}
 
