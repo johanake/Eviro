@@ -18,6 +18,7 @@ public class ServerController {
 	public static final int GETCUSTOMER = 2;
 	public static final int SEARCHCUSTOMER = 3;
 	public static final int UPDATECUSTOMER = 4;
+	public static final int DELETECUSTOMER = 5;
 
 	private ConnectDB database;
 
@@ -52,6 +53,9 @@ public class ServerController {
 		case UPDATECUSTOMER:
 			returnObject = updateCustomer((Customer) obj);
 			break;
+		case DELETECUSTOMER:
+			returnObject = deleteCustomer((Customer) obj);
+			break;
 		}
 
 		return returnObject;
@@ -71,17 +75,27 @@ public class ServerController {
 				+ "VALUES (\"" + customer.getName() + "\",\"" + customer.getAddress() + "\",\"" + customer.getZipCode()
 				+ "\",\"" + customer.getCity() + "\",\"" + customer.getPhoneNumber() + "\",\"" + customer.getEmail()
 				+ "\",\"" + customer.getVatNumber() + "\"," + customer.getCreditLimit() + ")";
-		database.executeInsertQuery(query);
+		database.executeInsertOrDeleteQuery(query);
 
 		return customer;
 
 	}
-
+	
+	/**
+	 * 
+	 * @param customer
+	 * @return
+	 */
 	private ArrayList<Customer> getCustomer(Customer customer) {
 		String query = "SELECT * FROM customer WHERE customerId = " + customer.getCustomerId();
 		return createCustomerList(database.executeGetQuery(query));
 	}
 
+	/**
+	 * 
+	 * @param customer
+	 * @return
+	 */
 	private ArrayList<Customer> searchCustomer(Customer customer) {
 		String query = "SELECT * FROM customer WHERE ";
 		String and = "";
@@ -126,7 +140,12 @@ public class ServerController {
 		return createCustomerList(database.executeGetQuery(query));
 	}
 
-	public String updateCustomer(Customer customer) {
+	/**
+	 * 
+	 * @param customer
+	 * @return
+	 */
+	public Object updateCustomer(Customer customer) {
 		String query = "UPDATE customer SET name = '" + customer.getName() + "', address = '" + customer.getAddress()
 				+ "', zipCode = '" + customer.getZipCode() + "', city = '" + customer.getCity() + "', phoneNumber = '"
 				+ customer.getPhoneNumber() + "', vatNumber = '" + customer.getVatNumber() + "', creditLimit = "
@@ -135,7 +154,23 @@ public class ServerController {
 
 		return "Update done";
 	}
-
+	
+	/**
+	 * 
+	 * @param customer
+	 * @return
+	 */
+	private Object deleteCustomer(Customer customer) {
+		String query = "DELETE FROM customer WHERE customerId = " + customer.getCustomerId();
+		database.executeInsertOrDeleteQuery(query);
+		return "Delete done";
+	}
+	
+	/**
+	 * 
+	 * @param rs
+	 * @return
+	 */
 	private ArrayList<Customer> createCustomerList(ResultSet rs) {
 		ArrayList<Customer> customerList = new ArrayList<Customer>();
 		try {

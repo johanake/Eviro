@@ -15,6 +15,8 @@ public class ClientController {
 	public static final int GETCUSTOMER = 2;
 	public static final int SEARCHCUSTOMER = 3;
 	public static final int UPDATECUSTOMER = 4;
+	public static final int DELETECUSTOMER = 5;
+
 	private Client client;
 	
 	/**
@@ -66,6 +68,13 @@ public class ClientController {
 		String temp = (String) client.sendObject(c);
 		System.out.println(temp);
 		
+	}
+	
+	public void deleteCustomer(int customerId){
+		Customer c = new Customer(customerId);
+		c.setOperation(DELETECUSTOMER);
+		String temp = (String) client.sendObject(c);
+		System.out.println(temp);
 	}
 //	public void createInvoice() {
 //		send(new Invoice());
