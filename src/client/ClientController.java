@@ -30,8 +30,8 @@ public class ClientController {
 	 * @param email customer email
 	 * @param vatNumber customer vat number
 	 */
-	public void createCustomer(int customerId, String name, String adress, int zipCode, String town, String phoneNumber, String email, int vatNumber) {
-		send(1,new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber));
+	public void createCustomer(int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
+		send(1,new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit));
 	}
 	
 //	public void createInvoice() {

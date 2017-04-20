@@ -178,7 +178,7 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 				}
 
 			}else if(e.getSource() == btnCreate){
-				clientController.createCustomer(Integer.parseInt(txtCustomerID.getText()), txtName.getText(), txtAddress.getText(), Integer.parseInt(txtZipCode.getText()), txtTown.getText(), txtPhoneNbr.getText(), txtEmail.getText(), Integer.parseInt(txtVATNbr.getText()));
+				clientController.createCustomer(Integer.parseInt(txtCustomerID.getText()), txtName.getText(), txtAddress.getText(),txtZipCode.getText(), txtTown.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 50);
 			}
 
 		}
