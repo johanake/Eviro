@@ -2,6 +2,7 @@ package server;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -40,6 +41,16 @@ public class ConnectDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public synchronized ResultSet executeGetQuery(String query){
+		ResultSet rs = null;
+		try {
+			rs = stmt.executeQuery(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return rs;
 	}
 
 }

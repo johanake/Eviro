@@ -121,6 +121,7 @@ public class Server extends Thread {
 				try {
 					objOutput.writeObject(serverController.operationHandler((EntityInterface) objInput.readObject()));
 					objOutput.flush();
+					System.out.println("Objekt skickat från server");
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
 				}

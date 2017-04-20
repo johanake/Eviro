@@ -48,6 +48,10 @@ public class Customer implements Serializable, EntityInterface {
 		this.creditLimit = creditLimit;
 		
 	}
+	
+	public Customer(int customerId){
+		this.customerId = customerId;
+	}
 
 	public int getCustomerId() {
 		return customerId;

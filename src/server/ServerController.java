@@ -1,5 +1,9 @@
 package server;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import enteties.Customer;
 import enteties.EntityInterface;
 
@@ -12,7 +16,7 @@ import enteties.EntityInterface;
 public class ServerController {
 	public static final int ADDCUSTOMER = 1;
 	public static final int GETCUSTOMER = 2;
-	public static final int GetAllCustomers = 3;
+	public static final int SEARCHCUSTOMER = 3;
 	public static final int UpdateCustomer = 4;
 
 	private ConnectDB database;
@@ -25,46 +29,108 @@ public class ServerController {
 	}
 
 	/**
-	 * Handles objects coming from the server. Finds out what operation to perform based on the first element in the
-	 * object array.
+	 * Handles objects coming from the server. Finds out what operation to
+	 * perform based on the first element in the object array.
 	 * 
-	 * @param obj The object coming from the server.
+	 * @param obj
+	 *            The object coming from the server.
 	 */
 	public Object operationHandler(EntityInterface obj) {
 		System.out.println("operation: " + obj.getOperation());
 		Object returnObject = null;
-		
+
 		switch (obj.getOperation()) {
-			case ADDCUSTOMER:
-				returnObject = addCustomer((Customer) obj);
-				break;
-			case GETCUSTOMER:
-				returnObject = getCustomer((Customer) obj);
+		case ADDCUSTOMER:
+			returnObject = addCustomer((Customer) obj);
+			break;
+		case GETCUSTOMER:
+			returnObject = getCustomer((Customer) obj);
+			break;
+		case SEARCHCUSTOMER:
+			returnObject = searchCustomer((Customer) obj);
 		}
 		return returnObject;
 	}
 
 	/**
-	 * Objects are sent here by the commandHandler method if the first element in the object array represents adding a
-	 * new customer to the database. The data in the Object is transformed into Strings which is then sent to the
+	 * Objects are sent here by the commandHandler method if the first element
+	 * in the object array represents adding a new customer to the database. The
+	 * data in the Object is transformed into Strings which is then sent to the
 	 * database.
 	 * 
-	 * @param data The data which is to be transformed and sent to the database.
+	 * @param data
+	 *            The data which is to be transformed and sent to the database.
 	 */
-	private Customer addCustomer(Customer c) {
-			String query = "INSERT INTO customer (name, address, zipCode, city, phoneNumber, email, vatNumber, creditLimit) "
-					+ "VALUES (\"" + c.getName() + "\",\"" + c.getAddress() + "\",\"" + c.getZipCode() + "\",\""
-					+ c.getCity() + "\",\"" + c.getPhoneNumber() + "\",\"" + c.getEmail() + "\",\"" + c.getVatNumber() + "\"," +
-					c.getCreditLimit() + ")";
-			database.executeInsertQuery(query);
-			
-			return c;
+	private Customer addCustomer(Customer customer) {
+		String query = "INSERT INTO customer (name, address, zipCode, city, phoneNumber, email, vatNumber, creditLimit) "
+				+ "VALUES (\"" + customer.getName() + "\",\"" + customer.getAddress() + "\",\"" + customer.getZipCode()
+				+ "\",\"" + customer.getCity() + "\",\"" + customer.getPhoneNumber() + "\",\"" + customer.getEmail()
+				+ "\",\"" + customer.getVatNumber() + "\"," + customer.getCreditLimit() + ")";
+		database.executeInsertQuery(query);
+
+		return customer;
 
 	}
-	
-	private Customer getCustomer(Customer c) {
-			
-		return null;
+
+	private ArrayList<Customer> getCustomer(Customer customer) {
+		String query = "SELECT * FROM customer WHERE customerId = " + customer.getCustomerId();
+		return createCustomerList(database.executeGetQuery(query));
+	}
+
+	private ArrayList<Customer> createCustomerList(ResultSet rs) {
+		ArrayList<Customer> customerList = new ArrayList<Customer>();
+		try {
+			while (rs.next()) {
+				customerList.add(new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
+						rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return customerList;
+	}
+
+	private ArrayList<Customer> searchCustomer(Customer customer) {
+		String query = "SELECT * FROM customer WHERE ";
+		String and = "";
+		if (customer.getCustomerId() != 0) {
+			query += and + "customerId LIKE '%" + customer.getCustomerId() + "%'";
+			and = " AND ";
+		}
+		if (customer.getName().length() > 0) {
+			query += and + "name LIKE '%" + customer.getName() + "%'";
+			and = " AND ";
+		}
+		if (customer.getAddress().length() > 0) {
+			query += and + "address LIKE '%" + customer.getAddress() + "%'";
+			and = " AND ";
+		}
+		if (customer.getZipCode().length() > 0) {
+			query += and + "zipCode LIKE '%" + customer.getZipCode() + "%'";
+			and = " AND ";
+		}
+		if (customer.getCity().length() > 0) {
+			query += and + "city LIKE '%" + customer.getCity() + "%'";
+			and = " AND ";
+		}
+		if (customer.getPhoneNumber().length() > 0) {
+			query += and + "phoneNumber LIKE '%" + customer.getPhoneNumber() + "%'";
+			and = " AND ";
+		}
+		if (customer.getEmail().length() > 0) {
+			query += and + "email LIKE '%" + customer.getEmail() + "%'";
+			and = " AND ";
+		}
+		if (customer.getVatNumber().length() > 0) {
+			query += and + "vatNumber LIKE '%" + customer.getVatNumber() + "%'";
+			and = " AND ";
+		}
+//		if (customer.getCreditLimit() != 0) {
+//			query += and + "creditLimit LIKE '%" + customer.getCreditLimit() + "%'";
+//		}
+		System.out.print(query);
+
+		return createCustomerList(database.executeGetQuery(query));
 	}
 
 }

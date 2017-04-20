@@ -147,6 +147,8 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 		ButtonListener listener = new ButtonListener();
 		btnEdit.addActionListener(listener);
 		btnCreate.addActionListener(listener);
+		btnOpenInvoice.addActionListener(listener);
+		btnClosedInvoice.addActionListener(listener);
 
 	}
 
@@ -179,6 +181,12 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 
 			}else if(e.getSource() == btnCreate){
 				clientController.createCustomer(Integer.parseInt(txtCustomerID.getText()), txtName.getText(), txtAddress.getText(),txtZipCode.getText(), txtTown.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 50);
+			}else if(e.getSource() == btnOpenInvoice){
+				clientController.getCustomer(Integer.parseInt(txtCustomerID.getText()));
+				
+			}else if(e.getSource() == btnClosedInvoice ){
+				clientController.searchCustomer(Integer.parseInt(txtCustomerID.getText()), txtName.getText(), txtAddress.getText(),txtZipCode.getText(), txtTown.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 50);
+				
 			}
 
 		}

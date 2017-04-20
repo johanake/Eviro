@@ -14,7 +14,8 @@ import gui.GUIController;
  *
  */
 public class Client extends Thread {
-
+	
+	private ClientController clientController;
 	private String ip;
 	private int port;
 	private Socket socket;
@@ -29,7 +30,7 @@ public class Client extends Thread {
 	 */
 	public Client(String ip, int port) {
 
-		new GUIController(new ClientController(this));
+		new GUIController(clientController = new ClientController(this));
 
 		this.ip = ip;
 		this.port = port;
@@ -72,36 +73,41 @@ public class Client extends Thread {
 	 * Streams a message object to the server.
 	 * 
 	 * @param o The object to be sent to the server.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
 	 */
-	public void sendObject(Object o) {
-
+	public Object sendObject(Object o) {
 		try {
 			objOutput.writeObject(o);
-		} catch (IOException e) {
+			return objInput.readObject();
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	/**
 	 * Waits for incoming messages from the server. Is called in the run method.
 	 */
-	private void waitForObject() {
-
-		try {
-			objInput.readObject();
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
-	}
+//	public Object waitForObject() {
+//		try {
+//			returnObject = objInput.readObject();
+//			System.out.println("Objekt mottaget i klient");
+//		} catch (ClassNotFoundException | IOException e) {
+//			e.printStackTrace();
+//		}
+//		return returnObject;
+//		
+//	}
 
 	/**
 	 * The run method for this clients thread. Calls the "waitForMessage()" method.
 	 */
-	public void run() {
-
-		while (!interrupted()) {
-			waitForObject();
-		}
-	}
+//	public void run() {
+//
+//		while (!interrupted()) {
+//			waitForObject();
+//		}
+//	}
 
 }
