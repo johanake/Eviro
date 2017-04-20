@@ -1,6 +1,7 @@
 package server;
 
 import enteties.Customer;
+import enteties.EntityInterface;
 
 /**
  * Handles most of the logic between the server and the database.
@@ -9,6 +10,10 @@ import enteties.Customer;
  *
  */
 public class ServerController {
+	public static final int ADDCUSTOMER = 1;
+	public static final int GETCUSTOMER = 2;
+	public static final int GetAllCustomers = 3;
+	public static final int UpdateCustomer = 4;
 
 	private ConnectDB database;
 
@@ -25,14 +30,16 @@ public class ServerController {
 	 * 
 	 * @param obj The object coming from the server.
 	 */
-	public Object operationHandler(Object obj) {
+	public Object operationHandler(EntityInterface obj) {
+		System.out.println("operation: " + obj.getOperation());
 		Object returnObject = null;
-		int operation = 0;
 		
-		switch ((int) operation) {
-			case 1:
-				addCustomer(null);
+		switch (obj.getOperation()) {
+			case ADDCUSTOMER:
+				returnObject = addCustomer((Customer) obj);
 				break;
+			case GETCUSTOMER:
+				returnObject = getCustomer((Customer) obj);
 		}
 		return returnObject;
 	}
@@ -51,8 +58,13 @@ public class ServerController {
 					c.getCreditLimit() + ")";
 			database.executeInsertQuery(query);
 			
-			return null;
+			return c;
 
+	}
+	
+	private Customer getCustomer(Customer c) {
+			
+		return null;
 	}
 
 }

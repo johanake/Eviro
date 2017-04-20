@@ -8,7 +8,10 @@ import enteties.Customer;
  * @version 1.0
  */
 public class ClientController {
-
+	public static final int ADDCUSTOMER = 1;
+	public static final int GetCustomer = 2;
+	public static final int GetAllCustomers = 3;
+	public static final int UpdateCustomer = 4;
 	private Client client;
 	
 	/**
@@ -31,7 +34,9 @@ public class ClientController {
 	 * @param vatNumber customer vat number
 	 */
 	public void createCustomer(int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
-		send(1,new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit));
+		Customer c = new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit);
+		c.setOperation(ADDCUSTOMER);
+		client.sendObject(c);
 	}
 	
 //	public void createInvoice() {
@@ -42,14 +47,4 @@ public class ClientController {
 //		send(new Product());
 //	}
 	
-	/**
-	 * Sends an operation and entity to the client. 
-	 * @param operation the operation to be executed by the client
-	 * @param obj the entity that the client will execute the operation on
-	 */
-	private void send(int operation, Object obj) {
-		
-		client.sendMessage(new Object[]{operation, obj});
-		
-	}
 }

@@ -35,7 +35,6 @@ public class ConnectDB {
 	 * @param query The information to add to the database.
 	 */
 	public synchronized void executeInsertQuery(String query) {
-
 		try {
 			stmt.execute(query);
 		} catch (SQLException e) {

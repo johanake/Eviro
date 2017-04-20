@@ -71,12 +71,12 @@ public class Client extends Thread {
 	/**
 	 * Streams a message object to the server.
 	 * 
-	 * @param message The object to be sent to the server.
+	 * @param o The object to be sent to the server.
 	 */
-	public void sendMessage(Object[] message) {
+	public void sendObject(Object o) {
 
 		try {
-			objOutput.writeObject(message);
+			objOutput.writeObject(o);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -85,7 +85,7 @@ public class Client extends Thread {
 	/**
 	 * Waits for incoming messages from the server. Is called in the run method.
 	 */
-	private void waitForMessage() {
+	private void waitForObject() {
 
 		try {
 			objInput.readObject();
@@ -100,7 +100,7 @@ public class Client extends Thread {
 	public void run() {
 
 		while (!interrupted()) {
-			waitForMessage();
+			waitForObject();
 		}
 	}
 

@@ -12,6 +12,8 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import enteties.EntityInterface;
+
 /**
  * Handles all Client and logs all traffic.
  * 
@@ -117,7 +119,7 @@ public class Server extends Thread {
 			while (!interrupted()) {
 
 				try {
-					objOutput.writeObject(serverController.operationHandler(objInput.readObject()));
+					objOutput.writeObject(serverController.operationHandler((EntityInterface) objInput.readObject()));
 					objOutput.flush();
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();

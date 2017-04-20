@@ -1,5 +1,6 @@
 package enteties;
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * A class that represents a Customer in the system.
@@ -9,6 +10,7 @@ import java.io.Serializable;
 
 public class Customer implements Serializable, EntityInterface {
 
+	private static final long serialVersionUID = 1L;
 	private int customerId;
 	private String name;
 	private String address;
@@ -18,6 +20,7 @@ public class Customer implements Serializable, EntityInterface {
 	private String email;
 	private String vatNumber;
 	private int creditLimit;
+	private int operation;
 	
 	
 	/**
@@ -118,12 +121,20 @@ public class Customer implements Serializable, EntityInterface {
 		this.creditLimit = creditLimit;
 	}
 	
-	public String toString() {
-		String res = "INSERT INTO customer (name, address, zipCode, city, phoneNumber, email, vatNumber, creditLimit) "
-				+ "VALUES (\"" + getName() + "\",\"" + getAddress() + "\",\"" + getZipCode() + "\",\""
-				+ getCity() + "\",\"" + getPhoneNumber() + "\",\"" + getEmail() + "\",\"" + getVatNumber()
-				+ "\"," + 0 + ")";
-		return res;
+	@Override
+	public void setOperation(int operation) {
+		this.operation = operation;
+	}
+
+	@Override
+	public int getOperation() {
+		return operation;
+	}
+
+	@Override
+	public HashMap<String, String> getHashMap() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
