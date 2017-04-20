@@ -161,9 +161,13 @@ public class ServerController {
 	 * @return
 	 */
 	private Object deleteCustomer(Customer customer) {
-		String query = "DELETE FROM customer WHERE customerId = " + customer.getCustomerId();
-		database.executeInsertOrDeleteQuery(query);
-		return "Delete done";
+		String returnString = "error";
+		if (getCustomer(customer).size() != 0){
+			String query = "DELETE FROM customer WHERE customerId = " + customer.getCustomerId();
+			database.executeInsertOrDeleteQuery(query);
+			returnString = "ok";
+		}
+		return returnString;
 	}
 	
 	/**
