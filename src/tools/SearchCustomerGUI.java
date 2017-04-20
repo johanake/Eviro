@@ -193,11 +193,11 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 						txtEmail.getText(), txtVATNbr.getText(), 50);
 
 			} else if (e.getSource() == btnComments) {
-//				 clientController.updateCustomer(Integer.parseInt(txtCustomerID.getText()),
-//				 txtName.getText(), txtAddress.getText(),txtZipCode.getText(),
-//				 txtTown.getText(), txtPhoneNbr.getText(), txtEmail.getText(),
-//				 txtVATNbr.getText(), 50);
-				clientController.deleteCustomer(Integer.parseInt(txtCustomerID.getText()));
+				clientController.updateCustomer(Integer.parseInt(txtCustomerID.getText()), txtName.getText(),
+						txtAddress.getText(), txtZipCode.getText(), txtTown.getText(), txtPhoneNbr.getText(),
+						txtEmail.getText(), txtVATNbr.getText(), 50);
+
+//				clientController.deleteCustomer(Integer.parseInt(txtCustomerID.getText()));
 			}
 		}
 

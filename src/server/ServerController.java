@@ -80,7 +80,7 @@ public class ServerController {
 		return customer;
 
 	}
-	
+
 	/**
 	 * 
 	 * @param customer
@@ -146,15 +146,19 @@ public class ServerController {
 	 * @return
 	 */
 	public Object updateCustomer(Customer customer) {
-		String query = "UPDATE customer SET name = '" + customer.getName() + "', address = '" + customer.getAddress()
-				+ "', zipCode = '" + customer.getZipCode() + "', city = '" + customer.getCity() + "', phoneNumber = '"
-				+ customer.getPhoneNumber() + "', vatNumber = '" + customer.getVatNumber() + "', creditLimit = "
-				+ customer.getCreditLimit() + " WHERE customerId = " + customer.getCustomerId();
-		database.executeUpdateQuery(query);
-
-		return "Update done";
+		String returnString = "error";
+		if (getCustomer(customer).size() != 0) {
+			String query = "UPDATE customer SET name = '" + customer.getName() + "', address = '"
+					+ customer.getAddress() + "', zipCode = '" + customer.getZipCode() + "', city = '"
+					+ customer.getCity() + "', phoneNumber = '" + customer.getPhoneNumber() + "', vatNumber = '"
+					+ customer.getVatNumber() + "', creditLimit = " + customer.getCreditLimit() + " WHERE customerId = "
+					+ customer.getCustomerId();
+			database.executeUpdateQuery(query);
+			returnString = "ok";
+		}
+		return returnString;
 	}
-	
+
 	/**
 	 * 
 	 * @param customer
@@ -162,14 +166,14 @@ public class ServerController {
 	 */
 	private Object deleteCustomer(Customer customer) {
 		String returnString = "error";
-		if (getCustomer(customer).size() != 0){
+		if (getCustomer(customer).size() != 0) {
 			String query = "DELETE FROM customer WHERE customerId = " + customer.getCustomerId();
 			database.executeInsertOrDeleteQuery(query);
 			returnString = "ok";
 		}
 		return returnString;
 	}
-	
+
 	/**
 	 * 
 	 * @param rs

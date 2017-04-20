@@ -31,7 +31,8 @@ public class Server extends Thread {
 	/**
 	 * Sets up the logger and starts the server.
 	 * 
-	 * @param port The port to which the server will be listening
+	 * @param port
+	 *            The port to which the server will be listening
 	 */
 	public Server(int port) {
 		serverController = new ServerController();
@@ -51,7 +52,8 @@ public class Server extends Thread {
 	}
 
 	/**
-	 * Listens for incoming clients and sends them to the ClientConnection class.
+	 * Listens for incoming clients and sends them to the ClientConnection
+	 * class.
 	 */
 	public void run() {
 
@@ -66,8 +68,8 @@ public class Server extends Thread {
 	}
 
 	/**
-	 * Handles all logic for the clients connected to this server. Each client gets its own instance of
-	 * ClientConnection.
+	 * Handles all logic for the clients connected to this server. Each client
+	 * gets its own instance of ClientConnection.
 	 * 
 	 * @author Mattias Sundquist
 	 *
@@ -81,7 +83,8 @@ public class Server extends Thread {
 		/**
 		 * Sets up input and output streams and starts a new Thread.
 		 * 
-		 * @param socket The client which connected to the server.
+		 * @param socket
+		 *            The client which connected to the server.
 		 */
 		public ClientConnection(Socket socket) {
 			this.socket = socket;
@@ -95,7 +98,8 @@ public class Server extends Thread {
 		}
 
 		/**
-		 * Disconnects the client from the server. Closes all streams and threads.
+		 * Disconnects the client from the server. Closes all streams and
+		 * threads.
 		 */
 		private void disconnect() {
 
@@ -111,7 +115,8 @@ public class Server extends Thread {
 		}
 
 		/**
-		 * The run method for this clients thread. Listens for incoming messages and sends them to the ServerController.
+		 * The run method for this clients thread. Listens for incoming messages
+		 * and sends them to the ServerController.
 		 */
 		public void run() {
 

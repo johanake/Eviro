@@ -33,7 +33,8 @@ public class ConnectDB {
 	/**
 	 * Adds a new query in the database
 	 * 
-	 * @param query The information to add to the database.
+	 * @param query
+	 *            The information to add to the database.
 	 */
 	public synchronized void executeInsertOrDeleteQuery(String query) {
 		try {
@@ -42,8 +43,8 @@ public class ConnectDB {
 			e.printStackTrace();
 		}
 	}
-	
-	public synchronized ResultSet executeGetQuery(String query){
+
+	public synchronized ResultSet executeGetQuery(String query) {
 		ResultSet rs = null;
 		try {
 			rs = stmt.executeQuery(query);
@@ -52,7 +53,7 @@ public class ConnectDB {
 		}
 		return rs;
 	}
-	
+
 	public synchronized void executeUpdateQuery(String query) {
 		try {
 			stmt.executeUpdate(query);
@@ -60,6 +61,5 @@ public class ConnectDB {
 			e.printStackTrace();
 		}
 	}
-	
 
 }
