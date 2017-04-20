@@ -1,4 +1,4 @@
-package client;
+package gui;
 import java.awt.Dimension;
 
 import javax.swing.JInternalFrame;

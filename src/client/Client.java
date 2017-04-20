@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import gui.GUIController;
+
 /**
  * Handles all traffic to and from the server.
  * 

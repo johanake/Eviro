@@ -1,4 +1,4 @@
-package client;
+package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -22,6 +22,8 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import client.ClientController;
+import client.Main;
 import tools.InvoiceGUI;
 import tools.SearchCustomerGUI;
 
