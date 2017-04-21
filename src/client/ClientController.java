@@ -47,10 +47,9 @@ public class ClientController {
 	public void getCustomer(int customerId){
 		Customer c = new Customer(customerId);
 		c.setOperation(GETCUSTOMER);
-		Customer c2 = null;
-		c2 = (Customer) client.sendObject(c);
+		ArrayList<Customer> cList = (ArrayList<Customer>) client.sendObject(c);
 		
-		System.out.println(c2.getName());
+		System.out.println(cList);
 	}
 
 	public void searchCustomer (int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {

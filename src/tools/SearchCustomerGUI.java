@@ -1,7 +1,6 @@
 package tools;
 
 import java.awt.BorderLayout;
-
 /*
  * Graphical class to create and search for customers 
  * @author Johan Åkesson
@@ -19,7 +18,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-
 import client.ClientController;
 import gui.Tool;
 
@@ -56,10 +54,10 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	private JTextField txtVATNbr = new JTextField("930116");
 
 	private JButton txtBalance = new JButton("Balance");
-	private JButton btnClosedInvoice = new JButton("Closed Invoice");
-	private JButton btnOpenInvoice = new JButton("Open Invoice");
+	private JButton btnSearchCustomer = new JButton("Search customer");
+	private JButton btnGetCustomer = new JButton("Get customer by Id");
 	private JButton btnCreateInvoice = new JButton("Create Invoice");
-	private JButton btnComments = new JButton("Open Comments");
+	private JButton btnUpdateCustomer = new JButton("Update customer");
 	private JButton btnEdit = new JButton("Edit Customer");
 	private JButton btnCreate = new JButton("Create Customer");
 
@@ -83,6 +81,7 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	 */
 
 	private void displayContent() {
+
 		add(pnlLeft, BorderLayout.WEST);
 		add(pnlMiddle, BorderLayout.CENTER);
 		add(pnlRight, BorderLayout.EAST);
@@ -113,10 +112,10 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 		lblCreditLimit.setBorder(centerBorder);
 
 		pnlRight.add(lblCreditLimit);
-		pnlRight.add(btnClosedInvoice);
-		pnlRight.add(btnOpenInvoice);
+		pnlRight.add(btnSearchCustomer);
+		pnlRight.add(btnGetCustomer);
 		pnlRight.add(btnCreateInvoice);
-		pnlRight.add(btnComments);
+		pnlRight.add(btnUpdateCustomer);
 		pnlRight.add(btnEdit);
 		pnlRight.add(btnCreate);
 
@@ -127,6 +126,7 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	 */
 
 	private void setEditable(Boolean editable) {
+
 		this.editable = editable;
 
 		txtCustomerID.setEditable(editable);
@@ -144,22 +144,25 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	 */
 
 	private void addListeners() {
+
 		ButtonListener listener = new ButtonListener();
 		btnEdit.addActionListener(listener);
 		btnCreate.addActionListener(listener);
-		btnOpenInvoice.addActionListener(listener);
-		btnClosedInvoice.addActionListener(listener);
-		btnComments.addActionListener(listener);
+		btnGetCustomer.addActionListener(listener);
+		btnSearchCustomer.addActionListener(listener);
+		btnUpdateCustomer.addActionListener(listener);
 
 	}
 
 	@Override
 	public String getTitle() {
+
 		return TOOLNAME;
 	}
 
 	@Override
 	public boolean getRezizable() {
+
 		return false;
 	}
 
@@ -184,20 +187,21 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 				clientController.createCustomer(Integer.parseInt(txtCustomerID.getText()), txtName.getText(),
 						txtAddress.getText(), txtZipCode.getText(), txtTown.getText(), txtPhoneNbr.getText(),
 						txtEmail.getText(), txtVATNbr.getText(), 50);
-			} else if (e.getSource() == btnOpenInvoice) {
+
+			} else if (e.getSource() == btnGetCustomer) {
 				clientController.getCustomer(Integer.parseInt(txtCustomerID.getText()));
 
-			} else if (e.getSource() == btnClosedInvoice) {
+			} else if (e.getSource() == btnSearchCustomer) {
 				clientController.searchCustomer(Integer.parseInt(txtCustomerID.getText()), txtName.getText(),
 						txtAddress.getText(), txtZipCode.getText(), txtTown.getText(), txtPhoneNbr.getText(),
 						txtEmail.getText(), txtVATNbr.getText(), 50);
 
-			} else if (e.getSource() == btnComments) {
+			} else if (e.getSource() == btnUpdateCustomer) {
 				clientController.updateCustomer(Integer.parseInt(txtCustomerID.getText()), txtName.getText(),
 						txtAddress.getText(), txtZipCode.getText(), txtTown.getText(), txtPhoneNbr.getText(),
 						txtEmail.getText(), txtVATNbr.getText(), 50);
 
-//				clientController.deleteCustomer(Integer.parseInt(txtCustomerID.getText()));
+				// clientController.deleteCustomer(Integer.parseInt(txtCustomerID.getText()));
 			}
 		}
 
