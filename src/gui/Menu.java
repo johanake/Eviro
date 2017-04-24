@@ -1,3 +1,4 @@
+package gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,14 +9,14 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 /**
- * The main menu of the main workspace in the system. 
+ * The main menu of the workspace in the system. 
  * @author Robin Overgaard
  * @version 0.1
  */
 public class Menu extends JMenuBar implements ActionListener {
 
 	/**
-	 * 
+	 * Constructor
 	 */
 	public Menu() {
 
@@ -28,11 +29,11 @@ public class Menu extends JMenuBar implements ActionListener {
 	}
 
 	/**
-	 * 
+	 * Builds the menu. 
 	 */
 	private void setupMenu() {
 		
-		JMenu menu = new JMenu("Menu");
+		JMenu menu = new JMenu("Menu");		
 
 		JMenuItem menuItem = new JMenuItem("Option");
 		menuItem.setActionCommand("Option");
