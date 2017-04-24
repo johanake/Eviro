@@ -30,6 +30,7 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	private JPanel pnlMiddle = new JPanel(new GridLayout(7, 1));
 	private JPanel pnlRight = new JPanel(new GridLayout(7, 1));
 	private JPanel pnlZipTown = new JPanel(new GridLayout(1, 2));
+	private JPanel pnlCenter = new JPanel(new BorderLayout());
 	
 	private JLabel lblCustomerID = new JLabel("Customer ID: ");
 	private JLabel lblname = new JLabel("Name: ");
@@ -83,6 +84,7 @@ public class SearchCustomerGUI extends JPanel implements Tool {
 	
 	private void displayContent(){
 		add(pnlLeft, BorderLayout.WEST);
+		add(pnlCenter, BorderLayout.CENTER);
 		add(pnlMiddle, BorderLayout.CENTER);
 		add(pnlRight, BorderLayout.EAST);
 		pnlLeft.setBorder(new EmptyBorder(10, 10, 10, 10));
