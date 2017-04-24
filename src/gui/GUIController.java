@@ -25,7 +25,8 @@ import javax.swing.border.TitledBorder;
 import client.ClientController;
 import client.Main;
 import tools.InvoiceGUI;
-import tools.SearchCustomerGUI;
+import tools.SearchCustomer;
+import tools.CreateCustomer;
 
 /**
  * Handles client side gui operations of the system.
@@ -172,7 +173,7 @@ public class GUIController {
 			switch (e.getActionCommand()) {
 
 			case "tool_customer":
-				desktop.add(new Toolbox(new SearchCustomerGUI(clientController)));
+				desktop.add(new Toolbox(new CreateCustomer(clientController)));
 				break;
 
 			case "tool_invoice":
@@ -182,6 +183,9 @@ public class GUIController {
 			case "link_exit":
 				System.exit(0);
 				break;
+				
+			case "find_cust":
+				desktop.add(new Toolbox(new SearchCustomer(clientController)));
 
 			default:
 				JOptionPane.showMessageDialog(desktop, "You clicked on: " + e.getActionCommand());

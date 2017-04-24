@@ -22,6 +22,8 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import gui.Menu;
+import gui.Toolbox;
 import tools.InvoiceGUI;
 import tools.SearchCustomerGUI;
 
