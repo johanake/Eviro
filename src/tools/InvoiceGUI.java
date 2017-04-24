@@ -19,7 +19,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import client.ClientController;
-import client.Tool;
+import gui.Tool;
 
 
 /*

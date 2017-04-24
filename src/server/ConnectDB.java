@@ -2,6 +2,7 @@ package server;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -32,12 +33,30 @@ public class ConnectDB {
 	/**
 	 * Adds a new query in the database
 	 * 
-	 * @param query The information to add to the database.
+	 * @param query
+	 *            The information to add to the database.
 	 */
-	public synchronized void executeInsertQuery(String query) {
-
+	public synchronized void executeInsertOrDeleteQuery(String query) {
 		try {
 			stmt.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public synchronized ResultSet executeGetQuery(String query) {
+		ResultSet rs = null;
+		try {
+			rs = stmt.executeQuery(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return rs;
+	}
+
+	public synchronized void executeUpdateQuery(String query) {
+		try {
+			stmt.executeUpdate(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

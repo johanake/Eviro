@@ -1,4 +1,4 @@
-package client;
+package gui;
 /**
  * Interface for Tools in the system.
  * 

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -11,6 +12,8 @@ import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import enteties.Customer;
+import enteties.EntityInterface;
 
 /**
  * Handles all Client and logs all traffic.
@@ -40,12 +43,24 @@ public class Server extends Thread {
 			fhLog.setFormatter(sfLog);
 			log.addHandler(fhLog);
 			log.setUseParentHandlers(false);
-
 			serverSocket = new ServerSocket(port);
 			start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Logs input streams 
+	 * @param obj the input object
+	 */
+	private void inputLog(Object obj) {
+		String res = "INPUT STREAM!\n";
+		if (obj instanceof Customer) {
+			Customer c = (Customer) obj;
+			res += "CUSTOMER:\t CustomerId: " + c.getCustomerId() + "\tOperation: " + c.getOperation();
+		}
+		log.info(res);
 	}
 
 	/**
@@ -97,15 +112,16 @@ public class Server extends Thread {
 		 */
 		private void disconnect() {
 
+			InetAddress ip = socket.getLocalAddress();
 			try {
 				socket.close();
 				objOutput.close();
 				objInput.close();
 				interrupt();
+				log.info("Client disconnected from " + ip);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			log.info("Client disconnected");
 		}
 
 		/**
@@ -117,7 +133,10 @@ public class Server extends Thread {
 			while (!interrupted()) {
 
 				try {
-					serverController.commandHandler(objInput.readObject());
+					Object inObj = objInput.readObject();
+					inputLog(inObj);
+					objOutput.writeObject(serverController.operationHandler((EntityInterface) inObj));
+					objOutput.flush();
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
 				}
