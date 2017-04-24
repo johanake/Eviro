@@ -1,5 +1,8 @@
 package client;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import enteties.Customer;
 
 /**
@@ -8,6 +11,11 @@ import enteties.Customer;
  * @version 1.0
  */
 public class ClientController {
+	public static final int ADDCUSTOMER = 1;
+	public static final int GETCUSTOMER = 2;
+	public static final int SEARCHCUSTOMER = 3;
+	public static final int UPDATECUSTOMER = 4;
+	public static final int DELETECUSTOMER = 5;
 
 	private Client client;
 	
@@ -30,10 +38,43 @@ public class ClientController {
 	 * @param email customer email
 	 * @param vatNumber customer vat number
 	 */
-	public void createCustomer(int customerId, String name, String adress, int zipCode, String town, String phoneNumber, String email, int vatNumber) {
-		send(1,new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber));
+	public void createCustomer(int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
+		Customer c = new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit);
+		c.setOperation(ADDCUSTOMER);
+		client.sendObject(c);
 	}
 	
+	public void getCustomer(int customerId){
+		Customer c = new Customer(customerId);
+		c.setOperation(GETCUSTOMER);
+		ArrayList<Customer> cList = (ArrayList<Customer>) client.sendObject(c);
+		
+		System.out.println(cList);
+	}
+
+	public void searchCustomer (int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
+		Customer c = new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit);
+		c.setOperation(SEARCHCUSTOMER);
+//		client.sendObject(c);
+		ArrayList <Customer> customerList;
+		customerList = (ArrayList <Customer>) client.sendObject(c);
+		System.out.println(customerList.toString());
+	}
+	
+	public void updateCustomer (int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
+		Customer c = new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit);
+		c.setOperation(UPDATECUSTOMER);
+		String temp = (String) client.sendObject(c);
+		System.out.println(temp);
+		
+	}
+	
+	public void deleteCustomer(int customerId){
+		Customer c = new Customer(customerId);
+		c.setOperation(DELETECUSTOMER);
+		String temp = (String) client.sendObject(c);
+		System.out.println(temp);
+	}
 //	public void createInvoice() {
 //		send(new Invoice());
 //	}
@@ -42,14 +83,4 @@ public class ClientController {
 //		send(new Product());
 //	}
 	
-	/**
-	 * Sends an operation and entity to the client. 
-	 * @param operation the operation to be executed by the client
-	 * @param obj the entity that the client will execute the operation on
-	 */
-	private void send(int operation, Object obj) {
-		
-		client.sendMessage(new Object[]{operation, obj});
-		
-	}
 }

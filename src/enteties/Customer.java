@@ -1,5 +1,6 @@
 package enteties;
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * A class that represents a Customer in the system.
@@ -7,16 +8,20 @@ import java.io.Serializable;
  *
  */
 
-public class Customer implements Serializable {
+public class Customer implements Serializable, EntityInterface {
 
+	private static final long serialVersionUID = 1L;
 	private int customerId;
 	private String name;
 	private String address;
-	private int zipCode;
-	private String town;
+	private String zipCode;
+	private String city;
 	private String phoneNumber;
 	private String email;
-	private int vatNumber;
+	private String vatNumber;
+	private int creditLimit;
+	private int operation;
+	
 	
 	/**
 	 * Customers constructor.
@@ -24,20 +29,28 @@ public class Customer implements Serializable {
 	 * @param name The name of the customer
 	 * @param adress The address of the customer
 	 * @param zipCode The zipcode of the customer
-	 * @param town The town in which the customer lives in
+	 * @param city The town in which the customer lives in
 	 * @param phoneNumber The customers phonenumber
 	 * @param email The customers email
 	 * @param vatNumber The organizationnumber for the customer
 	 */
-	public Customer(int customerId, String name, String adress, int zipCode, String town, String phoneNumber, String email, int vatNumber){
+	
+//	Krav på namn, adress, zip, city, tele. 
+	public Customer(int customerId, String name, String address, String zipCode, String city, String phoneNumber, String email, String vatNumber, int creditLimit){
 		this.customerId=customerId;
 		this.name=name;
-		this.address=adress;
+		this.address=address;
 		this.zipCode=zipCode;
-		this.town=town;
+		this.city=city;
 		this.phoneNumber=phoneNumber;
 		this.email=email;
 		this.vatNumber=vatNumber;
+		this.creditLimit = creditLimit;
+		
+	}
+	
+	public Customer(int customerId){
+		this.customerId = customerId;
 	}
 
 	public int getCustomerId() {
@@ -56,28 +69,28 @@ public class Customer implements Serializable {
 		this.name = name;
 	}
 
-	public String getAdress() {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setAdress(String adress) {
-		this.address = adress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
-	public int getZipCode() {
+	public String getZipCode() {
 		return zipCode;
 	}
 
-	public void setZipCode(int zipCode) {
+	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
 	}
 
-	public String getTown() {
-		return town;
+	public String getCity() {
+		return city;
 	}
 
-	public void setTown(String town) {
-		this.town = town;
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public String getPhoneNumber() {
@@ -96,20 +109,38 @@ public class Customer implements Serializable {
 		this.email = email;
 	}
 
-	public int getVatNumber() {
+	public String getVatNumber() {
 		return vatNumber;
 	}
 
-	public void setVatNumber(int vatNumber) {
+	public void setVatNumber(String vatNumber) {
 		this.vatNumber = vatNumber;
 	}
 	
-	public String toString() {
-		String res = "INSERT INTO customer (name, adress, zipCode, city, phoneNumber, email, organisationNumber, creditLimit) "
-				+ "VALUES (\"" + getName() + "\",\"" + getAdress() + "\",\"" + getZipCode() + "\",\""
-				+ getTown() + "\",\"" + getPhoneNumber() + "\",\"" + getEmail() + "\",\"" + getVatNumber()
-				+ "\"," + 0 + ")";
-		return res;
+	public int getCreditLimit() {
+		return creditLimit;
 	}
+
+	public void setCreditLimit(int creditLimit) {
+		this.creditLimit = creditLimit;
+	}
+	
+	@Override
+	public void setOperation(int operation) {
+		this.operation = operation;
+	}
+
+	@Override
+	public int getOperation() {
+		return operation;
+	}
+
+	@Override
+	public HashMap<String, String> getHashMap() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 
 }

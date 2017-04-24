@@ -22,12 +22,8 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-<<<<<<< HEAD:src/client/GUIController.java
-import tools.CreateCustomer;
-=======
 import client.ClientController;
 import client.Main;
->>>>>>> origin/master:src/gui/GUIController.java
 import tools.InvoiceGUI;
 import tools.SearchCustomerGUI;
 
@@ -176,8 +172,7 @@ public class GUIController {
 			switch (e.getActionCommand()) {
 
 			case "tool_customer":
-				desktop.add(new Toolbox(new CreateCustomer(clientController)));
-//				desktop.add(new Toolbox(new SearchCustomerGUI(clientController)));
+				desktop.add(new Toolbox(new SearchCustomerGUI(clientController)));
 				break;
 
 			case "tool_invoice":
