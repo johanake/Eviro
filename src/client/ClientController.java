@@ -2,6 +2,8 @@ package client;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import enteties.Customer;
 
@@ -18,6 +20,8 @@ public class ClientController {
 	public static final int DELETECUSTOMER = 5;
 
 	private Client client;
+	
+	private HashMap<String, String> txtList = new HashMap<String, String>();
 	
 	/**
 	 * Constructs the ClientController. 
@@ -42,6 +46,24 @@ public class ClientController {
 		Customer c = new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit);
 		c.setOperation(ADDCUSTOMER);
 		client.sendObject(c);
+	}
+	
+	public String checkFields(String name, String address, String zipCode, String city, String phoneNbr, String email, String vatNbr){		
+		txtList.put("Name", name);
+		txtList.put("Address", address);
+		txtList.put("Zip Code", zipCode);
+		txtList.put("City", city );
+		txtList.put("Phone number", phoneNbr);
+		txtList.put("Email", email);
+		txtList.put("VAT number", vatNbr);
+		
+		for(Map.Entry<String, String> entry : txtList.entrySet()){
+			if(entry.getValue().trim().length() <=0){
+				return "Please check following data: " + entry.getKey();
+			}
+		}
+		return "Customer added";
+		
 	}
 	
 	public void getCustomer(int customerId){

@@ -7,10 +7,13 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -46,11 +49,13 @@ public class CreateCustomer extends JPanel implements Tool {
 	private JTextField txtName = new JTextField();
 	private JTextField txtAddress = new JTextField();
 	private JTextField txtZipCode = new JTextField();
-	private JTextField txtTown = new JTextField();
+	private JTextField txtCity = new JTextField();
 	private JTextField txtPhoneNbr = new JTextField();
 	private JTextField txtEmail = new JTextField();
 	private JTextField txtVATNbr = new JTextField();
 	private JTextField txtCreditLimit = new JTextField();
+	
+
 	
 	
 	private JButton btnCreate = new JButton("Create Customer");
@@ -91,7 +96,7 @@ public class CreateCustomer extends JPanel implements Tool {
 		pnlNorthGridCenter.add(txtAddress);
 		pnlNorthGridCenter.add(pnlZipCountry);
 		pnlZipCountry.add(txtZipCode);
-		pnlZipCountry.add(txtTown);		
+		pnlZipCountry.add(txtCity);		
 		pnlNorthGridCenter.add(txtPhoneNbr);
 		pnlNorthGridCenter.add(txtEmail);
 		pnlNorthGridCenter.add(txtVATNbr);
@@ -105,16 +110,17 @@ public class CreateCustomer extends JPanel implements Tool {
 		btnCreate.addActionListener(listener);
 	}
 	
-	private boolean checkFields(){
-		
-		return true;
-		
+	private void displayMessage(String txt){
+		JOptionPane.showMessageDialog(null, txt);
 	}
+	
+
 	
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == btnCreate) {	
+			if (e.getSource() == btnCreate) {
+				displayMessage(clientController.checkFields(txtName.getText(), txtAddress.getText(), txtZipCode.getText(), txtCity.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText()));
 
 			}
 

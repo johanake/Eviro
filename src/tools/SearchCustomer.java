@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -30,7 +33,7 @@ public class SearchCustomer extends JPanel implements Tool {
 //	private JPanel pnlNorthEast = new JPanel(new GridLayout(1,1));
 	
 	private JPanel pnlZipCountry = new JPanel(new GridLayout(1,2));
-	private JPanel pnlSouth = new JPanel(new GridLayout(1,3));
+	private JPanel pnlSouth = new JPanel(new GridLayout(1,4));
 	
 	private JLabel lblCustomerID = new JLabel("Customer ID: ");
 	private JLabel lblName = new JLabel("Name: ");
@@ -45,14 +48,17 @@ public class SearchCustomer extends JPanel implements Tool {
 	private JTextField txtName = new JTextField();
 	private JTextField txtAddress = new JTextField();
 	private JTextField txtZipCode = new JTextField();
-	private JTextField txtTown = new JTextField();
+	private JTextField txtCity = new JTextField();
 	private JTextField txtPhoneNbr = new JTextField();
 	private JTextField txtEmail = new JTextField();
-	private JTextField txtVATNbr = new JTextField();
+	private JTextField txtVATNbr = new JTextField();	
+	
+	private HashMap<String, String> txtList = new HashMap<String, String>();
 	
 	private JButton btnEdit = new JButton("Edit");
 	private JButton btnUpdate = new JButton("Update");
 	private JButton btnSearch = new JButton("Search");
+	private JButton btnPurchase = new JButton("Purchase");
 	
 	
 	private ClientController clientController;
@@ -65,11 +71,12 @@ public class SearchCustomer extends JPanel implements Tool {
 		setPreferredSize(new Dimension(600,275));
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlNorth.setBorder(new EmptyBorder(10, 10, 10, 10));
-		pnlSouth.setBorder(new EmptyBorder(3, 3, 3, 3));
+		pnlSouth.setBorder(new EmptyBorder(3, 3, 3, 3));		
 		displayContent();
 		addListeners();
 
-	}
+	}	
+
 	
 	private void displayContent(){		
 		add(pnlNorth, BorderLayout.NORTH);
@@ -97,7 +104,7 @@ public class SearchCustomer extends JPanel implements Tool {
 		pnlNorthCenter.add(txtAddress);
 		pnlNorthCenter.add(pnlZipCountry);
 		pnlZipCountry.add(txtZipCode);
-		pnlZipCountry.add(txtTown);		
+		pnlZipCountry.add(txtCity);		
 		pnlNorthCenter.add(txtPhoneNbr);
 		pnlNorthCenter.add(txtEmail);
 		pnlNorthCenter.add(txtVATNbr);
@@ -106,6 +113,7 @@ public class SearchCustomer extends JPanel implements Tool {
 		pnlSouth.add(btnEdit);
 		pnlSouth.add(btnUpdate);
 		pnlSouth.add(btnSearch);
+		pnlSouth.add(btnPurchase);
 		
 	}
 	
@@ -114,9 +122,22 @@ public class SearchCustomer extends JPanel implements Tool {
 		btnSearch.addActionListener(listener);
 	}
 	
-	private boolean checkFields(){
+	private String checkFields(){
+		txtList.put("CustomerID", txtCustomerID.getText());
+		txtList.put("Name", txtName.getText());
+		txtList.put("Address", txtAddress.getText());
+		txtList.put("Zip Code", txtZipCode.getText());
+		txtList.put("City", txtCity.getText());
+		txtList.put("Phone number", txtPhoneNbr.getText());
+		txtList.put("Email", txtEmail.getText());
+		txtList.put("VAT number", txtVATNbr.getText());
 		
-		return true;
+		for(Map.Entry<String, String> entry : txtList.entrySet()){
+			if(entry.getValue().trim().length() <=0){
+				return "Please check following data: " + entry.getKey();
+			}
+		}
+		return "Customer added";
 		
 	}
 	
@@ -124,7 +145,7 @@ public class SearchCustomer extends JPanel implements Tool {
 
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnSearch) {	
-
+				System.out.println(checkFields());
 			}
 
 		}

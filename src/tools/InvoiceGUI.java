@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -29,111 +30,99 @@ import gui.Tool;
 
 public class InvoiceGUI extends JPanel implements Tool {
 	
-	private JPanel pnlTop = new JPanel(new GridLayout(1,3));
-	private JPanel pnlTopLeft = new JPanel(new GridLayout(6, 1));
-	private JPanel pnlTopMiddle = new JPanel(new GridLayout(6, 1));
-	private JPanel pnlTopRight = new JPanel(new BorderLayout());
-	private JPanel pnlZipTown = new JPanel(new GridLayout(1, 2));
-	private JPanel pnlProduct = new JPanel(new BorderLayout());
-	private JPanel pnlAddProduct = new JPanel(new GridLayout(1,5));
+	private JPanel pnlNorth = new JPanel(new BorderLayout());
+	private JPanel pnlNorthSouth = new JPanel(new GridLayout(2,5));
+	private JPanel pnlNorthWest = new JPanel(new GridLayout(2,1));
+	private JPanel pnlNorthCenter = new JPanel(new GridLayout(2,1));	
+	private JPanel pnlSouth = new JPanel(new BorderLayout());
+	private JPanel pnlMain = new JPanel(new BorderLayout());
 	
-	private JLabel lblInvoice = new JLabel("Invoice number: ");
-	private JLabel lblName = new JLabel("Name: ");
-	private JLabel lblAddress = new JLabel("Address: ");
-	private JLabel lblZipTown = new JLabel("ZipCode/Town: ");
-	private JLabel lblContact = new JLabel("Contact: ");
-	private JLabel lblInvoiceRef = new JLabel("Invoice reference: ");
-	private JLabel lblProductNbr = new JLabel("Product number: ", SwingConstants.CENTER);
-	private JLabel lblQuantity = new JLabel("Quantity: ", SwingConstants.CENTER);
+	private JTextArea txtMain = new JTextArea();
 	
-	private JTextField txtInvoice = new JTextField("Invoice number");
-	private JTextField txtName = new JTextField("Name");
-	private JTextField txtAddress = new JTextField("Address");
-	private JTextField txtZipCode = new JTextField("Zip Code");
-	private JTextField txtTown = new JTextField("Town");
-	private JTextField txtContact = new JTextField("Contact");
-	private JTextField txtInvoiceRef = new JTextField("Invoice reference");
-	private JTextField txtProductNbr = new JTextField();
-	private JTextField txtQuantity = new JTextField();
+	private JLabel lblBuyer = new JLabel("Buyer: ");
+	private JLabel lblReference = new JLabel("Reference: ");
+	private JLabel lblAddProduct = new JLabel("Add product: ");
+	private JLabel lblAddQuantity = new JLabel("Add Quantity: ");
+	private JLabel lblProduct = new JLabel("Product");
+	private JLabel lblName = new JLabel("Name");
+	private JLabel lblPrice = new JLabel("Price");
+	private JLabel lblQuantity = new JLabel("Quantity");
+	private JLabel lblSum = new JLabel("Sum");
 	
+	private JTextField txtBuyer = new JTextField();
+	private JTextField txtReference = new JTextField();
+	private JTextField txtAddProduct = new JTextField();
+	private JTextField txtAddQuantity = new JTextField();
+	
+	private JButton btnAdd = new JButton("Add");
 	private JButton btnCreate = new JButton("Create");
-	private JButton btnAddProduct = new JButton("ADD");
+	
 
-	private JTextArea txtPnProducts = new JTextArea();
+
 
 	/*
 	 * Constructs the GUI with swing components
 	 */
 	public InvoiceGUI(ClientController clientController){
-		
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(600,300));		
-		pnlTopLeft.setBorder(new EmptyBorder(10, 10, 10, 10));
-		pnlTopMiddle.setBorder(new EmptyBorder(10, 10, 10, 10));
-		pnlTopRight.setBorder(new EmptyBorder(10, 10, 10, 10));
+		add(pnlNorth, BorderLayout.NORTH);
+		add(pnlMain, BorderLayout.CENTER);
+		add(pnlSouth, BorderLayout.SOUTH);
+		pnlMain.add(txtMain, BorderLayout.CENTER);
+		pnlMain.setBorder(new EmptyBorder(10, 10, 10, 10));
+		pnlNorth.setBorder(new EmptyBorder(10, 10, 10, 10));
+		txtMain.setBorder(new EmptyBorder(10, 10, 10, 10));
+		pnlSouth.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
+		pnlNorth.add(pnlNorthSouth, BorderLayout.SOUTH);
+		pnlNorth.add(pnlNorthWest, BorderLayout.WEST);
+		pnlNorth.add(pnlNorthCenter, BorderLayout.CENTER);
 		
-		add(pnlTop, BorderLayout.NORTH);
-		pnlTop.add(pnlTopLeft);
-		pnlTop.add(pnlTopMiddle);
-		pnlTop.add(pnlTopRight);
+		pnlNorthWest.add(lblBuyer);
+		pnlNorthWest.add(lblReference);
 		
-		pnlTopLeft.add(lblInvoice);
-		pnlTopLeft.add(lblName);
-		pnlTopLeft.add(lblAddress);
-		pnlTopLeft.add(lblZipTown);
-		pnlTopLeft.add(lblContact);
-		pnlTopLeft.add(lblInvoiceRef);
+		pnlNorthCenter.add(txtBuyer);
+		pnlNorthCenter.add(txtReference);
 		
-		pnlTopMiddle.add(txtInvoice);
-		pnlTopMiddle.add(txtName);
-		pnlTopMiddle.add(txtAddress);
-		pnlTopMiddle.add(pnlZipTown);
-		pnlZipTown.add(txtZipCode);
-		pnlZipTown.add(txtTown);
-		pnlTopMiddle.add(txtContact);
-		pnlTopMiddle.add(txtInvoiceRef);
+		pnlNorthSouth.add(lblAddProduct);
+		pnlNorthSouth.add(txtAddProduct);
+		pnlNorthSouth.add(lblAddQuantity);
+		pnlNorthSouth.add(txtAddQuantity);
+		pnlNorthSouth.add(btnAdd);
+		pnlNorthSouth.add(lblProduct);
+		pnlNorthSouth.add(lblName);
+		pnlNorthSouth.add(lblPrice);
+		pnlNorthSouth.add(lblQuantity);
+		pnlNorthSouth.add(lblSum);
 		
-		pnlTopRight.add(btnCreate, BorderLayout.SOUTH);
+		pnlSouth.add(btnCreate, BorderLayout.EAST);
 		
-		add(pnlProduct, BorderLayout.CENTER);
-		pnlProduct.add(pnlAddProduct, BorderLayout.NORTH);
-		pnlAddProduct.setBorder(new TitledBorder(""));
-		pnlAddProduct.add(lblProductNbr);
-		pnlAddProduct.add(txtProductNbr);
-		pnlAddProduct.add(lblQuantity);		
-		pnlAddProduct.add(txtQuantity);
-		pnlAddProduct.add(btnAddProduct);
-		
-		pnlProduct.add(new JScrollPane(txtPnProducts));
-	
-		
-		addListeners();
+
+//		addListeners();
 	}
 	
 	/*
 	 * Class to enable button functions
 	 */
 	
-	private class ButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-
-			if (e.getSource() == btnAddProduct) {			
-				txtPnProducts.append("LOL \n");
-			}
-
-		}
-
-	}
-	/*
-	 * Method adds listeners
-	 */
-	
-	private void addListeners() {
-		ButtonListener listener = new ButtonListener();
-		btnAddProduct.addActionListener(listener);
-
-	}
+//	private class ButtonListener implements ActionListener {
+//		public void actionPerformed(ActionEvent e) {
+//
+//			if (e.getSource() ==  ) {			
+//			}
+//
+//		}
+//
+//	}
+//	/*
+//	 * Method adds listeners
+//	 */
+//	
+//	private void addListeners() {
+//		ButtonListener listener = new ButtonListener();
+//		btnAddProduct.addActionListener(listener);
+//
+//	}
 
 	@Override
 	public String getTitle() {
