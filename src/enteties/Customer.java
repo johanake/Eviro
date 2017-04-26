@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class Customer implements Serializable, EntityInterface {
 
 	private static final long serialVersionUID = 1L;
-	private int customerId;
+	private String customerId;
 	private String name;
 	private String address;
 	private String zipCode;
@@ -41,7 +41,7 @@ public class Customer implements Serializable, EntityInterface {
 	 */
 
 	// Krav på namn, adress, zip, city, tele.
-	public Customer(int customerId, String name, String address, String zipCode, String city, String phoneNumber,
+	public Customer(String customerId, String name, String address, String zipCode, String city, String phoneNumber,
 			String email, String vatNumber, int creditLimit) {
 		this.customerId = customerId;
 		this.name = name;
@@ -78,16 +78,16 @@ public class Customer implements Serializable, EntityInterface {
 
 	}
 
-	public Customer(int customerId) {
+	public Customer(String customerId) {
 		this.customerId = customerId;
 	}
 
-	public int getCustomerId() {
+	public String getCustomerId() {
 
 		return customerId;
 	}
 
-	public void setCustomerId(int customerId) {
+	public void setCustomerId(String customerId) {
 
 		this.customerId = customerId;
 	}

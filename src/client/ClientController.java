@@ -73,7 +73,7 @@ public class ClientController {
 //		System.out.println(cList.get(0).getAddress());
 //	}
 
-	public ArrayList<Customer> searchCustomer (int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
+	public ArrayList<Customer> searchCustomer (String customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
 		Customer c = new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit);
 		c.setOperation(SEARCHCUSTOMER);
 //		client.sendObject(c);
@@ -84,7 +84,7 @@ public class ClientController {
 		return customerList;
 	}
 	
-	public void updateCustomer (int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
+	public void updateCustomer (String customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
 		Customer c = new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit);
 		c.setOperation(UPDATECUSTOMER);
 		String temp = (String) client.sendObject(c);
@@ -92,7 +92,7 @@ public class ClientController {
 		
 	}
 	
-	public void deleteCustomer(int customerId){
+	public void deleteCustomer(String customerId){
 		Customer c = new Customer(customerId);
 		c.setOperation(DELETECUSTOMER);
 		String temp = (String) client.sendObject(c);
