@@ -25,6 +25,7 @@ import javax.swing.border.TitledBorder;
 import client.ClientController;
 import client.Main;
 import tools.InvoiceGUI;
+import tools.SearchArticle;
 import tools.SearchCustomer;
 import tools.SearchResults;
 import tools.CreateCustomer;
@@ -193,6 +194,11 @@ public class GUIController {
 				System.out.println("hej");
 				desktop.add(new Toolbox(new SearchResults()));
 				break;
+			
+			case "find_art":
+				desktop.add(new Toolbox(new SearchArticle(clientController)));
+				break;
+				
 
 			default:
 				JOptionPane.showMessageDialog(desktop, "You clicked on: " + e.getActionCommand());
