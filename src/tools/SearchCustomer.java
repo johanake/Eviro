@@ -13,10 +13,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 
 import client.ClientController;
 import gui.Tool;
@@ -52,8 +54,6 @@ public class SearchCustomer extends JPanel implements Tool {
 	private JTextField txtPhoneNbr = new JTextField();
 	private JTextField txtEmail = new JTextField();
 	private JTextField txtVATNbr = new JTextField();	
-	
-	private HashMap<String, String> txtList = new HashMap<String, String>();
 	
 	private JButton btnEdit = new JButton("Edit");
 	private JButton btnUpdate = new JButton("Update");
@@ -122,30 +122,13 @@ public class SearchCustomer extends JPanel implements Tool {
 		btnSearch.addActionListener(listener);
 	}
 	
-	private String checkFields(){
-		txtList.put("CustomerID", txtCustomerID.getText());
-		txtList.put("Name", txtName.getText());
-		txtList.put("Address", txtAddress.getText());
-		txtList.put("Zip Code", txtZipCode.getText());
-		txtList.put("City", txtCity.getText());
-		txtList.put("Phone number", txtPhoneNbr.getText());
-		txtList.put("Email", txtEmail.getText());
-		txtList.put("VAT number", txtVATNbr.getText());
-		
-		for(Map.Entry<String, String> entry : txtList.entrySet()){
-			if(entry.getValue().trim().length() <=0){
-				return "Please check following data: " + entry.getKey();
-			}
-		}
-		return "Customer added";
-		
-	}
-	
+
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == btnSearch) {	
-				System.out.println(checkFields());
+			if (e.getSource() == btnSearch) {
+				clientController.searchCustomer(Integer.parseInt(txtCustomerID.getText()), txtName.getText(), txtAddress.getText(), txtZipCode.getText(), txtCity.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 0);
+	//			clientController.getCustomer(39);
 			}
 
 		}
@@ -160,6 +143,7 @@ public class SearchCustomer extends JPanel implements Tool {
 	@Override
 	public boolean getRezizable() {	
 		return true;
-	}
+	}	
+	
 
 }

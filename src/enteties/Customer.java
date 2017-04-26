@@ -54,6 +54,29 @@ public class Customer implements Serializable, EntityInterface {
 		this.creditLimit = creditLimit;
 
 	}
+	
+	/**
+	 * 
+	 * @param name
+	 * @param address
+	 * @param zipCode
+	 * @param city
+	 * @param phoneNumber
+	 * @param email
+	 * @param vatNumber
+	 * @param creditLimit
+	 */
+	public Customer(String name, String address, String zipCode, String city, String phoneNumber,String email, String vatNumber, int creditLimit) {
+		this.name = name;
+		this.address = address;
+		this.zipCode = zipCode;
+		this.city = city;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.vatNumber = vatNumber;
+		this.creditLimit = creditLimit;
+
+	}
 
 	public Customer(int customerId) {
 		this.customerId = customerId;

@@ -26,6 +26,7 @@ import client.ClientController;
 import client.Main;
 import tools.InvoiceGUI;
 import tools.SearchCustomer;
+import tools.SearchResults;
 import tools.CreateCustomer;
 
 /**
@@ -186,6 +187,12 @@ public class GUIController {
 				
 			case "find_cust":
 				desktop.add(new Toolbox(new SearchCustomer(clientController)));
+				break;
+				
+			case "find_trans":
+				System.out.println("hej");
+				desktop.add(new Toolbox(new SearchResults()));
+				break;
 
 			default:
 				JOptionPane.showMessageDialog(desktop, "You clicked on: " + e.getActionCommand());

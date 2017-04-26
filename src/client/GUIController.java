@@ -25,7 +25,7 @@ import javax.swing.border.TitledBorder;
 import gui.Menu;
 import gui.Toolbox;
 import tools.InvoiceGUI;
-import tools.SearchCustomerGUI;
+import tools.SearchCustomer;
 
 /**
  * Handles client side gui operations of the system.
@@ -172,7 +172,7 @@ public class GUIController {
 			switch (e.getActionCommand()) {
 
 			case "tool_customer":
-				desktop.add(new Toolbox(new SearchCustomerGUI(clientController)));
+				desktop.add(new Toolbox(new SearchCustomer(clientController)));
 				break;
 
 			case "tool_invoice":

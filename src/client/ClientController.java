@@ -1,6 +1,5 @@
 package client;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,8 +13,8 @@ import enteties.Customer;
  */
 public class ClientController {
 	public static final int ADDCUSTOMER = 1;
-	public static final int GETCUSTOMER = 2;
-	public static final int SEARCHCUSTOMER = 3;
+//	public static final int GETCUSTOMER = 3;
+	public static final int SEARCHCUSTOMER = 2;
 	public static final int UPDATECUSTOMER = 4;
 	public static final int DELETECUSTOMER = 5;
 
@@ -32,8 +31,7 @@ public class ClientController {
 	}
 	
 	/**
-	 * Creates a new customer. 
-	 * @param customerId customer id
+	 * Creates a new customer. 	 
 	 * @param name customer name
 	 * @param adress customer adress
 	 * @param zipCode customer zip code
@@ -42,8 +40,8 @@ public class ClientController {
 	 * @param email customer email
 	 * @param vatNumber customer vat number
 	 */
-	public void createCustomer(int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
-		Customer c = new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit);
+	public void createCustomer(String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
+		Customer c = new Customer(name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit);
 		c.setOperation(ADDCUSTOMER);
 		client.sendObject(c);
 	}
@@ -62,17 +60,18 @@ public class ClientController {
 				return "Please check following data: " + entry.getKey();
 			}
 		}
+		createCustomer(name, address, zipCode, city, phoneNbr, email, vatNbr, 0);
 		return "Customer added";
 		
 	}
 	
-	public void getCustomer(int customerId){
-		Customer c = new Customer(customerId);
-		c.setOperation(GETCUSTOMER);
-		ArrayList<Customer> cList = (ArrayList<Customer>) client.sendObject(c);
-		
-		System.out.println(cList);
-	}
+//	public void getCustomer(int customerId){
+//		Customer c = new Customer(customerId);
+//		c.setOperation(GETCUSTOMER);
+//		ArrayList<Customer> cList = (ArrayList<Customer>) client.sendObject(c);
+//		
+//		System.out.println(cList.get(0).getAddress());
+//	}
 
 	public void searchCustomer (int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
 		Customer c = new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit);
@@ -80,7 +79,7 @@ public class ClientController {
 //		client.sendObject(c);
 		ArrayList <Customer> customerList;
 		customerList = (ArrayList <Customer>) client.sendObject(c);
-		System.out.println(customerList.toString());
+		System.out.println(customerList.get(0).getAddress());
 	}
 	
 	public void updateCustomer (int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
