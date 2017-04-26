@@ -21,6 +21,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import client.ClientController;
+import gui.GUIController;
 import gui.Tool;
 ;
 
@@ -62,10 +63,12 @@ public class SearchCustomer extends JPanel implements Tool {
 	
 	
 	private ClientController clientController;
+	private GUIController guiController;
 	
 	
-	public SearchCustomer(ClientController clientController){
+	public SearchCustomer(ClientController clientController, GUIController guiController){
 		this.clientController = clientController;
+		this.guiController = guiController;
 		
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(600,275));
