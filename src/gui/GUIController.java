@@ -25,6 +25,7 @@ import javax.swing.border.TitledBorder;
 import client.ClientController;
 import client.Main;
 import tools.InvoiceGUI;
+import tools.SearchArticle;
 import tools.SearchCustomer;
 import tools.CreateCustomer;
 
@@ -186,7 +187,12 @@ public class GUIController {
 				
 			case "find_cust":
 				desktop.add(new Toolbox(new SearchCustomer(clientController)));
-
+				break;
+			
+			case "find_art":
+				desktop.add(new Toolbox(new SearchArticle(clientController)));
+//				break;
+				
 			default:
 				JOptionPane.showMessageDialog(desktop, "You clicked on: " + e.getActionCommand());
 				break;
