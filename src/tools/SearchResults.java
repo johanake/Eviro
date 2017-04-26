@@ -1,14 +1,14 @@
 package tools;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import enteties.Customer;
 import gui.Tool;
 
 public class SearchResults extends JPanel implements Tool{
@@ -17,12 +17,21 @@ public class SearchResults extends JPanel implements Tool{
 	JScrollPane scrollPane = new JScrollPane(table);
 	
 	
-	public SearchResults(){
+	public SearchResults(ArrayList<Customer> list){
+		System.out.println("4");
 		setLayout(new BorderLayout());
 		add(scrollPane);		
 		setVisible(true);
 		table.setFillsViewportHeight(true);		//Så syns alla cols
-		model.addRow(new Object[]{"hej", "test"});
+		addRow(list);
+
+	}
+	
+	private void addRow(ArrayList<Customer> objectList){
+		System.out.println("5");		
+		for(int i=0; i<objectList.size(); i++){
+			model.addRow(objectList.get(i).getAllInObjects());
+		}
 
 	}
 

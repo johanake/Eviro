@@ -73,13 +73,15 @@ public class ClientController {
 //		System.out.println(cList.get(0).getAddress());
 //	}
 
-	public void searchCustomer (int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
+	public ArrayList<Customer> searchCustomer (int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
 		Customer c = new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit);
 		c.setOperation(SEARCHCUSTOMER);
 //		client.sendObject(c);
 		ArrayList <Customer> customerList;
+		System.out.println("2");
 		customerList = (ArrayList <Customer>) client.sendObject(c);
-		System.out.println(customerList.get(0).getAddress());
+		System.out.println("3");
+		return customerList;
 	}
 	
 	public void updateCustomer (int customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {

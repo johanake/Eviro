@@ -199,10 +199,10 @@ public class GUIController {
 				desktop.add(new Toolbox(new SearchCustomer(clientController, getGUIController())));
 				break;
 
-			case "find_trans":
-				System.out.println("hej");
-				desktop.add(new Toolbox(new SearchResults()));
-				break;
+//			case "find_trans":
+//				System.out.println("hej");
+//				desktop.add(new Toolbox(new SearchResults()));
+//				break;
 
 			case "find_art":
 				desktop.add(new Toolbox(new SearchArticle(clientController)));
