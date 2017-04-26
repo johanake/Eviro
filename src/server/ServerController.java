@@ -71,11 +71,11 @@ public class ServerController {
 		String query = "SELECT * FROM " + ei.getTableName() + " WHERE ";
 		String and = "";
 		for (int i = 0; i < colNames.length; i++) {
-			if (i == 0 && (int) info[i].toString().trim().length() >= 0) {
+			if (i == 0 && (int) info[i].toString().trim().length() > 0) {
 				query += colNames[i] + " = " + info[i];
 				return query;
 			}
-			if (info[i].toString().trim().length() >= 0) {
+			if (info[i].toString().trim().length() > 0) {
 				query += and + colNames[i] + " LIKE '%" + info[i] + "%'";
 				and = " AND ";
 			}
