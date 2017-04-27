@@ -27,9 +27,7 @@ import client.ClientController;
 import client.Main;
 import tools.CreateCustomer;
 import tools.CustomerGUI;
-import tools.InvoiceGUI;
 import tools.SearchArticle;
-import tools.SearchResults;
 
 /**
  * Handles client side gui operations of the system.
@@ -128,7 +126,7 @@ public class GUIController {
 
 		private JComponent quick[] = new JComponent[] { new ActionJButton("Customer", "find_cust"), new ActionJButton("Invoice", "find_inv"), new ActionJButton("Transaction", "find_trans"), new ActionJButton("Article", "find_art") };
 
-		private JComponent tools[] = new JComponent[] { new ActionJButton("Customer", "tool_customer"), new ActionJButton("Invoice", "tool_invoice") };
+		private JComponent tools[] = new JComponent[] { new ActionJButton("Customer", "tool_customer") };
 
 		private JComponent exampleInfo[] = new JComponent[] {
 
@@ -187,10 +185,6 @@ public class GUIController {
 				desktop.add(new Toolbox(new CreateCustomer(clientController)));
 				break;
 
-			case "tool_invoice":
-				desktop.add(new Toolbox(new InvoiceGUI(clientController)));
-				break;
-
 			case "link_exit":
 				System.exit(0);
 				break;
@@ -198,11 +192,6 @@ public class GUIController {
 			case "find_cust":
 				desktop.add(new Toolbox(new CustomerGUI(clientController, getGUIController())));
 				break;
-
-//			case "find_trans":
-//				System.out.println("hej");
-//				desktop.add(new Toolbox(new SearchResults()));
-//				break;
 
 			case "find_art":
 				desktop.add(new Toolbox(new SearchArticle(clientController)));
