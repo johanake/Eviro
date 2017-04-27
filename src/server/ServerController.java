@@ -72,6 +72,7 @@ public class ServerController {
 		String and = "";
 		for (int i = 0; i < colNames.length; i++) {
 			if (i == 0 && (int) info[i].toString().trim().length() > 0) {
+//			if (i == 0 && info[i] == null) {				La till denna så att sökfunktionen skulle fungera, diskuteras på möte /Åkesson
 				query += colNames[i] + " = " + info[i];
 				return query;
 			}
