@@ -18,6 +18,8 @@ public class Invoice implements Serializable, EntityInterface {
 	private int paymentPeriod;
 	private double price;
 	private int operation;
+	private Object[] data = new Object[] { incoiveId, customerId, contact, noteInvoice, timeStamp, price };
+
 	private final String[] COLUMNNAMES = { "incoiveId", "customerId", "contact", "noteInvoice", "timeStamp", "price" };
 	private final String TABLENAME = "customer";
 
@@ -39,6 +41,10 @@ public class Invoice implements Serializable, EntityInterface {
 		this.timeStamp = timeStamp;
 		this.paymentPeriod = paymentPeriod;
 		this.price = price;
+	}
+
+	public Invoice(Object[] data) {
+		this.data = data;
 	}
 
 	public int getIncoiveId() {
@@ -109,7 +115,7 @@ public class Invoice implements Serializable, EntityInterface {
 
 	@Override
 	public Object[] getAllInObjects() {
-		return new Object[] { incoiveId, customerId, contact, noteInvoice, timeStamp, price };
+		return data;
 	}
 
 	@Override
