@@ -40,7 +40,6 @@ public class Customer implements Serializable, EntityInterface {
 	 * @param vatNumber The organizationnumber for the customer
 	 */
 
-	// Krav på namn, adress, zip, city, tele.
 	public Customer(String customerId, String name, String address, String zipCode, String city, String phoneNumber,
 			String email, String vatNumber, int creditLimit) {
 		this.customerId = customerId;

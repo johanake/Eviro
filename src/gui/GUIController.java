@@ -26,9 +26,9 @@ import javax.swing.border.TitledBorder;
 import client.ClientController;
 import client.Main;
 import tools.CreateCustomer;
+import tools.CustomerGUI;
 import tools.InvoiceGUI;
 import tools.SearchArticle;
-import tools.SearchCustomer;
 import tools.SearchResults;
 
 /**
@@ -196,7 +196,7 @@ public class GUIController {
 				break;
 
 			case "find_cust":
-				desktop.add(new Toolbox(new SearchCustomer(clientController, getGUIController())));
+				desktop.add(new Toolbox(new CustomerGUI(clientController, getGUIController())));
 				break;
 
 //			case "find_trans":

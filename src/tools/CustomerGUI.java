@@ -25,10 +25,10 @@ import gui.GUIController;
 import gui.Tool;
 ;
 
-public class SearchCustomer extends JPanel implements Tool {
+public class CustomerGUI extends JPanel implements Tool {
 	
 	
-	public final String TOOLNAME = "Search Customer";
+	public final String TOOLNAME = "Customer";
 	
 	private JPanel pnlNorth = new JPanel(new BorderLayout());
 	private JPanel pnlNorthWest = new JPanel(new GridLayout(7,1));
@@ -54,7 +54,8 @@ public class SearchCustomer extends JPanel implements Tool {
 	private JTextField txtCity = new JTextField();
 	private JTextField txtPhoneNbr = new JTextField();
 	private JTextField txtEmail = new JTextField();
-	private JTextField txtVATNbr = new JTextField();	
+	private JTextField txtVATNbr = new JTextField();
+	private JTextField[] txtAll = {txtCustomerID, txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail, txtVATNbr};
 	
 	private JButton btnEdit = new JButton("Edit");
 	private JButton btnUpdate = new JButton("Update");
@@ -66,7 +67,7 @@ public class SearchCustomer extends JPanel implements Tool {
 	private GUIController guiController;
 	
 	
-	public SearchCustomer(ClientController clientController, GUIController guiController){
+	public CustomerGUI(ClientController clientController, GUIController guiController){
 		this.clientController = clientController;
 		this.guiController = guiController;
 		
@@ -124,6 +125,10 @@ public class SearchCustomer extends JPanel implements Tool {
 		ButtonListener listener = new ButtonListener();
 		btnSearch.addActionListener(listener);
 		btnUpdate.addActionListener(listener);
+	}
+	
+	private void setText(){
+		
 	}
 	
 

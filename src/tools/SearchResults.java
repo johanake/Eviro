@@ -37,6 +37,7 @@ public class SearchResults extends JPanel implements Tool{
 		setLayout(new BorderLayout());
 		add(scrollPane);		
 		setVisible(true);
+		table.setFillsViewportHeight(true);
 		
 	}
 	
