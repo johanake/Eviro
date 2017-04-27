@@ -8,15 +8,15 @@ import enteties.Customer;
 
 /**
  * Creates and sends objects to the client. 
- * @author Robin Overgaard
+ * @author Robin Overgaard, Johan Åkesson
  * @version 1.0
  */
 public class ClientController {
 	public static final int ADDCUSTOMER = 1;
 //	public static final int GETCUSTOMER = 3;
 	public static final int SEARCHCUSTOMER = 2;
-	public static final int UPDATECUSTOMER = 4;
-	public static final int DELETECUSTOMER = 5;
+	public static final int UPDATECUSTOMER = 3;
+	public static final int DELETECUSTOMER = 4;
 
 	private Client client;
 	
@@ -77,18 +77,18 @@ public class ClientController {
 		Customer c = new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit);
 		c.setOperation(SEARCHCUSTOMER);
 //		client.sendObject(c);
-		ArrayList <Customer> customerList;
-		System.out.println("2");
+		ArrayList <Customer> customerList;		
 		customerList = (ArrayList <Customer>) client.sendObject(c);
-		System.out.println("3");
+		
 		return customerList;
 	}
 	
 	public void updateCustomer (String customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
 		Customer c = new Customer(customerId,name,adress,zipCode,town,phoneNumber,email,vatNumber, creditLimit);
 		c.setOperation(UPDATECUSTOMER);
-		String temp = (String) client.sendObject(c);
-		System.out.println(temp);
+		System.out.println("b");
+		client.sendObject(c);
+
 		
 	}
 	

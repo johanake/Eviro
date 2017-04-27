@@ -123,17 +123,19 @@ public class SearchCustomer extends JPanel implements Tool {
 	private void addListeners(){
 		ButtonListener listener = new ButtonListener();
 		btnSearch.addActionListener(listener);
+		btnUpdate.addActionListener(listener);
 	}
 	
 
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == btnSearch) {
-				System.out.println("1");
+			if (e.getSource() == btnSearch) {				
 				guiController.popup(new SearchResults(new Object[]{"Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit"}, 0, clientController.searchCustomer(txtCustomerID.getText(), txtName.getText(), txtAddress.getText(), txtZipCode.getText(), txtCity.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 0)));
 	//			clientController.getCustomer(39);
 				
+			}else if(e.getSource() == btnUpdate){
+				clientController.updateCustomer(txtCustomerID.getText(), txtName.getText(), txtAddress.getText(), txtZipCode.getText(), txtCity.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 0);
 			}
 
 		}

@@ -35,6 +35,7 @@ public class ServerController {
 	 * @param ei The object coming from the server.
 	 */
 	public ArrayList<EntityInterface> operationHandler(EntityInterface ei) {
+		System.out.println("e");
 
 		ArrayList<EntityInterface> returnObject = null;
 
@@ -46,7 +47,7 @@ public class ServerController {
 			case SEARCH:
 				returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
 				break;
-			case UPDATE:
+			case UPDATE:				
 				database.executeUpdateQuery(buildUpdateQuery(ei));
 				returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
 				break;
@@ -118,7 +119,7 @@ public class ServerController {
 	 * @param ei The EntityInterface to build the update-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
-	public String buildUpdateQuery(EntityInterface ei) {
+	public String buildUpdateQuery(EntityInterface ei) {		
 
 		Object[] info = ei.getAllInObjects();
 		String[] colNames = ei.getColumnNames();

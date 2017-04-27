@@ -55,7 +55,7 @@ public class ConnectDB {
 	}
 
 	public synchronized void executeUpdateQuery(String query) {
-		try {
+		try {			
 			stmt.executeUpdate(query);
 		} catch (SQLException e) {
 			e.printStackTrace();

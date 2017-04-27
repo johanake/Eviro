@@ -134,7 +134,7 @@ public class Server extends Thread {
 
 				try {
 					Object inObj = objInput.readObject();
-					inputLog(inObj);
+					inputLog(inObj);					
 					objOutput.writeObject(serverController.operationHandler((EntityInterface) inObj));
 					objOutput.flush();
 				} catch (ClassNotFoundException | IOException e) {
