@@ -19,6 +19,9 @@ public class ClientController {
 	public static final int UPDATECUSTOMER = 3;
 	public static final int DELETECUSTOMER = 4;
 
+	public static final int INVOICEADD = 10;
+	public static final int INVOICEUPDATE = 11;
+
 	private Client client;
 
 	private HashMap<String, String> txtList = new HashMap<String, String>();
@@ -103,8 +106,8 @@ public class ClientController {
 
 	public void createInvoice(String[] data) {
 		Invoice i = new Invoice(data);
-		// TODO Auto-generated method stub
-
+		i.setOperation(Eviro.DB_ADD);
+		client.sendObject(i);
 	}
 
 	// public void createProduct() {

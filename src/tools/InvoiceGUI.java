@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -41,6 +42,7 @@ public class InvoiceGUI extends JPanel implements Tool {
 	private JTextField txtAddQuantity = new JTextField();
 
 	private String customerId;
+	private String invoiceId = "00000000"; // Ska hämtas från db i konstruktor
 
 	private JButton btnAdd = new JButton("Add");
 	private JButton btnCreate = new JButton("Create");
@@ -64,6 +66,7 @@ public class InvoiceGUI extends JPanel implements Tool {
 		pnlSouth.setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlNorthSouth.setBorder(new EmptyBorder(10, 10, 10, 10));
 
+		pnlNorth.add(new JLabel("Invoice number: " + invoiceId + " Customer number: " + customerId, JLabel.CENTER), BorderLayout.NORTH);
 		pnlNorth.add(pnlNorthSouth, BorderLayout.SOUTH);
 		pnlNorth.add(pnlNorthWest, BorderLayout.WEST);
 		pnlNorth.add(pnlNorthCenter, BorderLayout.CENTER);
@@ -89,6 +92,18 @@ public class InvoiceGUI extends JPanel implements Tool {
 		searchResults.addArticle(info);
 	}
 
+	private String getTotalPrice() {
+
+		int sum = 0;
+
+		for (int i = 0; i < searchResults.getTable().getRowCount(); i++) {
+			sum += Integer.parseInt((String) searchResults.getTable().getValueAt(i, 4));
+		}
+
+		return Integer.toString(sum);
+
+	}
+
 	/*
 	 * Class to enable button functions
 	 */
@@ -98,13 +113,20 @@ public class InvoiceGUI extends JPanel implements Tool {
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == btnAdd) {
-				String[] info = new String[] { txtAddProduct.getText(), txtAddQuantity.getText() };
+
+				String[] info = new String[5];
+				info[0] = txtAddProduct.getText();
+				info[1] = "\"KING COCK 7\" VIBRATING COCK";
+				info[2] = "579";
+				info[3] = txtAddQuantity.getText();
+				info[4] = Integer.toString(Integer.parseInt(info[2]) * Integer.parseInt(info[3]));
+
 				addProduct(info);
 
 			}
 
 			if (e.getSource() == btnCreate) {
-
+				System.out.println("Skickas till kontroller: " + Arrays.toString(create()));
 				clientController.createInvoice(create());
 			}
 
@@ -112,14 +134,13 @@ public class InvoiceGUI extends JPanel implements Tool {
 
 		private String[] create() {
 
-			String data[] = new String[6];
+			String data[] = new String[5];
 
-			// data[0] = "0"; // Hämta från db först?
-			// data[1] = customerId;
-			// data[2] = txtBuyer.getText();
-			// data[3] = txtReference.getText();
-			// data[4] = ;
-			// data[5];
+			data[0] = "0";
+			data[1] = customerId;
+			data[2] = txtBuyer.getText();
+			data[3] = txtReference.getText();
+			data[4] = getTotalPrice();
 
 			return data;
 		}
@@ -133,12 +154,13 @@ public class InvoiceGUI extends JPanel implements Tool {
 	private void addListeners() {
 		ButtonListener listener = new ButtonListener();
 		btnAdd.addActionListener(listener);
+		btnCreate.addActionListener(listener);
 
 	}
 
 	@Override
 	public String getTitle() {
-		return null;
+		return "New invoice for customer " + customerId;
 	}
 
 	@Override

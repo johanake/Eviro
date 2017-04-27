@@ -1,24 +1,29 @@
 package client;
+
 import server.Server;
 
 /**
  * Contains constants and code to setup and start the system.
- * 
  * @author Robin Overgaard
  * @version 1.0
  */
-public class Main {
+public class Eviro {
 
 	// Constants
 	public static final String APP_NAME = "Eviro Enterprise System";
 	public static final String APP_VERSION = "v0.1";
 	public static final String APP_ICON = "/eviro_icon.png";
 
+	public static final int DB_ADD = 1;
+	public static final int DB_SEARCH = 2;
+	public static final int DB_UPDATE = 3;
+	public static final int DB_DELETE = 4;
+
 	/**
 	 * Setup system before instantiation.
 	 */
 	private void setup() {
-		
+
 	}
 
 	/**
@@ -33,7 +38,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		Main app = new Main();
+		Eviro app = new Eviro();
 		app.setup();
 		app.start();
 

@@ -24,7 +24,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import client.ClientController;
-import client.Main;
+import client.Eviro;
 import tools.CreateCustomer;
 import tools.CustomerGUI;
 import tools.SearchArticle;
@@ -52,7 +52,7 @@ public class GUIController {
 			@Override
 			public void run() {
 				setSystemLookAndFeel();
-				JFrame window = new JFrame(Main.APP_NAME + " " + Main.APP_VERSION);
+				JFrame window = new JFrame(Eviro.APP_NAME + " " + Eviro.APP_VERSION);
 				JPanel pnlMain = new JPanel(new BorderLayout());
 				desktop = new JDesktopPane();
 
@@ -64,7 +64,7 @@ public class GUIController {
 				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				window.setVisible(true);
 				window.setJMenuBar(new Menu());
-				window.setIconImage(new ImageIcon(Main.APP_ICON).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+				window.setIconImage(new ImageIcon(Eviro.APP_ICON).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
 			}
 		});
 
@@ -130,7 +130,7 @@ public class GUIController {
 
 		private JComponent exampleInfo[] = new JComponent[] {
 
-				new JLabel(Main.APP_NAME, JLabel.CENTER), new JLabel(Main.APP_VERSION, JLabel.CENTER) };
+				new JLabel(Eviro.APP_NAME, JLabel.CENTER), new JLabel(Eviro.APP_VERSION, JLabel.CENTER) };
 
 		// new JLabel(new ImageIcon (new ImageIcon(ClientController.class.getResource(Main.APP_ICON)).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH))),
 

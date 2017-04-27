@@ -18,10 +18,10 @@ public class Invoice implements Serializable, EntityInterface {
 	private int paymentPeriod;
 	private double price;
 	private int operation;
-	private Object[] data = new Object[] { incoiveId, customerId, contact, noteInvoice, timeStamp, price };
+	private Object[] data = new Object[] { incoiveId, customerId, contact, noteInvoice, price };
 
-	private final String[] COLUMNNAMES = { "incoiveId", "customerId", "contact", "noteInvoice", "timeStamp", "price" };
-	private final String TABLENAME = "customer";
+	private final String[] COLUMNNAMES = { "invoiceID", "customerId", "contact", "noteInvoice", "price" };
+	private final String TABLENAME = "invoice";
 
 	/**
 	 * Invoice constructor

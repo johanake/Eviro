@@ -50,7 +50,7 @@ public class CustomerGUI extends JPanel implements Tool {
 	private JButton btnEdit = new JButton("Edit");
 	private JButton btnUpdate = new JButton("Update");
 	private JButton btnSearch = new JButton("Search");
-	private JButton btnPurchase = new JButton("Purchase");
+	private JButton btnPurchase = new JButton("Invoice");
 
 	private ClientController clientController;
 	private GUIController guiController;
@@ -64,6 +64,9 @@ public class CustomerGUI extends JPanel implements Tool {
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlNorth.setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlSouth.setBorder(new EmptyBorder(3, 3, 3, 3));
+
+		// btnPurchase.setEnabled(false);
+
 		displayContent();
 		addListeners();
 

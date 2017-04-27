@@ -3,14 +3,13 @@ package server;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import enteties.Customer;
 import enteties.EntityInterface;
 
 /**
  * Handles most of the logic between the server and the database.
- * 
  * @author Mattias Sundquist, Peter Folke
- *
  */
 public class ServerController {
 
@@ -29,9 +28,7 @@ public class ServerController {
 	}
 
 	/**
-	 * Handles objects coming from the server. Finds out what operation to perform based on the getOperation method in
-	 * the EntityInterface
-	 * 
+	 * Handles objects coming from the server. Finds out what operation to perform based on the getOperation method in the EntityInterface
 	 * @param ei The object coming from the server.
 	 */
 	public ArrayList<EntityInterface> operationHandler(EntityInterface ei) {
@@ -40,28 +37,26 @@ public class ServerController {
 		ArrayList<EntityInterface> returnObject = null;
 
 		switch (ei.getOperation()) {
-			case ADD:
-				database.executeInsertOrDeleteQuery(buildInsertQuery(ei));
-				returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
-				break;
-			case SEARCH:
-				returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
-				break;
-			case UPDATE:				
-				database.executeUpdateQuery(buildUpdateQuery(ei));
-				returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
-				break;
-			case DELETE:
-				database.executeInsertOrDeleteQuery(buildDeleteQuery(ei));
-				break;
+		case ADD:
+			database.executeInsertOrDeleteQuery(buildInsertQuery(ei));
+			returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
+			break;
+		case SEARCH:
+			returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
+			break;
+		case UPDATE:
+			database.executeUpdateQuery(buildUpdateQuery(ei));
+			returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
+			break;
+		case DELETE:
+			database.executeInsertOrDeleteQuery(buildDeleteQuery(ei));
+			break;
 		}
 		return returnObject;
 	}
 
 	/**
-	 * Builds a search-query based on information in the EntityInterface given in the parameter. If the EntityInterface
-	 * id has been specified then only the id will be searched.
-	 * 
+	 * Builds a search-query based on information in the EntityInterface given in the parameter. If the EntityInterface id has been specified then only the id will be searched.
 	 * @param ei The EntityInterface to build the search-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
@@ -72,8 +67,8 @@ public class ServerController {
 		String query = "SELECT * FROM " + ei.getTableName() + " WHERE ";
 		String and = "";
 		for (int i = 0; i < colNames.length; i++) {
-//			if (i == 0 && (int) info[i].toString().trim().length() > 0) {
-			if (i == 0 && info[i] == null) {				//La till denna så att sökfunktionen skulle fungera, diskuteras på möte /Åkesson
+			// if (i == 0 && (int) info[i].toString().trim().length() > 0) {
+			if (i == 0 && info[i] == null) { // La till denna så att sökfunktionen skulle fungera, diskuteras på möte /Åkesson
 				query += colNames[i] + " = " + info[i];
 				return query;
 			}
@@ -87,7 +82,6 @@ public class ServerController {
 
 	/**
 	 * Builds an insert-query based on information in the EntityInterface given in the parameter.
-	 * 
 	 * @param ei The EntityInterface to build the insert-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
@@ -109,17 +103,17 @@ public class ServerController {
 			else
 				query += "'" + info[i] + "', ";
 		}
+
+		System.out.println(query);
 		return query;
 	}
 
 	/**
-	 * Builds an update-query based on information in the EntityInterface given in the parameter. Expects that the
-	 * EntityInterface id is specified.
-	 * 
+	 * Builds an update-query based on information in the EntityInterface given in the parameter. Expects that the EntityInterface id is specified.
 	 * @param ei The EntityInterface to build the update-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
-	public String buildUpdateQuery(EntityInterface ei) {		
+	public String buildUpdateQuery(EntityInterface ei) {
 
 		Object[] info = ei.getAllInObjects();
 		String[] colNames = ei.getColumnNames();
@@ -135,9 +129,7 @@ public class ServerController {
 	}
 
 	/**
-	 * Build a delete-query based on the information in the ENtityInterface given in the parameter. Expects that the
-	 * EntityInterface id is specified.
-	 * 
+	 * Build a delete-query based on the information in the ENtityInterface given in the parameter. Expects that the EntityInterface id is specified.
 	 * @param ei The EntityInterface to build the update-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
@@ -152,7 +144,6 @@ public class ServerController {
 
 	/**
 	 * Builds an Arraylist of EntityInterfaces based on the resultset given in the parameter.
-	 * 
 	 * @param rs The resultset to build the Arraylist on.
 	 * @return An ArrayList of EntityInterfaces containing the EntityInterfaces from the resultset.
 	 */
@@ -162,8 +153,7 @@ public class ServerController {
 		try {
 			while (rs.next()) {
 				if (rs.getMetaData().toString().contains("tableName=customer")) {
-					ei.add(new Customer(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-							rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9)));
+					ei.add(new Customer(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9)));
 				} else if (rs.getMetaData().toString().contains("tableName=invoice")) {
 
 				} else if (rs.getMetaData().toString().contains("tableName=product")) {
