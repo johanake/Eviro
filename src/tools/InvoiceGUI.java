@@ -31,23 +31,18 @@ import gui.Tool;
 public class InvoiceGUI extends JPanel implements Tool {
 	
 	private JPanel pnlNorth = new JPanel(new BorderLayout());
-	private JPanel pnlNorthSouth = new JPanel(new GridLayout(2,5));
+	private JPanel pnlNorthSouth = new JPanel(new GridLayout(1,5));
 	private JPanel pnlNorthWest = new JPanel(new GridLayout(2,1));
 	private JPanel pnlNorthCenter = new JPanel(new GridLayout(2,1));	
 	private JPanel pnlSouth = new JPanel(new BorderLayout());
 	private JPanel pnlMain = new JPanel(new BorderLayout());
 	
-	private JTextArea txtMain = new JTextArea();
+	private SearchResults searchResults = new SearchResults(new Object[]{"Product", "Name", "Price", "Quantity", "Sum"},0);
 	
 	private JLabel lblBuyer = new JLabel("Buyer: ");
 	private JLabel lblReference = new JLabel("Reference: ");
 	private JLabel lblAddProduct = new JLabel("Add product: ");
 	private JLabel lblAddQuantity = new JLabel("Add Quantity: ");
-	private JLabel lblProduct = new JLabel("Product");
-	private JLabel lblName = new JLabel("Name");
-	private JLabel lblPrice = new JLabel("Price");
-	private JLabel lblQuantity = new JLabel("Quantity");
-	private JLabel lblSum = new JLabel("Sum");
 	
 	private JTextField txtBuyer = new JTextField();
 	private JTextField txtReference = new JTextField();
@@ -68,11 +63,12 @@ public class InvoiceGUI extends JPanel implements Tool {
 		add(pnlNorth, BorderLayout.NORTH);
 		add(pnlMain, BorderLayout.CENTER);
 		add(pnlSouth, BorderLayout.SOUTH);
-		pnlMain.add(txtMain, BorderLayout.CENTER);
+		pnlMain.add(searchResults, BorderLayout.CENTER);
 		pnlMain.setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlNorth.setBorder(new EmptyBorder(10, 10, 10, 10));
-		txtMain.setBorder(new EmptyBorder(10, 10, 10, 10));
+		searchResults.setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlSouth.setBorder(new EmptyBorder(10, 10, 10, 10));
+		pnlNorthSouth.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
 		pnlNorth.add(pnlNorthSouth, BorderLayout.SOUTH);
 		pnlNorth.add(pnlNorthWest, BorderLayout.WEST);
@@ -89,40 +85,45 @@ public class InvoiceGUI extends JPanel implements Tool {
 		pnlNorthSouth.add(lblAddQuantity);
 		pnlNorthSouth.add(txtAddQuantity);
 		pnlNorthSouth.add(btnAdd);
-		pnlNorthSouth.add(lblProduct);
-		pnlNorthSouth.add(lblName);
-		pnlNorthSouth.add(lblPrice);
-		pnlNorthSouth.add(lblQuantity);
-		pnlNorthSouth.add(lblSum);
+
 		
 		pnlSouth.add(btnCreate, BorderLayout.EAST);
 		
 
-//		addListeners();
+		addListeners();
+	}
+	
+	private void addProduct(String[] info){
+		searchResults.addArticle(info);
+		
 	}
 	
 	/*
 	 * Class to enable button functions
 	 */
 	
-//	private class ButtonListener implements ActionListener {
-//		public void actionPerformed(ActionEvent e) {
-//
-//			if (e.getSource() ==  ) {			
-//			}
-//
-//		}
-//
-//	}
-//	/*
-//	 * Method adds listeners
-//	 */
-//	
-//	private void addListeners() {
-//		ButtonListener listener = new ButtonListener();
-//		btnAddProduct.addActionListener(listener);
-//
-//	}
+	private class ButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+
+			if (e.getSource() == btnAdd ) {
+				String[] info = new String[]{txtAddProduct.getText(), txtAddQuantity.getText()};
+				addProduct(info);
+				
+			}
+
+		}
+
+	}
+	
+	/*
+	 * Method adds listeners
+	 */
+	
+	private void addListeners() {
+		ButtonListener listener = new ButtonListener();
+		btnAdd.addActionListener(listener);
+
+	}
 
 	@Override
 	public String getTitle() {
