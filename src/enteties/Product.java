@@ -1,13 +1,13 @@
 package enteties;
+
 import java.io.Serializable;
 
 /**
  * A class which represents a product in the system
  * @author nadiaelhaddaoui
- *
  */
 
-public class Product implements Serializable{
+public class Product implements Serializable, EntityInterface {
 	private int productId;
 	private String name;
 	private String description;
@@ -16,8 +16,11 @@ public class Product implements Serializable{
 	private String supplierArticleNumber;
 	private int ean;
 	private String stockPlace;
-	private int balance;
-	
+	private int saldo;
+	private int operation;
+	private final String[] COLUMNNAMES = { "productId", "name", "description", "price", "supplier", "supplierArticleNumber", "ean", "stockPlace", "saldo" };
+	private final String TABLENAME = "product";
+
 	/**
 	 * Product constructor
 	 * @param productId A unique Id
@@ -30,8 +33,7 @@ public class Product implements Serializable{
 	 * @param stockPlace Where the product is to be stocked
 	 * @param balance The amount of products
 	 */
-	public Product(int productId, String name, String description, int price, String supplier,
-			String supplierArticleNumber, int ean, String stockPlace, int balance) {
+	public Product(int productId, String name, String description, int price, String supplier, String supplierArticleNumber, int ean, String stockPlace, int balance) {
 		this.productId = productId;
 		this.name = name;
 		this.description = description;
@@ -40,7 +42,7 @@ public class Product implements Serializable{
 		this.supplierArticleNumber = supplierArticleNumber;
 		this.ean = ean;
 		this.stockPlace = stockPlace;
-		this.balance = balance;
+		this.saldo = balance;
 	}
 
 	public int getProductId() {
@@ -107,13 +109,37 @@ public class Product implements Serializable{
 		this.stockPlace = stockPlace;
 	}
 
-	public int getBalance() {
-		return balance;
+	public int getSaldo() {
+		return saldo;
 	}
 
-	public void setBalance(int balance) {
-		this.balance = balance;
+	public void setSaldo(int saldo) {
+		this.saldo = saldo;
 	}
-	
+
+	@Override
+	public void setOperation(int operation) {
+		this.operation = operation;
+	}
+
+	@Override
+	public int getOperation() {
+		return operation;
+	}
+
+	@Override
+	public Object[] getAllInObjects() {
+		return new Object[] { productId, name, description, price, supplier, supplierArticleNumber, ean, stockPlace, saldo };
+	}
+
+	@Override
+	public String[] getColumnNames() {
+		return COLUMNNAMES;
+	}
+
+	@Override
+	public String getTableName() {
+		return TABLENAME;
+	}
 
 }
