@@ -20,12 +20,12 @@ public class SearchResults extends JPanel implements Tool{
 	public SearchResults(Object[] obj, int rows, ArrayList<Customer> list){
 		table = new JTable(new DefaultTableModel(obj, rows));
 		model = (DefaultTableModel) table.getModel();
-		scrollPane = new JScrollPane(table);
-		System.out.println("4");
+		scrollPane = new JScrollPane(table);	
+		
 		setLayout(new BorderLayout());
 		add(scrollPane);		
 		setVisible(true);
-		table.setFillsViewportHeight(true);		//Så syns alla cols
+		table.setFillsViewportHeight(true);	
 		addCustomer(list);
 
 	}
@@ -41,8 +41,7 @@ public class SearchResults extends JPanel implements Tool{
 		
 	}
 	
-	public void addCustomer(ArrayList<Customer> objectList){
-		System.out.println("5");		
+	public void addCustomer(ArrayList<Customer> objectList){				
 		for(int i=0; i<objectList.size(); i++){
 			model.addRow(objectList.get(i).getAllInObjects());			
 		}

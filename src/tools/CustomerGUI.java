@@ -9,21 +9,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
-
 import client.ClientController;
 import gui.GUIController;
 import gui.Tool;
-;
+
 
 public class CustomerGUI extends JPanel implements Tool {
 	
@@ -88,12 +83,6 @@ public class CustomerGUI extends JPanel implements Tool {
 		
 		pnlNorth.add(pnlNorthWest, BorderLayout.WEST);
 		pnlNorth.add(pnlNorthCenter, BorderLayout.CENTER);	
-//		pnlNorth.add(pnlNorthEast, BorderLayout.EAST);		
-		
-//		TitledBorder centerBorder = BorderFactory.createTitledBorder("Credit Limit");
-//		centerBorder.setTitleJustification(TitledBorder.CENTER);
-//		lblCreditLimit.setBorder(centerBorder);
-//		pnlNorthEast.add(lblCreditLimit);
 		
 		pnlNorthWest.add(lblCustomerID);
 		pnlNorthWest.add(lblName);
@@ -130,17 +119,32 @@ public class CustomerGUI extends JPanel implements Tool {
 	private void setText(){
 		
 	}
+	private String getText(){
+		String getText = txtAll[0].getText() + ",";
+		
+		for(int i=1; i<txtAll.length; i++){
+			if(i==txtAll.length-1){
+				getText += txtAll[i].getText();
+			}else{
+				getText += txtAll[i].getText() + ",";
+			}
+				
+			
+		}
+		return getText;
+	}
 	
 
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == btnSearch) {				
+			if (e.getSource() == btnSearch) {	
+				System.out.println(getText());
 				guiController.popup(new SearchResults(new Object[]{"Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit"}, 0, clientController.searchCustomer(txtCustomerID.getText(), txtName.getText(), txtAddress.getText(), txtZipCode.getText(), txtCity.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 0)));
-	//			clientController.getCustomer(39);
+					
 				
 			}else if(e.getSource() == btnUpdate){
-				clientController.updateCustomer(txtCustomerID.getText(), txtName.getText(), txtAddress.getText(), txtZipCode.getText(), txtCity.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 0);
+				clientController.updateCustomer(txtAll[0].getText(), txtName.getText(), txtAddress.getText(), txtZipCode.getText(), txtCity.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 0);
 			}
 
 		}
