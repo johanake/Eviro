@@ -18,7 +18,6 @@ public class Product implements Serializable, EntityInterface {
 	private String stockPlace;
 	private int saldo;
 	private int operation;
-	private final String TABLENAME = "product";
 
 	/**
 	 * Product constructor
@@ -57,11 +56,6 @@ public class Product implements Serializable, EntityInterface {
 	@Override
 	public Object[] getAllInObjects() {
 		return new Object[] { productId, name, description, price, supplier, supplierArticleNumber, ean, stockPlace, saldo };
-	}
-
-	@Override
-	public String getTableName() {
-		return TABLENAME;
 	}
 
 }

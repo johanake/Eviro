@@ -8,6 +8,4 @@ public interface EntityInterface {
 	
 	public Object[] getAllInObjects();
 		
-	public String getTableName();
-
 }

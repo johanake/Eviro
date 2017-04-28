@@ -19,7 +19,6 @@ public class Invoice implements Serializable, EntityInterface {
 	private double price;
 	private int operation;
 	private Object[] data = new Object[] { incoiveId, customerId, contact, noteInvoice, price };
-	private final String TABLENAME = "invoice";
 
 	/**
 	 * Invoice constructor
@@ -58,11 +57,6 @@ public class Invoice implements Serializable, EntityInterface {
 	@Override
 	public Object[] getAllInObjects() {
 		return data;
-	}
-
-	@Override
-	public String getTableName() {
-		return TABLENAME;
 	}
 
 }

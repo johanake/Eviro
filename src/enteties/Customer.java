@@ -23,7 +23,6 @@ public class Customer implements Serializable, EntityInterface {
 	private String vatNumber;
 	private int creditLimit;
 	private int operation;
-	private final String TABLENAME = "customer";
 
 	/**
 	 * Customers constructor.
@@ -96,12 +95,6 @@ public class Customer implements Serializable, EntityInterface {
 
 		Object[] obj = { customerId, name, address, zipCode, city, phoneNumber, email, vatNumber, creditLimit };
 		return obj;
-	}
-
-	@Override
-	public String getTableName() {
-
-		return TABLENAME;
 	}
 
 }
