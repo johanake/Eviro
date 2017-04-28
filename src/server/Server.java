@@ -58,7 +58,7 @@ public class Server extends Thread {
 		String res = "INPUT STREAM!\n";
 		if (obj instanceof Customer) {
 			Customer c = (Customer) obj;
-			res += "CUSTOMER:\t CustomerId: " + c.getCustomerId() + "\tOperation: " + c.getOperation();
+//			res += "CUSTOMER:\t CustomerId: " + c.getCustomerId() + "\tOperation: " + c.getOperation();
 		}
 		log.info(res);
 	}

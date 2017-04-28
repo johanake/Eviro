@@ -54,6 +54,33 @@ public class ServerController {
 		}
 		return returnObject;
 	}
+	
+	/**
+	 * Asks the database for the tables column names with the MySql command "DESCRIBE table_name". The name of the table
+	 * itself is provided by an EntityInterface.
+	 * 
+	 * @param ei An EntityInterface with a method to read the table name.
+	 * @return A String array with all the table names.
+	 */
+	private String[] getColNames(EntityInterface ei) {
+
+		String query = "DESCRIBE " + ei.getTableName(); 		// Describe table_name returns information about the table.
+		ResultSet rs = database.executeGetQuery(query); 		// Asks database for table information, saves it.
+		try {
+			ArrayList<String> temp = new ArrayList<String>();
+			while (rs.next()) {
+				temp.add(rs.getString(1)); 						// Saves table names in an arraylist.
+			}
+			String[] colNames = new String[temp.size()];
+			for (int i = 0; i < colNames.length; i++) {
+				colNames[i] = temp.get(i).toString(); 			// Saves table names in a String array.
+			}
+			return colNames; 									// Returns the String array.
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	/**
 	 * Builds a search-query based on information in the EntityInterface given in the parameter. If the EntityInterface id has been specified then only the id will be searched.
@@ -63,7 +90,7 @@ public class ServerController {
 	public String buildSearchQuery(EntityInterface ei) {
 
 		Object[] info = ei.getAllInObjects();
-		String[] colNames = ei.getColumnNames();
+		String[] colNames = getColNames(ei);
 		String query = "SELECT * FROM " + ei.getTableName() + " WHERE ";
 		String and = "";
 		for (int i = 0; i < colNames.length; i++) {
@@ -88,7 +115,7 @@ public class ServerController {
 	private String buildInsertQuery(EntityInterface ei) {
 
 		Object[] info = ei.getAllInObjects();
-		String[] colNames = ei.getColumnNames();
+		String[] colNames = getColNames(ei);
 		String query = "INSERT INTO " + ei.getTableName() + " (";
 
 		for (int i = 1; i < colNames.length; i++) {
@@ -116,7 +143,7 @@ public class ServerController {
 	public String buildUpdateQuery(EntityInterface ei) {
 
 		Object[] info = ei.getAllInObjects();
-		String[] colNames = ei.getColumnNames();
+		String[] colNames = getColNames(ei);
 		String query = "UPDATE " + ei.getTableName() + " SET ";
 		for (int i = 1; i < colNames.length; i++) {
 			if (i == colNames.length - 1)
@@ -136,7 +163,7 @@ public class ServerController {
 	public String buildDeleteQuery(EntityInterface ei) {
 
 		Object[] info = ei.getAllInObjects();
-		String[] colNames = ei.getColumnNames();
+		String[] colNames = getColNames(ei);
 		String query = "DELETE FROM " + ei.getTableName() + " WHERE " + colNames[0] + " = " + info[0];
 
 		return query;

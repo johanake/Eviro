@@ -23,8 +23,6 @@ public class Customer implements Serializable, EntityInterface {
 	private String vatNumber;
 	private int creditLimit;
 	private int operation;
-	private final String[] COLUMNNAMES = { "customerId", "name", "address", "zipCode", "city", "phoneNumber", "email",
-			"vatNumber", "creditLimit" };
 	private final String TABLENAME = "customer";
 
 	/**
@@ -81,96 +79,6 @@ public class Customer implements Serializable, EntityInterface {
 		this.customerId = customerId;
 	}
 
-	public String getCustomerId() {
-
-		return customerId;
-	}
-
-	public void setCustomerId(String customerId) {
-
-		this.customerId = customerId;
-	}
-
-	public String getName() {
-
-		return name;
-	}
-
-	public void setName(String name) {
-
-		this.name = name;
-	}
-
-	public String getAddress() {
-
-		return address;
-	}
-
-	public void setAddress(String address) {
-
-		this.address = address;
-	}
-
-	public String getZipCode() {
-
-		return zipCode;
-	}
-
-	public void setZipCode(String zipCode) {
-
-		this.zipCode = zipCode;
-	}
-
-	public String getCity() {
-
-		return city;
-	}
-
-	public void setCity(String city) {
-
-		this.city = city;
-	}
-
-	public String getPhoneNumber() {
-
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getEmail() {
-
-		return email;
-	}
-
-	public void setEmail(String email) {
-
-		this.email = email;
-	}
-
-	public String getVatNumber() {
-
-		return vatNumber;
-	}
-
-	public void setVatNumber(String vatNumber) {
-
-		this.vatNumber = vatNumber;
-	}
-
-	public int getCreditLimit() {
-
-		return creditLimit;
-	}
-
-	public void setCreditLimit(int creditLimit) {
-
-		this.creditLimit = creditLimit;
-	}
-
 	@Override
 	public void setOperation(int operation) {
 
@@ -188,12 +96,6 @@ public class Customer implements Serializable, EntityInterface {
 
 		Object[] obj = { customerId, name, address, zipCode, city, phoneNumber, email, vatNumber, creditLimit };
 		return obj;
-	}
-
-	@Override
-	public String[] getColumnNames() {
-
-		return COLUMNNAMES;
 	}
 
 	@Override

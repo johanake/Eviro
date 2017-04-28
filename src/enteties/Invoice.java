@@ -19,8 +19,6 @@ public class Invoice implements Serializable, EntityInterface {
 	private double price;
 	private int operation;
 	private Object[] data = new Object[] { incoiveId, customerId, contact, noteInvoice, price };
-
-	private final String[] COLUMNNAMES = { "invoiceID", "customerId", "contact", "noteInvoice", "price" };
 	private final String TABLENAME = "invoice";
 
 	/**
@@ -47,62 +45,6 @@ public class Invoice implements Serializable, EntityInterface {
 		this.data = data;
 	}
 
-	public int getIncoiveId() {
-		return incoiveId;
-	}
-
-	public void setIncoiveId(int incoiveId) {
-		this.incoiveId = incoiveId;
-	}
-
-	public int getCustomerId() {
-		return customerId;
-	}
-
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
-	}
-
-	public String getContact() {
-		return contact;
-	}
-
-	public void setContact(String contact) {
-		this.contact = contact;
-	}
-
-	public String getNoteInvoice() {
-		return noteInvoice;
-	}
-
-	public void setNoteInvoice(String noteInvoice) {
-		this.noteInvoice = noteInvoice;
-	}
-
-	public Timestamp getMade() {
-		return timeStamp;
-	}
-
-	public void setMade(Timestamp made) {
-		this.timeStamp = made;
-	}
-
-	public int getIdk() {
-		return paymentPeriod;
-	}
-
-	public void setIdk(int idk) {
-		this.paymentPeriod = idk;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
 	@Override
 	public void setOperation(int operation) {
 		this.operation = operation;
@@ -116,11 +58,6 @@ public class Invoice implements Serializable, EntityInterface {
 	@Override
 	public Object[] getAllInObjects() {
 		return data;
-	}
-
-	@Override
-	public String[] getColumnNames() {
-		return COLUMNNAMES;
 	}
 
 	@Override

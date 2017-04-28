@@ -7,9 +7,7 @@ public interface EntityInterface {
 	public int getOperation();
 	
 	public Object[] getAllInObjects();
-	
-	public String[] getColumnNames();
-	
+		
 	public String getTableName();
 
 }
