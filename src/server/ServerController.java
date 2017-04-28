@@ -58,6 +58,11 @@ public class ServerController {
 		return returnObject;
 	}
 	
+	/**
+	 * Checks which Object the EntityInterface is an instance of and returns that objects table name.
+	 * @param ei The EntityInterface to check instance of.
+	 * @return A String with the Objects table name.
+	 */
 	private String getTableName(EntityInterface ei) {
 		String tableName = "";
 		if (ei instanceof Customer)
@@ -190,7 +195,7 @@ public class ServerController {
 		Object[] info = ei.getAllInObjects();
 		String tableName = getTableName(ei);
 		String[] colNames = getColNames(ei, tableName);
-		String query = "DELETE FROM " + tableName + " WHERE " + colNames[0] + " = " + info[0]; // ei.getTableName() ska ej finnas
+		String query = "DELETE FROM " + tableName + " WHERE " + colNames[0] + " = " + info[0];
 
 		return query;
 	}
