@@ -1,7 +1,6 @@
 package enteties;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 /**
  * A class which represents an invoice in the system
@@ -10,15 +9,15 @@ import java.sql.Timestamp;
 
 public class Invoice implements Serializable, EntityInterface {
 
-	private int invoiceId;
-	private int customerId;
-	private String contact;
-	private String noteInvoice;
-	private Timestamp timeStamp;
-	private int paymentPeriod;
-	private double price;
+	// private int invoiceId;
+	// private int customerId;
+	// private String contact;
+	// private String noteInvoice;
+	// private Timestamp timeStamp;
+	// private int paymentPeriod;
+	// private double price;
 	private int operation;
-	private Object[] data = new Object[] { invoiceId, customerId, contact, noteInvoice, price };
+	private Object[] data = new Object[] {};
 
 	/**
 	 * Invoice constructor
@@ -30,15 +29,15 @@ public class Invoice implements Serializable, EntityInterface {
 	 * @param paymentPeriod The paymentperiod for this invoice
 	 * @param price The price for this invoice
 	 */
-	public Invoice(int incoiveId, int customerId, String contact, String noteInvoice, Timestamp timeStamp, int paymentPeriod, double price) {
-		this.invoiceId = incoiveId;
-		this.customerId = customerId;
-		this.contact = contact;
-		this.noteInvoice = noteInvoice;
-		this.timeStamp = timeStamp;
-		this.paymentPeriod = paymentPeriod;
-		this.price = price;
-	}
+	// public Invoice(int incoiveId, int customerId, String contact, String noteInvoice, Timestamp timeStamp, int paymentPeriod, double price) {
+	// this.invoiceId = incoiveId;
+	// this.customerId = customerId;
+	// this.contact = contact;
+	// this.noteInvoice = noteInvoice;
+	// this.timeStamp = timeStamp;
+	// this.paymentPeriod = paymentPeriod;
+	// this.price = price;
+	// }
 
 	public Invoice(Object[] data) {
 		this.data = data;

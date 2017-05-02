@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -134,13 +136,15 @@ public class InvoiceGUI extends JPanel implements Tool {
 
 		private String[] create() {
 
-			String data[] = new String[5];
+			String data[] = new String[7];
 
-			data[0] = "0";
+			data[0] = ""; // Id set by db.
 			data[1] = customerId;
 			data[2] = txtBuyer.getText();
 			data[3] = txtReference.getText();
-			data[4] = getTotalPrice();
+			data[4] = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+			data[5] = "30";
+			data[6] = getTotalPrice();
 
 			return data;
 		}
