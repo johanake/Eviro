@@ -6,6 +6,7 @@ import java.util.Map;
 
 import enteties.Customer;
 import enteties.Invoice;
+import enteties.Transaction;
 
 /**
  * Creates and sends objects to the client.
@@ -99,6 +100,12 @@ public class ClientController {
 
 	public void createInvoice(String[] data) {
 		Invoice i = new Invoice(data);
+		i.setOperation(Eviro.DB_ADD);
+		client.sendObject(i);
+	}
+
+	public void createTransactions(String[] data) {
+		Transaction i = new Transaction(data);
 		i.setOperation(Eviro.DB_ADD);
 		client.sendObject(i);
 	}

@@ -9,7 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 
 import client.ClientController;
 import gui.Tool;
@@ -38,21 +37,18 @@ public class SearchArticle extends JPanel implements Tool {
 
 	private JPanel pnlNorth = new JPanel();
 	private JPanel pnlSouth = new JPanel();
-//	private JPanel pnlFinal = new JPanel();
-	
-	private JButton btnSearchArticle = new JButton ("Search article");
-	private JButton btnAdd = new JButton("Add new aricle");
-	private JButton btnEdit = new JButton ("Edit article");
-	
-	
-	
-	private ClientController clientController;
+	// private JPanel pnlFinal = new JPanel();
 
+	private JButton btnSearchArticle = new JButton("Search article");
+	private JButton btnAdd = new JButton("Add new aricle");
+	private JButton btnEdit = new JButton("Edit article");
+
+	private ClientController clientController;
 
 	public SearchArticle(ClientController clientController) {
 		this.clientController = clientController;
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(600,275));
+		setPreferredSize(new Dimension(600, 275));
 		articleWindow();
 	}
 
@@ -79,39 +75,36 @@ public class SearchArticle extends JPanel implements Tool {
 		pnlNorth.add(txtDescription);
 		pnlNorth.add(lblQuantity);
 		pnlNorth.add(txtQuantity);
-		
+
 		pnlSouth.add(btnSearchArticle);
 		pnlSouth.add(btnAdd);
 		pnlSouth.add(btnEdit);
 
 	}
-	
-	public void addListner(){
+
+	public void addListner() {
 		ButtonListner listener = new ButtonListner();
 		btnSearchArticle.addActionListener(listener);
 		btnAdd.addActionListener(listener);
 		btnEdit.addActionListener(listener);
-		
-		
+
 	}
-	
-	private class ButtonListner implements ActionListener{
+
+	private class ButtonListner implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource()==btnSearchArticle){
-				
-			} else if (e.getSource()==btnAdd){
-				
-			} else if (e.getSource()==btnEdit){
-				
+			if (e.getSource() == btnSearchArticle) {
+
+			} else if (e.getSource() == btnAdd) {
+
+			} else if (e.getSource() == btnEdit) {
+
 			}
-			
+
 		}
-		
+
 	}
-	
-	
 
 	@Override
 	public String getTitle() {

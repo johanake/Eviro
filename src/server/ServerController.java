@@ -8,6 +8,7 @@ import enteties.Customer;
 import enteties.EntityInterface;
 import enteties.Invoice;
 import enteties.Product;
+import enteties.Transaction;
 
 /**
  * Handles most of the logic between the server and the database.
@@ -69,6 +70,8 @@ public class ServerController {
 			tableName = "invoice";
 		else if (ei instanceof Product)
 			tableName = "product";
+		else if (ei instanceof Transaction)
+			tableName = "transaction";
 
 		return tableName;
 	}

@@ -44,7 +44,7 @@ public class InvoiceGUI extends JPanel implements Tool {
 	private JTextField txtAddQuantity = new JTextField();
 
 	private String customerId;
-	private String invoiceId = "00000000"; // Ska hämtas från db i konstruktor
+	private String invoiceId = "0000000"; // Ska hämtas från db i konstruktor
 
 	private JButton btnAdd = new JButton("Add");
 	private JButton btnCreate = new JButton("Create");
@@ -106,6 +106,22 @@ public class InvoiceGUI extends JPanel implements Tool {
 
 	}
 
+	private void setTransactions() {
+
+		for (int i = 0; i < searchResults.getTable().getRowCount(); i++) {
+
+			String[] trans = new String[5];
+			trans[0] = null;
+			trans[1] = invoiceId;
+			trans[2] = (String) searchResults.getTable().getValueAt(i, 0); // Product id
+			trans[3] = (String) searchResults.getTable().getValueAt(i, 3); // Quantity
+			trans[4] = (String) searchResults.getTable().getValueAt(i, 4); // Price
+			clientController.createTransactions(trans);
+
+		}
+
+	}
+
 	/*
 	 * Class to enable button functions
 	 */
@@ -118,7 +134,7 @@ public class InvoiceGUI extends JPanel implements Tool {
 
 				String[] info = new String[5];
 				info[0] = txtAddProduct.getText();
-				info[1] = "\"KING COCK 7\" VIBRATING COCK";
+				info[1] = "Brödrost";
 				info[2] = "579";
 				info[3] = txtAddQuantity.getText();
 				info[4] = Integer.toString(Integer.parseInt(info[2]) * Integer.parseInt(info[3]));
@@ -129,6 +145,7 @@ public class InvoiceGUI extends JPanel implements Tool {
 
 			if (e.getSource() == btnCreate) {
 				System.out.println("Skickas till kontroller: " + Arrays.toString(create()));
+				setTransactions();
 				clientController.createInvoice(create());
 			}
 
