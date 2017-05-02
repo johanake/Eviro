@@ -5,7 +5,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -44,7 +43,6 @@ public class InvoiceGUI extends JPanel implements Tool {
 	private JTextField txtAddQuantity = new JTextField();
 
 	private String customerId;
-	private String invoiceId = "0000000"; // Ska hämtas från db i konstruktor
 
 	private JButton btnAdd = new JButton("Add");
 	private JButton btnCreate = new JButton("Create");
@@ -68,7 +66,6 @@ public class InvoiceGUI extends JPanel implements Tool {
 		pnlSouth.setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlNorthSouth.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-		pnlNorth.add(new JLabel("Invoice number: " + invoiceId + " Customer number: " + customerId, JLabel.CENTER), BorderLayout.NORTH);
 		pnlNorth.add(pnlNorthSouth, BorderLayout.SOUTH);
 		pnlNorth.add(pnlNorthWest, BorderLayout.WEST);
 		pnlNorth.add(pnlNorthCenter, BorderLayout.CENTER);
@@ -106,13 +103,13 @@ public class InvoiceGUI extends JPanel implements Tool {
 
 	}
 
-	private void setTransactions() {
+	private void setTransactions(String invoiceNbr) {
 
 		for (int i = 0; i < searchResults.getTable().getRowCount(); i++) {
 
 			String[] trans = new String[5];
-			trans[0] = null;
-			trans[1] = invoiceId;
+			trans[0] = invoiceNbr;
+			trans[1] = invoiceNbr;
 			trans[2] = (String) searchResults.getTable().getValueAt(i, 0); // Product id
 			trans[3] = (String) searchResults.getTable().getValueAt(i, 3); // Quantity
 			trans[4] = (String) searchResults.getTable().getValueAt(i, 4); // Price
@@ -120,6 +117,21 @@ public class InvoiceGUI extends JPanel implements Tool {
 
 		}
 
+	}
+
+	private String[] create() {
+
+		String data[] = new String[7];
+
+		data[0] = null; // Id set by db.
+		data[1] = customerId;
+		data[2] = txtBuyer.getText();
+		data[3] = txtReference.getText();
+		data[4] = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		data[5] = "30";
+		data[6] = getTotalPrice();
+
+		return data;
 	}
 
 	/*
@@ -134,8 +146,8 @@ public class InvoiceGUI extends JPanel implements Tool {
 
 				String[] info = new String[5];
 				info[0] = txtAddProduct.getText();
-				info[1] = "Brödrost";
-				info[2] = "579";
+				info[1] = "Artikelbeskrivning";
+				info[2] = "100";
 				info[3] = txtAddQuantity.getText();
 				info[4] = Integer.toString(Integer.parseInt(info[2]) * Integer.parseInt(info[3]));
 
@@ -144,26 +156,10 @@ public class InvoiceGUI extends JPanel implements Tool {
 			}
 
 			if (e.getSource() == btnCreate) {
-				System.out.println("Skickas till kontroller: " + Arrays.toString(create()));
-				setTransactions();
-				clientController.createInvoice(create());
+				// System.out.println("Skickas till kontroller: " + Arrays.toString(create()));
+				setTransactions(clientController.createInvoice(create()));
 			}
 
-		}
-
-		private String[] create() {
-
-			String data[] = new String[7];
-
-			data[0] = ""; // Id set by db.
-			data[1] = customerId;
-			data[2] = txtBuyer.getText();
-			data[3] = txtReference.getText();
-			data[4] = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-			data[5] = "30";
-			data[6] = getTotalPrice();
-
-			return data;
 		}
 
 	}

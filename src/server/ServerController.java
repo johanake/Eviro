@@ -201,10 +201,12 @@ public class ServerController {
 		ArrayList<EntityInterface> ei = new ArrayList<EntityInterface>();
 		try {
 			while (rs.next()) {
+
 				if (rs.getMetaData().toString().contains("tableName=customer")) {
 					ei.add(new Customer(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9) }));
 				} else if (rs.getMetaData().toString().contains("tableName=invoice")) {
-
+					System.out.println("ddddddddddddddddd");
+					ei.add(new Invoice(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) }));
 				} else if (rs.getMetaData().toString().contains("tableName=product")) {
 
 				}

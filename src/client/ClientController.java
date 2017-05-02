@@ -99,16 +99,20 @@ public class ClientController {
 	// send(new Invoice());
 	// }
 
-	public void createInvoice(String[] data) {
+	public String createInvoice(String[] data) {
 		Invoice i = new Invoice(data);
 		i.setOperation(Eviro.DB_ADD);
-		client.sendObject(i);
+
+		ArrayList<Invoice> response = (ArrayList<Invoice>) client.sendObject(i);
+		System.out.println(response.size());
+
+		return response.get(0).getInvoiceNbr();
 	}
 
 	public void createTransactions(String[] data) {
-		Transaction i = new Transaction(data);
-		i.setOperation(Eviro.DB_ADD);
-		client.sendObject(i);
+		Transaction t = new Transaction(data);
+		t.setOperation(Eviro.DB_ADD);
+		client.sendObject(t);
 	}
 
 	// public void createProduct() {

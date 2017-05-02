@@ -43,6 +43,10 @@ public class Invoice implements Serializable, EntityInterface {
 		this.data = data;
 	}
 
+	public String getInvoiceNbr() {
+		return (String) data[0];
+	}
+
 	@Override
 	public void setOperation(int operation) {
 		this.operation = operation;
