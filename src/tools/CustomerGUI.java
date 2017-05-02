@@ -26,7 +26,6 @@ public class CustomerGUI extends JPanel implements Tool {
 	private JPanel pnlNorth = new JPanel(new BorderLayout());
 	private JPanel pnlNorthWest = new JPanel(new GridLayout(7, 1));
 	private JPanel pnlNorthCenter = new JPanel(new GridLayout(7, 1));
-	// private JPanel pnlNorthEast = new JPanel(new GridLayout(1,1));
 
 	private JPanel pnlZipCountry = new JPanel(new GridLayout(1, 2));
 	private JPanel pnlSouth = new JPanel(new GridLayout(1, 4));
@@ -69,8 +68,6 @@ public class CustomerGUI extends JPanel implements Tool {
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlNorth.setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlSouth.setBorder(new EmptyBorder(3, 3, 3, 3));
-
-		// btnPurchase.setEnabled(false);
 
 		displayContent();
 		addListeners();
