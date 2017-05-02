@@ -61,9 +61,11 @@ public class ClientController {
 		txtList.put("Credit Limit", obj[8].toString());
 
 		for (Map.Entry<String, String> entry : txtList.entrySet()) {
+
 			if (entry.getValue().trim().length() <= 0) {
 				return "Please check following data: " + entry.getKey();
 			}
+
 		}
 		createCustomer(obj);
 		return "Customer added";

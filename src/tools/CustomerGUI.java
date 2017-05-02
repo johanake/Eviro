@@ -6,7 +6,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -74,6 +73,10 @@ public class CustomerGUI extends JPanel implements Tool {
 
 	}
 
+	private CustomerGUI getCustomerGUI() {
+		return this;
+	}
+
 	private void displayContent() {
 		add(pnlNorth, BorderLayout.NORTH);
 		add(pnlSouth, BorderLayout.SOUTH);
@@ -115,13 +118,14 @@ public class CustomerGUI extends JPanel implements Tool {
 		btnClear.addActionListener(listener);
 	}
 
-	private void setText(Object[] resultArray) {
+	public void setText(Object[] resultArray) {
 
-		System.out.println(Arrays.toString(resultArray));
+		// System.out.println(Arrays.toString(resultArray));
 
 		for (int i = 0; i < txtAll.length; i++) {
 			txtAll[i].setText((String) resultArray[i]);
 		}
+
 	}
 
 	private Object[] getText() {
@@ -156,7 +160,7 @@ public class CustomerGUI extends JPanel implements Tool {
 				} else if (customerList.size() == 1) {
 					setText(customerList.get(0).getAllInObjects());
 				} else {
-					guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" }, 0, customerList));
+					guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" }, getCustomerGUI(), customerList));
 				}
 			} else if (e.getSource() == btnUpdate) {
 				clientController.updateCustomer(getText());
