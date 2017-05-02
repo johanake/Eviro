@@ -149,7 +149,7 @@ public class CustomerGUI extends JPanel implements Tool {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnSearch) {
-				ArrayList<Customer> customerList = clientController.searchCustomer(getText(), 0);
+				ArrayList<Customer> customerList = clientController.searchCustomer(getText());
 
 				if (customerList.size() == 0) {
 					displayMessage("No customers found, try again by changing or adding information in your search.");
@@ -159,7 +159,7 @@ public class CustomerGUI extends JPanel implements Tool {
 					guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" }, 0, customerList));
 				}
 			} else if (e.getSource() == btnUpdate) {
-				clientController.updateCustomer(txtAll[0].getText(), txtName.getText(), txtAddress.getText(), txtZipCode.getText(), txtCity.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 0);
+				clientController.updateCustomer(getText());
 				displayMessage("Update succesfull!");
 
 			} else if (e.getSource() == btnPurchase) {

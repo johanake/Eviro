@@ -14,7 +14,6 @@ import enteties.Invoice;
  */
 public class ClientController {
 	public static final int ADDCUSTOMER = 1;
-	// public static final int GETCUSTOMER = 3;
 	public static final int SEARCHCUSTOMER = 2;
 	public static final int UPDATECUSTOMER = 3;
 	public static final int DELETECUSTOMER = 4;
@@ -44,50 +43,34 @@ public class ClientController {
 	 * @param email customer email
 	 * @param vatNumber customer vat number
 	 */
-	public void createCustomer(String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
-		Customer c = new Customer(name, adress, zipCode, town, phoneNumber, email, vatNumber, creditLimit);
+	public void createCustomer(Object[] obj) {
+		Customer c = new Customer(obj);
 		c.setOperation(ADDCUSTOMER);
 		client.sendObject(c);
 	}
 
-	public String checkFields(String name, String address, String zipCode, String city, String phoneNbr, String email, String vatNbr) {
-		txtList.put("Name", name);
-		txtList.put("Address", address);
-		txtList.put("Zip Code", zipCode);
-		txtList.put("City", city);
-		txtList.put("Phone number", phoneNbr);
-		txtList.put("Email", email);
-		txtList.put("VAT number", vatNbr);
+	public String checkFields(Object[] obj) {
+		txtList.put("Name", obj[0].toString());
+		txtList.put("Address", obj[1].toString());
+		txtList.put("Zip Code", obj[2].toString());
+		txtList.put("City", obj[3].toString());
+		txtList.put("Phone number", obj[4].toString());
+		txtList.put("Email", obj[5].toString());
+		txtList.put("VAT number", obj[6].toString());
+		txtList.put("Credit Limit", obj[7].toString());
 
 		for (Map.Entry<String, String> entry : txtList.entrySet()) {
 			if (entry.getValue().trim().length() <= 0) {
 				return "Please check following data: " + entry.getKey();
 			}
 		}
-		createCustomer(name, address, zipCode, city, phoneNbr, email, vatNbr, 0);
+		createCustomer(obj);
 		return "Customer added";
 
 	}
 
-	// public void getCustomer(int customerId){
-	// Customer c = new Customer(customerId);
-	// c.setOperation(GETCUSTOMER);
-	// ArrayList<Customer> cList = (ArrayList<Customer>) client.sendObject(c);
-	//
-	// System.out.println(cList.get(0).getAddress());
-	// }
 
-	// public ArrayList<Customer> searchCustomer(String customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
-	// Customer c = new Customer(customerId, name, adress, zipCode, town, phoneNumber, email, vatNumber, creditLimit);
-	// c.setOperation(SEARCHCUSTOMER);
-	// // client.sendObject(c);
-	// ArrayList<Customer> customerList;
-	// customerList = (ArrayList<Customer>) client.sendObject(c);
-	//
-	// return customerList;
-	// }
-
-	public ArrayList<Customer> searchCustomer(Object[] obj, int creditLimit) {
+	public ArrayList<Customer> searchCustomer(Object[] obj) {
 		Customer c = new Customer(obj);
 		c.setOperation(SEARCHCUSTOMER);
 		// client.sendObject(c);
@@ -97,19 +80,19 @@ public class ClientController {
 		return customerList;
 	}
 
-	public void updateCustomer(String customerId, String name, String adress, String zipCode, String town, String phoneNumber, String email, String vatNumber, int creditLimit) {
-		Customer c = new Customer(customerId, name, adress, zipCode, town, phoneNumber, email, vatNumber, creditLimit);
+	public void updateCustomer(Object[] obj) {
+		Customer c = new Customer(obj);
 		c.setOperation(UPDATECUSTOMER);
 		client.sendObject(c);
 
 	}
 
-	public void deleteCustomer(String customerId) {
-		Customer c = new Customer(customerId);
-		c.setOperation(DELETECUSTOMER);
-		String temp = (String) client.sendObject(c);
-		System.out.println(temp);
-	}
+//	public void deleteCustomer(String customerId) {
+//		Customer c = new Customer(customerId);
+//		c.setOperation(DELETECUSTOMER);
+//		String temp = (String) client.sendObject(c);
+//		System.out.println(temp);
+//	}
 	// public void createInvoice() {
 	// send(new Invoice());
 	// }

@@ -55,6 +55,8 @@ public class CreateCustomer extends JPanel implements Tool {
 	private JTextField txtVATNbr = new JTextField();
 	private JTextField txtCreditLimit = new JTextField();
 	
+	private JTextField[] txtAll = {txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail, txtVATNbr, txtCreditLimit};
+	
 
 	
 	
@@ -114,13 +116,29 @@ public class CreateCustomer extends JPanel implements Tool {
 		JOptionPane.showMessageDialog(null, txt);
 	}
 	
+	private Object[] getText() {
+		Object[] info = new Object[9];
+		info[0] = txtAll[0].getText();
+		info[1] = txtAll[1].getText();
+		info[2] = txtAll[2].getText();
+		info[3] = txtAll[3].getText();
+		info[4] = txtAll[4].getText();
+		info[5] = txtAll[5].getText();
+		info[6] = txtAll[6].getText();
+		info[7] = txtAll[7].getText();
+		info[8] = 0; // Kreditlimit
+
+		return info;
+
+	}
+	
 
 	
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnCreate) {
-				displayMessage(clientController.checkFields(txtName.getText(), txtAddress.getText(), txtZipCode.getText(), txtCity.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText()));
+				displayMessage(clientController.checkFields(getText()));
 
 			}
 
