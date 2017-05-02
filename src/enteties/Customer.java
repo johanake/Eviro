@@ -1,13 +1,10 @@
 package enteties;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * A class that represents a Customer in the system.
- * 
  * @author nadiaelhaddaoui
- *
  */
 
 public class Customer implements Serializable, EntityInterface {
@@ -23,18 +20,16 @@ public class Customer implements Serializable, EntityInterface {
 	private String vatNumber;
 	private int creditLimit;
 	private int operation;
-	
-	private Object[] data = new Object[]{customerId, name, address, zipCode, city, phoneNumber, email, vatNumber, creditLimit};
-	
-	public Customer(Object[] data, int creditLimit){
+
+	private Object[] data;
+	// private Object[] data = new Object[]{customerId, name, address, zipCode, city, phoneNumber, email, vatNumber, creditLimit};
+
+	public Customer(Object[] data) {
 		this.data = data;
-		this.creditLimit = creditLimit;
-		
 	}
 
 	/**
 	 * Customers constructor.
-	 * 
 	 * @param customerId A unique Id
 	 * @param name The name of the customer
 	 * @param adress The address of the customer
@@ -45,8 +40,7 @@ public class Customer implements Serializable, EntityInterface {
 	 * @param vatNumber The organizationnumber for the customer
 	 */
 
-	public Customer(String customerId, String name, String address, String zipCode, String city, String phoneNumber,
-			String email, String vatNumber, int creditLimit) {
+	public Customer(String customerId, String name, String address, String zipCode, String city, String phoneNumber, String email, String vatNumber, int creditLimit) {
 		this.customerId = customerId;
 		this.name = name;
 		this.address = address;
@@ -58,9 +52,8 @@ public class Customer implements Serializable, EntityInterface {
 		this.creditLimit = creditLimit;
 
 	}
-	
+
 	/**
-	 * 
 	 * @param name
 	 * @param address
 	 * @param zipCode
@@ -70,7 +63,7 @@ public class Customer implements Serializable, EntityInterface {
 	 * @param vatNumber
 	 * @param creditLimit
 	 */
-	public Customer(String name, String address, String zipCode, String city, String phoneNumber,String email, String vatNumber, int creditLimit) {
+	public Customer(String name, String address, String zipCode, String city, String phoneNumber, String email, String vatNumber, int creditLimit) {
 		this.name = name;
 		this.address = address;
 		this.zipCode = zipCode;
@@ -101,8 +94,8 @@ public class Customer implements Serializable, EntityInterface {
 	@Override
 	public Object[] getAllInObjects() {
 
-		Object[] obj = { customerId, name, address, zipCode, city, phoneNumber, email, vatNumber, creditLimit };
-		return obj;
+		// Object[] obj = { customerId, name, address, zipCode, city, phoneNumber, email, vatNumber, creditLimit };
+		return data;
 	}
 
 }

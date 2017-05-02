@@ -3,6 +3,7 @@ package server;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import enteties.Customer;
 import enteties.EntityInterface;
 import enteties.Invoice;
@@ -10,7 +11,6 @@ import enteties.Product;
 
 /**
  * Handles most of the logic between the server and the database.
- * 
  * @author Mattias Sundquist, Peter Folke
  */
 public class ServerController {
@@ -30,9 +30,7 @@ public class ServerController {
 	}
 
 	/**
-	 * Handles objects coming from the server. Finds out what operation to perform based on the getOperation method in
-	 * the EntityInterface
-	 * 
+	 * Handles objects coming from the server. Finds out what operation to perform based on the getOperation method in the EntityInterface
 	 * @param ei The object coming from the server.
 	 */
 	public ArrayList<EntityInterface> operationHandler(EntityInterface ei) {
@@ -40,24 +38,24 @@ public class ServerController {
 		ArrayList<EntityInterface> returnObject = null;
 
 		switch (ei.getOperation()) {
-			case ADD:
-				database.executeInsertOrDeleteQuery(buildInsertQuery(ei));
-				returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
-				break;
-			case SEARCH:
-				returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
-				break;
-			case UPDATE:
-				database.executeUpdateQuery(buildUpdateQuery(ei));
-				returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
-				break;
-			case DELETE:
-				database.executeInsertOrDeleteQuery(buildDeleteQuery(ei));
-				break;
+		case ADD:
+			database.executeInsertOrDeleteQuery(buildInsertQuery(ei));
+			returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
+			break;
+		case SEARCH:
+			returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
+			break;
+		case UPDATE:
+			database.executeUpdateQuery(buildUpdateQuery(ei));
+			returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
+			break;
+		case DELETE:
+			database.executeInsertOrDeleteQuery(buildDeleteQuery(ei));
+			break;
 		}
 		return returnObject;
 	}
-	
+
 	/**
 	 * Checks which Object the EntityInterface is an instance of and returns that objects table name.
 	 * @param ei The EntityInterface to check instance of.
@@ -71,14 +69,12 @@ public class ServerController {
 			tableName = "invoice";
 		else if (ei instanceof Product)
 			tableName = "product";
-		
+
 		return tableName;
 	}
 
 	/**
-	 * Asks the database for the tables column names with the MySql command "DESCRIBE table_name". The name of the table
-	 * itself is provided by an EntityInterface.
-	 * 
+	 * Asks the database for the tables column names with the MySql command "DESCRIBE table_name". The name of the table itself is provided by an EntityInterface.
 	 * @param ei An EntityInterface with a method to read the table name.
 	 * @return A String array with all the table names.
 	 */
@@ -92,9 +88,9 @@ public class ServerController {
 			while (rs.next()) {
 				temp.add(rs.getString(1));
 			}
-			String[] colNames = new String[temp.size()-1];
+			String[] colNames = new String[temp.size() - 1];
 			for (int i = 0; i < colNames.length; i++) {
-				colNames[i] = temp.get(i+1).toString();
+				colNames[i] = temp.get(i + 1).toString();
 			}
 			return colNames;
 		} catch (SQLException e) {
@@ -105,7 +101,6 @@ public class ServerController {
 
 	/**
 	 * Builds a search-query based on information in the EntityInterface given in the parameter.
-	 * 
 	 * @param ei The EntityInterface to build the search-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
@@ -116,18 +111,20 @@ public class ServerController {
 		String[] colNames = getColNames(ei, tableName);
 		String query = "SELECT * FROM " + tableName + " WHERE ";
 		String and = "";
-		for (int i = 0; i < colNames.length; i++) {			
-			if (info[i].toString().trim().length() > 0) {					
+
+		for (int i = 0; i < colNames.length; i++) {
+			if (info[i] != null && info[i].toString().trim().length() > 0) {
 				query += and + colNames[i] + " LIKE '%" + info[i] + "%'";
 				and = " AND ";
 			}
 		}
+
+		System.out.println(query);
 		return query;
 	}
 
 	/**
 	 * Builds an insert-query based on information in the EntityInterface given in the parameter.
-	 * 
 	 * @param ei The EntityInterface to build the insert-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
@@ -156,9 +153,7 @@ public class ServerController {
 	}
 
 	/**
-	 * Builds an update-query based on information in the EntityInterface given in the parameter. Expects that the
-	 * EntityInterface id is specified.
-	 * 
+	 * Builds an update-query based on information in the EntityInterface given in the parameter. Expects that the EntityInterface id is specified.
 	 * @param ei The EntityInterface to build the update-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
@@ -179,9 +174,7 @@ public class ServerController {
 	}
 
 	/**
-	 * Build a delete-query based on the information in the ENtityInterface given in the parameter. Expects that the
-	 * EntityInterface id is specified.
-	 * 
+	 * Build a delete-query based on the information in the ENtityInterface given in the parameter. Expects that the EntityInterface id is specified.
 	 * @param ei The EntityInterface to build the update-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
@@ -197,7 +190,6 @@ public class ServerController {
 
 	/**
 	 * Builds an Arraylist of EntityInterfaces based on the resultset given in the parameter.
-	 * 
 	 * @param rs The resultset to build the Arraylist on.
 	 * @return An ArrayList of EntityInterfaces containing the EntityInterfaces from the resultset.
 	 */
@@ -207,8 +199,7 @@ public class ServerController {
 		try {
 			while (rs.next()) {
 				if (rs.getMetaData().toString().contains("tableName=customer")) {
-					ei.add(new Customer(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-							rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9)));
+					ei.add(new Customer(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9) }));
 				} else if (rs.getMetaData().toString().contains("tableName=invoice")) {
 
 				} else if (rs.getMetaData().toString().contains("tableName=product")) {

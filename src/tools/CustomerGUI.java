@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -47,8 +48,7 @@ public class CustomerGUI extends JPanel implements Tool {
 	private JTextField txtPhoneNbr = new JTextField();
 	private JTextField txtEmail = new JTextField();
 	private JTextField txtVATNbr = new JTextField();
-	private JTextField[] txtAll = { txtCustomerID, txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail,
-			txtVATNbr };
+	private JTextField[] txtAll = { txtCustomerID, txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail, txtVATNbr };
 
 	private JButton btnEdit = new JButton("Edit");
 	private JButton btnUpdate = new JButton("Update");
@@ -116,13 +116,16 @@ public class CustomerGUI extends JPanel implements Tool {
 	}
 
 	private void setText(Object[] resultArray) {
+
+		System.out.println(Arrays.toString(resultArray));
+
 		for (int i = 0; i < txtAll.length; i++) {
 			txtAll[i].setText((String) resultArray[i]);
 		}
 	}
 
 	private Object[] getText() {
-		Object[] info = new Object[8];
+		Object[] info = new Object[9];
 		info[0] = txtAll[0].getText();
 		info[1] = txtAll[1].getText();
 		info[2] = txtAll[2].getText();
@@ -131,9 +134,10 @@ public class CustomerGUI extends JPanel implements Tool {
 		info[5] = txtAll[5].getText();
 		info[6] = txtAll[6].getText();
 		info[7] = txtAll[7].getText();
+		info[8] = 0; // Kreditlimit
 
 		return info;
-	
+
 	}
 
 	private void displayMessage(String txt) {
@@ -152,22 +156,16 @@ public class CustomerGUI extends JPanel implements Tool {
 				} else if (customerList.size() == 1) {
 					setText(customerList.get(0).getAllInObjects());
 				} else {
-					guiController.popup(new SearchResults(
-							new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number",
-									"Email", "VAT number", "Credit Limit" },
-							0,
-							customerList));
+					guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" }, 0, customerList));
 				}
 			} else if (e.getSource() == btnUpdate) {
-				clientController.updateCustomer(txtAll[0].getText(), txtName.getText(), txtAddress.getText(),
-						txtZipCode.getText(), txtCity.getText(), txtPhoneNbr.getText(), txtEmail.getText(),
-						txtVATNbr.getText(), 0);
+				clientController.updateCustomer(txtAll[0].getText(), txtName.getText(), txtAddress.getText(), txtZipCode.getText(), txtCity.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 0);
 				displayMessage("Update succesfull!");
 
 			} else if (e.getSource() == btnPurchase) {
 				guiController.popup(new InvoiceGUI(clientController, txtCustomerID.getText()));
 			} else if (e.getSource() == btnClear) {
-				for(JTextField t: txtAll){
+				for (JTextField t : txtAll) {
 					t.setText("");
 				}
 			}
