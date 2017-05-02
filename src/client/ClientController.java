@@ -1,6 +1,5 @@
 package client;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,18 +57,15 @@ public class ClientController {
 		txtList.put("City", obj[4].toString());
 		txtList.put("Phone number", obj[5].toString());
 		txtList.put("Email", obj[6].toString());
-		txtList.put("VAT number", obj[7].toString());		
-		try{
-			Integer.parseInt(obj[8].toString());
-		}catch(NumberFormatException e){
-			return "Please insert a number as credit limit";			
-		}
+		txtList.put("VAT number", obj[7].toString());
 		txtList.put("Credit Limit", obj[8].toString());
-		
+
 		for (Map.Entry<String, String> entry : txtList.entrySet()) {
+
 			if (entry.getValue().trim().length() <= 0) {
 				return "Please check following data: " + entry.getKey();
 			}
+
 		}
 		createCustomer(obj);
 		return "Customer added";
