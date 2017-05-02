@@ -104,8 +104,7 @@ public class ServerController {
 	}
 
 	/**
-	 * Builds a search-query based on information in the EntityInterface given in the parameter. If the EntityInterface
-	 * id has been specified then only the id will be searched.
+	 * Builds a search-query based on information in the EntityInterface given in the parameter.
 	 * 
 	 * @param ei The EntityInterface to build the search-query around.
 	 * @return A String-query ready to be executed by the database.
@@ -118,10 +117,6 @@ public class ServerController {
 		String query = "SELECT * FROM " + tableName + " WHERE ";
 		String and = "";
 		for (int i = 0; i < colNames.length; i++) {
-			if (i == 0 && info[i] == null) {
-				query += colNames[i] + " = " + info[i];
-				return query;
-			}
 			if (info[i].toString().trim().length() > 0) {
 				query += and + colNames[i] + " LIKE '%" + info[i] + "%'";
 				and = " AND ";
