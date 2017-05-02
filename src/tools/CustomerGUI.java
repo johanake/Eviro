@@ -5,14 +5,17 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import client.ClientController;
+import enteties.Customer;
 import gui.GUIController;
 import gui.Tool;
 
@@ -45,12 +48,14 @@ public class CustomerGUI extends JPanel implements Tool {
 	private JTextField txtPhoneNbr = new JTextField();
 	private JTextField txtEmail = new JTextField();
 	private JTextField txtVATNbr = new JTextField();
-	private JTextField[] txtAll = { txtCustomerID, txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail, txtVATNbr };
+	private JTextField[] txtAll = { txtCustomerID, txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail,
+			txtVATNbr };
 
 	private JButton btnEdit = new JButton("Edit");
 	private JButton btnUpdate = new JButton("Update");
 	private JButton btnSearch = new JButton("Search");
 	private JButton btnPurchase = new JButton("Invoice");
+	private JButton btnClear = new JButton("Clear fields");
 
 	private ClientController clientController;
 	private GUIController guiController;
@@ -101,6 +106,7 @@ public class CustomerGUI extends JPanel implements Tool {
 		pnlSouth.add(btnUpdate);
 		pnlSouth.add(btnSearch);
 		pnlSouth.add(btnPurchase);
+		pnlSouth.add(btnClear);
 
 	}
 
@@ -109,10 +115,13 @@ public class CustomerGUI extends JPanel implements Tool {
 		btnSearch.addActionListener(listener);
 		btnUpdate.addActionListener(listener);
 		btnPurchase.addActionListener(listener);
+		btnClear.addActionListener(listener);
 	}
 
-	private void setText() {
-
+	private void setText(Object[] resultArray) {
+		for (int i = 0; i < txtAll.length; i++) {
+			txtAll[i].setText((String) resultArray[i]);
+		}
 	}
 
 	private String getText() {
@@ -129,19 +138,42 @@ public class CustomerGUI extends JPanel implements Tool {
 		return getText;
 	}
 
+	private void displayMessage(String txt) {
+		JOptionPane.showMessageDialog(null, txt);
+	}
+
 	private class ButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnSearch) {
-				System.out.println(getText());
-				guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" }, 0,
-						clientController.searchCustomer(txtCustomerID.getText(), txtName.getText(), txtAddress.getText(), txtZipCode.getText(), txtCity.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 0)));
+				ArrayList<Customer> customerList = clientController.searchCustomer(txtCustomerID.getText(),
+						txtName.getText(), txtAddress.getText(), txtZipCode.getText(), txtCity.getText(),
+						txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 0);
 
+				if (customerList.size() == 0) {
+					displayMessage("No customers found, try again by changing or adding information in your search.");
+				} else if (customerList.size() == 1) {
+					setText(customerList.get(0).getAllInObjects());
+				} else {
+					guiController.popup(new SearchResults(
+							new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number",
+									"Email", "VAT number", "Credit Limit" },
+							0,
+							customerList));
+				}
 			} else if (e.getSource() == btnUpdate) {
-				clientController.updateCustomer(txtAll[0].getText(), txtName.getText(), txtAddress.getText(), txtZipCode.getText(), txtCity.getText(), txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 0);
+				clientController.updateCustomer(txtAll[0].getText(), txtName.getText(), txtAddress.getText(),
+						txtZipCode.getText(), txtCity.getText(), txtPhoneNbr.getText(), txtEmail.getText(),
+						txtVATNbr.getText(), 0);
+				displayMessage("Update succesfull!");
+
 			} else if (e.getSource() == btnPurchase) {
 				guiController.popup(new InvoiceGUI(clientController, txtCustomerID.getText()));
+			} else if (e.getSource() == btnClear) {
+				for(JTextField t: txtAll){
+					t.setText("");
+				}
 			}
 
 		}
