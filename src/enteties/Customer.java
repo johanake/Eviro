@@ -23,6 +23,14 @@ public class Customer implements Serializable, EntityInterface {
 	private String vatNumber;
 	private int creditLimit;
 	private int operation;
+	
+	private Object[] data = new Object[]{customerId, name, address, zipCode, city, phoneNumber, email, vatNumber, creditLimit};
+	
+	public Customer(Object[] data, int creditLimit){
+		this.data = data;
+		this.creditLimit = creditLimit;
+		
+	}
 
 	/**
 	 * Customers constructor.

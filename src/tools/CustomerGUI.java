@@ -121,18 +121,19 @@ public class CustomerGUI extends JPanel implements Tool {
 		}
 	}
 
-	private String getText() {
-		String getText = txtAll[0].getText() + ",";
+	private Object[] getText() {
+		Object[] info = new Object[8];
+		info[0] = txtAll[0].getText();
+		info[1] = txtAll[1].getText();
+		info[2] = txtAll[2].getText();
+		info[3] = txtAll[3].getText();
+		info[4] = txtAll[4].getText();
+		info[5] = txtAll[5].getText();
+		info[6] = txtAll[6].getText();
+		info[7] = txtAll[7].getText();
 
-		for (int i = 1; i < txtAll.length; i++) {
-			if (i == txtAll.length - 1) {
-				getText += txtAll[i].getText();
-			} else {
-				getText += txtAll[i].getText() + ",";
-			}
-
-		}
-		return getText;
+		return info;
+	
 	}
 
 	private void displayMessage(String txt) {
@@ -144,9 +145,7 @@ public class CustomerGUI extends JPanel implements Tool {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnSearch) {
-				ArrayList<Customer> customerList = clientController.searchCustomer(txtCustomerID.getText(),
-						txtName.getText(), txtAddress.getText(), txtZipCode.getText(), txtCity.getText(),
-						txtPhoneNbr.getText(), txtEmail.getText(), txtVATNbr.getText(), 0);
+				ArrayList<Customer> customerList = clientController.searchCustomer(getText(), 0);
 
 				if (customerList.size() == 0) {
 					displayMessage("No customers found, try again by changing or adding information in your search.");

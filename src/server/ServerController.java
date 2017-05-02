@@ -116,8 +116,8 @@ public class ServerController {
 		String[] colNames = getColNames(ei, tableName);
 		String query = "SELECT * FROM " + tableName + " WHERE ";
 		String and = "";
-		for (int i = 0; i < colNames.length; i++) {
-			if (info[i].toString().trim().length() > 0) {
+		for (int i = 0; i < colNames.length; i++) {			
+			if (info[i].toString().trim().length() > 0) {					
 				query += and + colNames[i] + " LIKE '%" + info[i] + "%'";
 				and = " AND ";
 			}
