@@ -156,7 +156,7 @@ public class CustomerGUI extends JPanel implements Tool {
 				} else if (customerList.size() == 1) {
 					setText(customerList.get(0).getAllInObjects());
 				} else {
-					guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" }, 0, customerList));
+					guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" }, customerList));
 				}
 			} else if (e.getSource() == btnUpdate) {
 				clientController.updateCustomer(getText());

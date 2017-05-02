@@ -16,9 +16,10 @@ public class SearchResults extends JPanel implements Tool {
 	private DefaultTableModel model;
 	private JScrollPane scrollPane;
 
-	public SearchResults(Object[] obj, int rows, ArrayList<Customer> list) {
-		table = new JTable(new DefaultTableModel(obj, rows));
+	public SearchResults(Object[] obj, ArrayList<Customer> list) {
+		table = new JTable(new DefaultTableModel(obj, 0));
 		model = (DefaultTableModel) table.getModel();
+		
 		scrollPane = new JScrollPane(table);
 
 		setLayout(new BorderLayout());
@@ -42,7 +43,7 @@ public class SearchResults extends JPanel implements Tool {
 
 	public void addCustomer(ArrayList<Customer> objectList) {
 		for (int i = 0; i < objectList.size(); i++) {
-			model.addRow(objectList.get(i).getAllInObjects());
+			model.addRow(objectList.get(i).getAllInObjects());		
 		}
 
 	}
