@@ -1,51 +1,41 @@
 package tools;
 
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 
 import client.ClientController;
 import gui.Tool;
 
-import javax.swing.JPanel;
-
 public class CreateCustomer extends JPanel implements Tool {
-	
+
 	public final String TOOLNAME = "Create Customer";
-	
+
 	private JPanel pnlNorth = new JPanel(new BorderLayout());
-	private JPanel pnlNorthGridWest = new JPanel(new GridLayout(7,1));
-	private JPanel pnlNorthGridCenter = new JPanel(new GridLayout(7,1));	
-	
-	private JPanel pnlZipCountry = new JPanel(new GridLayout(1,2));
+	private JPanel pnlNorthGridWest = new JPanel(new GridLayout(7, 1));
+	private JPanel pnlNorthGridCenter = new JPanel(new GridLayout(7, 1));
+
+	private JPanel pnlZipCountry = new JPanel(new GridLayout(1, 2));
 	private JPanel pnlSouth = new JPanel(new BorderLayout());
-	
-	
+
 	private JLabel lblName = new JLabel("Name: ");
-	private JLabel lblAddress= new JLabel("Address: ");
+	private JLabel lblAddress = new JLabel("Address: ");
 	private JLabel lblZipTown = new JLabel("Zip/Town: ");
 	private JLabel lblPhoneNbr = new JLabel("Phone number: ");
 	private JLabel lblEmail = new JLabel("Email: ");
 	private JLabel lblVatNbr = new JLabel("Vat-number: ");
 	private JLabel lblCreditLimit = new JLabel("Credit Limit: ");
-	
-	
+
 	private JTextField txtName = new JTextField();
 	private JTextField txtAddress = new JTextField();
 	private JTextField txtZipCode = new JTextField();
@@ -54,23 +44,18 @@ public class CreateCustomer extends JPanel implements Tool {
 	private JTextField txtEmail = new JTextField();
 	private JTextField txtVATNbr = new JTextField();
 	private JTextField txtCreditLimit = new JTextField();
-	
-	private JTextField[] txtAll = {txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail, txtVATNbr, txtCreditLimit};
-	
 
-	
-	
+	private JTextField[] txtAll = { txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail, txtVATNbr, txtCreditLimit };
+
 	private JButton btnCreate = new JButton("Create Customer");
-	
-	
+
 	private ClientController clientController;
-	
-	
-	public CreateCustomer(ClientController clientController){
+
+	public CreateCustomer(ClientController clientController) {
 		this.clientController = clientController;
-		
+
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(400,275));
+		setPreferredSize(new Dimension(400, 275));
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlNorth.setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlSouth.setBorder(new EmptyBorder(3, 3, 3, 3));
@@ -78,14 +63,14 @@ public class CreateCustomer extends JPanel implements Tool {
 		addListeners();
 
 	}
-	
-	private void displayContent(){		
+
+	private void displayContent() {
 		add(pnlNorth, BorderLayout.NORTH);
 		add(pnlSouth, BorderLayout.SOUTH);
-		
+
 		pnlNorth.add(pnlNorthGridWest, BorderLayout.WEST);
-		pnlNorth.add(pnlNorthGridCenter, BorderLayout.CENTER);		
-		
+		pnlNorth.add(pnlNorthGridCenter, BorderLayout.CENTER);
+
 		pnlNorthGridWest.add(lblName);
 		pnlNorthGridWest.add(lblAddress);
 		pnlNorthGridWest.add(lblZipTown);
@@ -93,53 +78,49 @@ public class CreateCustomer extends JPanel implements Tool {
 		pnlNorthGridWest.add(lblEmail);
 		pnlNorthGridWest.add(lblVatNbr);
 		pnlNorthGridWest.add(lblCreditLimit);
-		
+
 		pnlNorthGridCenter.add(txtName);
 		pnlNorthGridCenter.add(txtAddress);
 		pnlNorthGridCenter.add(pnlZipCountry);
 		pnlZipCountry.add(txtZipCode);
-		pnlZipCountry.add(txtCity);		
+		pnlZipCountry.add(txtCity);
 		pnlNorthGridCenter.add(txtPhoneNbr);
 		pnlNorthGridCenter.add(txtEmail);
 		pnlNorthGridCenter.add(txtVATNbr);
 		pnlNorthGridCenter.add(txtCreditLimit);
 		pnlSouth.add(btnCreate, BorderLayout.EAST);
-		
+
 	}
-	
-	private void addListeners(){
+
+	private void addListeners() {
 		ButtonListener listener = new ButtonListener();
 		btnCreate.addActionListener(listener);
 	}
-	
-	private void displayMessage(String txt){
+
+	private void displayMessage(String txt) {
 		JOptionPane.showMessageDialog(null, txt);
 	}
-	
-	private Object[] getText() {
-		Object[] info = new Object[9];
-		info[0] = txtAll[0].getText();
-		info[1] = txtAll[1].getText();
-		info[2] = txtAll[2].getText();
-		info[3] = txtAll[3].getText();
-		info[4] = txtAll[4].getText();
-		info[5] = txtAll[5].getText();
-		info[6] = txtAll[6].getText();
-		info[7] = txtAll[7].getText();
-		info[8] = 0; // Kreditlimit
 
-		return info;
+	private Object[] getText() {
+
+		Object[] data = new Object[9];
+
+		for (int i = 0; i < txtAll.length; i++) {
+			data[i + 1] = txtAll[i].getText();
+		}
+
+		System.out.println("Skickas till controller: " + Arrays.toString(data));
+
+		return data;
 
 	}
-	
 
-	
 	private class ButtonListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnCreate) {
 				displayMessage(clientController.checkFields(getText()));
-
 			}
 
 		}
@@ -147,7 +128,7 @@ public class CreateCustomer extends JPanel implements Tool {
 	}
 
 	@Override
-	public String getTitle() {		
+	public String getTitle() {
 		return TOOLNAME;
 	}
 
