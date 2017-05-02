@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 
 public class Invoice implements Serializable, EntityInterface {
 
-	private int incoiveId;
+	private int invoiceId;
 	private int customerId;
 	private String contact;
 	private String noteInvoice;
@@ -18,7 +18,7 @@ public class Invoice implements Serializable, EntityInterface {
 	private int paymentPeriod;
 	private double price;
 	private int operation;
-	private Object[] data = new Object[] { incoiveId, customerId, contact, noteInvoice, price };
+	private Object[] data = new Object[] { invoiceId, customerId, contact, noteInvoice, price };
 
 	/**
 	 * Invoice constructor
@@ -31,7 +31,7 @@ public class Invoice implements Serializable, EntityInterface {
 	 * @param price The price for this invoice
 	 */
 	public Invoice(int incoiveId, int customerId, String contact, String noteInvoice, Timestamp timeStamp, int paymentPeriod, double price) {
-		this.incoiveId = incoiveId;
+		this.invoiceId = incoiveId;
 		this.customerId = customerId;
 		this.contact = contact;
 		this.noteInvoice = noteInvoice;
