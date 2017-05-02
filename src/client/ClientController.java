@@ -51,14 +51,14 @@ public class ClientController {
 	}
 
 	public String checkFields(Object[] obj) {
-		txtList.put("Name", obj[0].toString());
-		txtList.put("Address", obj[1].toString());
-		txtList.put("Zip Code", obj[2].toString());
-		txtList.put("City", obj[3].toString());
-		txtList.put("Phone number", obj[4].toString());
-		txtList.put("Email", obj[5].toString());
-		txtList.put("VAT number", obj[6].toString());
-		txtList.put("Credit Limit", obj[7].toString());
+		txtList.put("Name", obj[1].toString());
+		txtList.put("Address", obj[2].toString());
+		txtList.put("Zip Code", obj[3].toString());
+		txtList.put("City", obj[4].toString());
+		txtList.put("Phone number", obj[5].toString());
+		txtList.put("Email", obj[6].toString());
+		txtList.put("VAT number", obj[7].toString());
+		txtList.put("Credit Limit", obj[8].toString());
 
 		for (Map.Entry<String, String> entry : txtList.entrySet()) {
 			if (entry.getValue().trim().length() <= 0) {
@@ -69,7 +69,6 @@ public class ClientController {
 		return "Customer added";
 
 	}
-
 
 	public ArrayList<Customer> searchCustomer(Object[] obj) {
 		Customer c = new Customer(obj);
@@ -88,12 +87,12 @@ public class ClientController {
 
 	}
 
-//	public void deleteCustomer(String customerId) {
-//		Customer c = new Customer(customerId);
-//		c.setOperation(DELETECUSTOMER);
-//		String temp = (String) client.sendObject(c);
-//		System.out.println(temp);
-//	}
+	// public void deleteCustomer(String customerId) {
+	// Customer c = new Customer(customerId);
+	// c.setOperation(DELETECUSTOMER);
+	// String temp = (String) client.sendObject(c);
+	// System.out.println(temp);
+	// }
 	// public void createInvoice() {
 	// send(new Invoice());
 	// }
