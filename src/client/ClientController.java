@@ -2,6 +2,8 @@ package client;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import enteties.ChatMessage;
 import enteties.Customer;
 import enteties.Entity;
@@ -37,46 +39,45 @@ public class ClientController {
 		if (!checkData(data))
 			return false;
 
-		// String[] oldData = new String[data.length];
-		// oldData[0] = data[0];
-		//
-		// System.out.println(oldData[0]);
-		//
-		// ArrayList<Entity> oldResponse = search(oldData, entityType);
-		// Object[] oldData1 = oldResponse.get(0).getData();
-		//
-		// String update = "";
-		//
-		// for (int i = 0; i < data.length; i++) {
-		//
-		// if (oldData1[i] instanceof Integer) {
-		//
-		// if (!oldData1[i].equals(data[i])) {
-		// update += Integer.toString((int) oldData1[i]) + " -> " + data[i] + "\n";
-		// }
-		//
-		// }
-		//
-		// else {
-		// if (!oldData1[i].equals(data[i])) {
-		// update += oldData1[i] + " -> " + data[i] + "\n";
-		// }
-		// }
-		//
-		// }
-		//
-		// JOptionPane.showConfirmDialog(null, "Please confirm these changes?\n" + update);
+		String updates = "";
+		Object[] oldData = new Object[data.length];
+		oldData[0] = data[0]; // Set customerId;
 
-		Entity object = createEntityByType(entityType);
-		object.setData(data);
-		object.setOperation(Eviro.DB_UPDATE);
+		ArrayList<Entity> oldResponse = search(oldData, entityType);
+		oldData = oldResponse.get(0).getData();
 
-		ArrayList<Entity> response = (ArrayList<Entity>) client.sendObject(object);
+		for (int i = 0; i < data.length; i++) {
 
-		if (response.size() > 0) {
-			return true;
+			if (oldData[i] instanceof Integer) {
+				oldData[i] = Integer.toString((int) oldData[i]);
+			}
+
+			if (!oldData[i].equals(data[i])) {
+				updates += oldData[i] + " -> " + data[i] + "\n";
+			}
 		}
 
+		if (updates.trim().length() > 0) {
+
+			int reply = JOptionPane.showConfirmDialog(null, "Please review the following changes before proceeding:\n" + updates, "Update?", JOptionPane.OK_CANCEL_OPTION);
+
+			if (reply == JOptionPane.OK_OPTION) {
+
+				Entity object = createEntityByType(entityType);
+				object.setData(data);
+				object.setOperation(Eviro.DB_UPDATE);
+
+				ArrayList<Entity> response = (ArrayList<Entity>) client.sendObject(object);
+
+				if (response.size() > 0) {
+					return true;
+				}
+
+			} else {
+				return false;
+			}
+
+		}
 		return false;
 	}
 
@@ -114,7 +115,7 @@ public class ClientController {
 	 * @param entityType the type of entity to search for
 	 * @return the search result from the server
 	 */
-	public ArrayList<Entity> search(String[] data, int entityType) {
+	public ArrayList<Entity> search(Object[] data, int entityType) {
 
 		ArrayList<Entity> response = new ArrayList<Entity>();
 
@@ -135,15 +136,15 @@ public class ClientController {
 	}
 
 	/**
-	 * Checks an array of strings so that 1. it contains atleast 1 object that is not null and 2. it contains atleast 1 string with a trimmed lenght of more than 0.
+	 * Checks an array of objects so that 1. it contains atleast 1 object that is not null and 2. it contains atleast 1 string with a trimmed lenght of more than 0.
 	 * @param data the arrays of strings to check
 	 * @return whether the controll was successful or not
 	 */
-	private boolean checkData(String[] data) {
+	private boolean checkData(Object[] data) {
 
-		for (String s : data) {
+		for (Object s : data) {
 
-			if (s != null && s.trim().length() > 0) {
+			if (s != null && ((String) s).trim().length() > 0) {
 				return true;
 			}
 
@@ -179,6 +180,40 @@ public class ClientController {
 
 	}
 
+	/*
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 	/**
 	 * Gets all chat messages.
 	 * @return a String array with all chat messages.
