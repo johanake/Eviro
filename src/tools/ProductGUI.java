@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 
 import client.ClientController;
 import client.Eviro;
-import enteties.EntityInterface;
+import enteties.Entity;
 import gui.GUIController;
 import gui.Tool;
 import gui.Updatable;
@@ -142,7 +142,7 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 
 	public void searchArticle() {
 
-		ArrayList<EntityInterface> response = clientController.search(getText(), Eviro.ENTITY_PRODUCT);
+		ArrayList<Entity> response = clientController.search(getText(), Eviro.ENTITY_PRODUCT);
 
 		if (response.size() == 0) {
 

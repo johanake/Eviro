@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import enteties.EntityInterface;
+import enteties.Entity;
 
 /**
  * Handles all Client.
@@ -103,7 +103,7 @@ public class Server extends Thread {
 			while (!interrupted()) {
 				try {
 					Object inObj = objInput.readObject();
-					objOutput.writeObject(serverController.operationHandler((EntityInterface) inObj));
+					objOutput.writeObject(serverController.operationHandler((Entity) inObj));
 					objOutput.flush();
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();

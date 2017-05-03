@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import enteties.Customer;
-import enteties.EntityInterface;
+import enteties.Entity;
 import enteties.Invoice;
 import enteties.Product;
 import enteties.Transaction;
@@ -125,23 +125,23 @@ public class ClientController {
 		client.sendObject(p);
 	}
 
-	public ArrayList<EntityInterface> search(Object[] data, int entityType) {
+	public ArrayList<Entity> search(Object[] data, int entityType) {
 
 		// Create entity, type by entityType
-		EntityInterface object = createEntityByType(entityType);
+		Entity object = createEntityByType(entityType);
 
 		// Populate
 		object.setData(data);
 		object.setOperation(Eviro.DB_SEARCH);
 
 		// Get and return response
-		ArrayList<EntityInterface> response = null;
-		response = (ArrayList<EntityInterface>) client.sendObject(object);
+		ArrayList<Entity> response = null;
+		response = (ArrayList<Entity>) client.sendObject(object);
 		return response;
 
 	}
 
-	private EntityInterface createEntityByType(int entityType) {
+	private Entity createEntityByType(int entityType) {
 
 		if (entityType == Eviro.ENTITY_CUSTOMER) {
 			return new Customer();

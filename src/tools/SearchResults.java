@@ -11,7 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import enteties.EntityInterface;
+import enteties.Entity;
 import gui.Tool;
 import gui.Updatable;
 
@@ -20,7 +20,7 @@ public class SearchResults extends JPanel implements Tool {
 	private DefaultTableModel model;
 	private JScrollPane scrollPane;
 
-	public SearchResults(Object[] obj, Updatable gui, ArrayList<EntityInterface> list) {
+	public SearchResults(Object[] obj, Updatable gui, ArrayList<Entity> list) {
 
 		table = new JTable();
 
@@ -77,7 +77,7 @@ public class SearchResults extends JPanel implements Tool {
 
 	}
 
-	public void addCustomer(ArrayList<EntityInterface> objectList) {
+	public void addCustomer(ArrayList<Entity> objectList) {
 		for (int i = 0; i < objectList.size(); i++) {
 			model.addRow(objectList.get(i).getData());
 		}

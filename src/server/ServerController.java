@@ -11,7 +11,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import enteties.Customer;
-import enteties.EntityInterface;
+import enteties.Entity;
 import enteties.Invoice;
 import enteties.Product;
 import enteties.Transaction;
@@ -61,9 +61,9 @@ public class ServerController {
 	 * Handles objects coming from the server. Finds out what operation to perform based on the getOperation method in the EntityInterface
 	 * @param ei The object coming from the server.
 	 */
-	public ArrayList<EntityInterface> operationHandler(EntityInterface ei) {
+	public ArrayList<Entity> operationHandler(Entity ei) {
 
-		ArrayList<EntityInterface> returnObject = null;
+		ArrayList<Entity> returnObject = null;
 
 		switch (ei.getOperation()) {
 		case ADD:
@@ -89,7 +89,7 @@ public class ServerController {
 	 * @param ei The EntityInterface to check instance of.
 	 * @return A String with the Objects table name.
 	 */
-	private String getTableName(EntityInterface ei) {
+	private String getTableName(Entity ei) {
 		String tableName = "";
 		if (ei instanceof Customer)
 			tableName = "customer";
@@ -108,7 +108,7 @@ public class ServerController {
 	 * @param ei An EntityInterface with a method to read the table name.
 	 * @return A String array with all the table names.
 	 */
-	private String[] getColNames(EntityInterface ei, String tableName) {
+	private String[] getColNames(Entity ei, String tableName) {
 
 		String query = "DESCRIBE " + tableName;
 		ResultSet rs = database.executeGetQuery(query);
@@ -134,7 +134,7 @@ public class ServerController {
 	 * @param ei The EntityInterface to build the search-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
-	private String buildSearchQuery(EntityInterface ei) {
+	private String buildSearchQuery(Entity ei) {
 
 		Object[] info = ei.getData();
 		String tableName = getTableName(ei);
@@ -161,7 +161,7 @@ public class ServerController {
 	 * @param ei The EntityInterface to build the insert-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
-	private String buildInsertQuery(EntityInterface ei) {
+	private String buildInsertQuery(Entity ei) {
 
 		Object[] info = ei.getData();
 		String tableName = getTableName(ei);
@@ -191,7 +191,7 @@ public class ServerController {
 	 * @param ei The EntityInterface to build the update-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
-	private String buildUpdateQuery(EntityInterface ei) {
+	private String buildUpdateQuery(Entity ei) {
 
 		Object[] info = ei.getData();
 		String tableName = getTableName(ei);
@@ -214,7 +214,7 @@ public class ServerController {
 	 * @param ei The EntityInterface to build the update-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
-	private String buildDeleteQuery(EntityInterface ei) {
+	private String buildDeleteQuery(Entity ei) {
 
 		Object[] info = ei.getData();
 		String tableName = getTableName(ei);
@@ -230,9 +230,9 @@ public class ServerController {
 	 * @param rs The resultset to build the Arraylist on.
 	 * @return An ArrayList of EntityInterfaces containing the EntityInterfaces from the resultset.
 	 */
-	private ArrayList<EntityInterface> createList(ResultSet rs) {
+	private ArrayList<Entity> createList(ResultSet rs) {
 
-		ArrayList<EntityInterface> ei = new ArrayList<EntityInterface>();
+		ArrayList<Entity> ei = new ArrayList<Entity>();
 		try {
 			while (rs.next()) {
 
