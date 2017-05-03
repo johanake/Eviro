@@ -19,6 +19,11 @@ public interface EntityInterface {
 	/**
 	 * @return
 	 */
-	public Object[] getAllInObjects();
+	public Object[] getData();
+
+	/**
+	 * @return
+	 */
+	public void setData(Object[] data);
 
 }

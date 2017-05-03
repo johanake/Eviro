@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import enteties.Customer;
+import enteties.EntityInterface;
 import enteties.Invoice;
 import enteties.Product;
 import enteties.Transaction;
@@ -73,16 +74,6 @@ public class ClientController {
 
 	}
 
-	public ArrayList<Customer> searchCustomer(Object[] obj) {
-		Customer c = new Customer(obj);
-		c.setOperation(SEARCHCUSTOMER);
-		// client.sendObject(c);
-		ArrayList<Customer> customerList;
-		customerList = (ArrayList<Customer>) client.sendObject(c);
-
-		return customerList;
-	}
-
 	public void updateCustomer(Object[] obj) {
 		Customer c = new Customer(obj);
 		c.setOperation(UPDATECUSTOMER);
@@ -117,17 +108,59 @@ public class ClientController {
 	}
 
 	// Ersätts med Nadjas metod sen!
-	public Object[] searchArticle(String[] data) {
+	// public Object[] searchArticle(String[] data) {
+	// Product p = new Product(data);
+	// p.setOperation(Eviro.DB_SEARCH);
+	// ArrayList<Product> response;
+	// response = (ArrayList<Product>) client.sendObject(p);
+	// return response.get(0).getAllInObjects();
+	//
+	// }
+
+	// De två nedanstående metoderna
+	public void addProduct(String[] data) {
 		Product p = new Product(data);
-		p.setOperation(Eviro.DB_SEARCH);
-		ArrayList<Product> response;
-		response = (ArrayList<Product>) client.sendObject(p);
-		return response.get(0).getAllInObjects();
+		p.setOperation(Eviro.DB_ADD);
+		System.out.println(p.getData()[1]);
+		client.sendObject(p);
+	}
+
+	public ArrayList<EntityInterface> search(Object[] data, int entityType) {
+
+		// Create entity, type by entityType
+		EntityInterface object = createEntityByType(entityType);
+
+		// Populate
+		object.setData(data);
+		object.setOperation(Eviro.DB_SEARCH);
+
+		// Get and return response
+		ArrayList<EntityInterface> response = null;
+		response = (ArrayList<EntityInterface>) client.sendObject(object);
+		return response;
 
 	}
 
-	// public void createProduct() {
-	// send(new Product());
-	// }
+	private EntityInterface createEntityByType(int entityType) {
+
+		if (entityType == Eviro.ENTITY_CUSTOMER) {
+			return new Customer();
+		}
+
+		else if (entityType == Eviro.ENTITY_INVOICE) {
+			return new Invoice();
+		}
+
+		else if (entityType == Eviro.ENTITY_PRODUCT) {
+			return new Product();
+		}
+
+		else if (entityType == Eviro.ENTITY_TRANSACTION) {
+			return new Transaction();
+		}
+
+		return null;
+
+	}
 
 }

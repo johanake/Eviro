@@ -1,7 +1,7 @@
 package gui;
+
 /**
  * Interface for Tools in the system.
- * 
  * @author Robin Overgaard
  * @version 1.0
  */

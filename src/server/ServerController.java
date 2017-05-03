@@ -136,7 +136,7 @@ public class ServerController {
 	 */
 	private String buildSearchQuery(EntityInterface ei) {
 
-		Object[] info = ei.getAllInObjects();
+		Object[] info = ei.getData();
 		String tableName = getTableName(ei);
 		System.out.println(tableName);
 
@@ -163,7 +163,7 @@ public class ServerController {
 	 */
 	private String buildInsertQuery(EntityInterface ei) {
 
-		Object[] info = ei.getAllInObjects();
+		Object[] info = ei.getData();
 		String tableName = getTableName(ei);
 		String[] colNames = getColNames(ei, tableName);
 		String query = "INSERT INTO " + tableName + " (";
@@ -193,7 +193,7 @@ public class ServerController {
 	 */
 	private String buildUpdateQuery(EntityInterface ei) {
 
-		Object[] info = ei.getAllInObjects();
+		Object[] info = ei.getData();
 		String tableName = getTableName(ei);
 		String[] colNames = getColNames(ei, tableName);
 		String query = "UPDATE " + tableName + " SET ";
@@ -216,7 +216,7 @@ public class ServerController {
 	 */
 	private String buildDeleteQuery(EntityInterface ei) {
 
-		Object[] info = ei.getAllInObjects();
+		Object[] info = ei.getData();
 		String tableName = getTableName(ei);
 		String[] colNames = getColNames(ei, tableName);
 		String query = "DELETE FROM " + tableName + " WHERE " + colNames[0] + " = " + info[0];

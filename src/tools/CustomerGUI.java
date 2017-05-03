@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -15,11 +16,13 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import client.ClientController;
-import enteties.Customer;
+import client.Eviro;
+import enteties.EntityInterface;
 import gui.GUIController;
 import gui.Tool;
+import gui.Updatable;
 
-public class CustomerGUI extends JPanel implements Tool {
+public class CustomerGUI extends JPanel implements Tool, Updatable {
 
 	public final String TOOLNAME = "Customer";
 
@@ -118,15 +121,15 @@ public class CustomerGUI extends JPanel implements Tool {
 		btnClear.addActionListener(listener);
 	}
 
-	public void setText(Object[] resultArray) {
-
-		// System.out.println(Arrays.toString(resultArray));
-
-		for (int i = 0; i < txtAll.length; i++) {
-			txtAll[i].setText((String) resultArray[i]);
-		}
-
-	}
+	// public void setText(Object[] resultArray) {
+	//
+	// // System.out.println(Arrays.toString(resultArray));
+	//
+	// for (int i = 0; i < txtAll.length; i++) {
+	// txtAll[i].setText((String) resultArray[i]);
+	// }
+	//
+	// }
 
 	private Object[] getText() {
 		Object[] info = new Object[9];
@@ -138,7 +141,7 @@ public class CustomerGUI extends JPanel implements Tool {
 		info[5] = txtAll[5].getText();
 		info[6] = txtAll[6].getText();
 		info[7] = txtAll[7].getText();
-		info[8] = 0; // Kreditlimit
+		info[8] = null; // Kreditlimit
 
 		return info;
 
@@ -153,12 +156,12 @@ public class CustomerGUI extends JPanel implements Tool {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnSearch) {
-				ArrayList<Customer> customerList = clientController.searchCustomer(getText());
+				ArrayList<EntityInterface> customerList = clientController.search(getText(), Eviro.ENTITY_CUSTOMER);
 
 				if (customerList.size() == 0) {
 					displayMessage("No customers found, try again by changing or adding information in your search.");
 				} else if (customerList.size() == 1) {
-					setText(customerList.get(0).getAllInObjects());
+					updateGUI(customerList.get(0).getData());
 				} else {
 					guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" }, getCustomerGUI(), customerList));
 				}
@@ -186,6 +189,17 @@ public class CustomerGUI extends JPanel implements Tool {
 	@Override
 	public boolean getRezizable() {
 		return true;
+	}
+
+	@Override
+	public void updateGUI(Object[] values) {
+
+		System.out.println("Update GUI with: " + Arrays.toString(values));
+
+		for (int i = 0; i < txtAll.length; i++) {
+			txtAll[i].setText((String) values[i]);
+		}
+
 	}
 
 }

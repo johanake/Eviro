@@ -3,46 +3,41 @@ package enteties;
 import java.io.Serializable;
 
 /**
+ * A class which represents a transaction in the system
+ * @author nadiaelhaddaoui
  * @author Robin Overgaard
- * @version
  */
+
 public class Transaction implements Serializable, EntityInterface {
 
 	private int operation;
-	private Object[] data = new Object[] {};
+	private Object[] data;
 
-	/**
-	 * @param data
-	 */
+	public Transaction() {
+	}
+
 	public Transaction(Object[] data) {
 		this.data = data;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see enteties.EntityInterface#setOperation(int)
-	 */
-	@Override
-	public void setOperation(int operation) {
-		this.operation = operation;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see enteties.EntityInterface#getOperation()
-	 */
 	@Override
 	public int getOperation() {
 		return operation;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see enteties.EntityInterface#getAllInObjects()
-	 */
 	@Override
-	public Object[] getAllInObjects() {
+	public void setOperation(int operation) {
+		this.operation = operation;
+	}
+
+	@Override
+	public Object[] getData() {
 		return data;
+	}
+
+	@Override
+	public void setData(Object[] data) {
+		this.data = data;
 	}
 
 }

@@ -5,39 +5,16 @@ import java.io.Serializable;
 /**
  * A class which represents an invoice in the system
  * @author nadiaelhaddaoui
+ * @author Robin Overgaard
  */
 
 public class Invoice implements Serializable, EntityInterface {
 
-	// private int invoiceId;
-	// private int customerId;
-	// private String contact;
-	// private String noteInvoice;
-	// private Timestamp timeStamp;
-	// private int paymentPeriod;
-	// private double price;
 	private int operation;
-	private Object[] data = new Object[] {};
+	private Object[] data;
 
-	/**
-	 * Invoice constructor
-	 * @param incoiveId A unique Id
-	 * @param customerId The customer which this invoice relates to
-	 * @param contact The contactinformation for this invoice
-	 * @param noteInvoice Notes for this invoice
-	 * @param timeStamp The time which this invoice was created
-	 * @param paymentPeriod The paymentperiod for this invoice
-	 * @param price The price for this invoice
-	 */
-	// public Invoice(int incoiveId, int customerId, String contact, String noteInvoice, Timestamp timeStamp, int paymentPeriod, double price) {
-	// this.invoiceId = incoiveId;
-	// this.customerId = customerId;
-	// this.contact = contact;
-	// this.noteInvoice = noteInvoice;
-	// this.timeStamp = timeStamp;
-	// this.paymentPeriod = paymentPeriod;
-	// this.price = price;
-	// }
+	public Invoice() {
+	}
 
 	public Invoice(Object[] data) {
 		this.data = data;
@@ -48,18 +25,24 @@ public class Invoice implements Serializable, EntityInterface {
 	}
 
 	@Override
-	public void setOperation(int operation) {
-		this.operation = operation;
-	}
-
-	@Override
 	public int getOperation() {
 		return operation;
 	}
 
 	@Override
-	public Object[] getAllInObjects() {
+	public void setOperation(int operation) {
+		this.operation = operation;
+	}
+
+	@Override
+	public Object[] getData() {
 		return data;
+	}
+
+	@Override
+	public void setData(Object[] data) {
+		this.data = data;
+
 	}
 
 }

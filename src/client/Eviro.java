@@ -19,6 +19,11 @@ public class Eviro {
 	public static final int DB_UPDATE = 3;
 	public static final int DB_DELETE = 4;
 
+	public static final int ENTITY_CUSTOMER = 1;
+	public static final int ENTITY_INVOICE = 2;
+	public static final int ENTITY_PRODUCT = 3;
+	public static final int ENTITY_TRANSACTION = 4;
+
 	/**
 	 * Setup system before instantiation.
 	 */

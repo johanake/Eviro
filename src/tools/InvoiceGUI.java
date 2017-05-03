@@ -5,7 +5,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -144,19 +143,19 @@ public class InvoiceGUI extends JPanel implements Tool {
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == btnAdd) {
-
-				Object[] article = clientController.searchArticle(new String[] { txtAddProduct.getText(), null, null, null, null, null, null, null, null });
-
-				System.out.println(Arrays.toString(article));
-
-				Object[] info = new Object[5];
-				info[0] = article[0];
-				info[1] = article[1];
-				info[2] = article[3];
-				info[3] = txtAddQuantity.getText();
-				info[4] = Integer.toString(Integer.parseInt((String) info[2]) * Integer.parseInt((String) info[3]));
-
-				addProduct(info);
+				//
+				// Object[] article = clientController.searchArticle(new String[] { txtAddProduct.getText(), null, null, null, null, null, null, null, null });
+				//
+				// System.out.println(Arrays.toString(article));
+				//
+				// Object[] info = new Object[5];
+				// info[0] = article[0];
+				// info[1] = article[1];
+				// info[2] = article[3];
+				// info[3] = txtAddQuantity.getText();
+				// info[4] = Integer.toString(Integer.parseInt((String) info[2]) * Integer.parseInt((String) info[3]));
+				//
+				// addProduct(info);
 
 			}
 

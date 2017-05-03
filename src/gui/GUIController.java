@@ -26,7 +26,7 @@ import client.ClientController;
 import client.Eviro;
 import tools.CreateCustomer;
 import tools.CustomerGUI;
-import tools.SearchArticle;
+import tools.ProductGUI;
 
 /**
  * Handles client side gui operations of the system.
@@ -189,7 +189,7 @@ public class GUIController {
 				break;
 
 			case "find_art":
-				desktop.add(new Toolbox(new SearchArticle(clientController)));
+				desktop.add(new Toolbox(new ProductGUI(clientController, getGUIController())));
 				break;
 
 			default:
