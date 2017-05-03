@@ -135,8 +135,6 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 			text[i] = txtAll[i].getText();
 		}
 
-		// System.out.println(Arrays.toString(text));
-
 		return text;
 
 	}
@@ -199,9 +197,12 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 	@Override
 	public void updateGUI(Object[] values) {
 
-		// System.out.println("Update GUI with: " + Arrays.toString(values));
-
 		for (int i = 0; i < txtAll.length; i++) {
+
+			if (values[i] instanceof Integer) {
+				values[i] = Integer.toString((int) values[i]);
+			}
+
 			txtAll[i].setText((String) values[i]);
 		}
 

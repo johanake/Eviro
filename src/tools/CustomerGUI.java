@@ -6,7 +6,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -27,8 +26,8 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	public final String TOOLNAME = "Customer";
 
 	private JPanel pnlNorth = new JPanel(new BorderLayout());
-	private JPanel pnlNorthWest = new JPanel(new GridLayout(7, 1));
-	private JPanel pnlNorthCenter = new JPanel(new GridLayout(7, 1));
+	private JPanel pnlNorthWest = new JPanel(new GridLayout(8, 1));
+	private JPanel pnlNorthCenter = new JPanel(new GridLayout(8, 1));
 
 	private JPanel pnlZipCountry = new JPanel(new GridLayout(1, 2));
 	private JPanel pnlSouth = new JPanel(new GridLayout(1, 4));
@@ -40,7 +39,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	private JLabel lblPhoneNbr = new JLabel("Phone number: ");
 	private JLabel lblEmail = new JLabel("Email: ");
 	private JLabel lblVatNbr = new JLabel("Vat-number: ");
-	// private JLabel lblCreditLimit = new JLabel("0", SwingConstants.CENTER);
+	private JLabel lblCreditLimit = new JLabel("Credit-limit: ");
 
 	private JTextField txtCustomerID = new JTextField();
 	private JTextField txtName = new JTextField();
@@ -50,7 +49,8 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	private JTextField txtPhoneNbr = new JTextField();
 	private JTextField txtEmail = new JTextField();
 	private JTextField txtVATNbr = new JTextField();
-	private JTextField[] txtAll = { txtCustomerID, txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail, txtVATNbr };
+	private JTextField txtCreditLimit = new JTextField();
+	private JTextField[] txtAll = { txtCustomerID, txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail, txtVATNbr, txtCreditLimit };
 
 	private JButton btnEdit = new JButton("Edit");
 	private JButton btnUpdate = new JButton("Update");
@@ -66,7 +66,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		this.guiController = guiController;
 
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(600, 275));
+		setPreferredSize(new Dimension(500, 300));
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlNorth.setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlSouth.setBorder(new EmptyBorder(3, 3, 3, 3));
@@ -94,6 +94,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		pnlNorthWest.add(lblPhoneNbr);
 		pnlNorthWest.add(lblEmail);
 		pnlNorthWest.add(lblVatNbr);
+		pnlNorthWest.add(lblCreditLimit);
 
 		pnlNorthCenter.add(txtCustomerID);
 		pnlNorthCenter.add(txtName);
@@ -104,6 +105,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		pnlNorthCenter.add(txtPhoneNbr);
 		pnlNorthCenter.add(txtEmail);
 		pnlNorthCenter.add(txtVATNbr);
+		pnlNorthCenter.add(txtCreditLimit);
 
 		pnlSouth.add(btnEdit);
 		pnlSouth.add(btnUpdate);
@@ -121,29 +123,15 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		btnClear.addActionListener(listener);
 	}
 
-	// public void setText(Object[] resultArray) {
-	//
-	// // System.out.println(Arrays.toString(resultArray));
-	//
-	// for (int i = 0; i < txtAll.length; i++) {
-	// txtAll[i].setText((String) resultArray[i]);
-	// }
-	//
-	// }
+	private String[] getText() {
 
-	private Object[] getText() {
-		Object[] info = new Object[9];
-		info[0] = txtAll[0].getText();
-		info[1] = txtAll[1].getText();
-		info[2] = txtAll[2].getText();
-		info[3] = txtAll[3].getText();
-		info[4] = txtAll[4].getText();
-		info[5] = txtAll[5].getText();
-		info[6] = txtAll[6].getText();
-		info[7] = txtAll[7].getText();
-		info[8] = 0; // Kreditlimit
+		String[] text = new String[txtAll.length];
 
-		return info;
+		for (int i = 0; i < txtAll.length; i++) {
+			text[i] = txtAll[i].getText();
+		}
+
+		return text;
 
 	}
 
@@ -159,15 +147,19 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 				ArrayList<Entity> customerList = clientController.search(getText(), Eviro.ENTITY_CUSTOMER);
 
 				if (customerList.size() == 0) {
-					displayMessage("No customers found, try again by changing or adding information in your search.");
+					displayMessage("No matches, try again by changing or adding information in your search.");
 				} else if (customerList.size() == 1) {
 					updateGUI(customerList.get(0).getData());
 				} else {
 					guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" }, getCustomerGUI(), customerList));
 				}
 			} else if (e.getSource() == btnUpdate) {
-				clientController.update(getText(), Eviro.ENTITY_CUSTOMER);
-				displayMessage("Update succesfull!");
+
+				if (clientController.update(getText(), Eviro.ENTITY_CUSTOMER)) {
+					displayMessage("Update succesfull!");
+				} else {
+					displayMessage("Update aborted!");
+				}
 
 			} else if (e.getSource() == btnPurchase) {
 				guiController.popup(new InvoiceGUI(clientController, txtCustomerID.getText()));
@@ -194,9 +186,12 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	@Override
 	public void updateGUI(Object[] values) {
 
-		System.out.println("Update GUI with: " + Arrays.toString(values));
-
 		for (int i = 0; i < txtAll.length; i++) {
+
+			if (values[i] instanceof Integer) {
+				values[i] = Integer.toString((int) values[i]);
+			}
+
 			txtAll[i].setText((String) values[i]);
 		}
 

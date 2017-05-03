@@ -32,11 +32,52 @@ public class ClientController {
 	 * @param data data to use when updating
 	 * @param entityType the type of entity to update
 	 */
-	public void update(Object[] data, int entityType) {
+	public boolean update(String[] data, int entityType) {
+
+		if (!checkData(data))
+			return false;
+
+		// String[] oldData = new String[data.length];
+		// oldData[0] = data[0];
+		//
+		// System.out.println(oldData[0]);
+		//
+		// ArrayList<Entity> oldResponse = search(oldData, entityType);
+		// Object[] oldData1 = oldResponse.get(0).getData();
+		//
+		// String update = "";
+		//
+		// for (int i = 0; i < data.length; i++) {
+		//
+		// if (oldData1[i] instanceof Integer) {
+		//
+		// if (!oldData1[i].equals(data[i])) {
+		// update += Integer.toString((int) oldData1[i]) + " -> " + data[i] + "\n";
+		// }
+		//
+		// }
+		//
+		// else {
+		// if (!oldData1[i].equals(data[i])) {
+		// update += oldData1[i] + " -> " + data[i] + "\n";
+		// }
+		// }
+		//
+		// }
+		//
+		// JOptionPane.showConfirmDialog(null, "Please confirm these changes?\n" + update);
+
 		Entity object = createEntityByType(entityType);
 		object.setData(data);
 		object.setOperation(Eviro.DB_UPDATE);
-		client.sendObject(object);
+
+		ArrayList<Entity> response = (ArrayList<Entity>) client.sendObject(object);
+
+		if (response.size() > 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -73,7 +114,12 @@ public class ClientController {
 	 * @param entityType the type of entity to search for
 	 * @return the search result from the server
 	 */
-	public ArrayList<Entity> search(Object[] data, int entityType) {
+	public ArrayList<Entity> search(String[] data, int entityType) {
+
+		ArrayList<Entity> response = new ArrayList<Entity>();
+
+		if (!checkData(data))
+			return response;
 
 		// Create entity, type by entityType
 		Entity object = createEntityByType(entityType);
@@ -83,10 +129,27 @@ public class ClientController {
 		object.setOperation(Eviro.DB_SEARCH);
 
 		// Get and return response
-		ArrayList<Entity> response = null;
 		response = (ArrayList<Entity>) client.sendObject(object);
 		return response;
 
+	}
+
+	/**
+	 * Checks an array of strings so that 1. it contains atleast 1 object that is not null and 2. it contains atleast 1 string with a trimmed lenght of more than 0.
+	 * @param data the arrays of strings to check
+	 * @return whether the controll was successful or not
+	 */
+	private boolean checkData(String[] data) {
+
+		for (String s : data) {
+
+			if (s != null && s.trim().length() > 0) {
+				return true;
+			}
+
+		}
+
+		return false;
 	}
 
 	/**
