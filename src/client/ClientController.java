@@ -1,6 +1,7 @@
 package client;
 
 import java.util.ArrayList;
+
 import enteties.ChatMessage;
 import enteties.Customer;
 import enteties.Entity;
@@ -24,38 +25,6 @@ public class ClientController {
 	 */
 	public ClientController(Client client) {
 		this.client = client;
-	}
-	
-	/**
-	 * Gets all chat messages.
-	 * @return a String array with all chat messages.
-	 */
-	public String[] getChatMessages() {
-
-		ChatMessage cm = new ChatMessage();
-		cm.setOperation(5);
-		ArrayList<ChatMessage> list = (ArrayList<ChatMessage>) client.sendObject(cm);
-		if (list == null) {
-			return new String[] { "NO" };
-		} else {
-			String[] res = new String[list.size()];
-			for (int i = 0; i < list.size(); i++) {
-				res[i] = list.get(i).getData()[0] + "\t" + list.get(i).getData()[1] + "\n";
-			}
-			return res;
-		}
-	}
-
-	/**
-	 * Adds a new chatmessage to the database.
-	 * @param res the message to add.
-	 */
-	public void addChatMessage(String res) {
-
-		Object[] obj = {1, res};
-		ChatMessage cm = new ChatMessage(obj);
-		cm.setOperation(Eviro.DB_ADD);
-		client.sendObject(cm);
 	}
 
 	/**
@@ -145,6 +114,38 @@ public class ClientController {
 
 		return null;
 
+	}
+
+	/**
+	 * Gets all chat messages.
+	 * @return a String array with all chat messages.
+	 */
+	public String[] getChatMessages() {
+
+		ChatMessage cm = new ChatMessage();
+		cm.setOperation(5);
+		ArrayList<ChatMessage> list = (ArrayList<ChatMessage>) client.sendObject(cm);
+		if (list == null) {
+			return new String[] { "NO" };
+		} else {
+			String[] res = new String[list.size()];
+			for (int i = 0; i < list.size(); i++) {
+				res[i] = list.get(i).getData()[0] + "\t" + list.get(i).getData()[1] + "\n";
+			}
+			return res;
+		}
+	}
+
+	/**
+	 * Adds a new chatmessage to the database.
+	 * @param res the message to add.
+	 */
+	public void addChatMessage(String res) {
+
+		Object[] obj = { 1, res };
+		ChatMessage cm = new ChatMessage(obj);
+		cm.setOperation(Eviro.DB_ADD);
+		client.sendObject(cm);
 	}
 
 }
