@@ -40,12 +40,16 @@ public class ClientController {
 			return false;
 
 		String updates = "";
+
+		// Create object to use in search for old data in database.
 		Object[] oldData = new Object[data.length];
 		oldData[0] = data[0]; // Set customerId;
 
+		// Search for old data in database.
 		ArrayList<Entity> oldResponse = search(oldData, entityType);
 		oldData = oldResponse.get(0).getData();
 
+		// Compare and note differences.
 		for (int i = 0; i < data.length; i++) {
 
 			if (oldData[i] instanceof Integer) {
@@ -57,6 +61,7 @@ public class ClientController {
 			}
 		}
 
+		// If there are differences, display confirm dialog.
 		if (updates.trim().length() > 0) {
 
 			int reply = JOptionPane.showConfirmDialog(null, "Please review the following changes before proceeding:\n" + updates, "Update?", JOptionPane.OK_CANCEL_OPTION);
@@ -123,7 +128,7 @@ public class ClientController {
 			return response;
 
 		// Create entity, type by entityType
-		Entity object = createEntityByType(entityType);
+		Entity object = createEntityByType(entityType);//
 
 		// Populate
 		object.setData(data);
