@@ -10,7 +10,8 @@ import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-
+import client.Eviro;
+import enteties.ChatMessage;
 import enteties.Customer;
 import enteties.Entity;
 import enteties.Invoice;
@@ -22,11 +23,6 @@ import enteties.Transaction;
  * @author Mattias Sundquist, Peter Folke
  */
 public class ServerController {
-
-	private final int ADD = 1;
-	private final int SEARCH = 2;
-	private final int UPDATE = 3;
-	private final int DELETE = 4;
 
 	private Logger log = Logger.getLogger("log");
 	private FileHandler fhLog;
@@ -67,22 +63,25 @@ public class ServerController {
 		ArrayList<Entity> returnObject = null;
 
 		switch (ei.getOperation()) {
-		case ADD:
-			database.executeInsertOrDeleteQuery(buildInsertQuery(ei));
-			returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
-			break;
-		case SEARCH:
-			returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
-			break;
-		case UPDATE:
-			database.executeUpdateQuery(buildUpdateQuery(ei));
-			returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
-			break;
-		case DELETE:
-			database.executeInsertOrDeleteQuery(buildDeleteQuery(ei));
-			break;
-		}
-		return returnObject;
+			case Eviro.DB_ADD:
+				database.executeInsertOrDeleteQuery(buildInsertQuery(ei));
+				returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
+				break;
+			case Eviro.DB_SEARCH:
+				returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
+				break;
+			case Eviro.DB_UPDATE:
+				database.executeUpdateQuery(buildUpdateQuery(ei));
+				returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
+				break;
+			case Eviro.DB_DELETE:
+				database.executeInsertOrDeleteQuery(buildDeleteQuery(ei));
+				break;
+			case Eviro.DB_GETALL:
+				returnObject = createList(database.executeGetQuery(buildGetAllQuery(ei)));
+				break;
+			}
+			return returnObject;
 	}
 
 	/**
@@ -100,6 +99,8 @@ public class ServerController {
 			tableName = "product";
 		else if (ei instanceof Transaction)
 			tableName = "transaction";
+		else if (ei instanceof ChatMessage)
+			tableName = "chatmessage";
 
 		return tableName;
 	}
@@ -128,6 +129,20 @@ public class ServerController {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	/**
+	 * Builds a "get all" query based on the information in the Entity given in the parameter.
+	 * @param ei
+	 * @return
+	 */
+	private String buildGetAllQuery(Entity ei) {
+		Object[] info = ei.getData();
+		String tableName = getTableName(ei);
+		String[] colNames = getColNames(ei, tableName);
+		String query = "SELECT * FROM " + tableName;
+		
+		return query;
 	}
 
 	/**
@@ -244,6 +259,8 @@ public class ServerController {
 					ei.add(new Invoice(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) }));
 				} else if (rs.getMetaData().toString().contains("tableName=product")) {
 					ei.add(new Product(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9) }));
+				} else if (rs.getMetaData().toString().contains("tableName=chatmessage")) {
+					ei.add(new ChatMessage(new Object[] {rs.getString(1), rs.getString(2)}));
 				}
 			}
 		} catch (SQLException e) {

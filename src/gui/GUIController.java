@@ -7,7 +7,6 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,15 +20,16 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-
 import client.ClientController;
 import client.Eviro;
+import tools.ChatGUI;
 import tools.CreateCustomer;
 import tools.CustomerGUI;
 import tools.ProductGUI;
 
 /**
  * Handles client side gui operations of the system.
+ * 
  * @author Robin Overgaard
  * @version 1.0
  */
@@ -41,6 +41,7 @@ public class GUIController {
 
 	/**
 	 * Constructs the client, instantiates a new main workspace window.
+	 * 
 	 * @param clientController controller for communication with the client
 	 */
 	public GUIController(ClientController clientController) {
@@ -48,8 +49,10 @@ public class GUIController {
 		this.clientController = clientController;
 
 		SwingUtilities.invokeLater(new Runnable() {
+
 			@Override
 			public void run() {
+
 				setSystemLookAndFeel();
 				JFrame window = new JFrame(Eviro.APP_NAME + " " + Eviro.APP_VERSION);
 				JPanel pnlMain = new JPanel(new BorderLayout());
@@ -62,7 +65,8 @@ public class GUIController {
 				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				window.setVisible(true);
 				// window.setJMenuBar(new Menu());
-				window.setIconImage(new ImageIcon(Eviro.APP_ICON).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+				window.setIconImage(
+						new ImageIcon(Eviro.APP_ICON).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
 			}
 		});
 
@@ -72,6 +76,7 @@ public class GUIController {
 	 * Returns an instance of the GUIController
 	 */
 	private GUIController getGUIController() {
+
 		return this;
 	}
 
@@ -109,14 +114,17 @@ public class GUIController {
 
 	/**
 	 * Adds a new toolbox to the desktop
+	 * 
 	 * @param tool the tool to use
 	 */
 	public void popup(Tool tool) {
+
 		desktop.add(new Toolbox(tool));
 	}
 
 	/**
 	 * The sidebar.
+	 * 
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */
@@ -126,11 +134,14 @@ public class GUIController {
 		private JPanel pnlSideNorth = new JPanel();
 		private JPanel pnlSideSouth = new JPanel();
 
-		private JComponent quick[] = new JComponent[] { new ActionJButton("Customer", "find_cust"), new ActionJButton("Invoice", "find_inv"), new ActionJButton("Transaction", "find_trans"), new ActionJButton("Article", "find_art") };
+		private JComponent quick[] = new JComponent[] { new ActionJButton("Customer", "find_cust"),
+				new ActionJButton("Invoice", "find_inv"), new ActionJButton("Transaction", "find_trans"),
+				new ActionJButton("Article", "find_art") };
 
 		private JComponent tools[] = new JComponent[] { new ActionJButton("Customer", "tool_customer") };
 
-		private JComponent exampleShortcuts[] = new JComponent[] { new ActionJButton("Quit", "link_exit") };
+		private JComponent exampleShortcuts[] = new JComponent[] { new ActionJButton("Chat", "open_chat"),
+				new ActionJButton("Quit", "link_exit") };
 
 		public Sidebar() {
 
@@ -176,30 +187,35 @@ public class GUIController {
 
 			switch (e.getActionCommand()) {
 
-			case "tool_customer":
-				desktop.add(new Toolbox(new CreateCustomer(clientController)));
-				break;
+				case "tool_customer":
+					desktop.add(new Toolbox(new CreateCustomer(clientController)));
+					break;
 
-			case "link_exit":
-				System.exit(0);
-				break;
+				case "link_exit":
+					System.exit(0);
+					break;
 
-			case "find_cust":
-				desktop.add(new Toolbox(new CustomerGUI(clientController, getGUIController())));
-				break;
+				case "find_cust":
+					desktop.add(new Toolbox(new CustomerGUI(clientController, getGUIController())));
+					break;
 
-			case "find_art":
-				desktop.add(new Toolbox(new ProductGUI(clientController, getGUIController())));
-				break;
+				case "find_art":
+					desktop.add(new Toolbox(new ProductGUI(clientController, getGUIController())));
+					break;
 
-			default:
-				JOptionPane.showMessageDialog(desktop, "You clicked on: " + e.getActionCommand());
-				break;
+				case "open_chat":
+					desktop.add(new Toolbox(new ChatGUI(clientController, getGUIController())));
+					break;
+
+				default:
+					JOptionPane.showMessageDialog(desktop, "You clicked on: " + e.getActionCommand());
+					break;
 			}
 		}
 
 		/**
 		 * Customization of JButton that takes it's ActionCommand as a parameter in the constructor.
+		 * 
 		 * @author Robin Overgaard
 		 * @version 1.0
 		 */
@@ -207,6 +223,7 @@ public class GUIController {
 
 			/**
 			 * Constructor.
+			 * 
 			 * @param text the text to display on this button
 			 */
 			public ActionJButton(String text) {
@@ -215,6 +232,7 @@ public class GUIController {
 
 			/**
 			 * Constructor.
+			 * 
 			 * @param text the text to display on this button
 			 * @param action the action command for this button
 			 */
