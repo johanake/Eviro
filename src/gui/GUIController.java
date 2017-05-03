@@ -109,10 +109,11 @@ public class GUIController {
 
 	/**
 	 * Adds a new toolbox to the desktop
-	 * @param tool the tool to use
+	 * @param tool the tool to open
 	 */
 	public void popup(Tool tool) {
-		desktop.add(new Toolbox(tool));
+		Toolbox toolbox = new Toolbox(tool);
+		desktop.add(toolbox);
 	}
 
 	/**
@@ -171,13 +172,17 @@ public class GUIController {
 			return pnl;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			switch (e.getActionCommand()) {
 
 			case "tool_customer":
-				desktop.add(new Toolbox(new CreateCustomer(clientController)));
+				popup(new CreateCustomer(clientController));
 				break;
 
 			case "link_exit":
@@ -185,11 +190,11 @@ public class GUIController {
 				break;
 
 			case "find_cust":
-				desktop.add(new Toolbox(new CustomerGUI(clientController, getGUIController())));
+				popup(new CustomerGUI(clientController, getGUIController()));
 				break;
 
 			case "find_art":
-				desktop.add(new Toolbox(new ProductGUI(clientController, getGUIController())));
+				popup(new ProductGUI(clientController, getGUIController()));
 				break;
 
 			default:
