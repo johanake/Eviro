@@ -17,7 +17,7 @@ import javax.swing.border.EmptyBorder;
 
 import client.ClientController;
 import client.Eviro;
-import enteties.EntityInterface;
+import enteties.Entity;
 import gui.GUIController;
 import gui.Tool;
 import gui.Updatable;
@@ -141,7 +141,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		info[5] = txtAll[5].getText();
 		info[6] = txtAll[6].getText();
 		info[7] = txtAll[7].getText();
-		info[8] = null; // Kreditlimit
+		info[8] = 0; // Kreditlimit
 
 		return info;
 
@@ -156,7 +156,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnSearch) {
-				ArrayList<EntityInterface> customerList = clientController.search(getText(), Eviro.ENTITY_CUSTOMER);
+				ArrayList<Entity> customerList = clientController.search(getText(), Eviro.ENTITY_CUSTOMER);
 
 				if (customerList.size() == 0) {
 					displayMessage("No customers found, try again by changing or adding information in your search.");
