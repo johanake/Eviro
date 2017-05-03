@@ -111,6 +111,8 @@ public class ServerController {
 
 		Object[] info = ei.getAllInObjects();
 		String tableName = getTableName(ei);
+		System.out.println(tableName);
+
 		String[] colNames = getColNames(ei, tableName);
 		String query = "SELECT * FROM " + tableName + " WHERE ";
 		String and = "";
@@ -205,10 +207,9 @@ public class ServerController {
 				if (rs.getMetaData().toString().contains("tableName=customer")) {
 					ei.add(new Customer(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9) }));
 				} else if (rs.getMetaData().toString().contains("tableName=invoice")) {
-					System.out.println("ddddddddddddddddd");
 					ei.add(new Invoice(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) }));
 				} else if (rs.getMetaData().toString().contains("tableName=product")) {
-
+					ei.add(new Product(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9) }));
 				}
 			}
 		} catch (SQLException e) {

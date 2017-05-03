@@ -83,7 +83,7 @@ public class SearchResults extends JPanel implements Tool {
 
 	}
 
-	public void addArticle(String[] info) {
+	public void addArticle(Object[] info) {
 		model.addRow(info);
 
 	}

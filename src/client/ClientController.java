@@ -6,6 +6,7 @@ import java.util.Map;
 
 import enteties.Customer;
 import enteties.Invoice;
+import enteties.Product;
 import enteties.Transaction;
 
 /**
@@ -113,6 +114,16 @@ public class ClientController {
 		Transaction t = new Transaction(data);
 		t.setOperation(Eviro.DB_ADD);
 		client.sendObject(t);
+	}
+
+	// Ersätts med Nadjas metod sen!
+	public Object[] searchArticle(String[] data) {
+		Product p = new Product(data);
+		p.setOperation(Eviro.DB_SEARCH);
+		ArrayList<Product> response;
+		response = (ArrayList<Product>) client.sendObject(p);
+		return response.get(0).getAllInObjects();
+
 	}
 
 	// public void createProduct() {

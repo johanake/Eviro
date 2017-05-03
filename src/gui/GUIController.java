@@ -14,7 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -32,7 +31,7 @@ import tools.SearchArticle;
 /**
  * Handles client side gui operations of the system.
  * @author Robin Overgaard
- * @version 0.1
+ * @version 1.0
  */
 
 public class GUIController {
@@ -42,7 +41,7 @@ public class GUIController {
 
 	/**
 	 * Constructs the client, instantiates a new main workspace window.
-	 * @param clientController controller for communication with client
+	 * @param clientController controller for communication with the client
 	 */
 	public GUIController(ClientController clientController) {
 
@@ -55,15 +54,14 @@ public class GUIController {
 				JFrame window = new JFrame(Eviro.APP_NAME + " " + Eviro.APP_VERSION);
 				JPanel pnlMain = new JPanel(new BorderLayout());
 				desktop = new JDesktopPane();
-
 				window.setContentPane(pnlMain);
 				window.add(desktop, BorderLayout.CENTER);
 				window.add(new Sidebar(), BorderLayout.WEST);
 				window.setExtendedState(JFrame.MAXIMIZED_BOTH);
-				window.setMinimumSize(new Dimension(800, 600));
+				window.setMinimumSize(new Dimension(1200, 720));
 				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				window.setVisible(true);
-				window.setJMenuBar(new Menu());
+				// window.setJMenuBar(new Menu());
 				window.setIconImage(new ImageIcon(Eviro.APP_ICON).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
 			}
 		});
@@ -73,7 +71,7 @@ public class GUIController {
 	/**
 	 * Returns an instance of the GUIController
 	 */
-	public GUIController getGUIController() {
+	private GUIController getGUIController() {
 		return this;
 	}
 
@@ -89,6 +87,10 @@ public class GUIController {
 				if ("Nimbus".equals(lnfi.getName())) {
 					UIManager.setLookAndFeel(lnfi.getClassName());
 					break;
+				}
+
+				else {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 				}
 
 			}
@@ -128,21 +130,13 @@ public class GUIController {
 
 		private JComponent tools[] = new JComponent[] { new ActionJButton("Customer", "tool_customer") };
 
-		private JComponent exampleInfo[] = new JComponent[] {
-
-				new JLabel(Eviro.APP_NAME, JLabel.CENTER), new JLabel(Eviro.APP_VERSION, JLabel.CENTER) };
-
-		// new JLabel(new ImageIcon (new ImageIcon(ClientController.class.getResource(Main.APP_ICON)).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH))),
-
-		private JComponent exampleShortcuts[] = new JComponent[] {
-
-				new ActionJButton("Settings", "tool_settings"), new ActionJButton("Quit", "link_exit") };
+		private JComponent exampleShortcuts[] = new JComponent[] { new ActionJButton("Quit", "link_exit") };
 
 		public Sidebar() {
 
 			setPreferredSize(new Dimension(175, 0));
 			setLayout(new BorderLayout());
-			setBorder(new EmptyBorder(10, 10, 10, 10));
+			setBorder(new EmptyBorder(5, 5, 5, 5));
 
 			pnlSideNorth.setLayout(new BoxLayout(pnlSideNorth, BoxLayout.Y_AXIS));
 			pnlSideSouth.setLayout(new BoxLayout(pnlSideSouth, BoxLayout.Y_AXIS));
@@ -165,6 +159,7 @@ public class GUIController {
 			pnl.setBorder(new TitledBorder(title));
 
 			for (JComponent b : objects) {
+
 				pnl.add(b);
 
 				if (b instanceof JButton) {

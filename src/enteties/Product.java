@@ -18,6 +18,7 @@ public class Product implements Serializable, EntityInterface {
 	private String stockPlace;
 	private int saldo;
 	private int operation;
+	private Object[] data;
 
 	/**
 	 * Product constructor
@@ -43,6 +44,10 @@ public class Product implements Serializable, EntityInterface {
 		this.saldo = balance;
 	}
 
+	public Product(Object[] data) {
+		this.data = data;
+	}
+
 	@Override
 	public void setOperation(int operation) {
 		this.operation = operation;
@@ -55,7 +60,8 @@ public class Product implements Serializable, EntityInterface {
 
 	@Override
 	public Object[] getAllInObjects() {
-		return new Object[] { productId, name, description, price, supplier, supplierArticleNumber, ean, stockPlace, saldo };
+		// return new Object[] { productId, name, description, price, supplier, supplierArticleNumber, ean, stockPlace, saldo };
+		return data;
 	}
 
 }
