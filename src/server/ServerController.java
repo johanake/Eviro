@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+
 import enteties.Customer;
 import enteties.Entity;
 import enteties.Invoice;
@@ -48,7 +49,7 @@ public class ServerController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Adds a new info message in the logger.
 	 * @param msg
@@ -138,7 +139,6 @@ public class ServerController {
 
 		Object[] info = ei.getData();
 		String tableName = getTableName(ei);
-		System.out.println(tableName);
 
 		String[] colNames = getColNames(ei, tableName);
 		String query = "SELECT * FROM " + tableName + " WHERE ";
@@ -152,7 +152,7 @@ public class ServerController {
 		}
 
 		logAppend(query);
-		System.out.println(query);
+		System.out.println("buildSearchQuery: " + query);
 		return query;
 	}
 
@@ -182,7 +182,7 @@ public class ServerController {
 		}
 
 		logAppend(query);
-		System.out.println(query);
+		System.out.println("buildInsertQuery: " + query);
 		return query;
 	}
 
@@ -204,8 +204,9 @@ public class ServerController {
 				query += colNames[i] + " = '" + info[i] + "', ";
 		}
 		query += " WHERE " + colNames[0] + " = " + info[0];
-		
+
 		logAppend(query);
+		System.out.println("buildUpdateQuery: " + query);
 		return query;
 	}
 
@@ -222,6 +223,7 @@ public class ServerController {
 		String query = "DELETE FROM " + tableName + " WHERE " + colNames[0] + " = " + info[0];
 
 		logAppend(query);
+		System.out.println("buildDeleteQuery: " + query);
 		return query;
 	}
 

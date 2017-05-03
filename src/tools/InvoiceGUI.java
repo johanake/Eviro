@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -14,6 +15,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import client.ClientController;
+import client.Eviro;
+import enteties.Entity;
 import gui.Tool;
 
 /*
@@ -113,7 +116,7 @@ public class InvoiceGUI extends JPanel implements Tool {
 			trans[2] = (String) searchResults.getTable().getValueAt(i, 0); // Productid
 			trans[3] = (String) searchResults.getTable().getValueAt(i, 3); // Quantity
 			trans[4] = (String) searchResults.getTable().getValueAt(i, 4); // Price
-			clientController.createTransactions(trans);
+			clientController.create(trans, Eviro.ENTITY_TRANSACTION);
 
 		}
 
@@ -143,25 +146,25 @@ public class InvoiceGUI extends JPanel implements Tool {
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == btnAdd) {
-				//
-				// Object[] article = clientController.searchArticle(new String[] { txtAddProduct.getText(), null, null, null, null, null, null, null, null });
-				//
-				// System.out.println(Arrays.toString(article));
-				//
-				// Object[] info = new Object[5];
-				// info[0] = article[0];
-				// info[1] = article[1];
-				// info[2] = article[3];
-				// info[3] = txtAddQuantity.getText();
-				// info[4] = Integer.toString(Integer.parseInt((String) info[2]) * Integer.parseInt((String) info[3]));
-				//
-				// addProduct(info);
+
+				ArrayList<Entity> response = clientController.search(new String[] { txtAddProduct.getText(), null, null, null, null, null, null, null, null }, Eviro.ENTITY_PRODUCT);
+
+				Object[] article = response.get(0).getData();
+
+				Object[] info = new Object[5];
+				info[0] = article[0];
+				info[1] = article[1];
+				info[2] = article[3];
+				info[3] = txtAddQuantity.getText();
+				info[4] = Integer.toString(Integer.parseInt((String) info[2]) * Integer.parseInt((String) info[3]));
+
+				addProduct(info);
 
 			}
 
 			if (e.getSource() == btnCreate) {
-				// System.out.println("Skickas till kontroller: " + Arrays.toString(create()));
-				createTransactions(clientController.createInvoice(create()));
+
+				createTransactions(clientController.create(create(), Eviro.ENTITY_INVOICE, true));
 			}
 
 		}

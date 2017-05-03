@@ -6,13 +6,13 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import client.ClientController;
 import client.Eviro;
@@ -78,6 +78,7 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 
 	public void articleWindow() {
 
+		setBorder(new EmptyBorder(10, 10, 10, 10));
 		add(pnlFinal, BorderLayout.NORTH);
 		add(pnlSouth, BorderLayout.SOUTH);
 
@@ -134,7 +135,7 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 			text[i] = txtAll[i].getText();
 		}
 
-		System.out.println(Arrays.toString(text));
+		// System.out.println(Arrays.toString(text));
 
 		return text;
 
@@ -187,7 +188,6 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 	@Override
 	public String getTitle() {
 		return TOOLNAME;
-
 	}
 
 	@Override
@@ -199,7 +199,7 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 	@Override
 	public void updateGUI(Object[] values) {
 
-		System.out.println("Update GUI with: " + Arrays.toString(values));
+		// System.out.println("Update GUI with: " + Arrays.toString(values));
 
 		for (int i = 0; i < txtAll.length; i++) {
 			txtAll[i].setText((String) values[i]);

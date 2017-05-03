@@ -6,6 +6,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -15,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import client.ClientController;
+import client.Eviro;
 import gui.Tool;
 
 public class CreateCustomer extends JPanel implements Tool {
@@ -61,6 +64,31 @@ public class CreateCustomer extends JPanel implements Tool {
 		pnlSouth.setBorder(new EmptyBorder(3, 3, 3, 3));
 		displayContent();
 		addListeners();
+
+	}
+
+	public String checkFields(Object[] obj, int type) {
+
+		HashMap<String, String> txtList = new HashMap<String, String>();
+
+		txtList.put("Name", obj[1].toString());
+		txtList.put("Address", obj[2].toString());
+		txtList.put("Zip Code", obj[3].toString());
+		txtList.put("City", obj[4].toString());
+		txtList.put("Phone number", obj[5].toString());
+		txtList.put("Email", obj[6].toString());
+		txtList.put("VAT number", obj[7].toString());
+		txtList.put("Credit Limit", obj[8].toString());
+
+		for (Map.Entry<String, String> entry : txtList.entrySet()) {
+
+			if (entry.getValue().trim().length() <= 0) {
+				return "Please check following data: " + entry.getKey();
+			}
+
+		}
+		clientController.create(obj, type);
+		return "Customer added";
 
 	}
 
@@ -120,7 +148,7 @@ public class CreateCustomer extends JPanel implements Tool {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnCreate) {
-				displayMessage(clientController.checkFields(getText()));
+				displayMessage(checkFields(getText(), Eviro.ENTITY_CUSTOMER));
 			}
 
 		}

@@ -166,7 +166,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 					guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" }, getCustomerGUI(), customerList));
 				}
 			} else if (e.getSource() == btnUpdate) {
-				clientController.updateCustomer(getText());
+				clientController.update(getText(), Eviro.ENTITY_CUSTOMER);
 				displayMessage("Update succesfull!");
 
 			} else if (e.getSource() == btnPurchase) {
