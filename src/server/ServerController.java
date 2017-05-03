@@ -1,9 +1,15 @@
 package server;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Date;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import enteties.Customer;
 import enteties.EntityInterface;
 import enteties.Invoice;
@@ -11,7 +17,7 @@ import enteties.Product;
 import enteties.Transaction;
 
 /**
- * Handles most of the logic between the server and the database.
+ * Handles most of the logic between the server and the database. Also logs traffic to and from database.
  * @author Mattias Sundquist, Peter Folke
  */
 public class ServerController {
@@ -21,6 +27,9 @@ public class ServerController {
 	private final int UPDATE = 3;
 	private final int DELETE = 4;
 
+	private Logger log = Logger.getLogger("log");
+	private FileHandler fhLog;
+	private SimpleFormatter sfLog = new SimpleFormatter();
 	private ConnectDB database;
 
 	/**
@@ -28,6 +37,24 @@ public class ServerController {
 	 */
 	public ServerController() {
 		database = new ConnectDB();
+		try {
+			File logDir = new File("logs");
+			logDir.mkdir();
+			fhLog = new FileHandler("logs/log" + new SimpleDateFormat("ddMMYY").format(new Date()) + ".log", true);
+			fhLog.setFormatter(sfLog);
+			log.addHandler(fhLog);
+			log.setUseParentHandlers(false);
+		} catch (SecurityException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Adds a new info message in the logger.
+	 * @param msg
+	 */
+	public void logAppend(String msg) {
+		log.info(msg);
 	}
 
 	/**
@@ -124,6 +151,7 @@ public class ServerController {
 			}
 		}
 
+		logAppend(query);
 		System.out.println(query);
 		return query;
 	}
@@ -153,6 +181,7 @@ public class ServerController {
 				query += "'" + info[i] + "', ";
 		}
 
+		logAppend(query);
 		System.out.println(query);
 		return query;
 	}
@@ -175,6 +204,8 @@ public class ServerController {
 				query += colNames[i] + " = '" + info[i] + "', ";
 		}
 		query += " WHERE " + colNames[0] + " = " + info[0];
+		
+		logAppend(query);
 		return query;
 	}
 
@@ -190,6 +221,7 @@ public class ServerController {
 		String[] colNames = getColNames(ei, tableName);
 		String query = "DELETE FROM " + tableName + " WHERE " + colNames[0] + " = " + info[0];
 
+		logAppend(query);
 		return query;
 	}
 
