@@ -24,6 +24,7 @@ import javax.swing.border.TitledBorder;
 
 import client.ClientController;
 import client.Eviro;
+import tools.ChatGUI;
 import tools.CreateCustomer;
 import tools.CustomerGUI;
 import tools.ProductGUI;
@@ -48,8 +49,10 @@ public class GUIController {
 		this.clientController = clientController;
 
 		SwingUtilities.invokeLater(new Runnable() {
+
 			@Override
 			public void run() {
+
 				setSystemLookAndFeel();
 				JFrame window = new JFrame(Eviro.APP_NAME + " " + Eviro.APP_VERSION);
 				JPanel pnlMain = new JPanel(new BorderLayout());
@@ -72,6 +75,7 @@ public class GUIController {
 	 * Returns an instance of the GUIController
 	 */
 	private GUIController getGUIController() {
+
 		return this;
 	}
 
@@ -114,6 +118,7 @@ public class GUIController {
 	public void popup(Tool tool) {
 		Toolbox toolbox = new Toolbox(tool);
 		desktop.add(toolbox);
+
 	}
 
 	/**
@@ -131,7 +136,7 @@ public class GUIController {
 
 		private JComponent tools[] = new JComponent[] { new ActionJButton("Customer", "tool_customer") };
 
-		private JComponent exampleShortcuts[] = new JComponent[] { new ActionJButton("Quit", "link_exit") };
+		private JComponent exampleShortcuts[] = new JComponent[] { new ActionJButton("Chat", "open_chat"), new ActionJButton("Quit", "link_exit") };
 
 		public Sidebar() {
 
@@ -195,6 +200,10 @@ public class GUIController {
 
 			case "find_art":
 				popup(new ProductGUI(clientController, getGUIController()));
+				break;
+
+			case "open_chat":
+				popup(new ChatGUI(clientController, getGUIController()));
 				break;
 
 			default:
