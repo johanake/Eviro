@@ -134,7 +134,7 @@ public class GUIController {
 
 		private JComponent quick[] = new JComponent[] { new ActionJButton("Customer", "find_cust"), new ActionJButton("Invoice", "find_inv"), new ActionJButton("Transaction", "find_trans"), new ActionJButton("Article", "find_art") };
 
-		private JComponent tools[] = new JComponent[] { new ActionJButton("Customer", "tool_customer") };
+		private JComponent tools[] = new JComponent[] { new ActionJButton("Create customer", "tool_customer") };
 
 		private JComponent exampleShortcuts[] = new JComponent[] { new ActionJButton("Chat", "open_chat"), new ActionJButton("Quit", "link_exit") };
 

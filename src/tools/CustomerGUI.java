@@ -1,6 +1,7 @@
 package tools;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -50,13 +51,16 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	private JTextField txtEmail = new JTextField();
 	private JTextField txtVATNbr = new JTextField();
 	private JTextField txtCreditLimit = new JTextField();
-	private JTextField[] txtAll = { txtCustomerID, txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail, txtVATNbr, txtCreditLimit };
+	private JTextField[] txtAll = { txtCustomerID, txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail,
+			txtVATNbr, txtCreditLimit };
 
 	private JButton btnEdit = new JButton("Edit");
 	private JButton btnUpdate = new JButton("Update");
 	private JButton btnSearch = new JButton("Search");
 	private JButton btnPurchase = new JButton("Invoice");
 	private JButton btnClear = new JButton("Clear fields");
+
+	private Color fieldGray = Color.getHSBColor(0, 0, Float.parseFloat("0.95"));
 
 	private ClientController clientController;
 	private GUIController guiController;
@@ -121,6 +125,8 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		btnUpdate.addActionListener(listener);
 		btnPurchase.addActionListener(listener);
 		btnClear.addActionListener(listener);
+		btnEdit.addActionListener(listener);
+
 	}
 
 	private String[] getText() {
@@ -137,40 +143,72 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 
 	private void displayMessage(String txt) {
 		JOptionPane.showMessageDialog(null, txt);
+
 	}
 
 	private class ButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+
 			if (e.getSource() == btnSearch) {
-				ArrayList<Entity> customerList = clientController.search(getText(), Eviro.ENTITY_CUSTOMER);
-
-				if (customerList.size() == 0) {
-					displayMessage("No matches, try again by changing or adding information in your search.");
-				} else if (customerList.size() == 1) {
-					updateGUI(customerList.get(0).getData());
-				} else {
-					guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" }, getCustomerGUI(), customerList));
-				}
+				search();
 			} else if (e.getSource() == btnUpdate) {
-
-				if (clientController.update(getText(), Eviro.ENTITY_CUSTOMER)) {
-					displayMessage("Update succesfull!");
-				} else {
-					displayMessage("Update aborted!");
-				}
-
+				update();
 			} else if (e.getSource() == btnPurchase) {
 				guiController.popup(new InvoiceGUI(clientController, txtCustomerID.getText()));
 			} else if (e.getSource() == btnClear) {
-				for (JTextField t : txtAll) {
-					t.setText("");
-				}
+				clear();
+			} else if (e.getSource() == btnEdit) {
+				edit();
 			}
-
 		}
+	}
+	private void search(){
+		ArrayList<Entity> customerList = clientController.search(getText(), Eviro.ENTITY_CUSTOMER);
 
+		if (customerList.size() == 0) {
+			displayMessage("No matches, try again by changing or adding information in your search.");
+		} else if (customerList.size() == 1) {
+			updateGUI(customerList.get(0).getData());
+		} else {
+			guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code",
+					"City", "Phone number", "Email", "VAT number", "Credit Limit" }, getCustomerGUI(),
+					customerList));
+		}
+	}
+	
+	private void update() {
+		if (clientController.update(getText(), Eviro.ENTITY_CUSTOMER)) {
+			for (JTextField t : txtAll) {
+				t.setEditable(false);
+				t.setBackground(fieldGray);
+			}
+			displayMessage("Update succesfull!");
+		} else {
+			updateGUI(clientController.search(new Object[] {txtCustomerID.getText(),null,null,null,null,null,null,null,null}, Eviro.ENTITY_CUSTOMER).get(0).getData());
+			displayMessage("Update aborted!");
+		}			
+	}
+	
+	private void clear() {
+		for (JTextField t : txtAll) {
+			t.setText("");
+			t.setBackground(Color.WHITE);
+			t.setEditable(true);
+		}			
+	}
+	
+	private void edit() {
+		for (JTextField t : txtAll) {
+			if (!t.equals(txtCustomerID)) {
+				t.setEditable(!t.isEditable());
+				if (t.getBackground() == Color.WHITE) {
+					t.setBackground(fieldGray);
+				} else
+					t.setBackground(Color.WHITE);
+			}
+		}			
 	}
 
 	@Override
@@ -193,6 +231,8 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 			}
 
 			txtAll[i].setText((String) values[i]);
+			txtAll[i].setBackground(fieldGray);
+			txtAll[i].setEditable(false);
 		}
 
 	}
