@@ -7,7 +7,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -36,7 +37,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	private JLabel lblCustomerID = new JLabel("Customer ID: ");
 	private JLabel lblName = new JLabel("Name: ");
 	private JLabel lblAddress = new JLabel("Address: ");
-	private JLabel lblZipTown = new JLabel("Zip/Town: ");
+	private JLabel lblZipTown = new JLabel("Zip/City: ");
 	private JLabel lblPhoneNbr = new JLabel("Phone number: ");
 	private JLabel lblEmail = new JLabel("Email: ");
 	private JLabel lblVatNbr = new JLabel("Vat-number: ");
@@ -116,6 +117,10 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		pnlSouth.add(btnSearch);
 		pnlSouth.add(btnPurchase);
 		pnlSouth.add(btnClear);
+		
+		for (int i = 0; i < txtAll.length; i++) {
+			txtAll[i].setEnabled(false);
+		}
 
 	}
 
@@ -126,7 +131,10 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		btnPurchase.addActionListener(listener);
 		btnClear.addActionListener(listener);
 		btnEdit.addActionListener(listener);
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
 	}
 
 	private String[] getText() {
@@ -147,10 +155,11 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	}
 
 	private class ButtonListener implements ActionListener {
-
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
+<<<<<<< HEAD
 			if (e.getSource() == btnSearch) {
 				search();
 			} else if (e.getSource() == btnUpdate) {
@@ -161,6 +170,41 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 				clear();
 			} else if (e.getSource() == btnEdit) {
 				edit();
+=======
+			// SEARCH
+			if (e.getSource() == btnSearch) {
+				ArrayList<Entity> customerList = clientController.search(getText(), Eviro.ENTITY_CUSTOMER);
+
+				if (customerList.size() == 0) {
+					displayMessage("No matches, try again by changing or adding information in your search.");
+				} else if (customerList.size() == 1) {
+					updateGUI(customerList.get(0).getData());
+				} else {
+					guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" }, getCustomerGUI(), customerList));
+				}
+
+			}
+
+			// UPDATE
+			else if (e.getSource() == btnUpdate) {
+
+				if (clientController.update(getText(), Eviro.ENTITY_CUSTOMER)) {
+					displayMessage("Update succesfull!");
+				} else {
+					displayMessage("Update aborted!");
+				}
+
+			} else if (e.getSource() == btnPurchase) {
+				guiController.popup(new InvoiceGUI(clientController, txtCustomerID.getText()));
+			} else if (e.getSource() == btnClear) {
+				for (JTextField t : txtAll) {
+					t.setText("");
+				}
+			} else if (e.getSource() == btnEdit) {
+				for (int i = 0; i < txtAll.length; i++) {
+					txtAll[i].setEnabled(true);
+				}
+>>>>>>> origin/master
 			}
 		}
 	}
@@ -223,7 +267,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	public boolean getRezizable() {
 		return true;
 	}
-
+	
 	@Override
 	public void updateGUI(Object[] values) {
 

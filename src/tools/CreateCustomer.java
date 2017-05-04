@@ -33,7 +33,7 @@ public class CreateCustomer extends JPanel implements Tool {
 
 	private JLabel lblName = new JLabel("Name: ");
 	private JLabel lblAddress = new JLabel("Address: ");
-	private JLabel lblZipTown = new JLabel("Zip/Town: ");
+	private JLabel lblZipTown = new JLabel("Zip/City: ");
 	private JLabel lblPhoneNbr = new JLabel("Phone number: ");
 	private JLabel lblEmail = new JLabel("Email: ");
 	private JLabel lblVatNbr = new JLabel("Vat-number: ");
@@ -85,8 +85,16 @@ public class CreateCustomer extends JPanel implements Tool {
 			if (entry.getValue().trim().length() <= 0) {
 				return "Please check following data: " + entry.getKey();
 			}
-
+			
+			if (entry.getKey().equals("Zip Code") || entry.getKey().equals("Credit Limit")) {
+				try {
+					Integer.parseInt(entry.getValue());
+				} catch (Exception e) {
+					return "Please check following data: " + entry.getKey();
+				}
+			}
 		}
+		
 		clientController.create(obj, type);
 		return "Customer added";
 

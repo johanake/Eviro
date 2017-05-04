@@ -44,7 +44,7 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 	private JTextField txtSupplerArticleNumber = new JTextField();
 	private JTextField txtBalance = new JTextField();
 	private JTextField txtStockPlace = new JTextField();
-	private JTextField[] txtAll = { txtArticleNumber, txtName, txtDescription, txtPrice, txtEan, txtSupplier, txtSupplerArticleNumber, txtBalance, txtStockPlace };
+	private JTextField[] txtAll = { txtArticleNumber, txtName, txtDescription, txtPrice, txtSupplier, txtSupplerArticleNumber, txtEan, txtStockPlace, txtBalance };
 
 	private JPanel pnlNorth = new JPanel(new GridLayout(8, 1));
 	private JPanel pnlSouth = new JPanel(new GridLayout(1, 3));
@@ -139,6 +139,10 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 
 	}
 
+	private void displayMessage(String txt) {
+		JOptionPane.showMessageDialog(null, txt);
+	}
+
 	public void searchArticle() {
 
 		ArrayList<Entity> response = clientController.search(getText(), Eviro.ENTITY_PRODUCT);
@@ -166,17 +170,30 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
+			// SEARCH
 			if (e.getSource() == btnSearchArticle) {
-
 				searchArticle();
+			}
 
-			} else if (e.getSource() == btnAdd) {
+			// ADD
+			else if (e.getSource() == btnAdd) {
+				txtArticleNumber.setText(clientController.create(getText(), Eviro.ENTITY_PRODUCT, true));
 				// clientController.addProduct(txtName.getText(), txtPrice.getText(), txtEan.getText(), txtSupplier.getText(), txtSupplerArticleNumber.getText(), txtDescription.getText(), txtStockPlace.getText(), txtBalance.getText());
-			} else if (e.getSource() == btnEdit) {
+			}
+
+			else if (e.getSource() == btnEdit) {
 				// Kod som fyller i "låser upp" rutorna så att användaren kan redigera
 				btnSave.setEnabled(true);
-			} else if (e.getSource() == btnSave) {
-				// Kod som sparar dne nya data, därefter så låser sig save knappen.
+			}
+
+			else if (e.getSource() == btnSave) {
+
+				if (clientController.update(getText(), Eviro.ENTITY_PRODUCT)) {
+					displayMessage("Update succesfull!");
+				} else {
+					displayMessage("Update aborted!");
+				}
+
 				btnSave.setEnabled(false);
 			}
 		}
