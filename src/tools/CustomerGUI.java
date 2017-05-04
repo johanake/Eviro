@@ -6,7 +6,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -35,7 +36,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	private JLabel lblCustomerID = new JLabel("Customer ID: ");
 	private JLabel lblName = new JLabel("Name: ");
 	private JLabel lblAddress = new JLabel("Address: ");
-	private JLabel lblZipTown = new JLabel("Zip/Town: ");
+	private JLabel lblZipTown = new JLabel("Zip/City: ");
 	private JLabel lblPhoneNbr = new JLabel("Phone number: ");
 	private JLabel lblEmail = new JLabel("Email: ");
 	private JLabel lblVatNbr = new JLabel("Vat-number: ");
@@ -140,7 +141,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	}
 
 	private class ButtonListener implements ActionListener {
-
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
