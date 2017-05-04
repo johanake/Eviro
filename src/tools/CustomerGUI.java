@@ -143,6 +143,8 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+
+			// SEARCH
 			if (e.getSource() == btnSearch) {
 				ArrayList<Entity> customerList = clientController.search(getText(), Eviro.ENTITY_CUSTOMER);
 
@@ -153,7 +155,11 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 				} else {
 					guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" }, getCustomerGUI(), customerList));
 				}
-			} else if (e.getSource() == btnUpdate) {
+
+			}
+
+			// UPDATE
+			else if (e.getSource() == btnUpdate) {
 
 				if (clientController.update(getText(), Eviro.ENTITY_CUSTOMER)) {
 					displayMessage("Update succesfull!");

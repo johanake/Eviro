@@ -118,7 +118,6 @@ public class GUIController {
 	public void popup(Tool tool) {
 		Toolbox toolbox = new Toolbox(tool);
 		desktop.add(toolbox);
-
 	}
 
 	/**
@@ -136,7 +135,7 @@ public class GUIController {
 
 		private JComponent tools[] = new JComponent[] { new ActionJButton("Customer", "tool_customer") };
 
-		private JComponent exampleShortcuts[] = new JComponent[] { new ActionJButton("Chat", "open_chat"), new ActionJButton("Quit", "link_exit") };
+		private JComponent exampleShortcuts[] = new JComponent[] { new ActionJButton("Chat", "tool_chat"), new ActionJButton("Quit", "link_exit") };
 
 		public Sidebar() {
 
@@ -202,7 +201,7 @@ public class GUIController {
 				popup(new ProductGUI(clientController, getGUIController()));
 				break;
 
-			case "open_chat":
+			case "tool_chat":
 				popup(new ChatGUI(clientController, getGUIController()));
 				break;
 
