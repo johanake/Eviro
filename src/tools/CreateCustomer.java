@@ -33,7 +33,7 @@ public class CreateCustomer extends JPanel implements Tool {
 
 	private JLabel lblName = new JLabel("Name: ");
 	private JLabel lblAddress = new JLabel("Address: ");
-	private JLabel lblZipTown = new JLabel("Zip/Town: ");
+	private JLabel lblZipTown = new JLabel("Zip/City: ");
 	private JLabel lblPhoneNbr = new JLabel("Phone number: ");
 	private JLabel lblEmail = new JLabel("Email: ");
 	private JLabel lblVatNbr = new JLabel("Vat-number: ");
