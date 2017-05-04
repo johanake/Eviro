@@ -113,6 +113,10 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		pnlSouth.add(btnSearch);
 		pnlSouth.add(btnPurchase);
 		pnlSouth.add(btnClear);
+		
+		for (int i = 0; i < txtAll.length; i++) {
+			txtAll[i].setEnabled(false);
+		}
 
 	}
 
@@ -122,6 +126,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		btnUpdate.addActionListener(listener);
 		btnPurchase.addActionListener(listener);
 		btnClear.addActionListener(listener);
+		btnEdit.addActionListener(listener);
 	}
 
 	private String[] getText() {
@@ -174,6 +179,10 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 				for (JTextField t : txtAll) {
 					t.setText("");
 				}
+			} else if (e.getSource() == btnEdit) {
+				for (int i = 0; i < txtAll.length; i++) {
+					txtAll[i].setEnabled(true);
+				}
 			}
 
 		}
@@ -189,7 +198,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	public boolean getRezizable() {
 		return true;
 	}
-
+	
 	@Override
 	public void updateGUI(Object[] values) {
 
