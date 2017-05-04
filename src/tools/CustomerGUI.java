@@ -164,7 +164,8 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 			}
 		}
 	}
-	private void search(){
+
+	private void search() {
 		ArrayList<Entity> customerList = clientController.search(getText(), Eviro.ENTITY_CUSTOMER);
 
 		if (customerList.size() == 0) {
@@ -172,12 +173,11 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		} else if (customerList.size() == 1) {
 			updateGUI(customerList.get(0).getData());
 		} else {
-			guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code",
-					"City", "Phone number", "Email", "VAT number", "Credit Limit" }, getCustomerGUI(),
-					customerList));
+			guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City",
+					"Phone number", "Email", "VAT number", "Credit Limit" }, getCustomerGUI(), customerList));
 		}
 	}
-	
+
 	private void update() {
 		if (clientController.update(getText(), Eviro.ENTITY_CUSTOMER)) {
 			for (JTextField t : txtAll) {
@@ -186,19 +186,22 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 			}
 			displayMessage("Update succesfull!");
 		} else {
-			updateGUI(clientController.search(new Object[] {txtCustomerID.getText(),null,null,null,null,null,null,null,null}, Eviro.ENTITY_CUSTOMER).get(0).getData());
+			updateGUI(clientController
+					.search(new Object[] { txtCustomerID.getText(), null, null, null, null, null, null, null, null },
+							Eviro.ENTITY_CUSTOMER)
+					.get(0).getData());
 			displayMessage("Update aborted!");
-		}			
+		}
 	}
-	
+
 	private void clear() {
 		for (JTextField t : txtAll) {
 			t.setText("");
 			t.setBackground(Color.WHITE);
 			t.setEditable(true);
-		}			
+		}
 	}
-	
+
 	private void edit() {
 		for (JTextField t : txtAll) {
 			if (!t.equals(txtCustomerID)) {
@@ -208,7 +211,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 				} else
 					t.setBackground(Color.WHITE);
 			}
-		}			
+		}
 	}
 
 	@Override
