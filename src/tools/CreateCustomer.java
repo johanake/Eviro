@@ -85,8 +85,16 @@ public class CreateCustomer extends JPanel implements Tool {
 			if (entry.getValue().trim().length() <= 0) {
 				return "Please check following data: " + entry.getKey();
 			}
-
+			
+			if (entry.getKey().equals("Zip Code")) {
+				try {
+					Integer.parseInt(entry.getValue());
+				} catch (Exception e) {
+					return "Please check following data: " + entry.getKey();
+				}
+			}
 		}
+		
 		clientController.create(obj, type);
 		return "Customer added";
 
