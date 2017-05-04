@@ -86,7 +86,7 @@ public class CreateCustomer extends JPanel implements Tool {
 				return "Please check following data: " + entry.getKey();
 			}
 			
-			if (entry.getKey().equals("Zip Code")) {
+			if (entry.getKey().equals("Zip Code") || entry.getKey().equals("Credit Limit")) {
 				try {
 					Integer.parseInt(entry.getValue());
 				} catch (Exception e) {
