@@ -24,7 +24,7 @@ import javax.swing.border.TitledBorder;
 
 import client.ClientController;
 import client.Eviro;
-import tools.ChatGUI;
+import tools.ForumGUI;
 import tools.CreateCustomer;
 import tools.CustomerGUI;
 import tools.ProductGUI;
@@ -215,7 +215,7 @@ public class GUIController {
 				break;
 
 			case "tool_chat":
-				popup(new ChatGUI(clientController, getGUIController()));
+				popup(new ForumGUI(clientController));
 				break;
 
 			default:

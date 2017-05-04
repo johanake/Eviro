@@ -2,15 +2,15 @@ package enteties;
 
 import java.io.Serializable;
 
-public class ChatMessage implements Serializable, Entity {
+public class ForumMessage implements Serializable, Entity {
 
 	private int operation;
 	private Object[] data;
 	
-	public ChatMessage() {
+	public ForumMessage() {
 	}
 	
-	public ChatMessage(Object[] data) {
+	public ForumMessage(Object[] data) {
 		this.data = data;
 	}
 

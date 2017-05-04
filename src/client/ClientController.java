@@ -1,10 +1,8 @@
 package client;
 
 import java.util.ArrayList;
-
 import javax.swing.JOptionPane;
-
-import enteties.ChatMessage;
+import enteties.ForumMessage;
 import enteties.Customer;
 import enteties.Entity;
 import enteties.Invoice;
@@ -25,8 +23,7 @@ public class ClientController {
 	/**
 	 * Creates a ClientController object.
 	 * 
-	 * @param client
-	 *            the client of the system
+	 * @param client the client of the system
 	 */
 	public ClientController(Client client) {
 		this.client = client;
@@ -35,10 +32,8 @@ public class ClientController {
 	/**
 	 * Creates and sends a "update operation" object to the server.
 	 * 
-	 * @param data
-	 *            data to use when updating
-	 * @param entityType
-	 *            the type of entity to update
+	 * @param data data to use when updating
+	 * @param entityType the type of entity to update
 	 */
 	public boolean update(String[] data, int entityType) {
 
@@ -97,29 +92,24 @@ public class ClientController {
 	/**
 	 * Creates and sends a "create operation" object to the server.
 	 * 
-	 * @param data
-	 *            data to use when creating
-	 * @param entityType
-	 *            the type of entity to create
+	 * @param data data to use when creating
+	 * @param entityType the type of entity to create
 	 */
 	public void create(Object[] data, int entityType) {
+
 		create(data, entityType, false);
 	}
 
 	/**
-	 * Creates and sends a "create operation" object to the server and then
-	 * waits for response.
+	 * Creates and sends a "create operation" object to the server and then waits for response.
 	 * 
-	 * @param data
-	 *            data to use when creating
-	 * @param entityType
-	 *            the type of entity to create
-	 * @param returnId
-	 *            whether the method should return the id of the created
-	 *            database row or not
+	 * @param data data to use when creating
+	 * @param entityType the type of entity to create
+	 * @param returnId whether the method should return the id of the created database row or not
 	 * @return the search result from the server
 	 */
 	public String create(Object[] data, int entityType, boolean returnId) {
+
 		Entity object = createEntityByType(entityType);
 		object.setData(data);
 		object.setOperation(Eviro.DB_ADD);
@@ -132,13 +122,10 @@ public class ClientController {
 	}
 
 	/**
-	 * Creates and sends a "search operation" object to the server and then
-	 * waits for response.
+	 * Creates and sends a "search operation" object to the server and then waits for response.
 	 * 
-	 * @param data
-	 *            data to use when searching
-	 * @param entityType
-	 *            the type of entity to search for
+	 * @param data data to use when searching
+	 * @param entityType the type of entity to search for
 	 * @return the search result from the server
 	 */
 	public ArrayList<Entity> search(Object[] data, int entityType) {
@@ -162,12 +149,10 @@ public class ClientController {
 	}
 
 	/**
-	 * Checks an array of objects so that 1. it contains atleast 1 object that
-	 * is not null and 2. it contains atleast 1 string with a trimmed lenght of
-	 * more than 0.
+	 * Checks an array of objects so that 1. it contains atleast 1 object that is not null and 2. it contains atleast 1
+	 * string with a trimmed lenght of more than 0.
 	 * 
-	 * @param data
-	 *            the arrays of strings to check
+	 * @param data the arrays of strings to check
 	 * @return whether the controll was successful or not
 	 */
 	private boolean checkData(Object[] data) {
@@ -184,11 +169,9 @@ public class ClientController {
 	}
 
 	/**
-	 * Instantiates and returns an empty Entity implementation of the specified
-	 * entityType.
+	 * Instantiates and returns an empty Entity implementation of the specified entityType.
 	 * 
-	 * @param entityType
-	 *            the type of entity to instantiate
+	 * @param entityType the type of entity to instantiate
 	 * @return the entity that was instantiated
 	 */
 	private Entity createEntityByType(int entityType) {
@@ -248,38 +231,25 @@ public class ClientController {
 	 * 
 	 */
 	/**
-	 * Gets all chat messages.
+	 * Gets all forum messages.
 	 * 
-	 * @return a String array with all chat messages.
+	 * @return a String array with all forum messages.
 	 */
-	public String[] getChatMessages() {
+	public ArrayList<ForumMessage> getForumMessages() {
 
-		ChatMessage cm = new ChatMessage();
-		cm.setOperation(5);
-		ArrayList<ChatMessage> list = (ArrayList<ChatMessage>) client.sendObject(cm);
-		if (list == null) {
-			return new String[] { "NO" };
-		} else {
-			String[] res = new String[list.size()];
-			for (int i = 0; i < list.size(); i++) {
-				res[i] = list.get(i).getData()[0] + "\t" + list.get(i).getData()[1] + "\n";
-			}
-			return res;
-		}
+		ForumMessage cm = new ForumMessage();
+		cm.setOperation(Eviro.DB_GETALL);
+		return (ArrayList<ForumMessage>) client.sendObject(cm);
 	}
 
 	/**
-	 * Adds a new chatmessage to the database.
+	 * Adds a new forum message to the database.
 	 * 
-	 * @param res
-	 *            the message to add.
+	 * @param res the message to add.
 	 */
-	public void addChatMessage(String res) {
-
-		Object[] obj = { 1, res };
-		ChatMessage cm = new ChatMessage(obj);
-		cm.setOperation(Eviro.DB_ADD);
-		client.sendObject(cm);
+	public void addForumMessage(ForumMessage msg) {
+		msg.setOperation(Eviro.DB_ADD);
+		client.sendObject(msg);
 	}
 
 }

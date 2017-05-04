@@ -11,7 +11,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import client.Eviro;
-import enteties.ChatMessage;
+import enteties.ForumMessage;
 import enteties.Customer;
 import enteties.Entity;
 import enteties.Invoice;
@@ -99,8 +99,8 @@ public class ServerController {
 			tableName = "product";
 		else if (ei instanceof Transaction)
 			tableName = "transaction";
-		else if (ei instanceof ChatMessage)
-			tableName = "chatmessage";
+		else if (ei instanceof ForumMessage)
+			tableName = "forummessage";
 
 		return tableName;
 	}
@@ -142,6 +142,8 @@ public class ServerController {
 		String[] colNames = getColNames(ei, tableName);
 		String query = "SELECT * FROM " + tableName;
 		
+		logAppend(query);
+		System.out.println("buildGetAllQuery: " + query);
 		return query;
 	}
 
@@ -259,8 +261,8 @@ public class ServerController {
 					ei.add(new Invoice(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) }));
 				} else if (rs.getMetaData().toString().contains("tableName=product")) {
 					ei.add(new Product(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9) }));
-				} else if (rs.getMetaData().toString().contains("tableName=chatmessage")) {
-					ei.add(new ChatMessage(new Object[] {rs.getString(1), rs.getString(2)}));
+				} else if (rs.getMetaData().toString().contains("tableName=forummessage")) {
+					ei.add(new ForumMessage(new Object[] {rs.getString(1), rs.getString(2), rs.getString(3)}));
 				}
 			}
 		} catch (SQLException e) {
