@@ -118,10 +118,6 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		pnlSouth.add(btnPurchase);
 		pnlSouth.add(btnClear);
 		
-		for (int i = 0; i < txtAll.length; i++) {
-			txtAll[i].setEnabled(false);
-		}
-
 	}
 
 	private void addListeners() {
@@ -131,10 +127,6 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		btnPurchase.addActionListener(listener);
 		btnClear.addActionListener(listener);
 		btnEdit.addActionListener(listener);
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
 	}
 
 	private String[] getText() {
@@ -159,7 +151,6 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-<<<<<<< HEAD
 			if (e.getSource() == btnSearch) {
 				search();
 			} else if (e.getSource() == btnUpdate) {
@@ -170,41 +161,6 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 				clear();
 			} else if (e.getSource() == btnEdit) {
 				edit();
-=======
-			// SEARCH
-			if (e.getSource() == btnSearch) {
-				ArrayList<Entity> customerList = clientController.search(getText(), Eviro.ENTITY_CUSTOMER);
-
-				if (customerList.size() == 0) {
-					displayMessage("No matches, try again by changing or adding information in your search.");
-				} else if (customerList.size() == 1) {
-					updateGUI(customerList.get(0).getData());
-				} else {
-					guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" }, getCustomerGUI(), customerList));
-				}
-
-			}
-
-			// UPDATE
-			else if (e.getSource() == btnUpdate) {
-
-				if (clientController.update(getText(), Eviro.ENTITY_CUSTOMER)) {
-					displayMessage("Update succesfull!");
-				} else {
-					displayMessage("Update aborted!");
-				}
-
-			} else if (e.getSource() == btnPurchase) {
-				guiController.popup(new InvoiceGUI(clientController, txtCustomerID.getText()));
-			} else if (e.getSource() == btnClear) {
-				for (JTextField t : txtAll) {
-					t.setText("");
-				}
-			} else if (e.getSource() == btnEdit) {
-				for (int i = 0; i < txtAll.length; i++) {
-					txtAll[i].setEnabled(true);
-				}
->>>>>>> origin/master
 			}
 		}
 	}
