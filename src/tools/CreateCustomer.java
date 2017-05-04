@@ -48,7 +48,8 @@ public class CreateCustomer extends JPanel implements Tool {
 	private JTextField txtVATNbr = new JTextField();
 	private JTextField txtCreditLimit = new JTextField();
 
-	private JTextField[] txtAll = { txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail, txtVATNbr, txtCreditLimit };
+	private JTextField[] txtAll = { txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail, txtVATNbr,
+			txtCreditLimit };
 
 	private JButton btnCreate = new JButton("Create Customer");
 
@@ -85,7 +86,7 @@ public class CreateCustomer extends JPanel implements Tool {
 			if (entry.getValue().trim().length() <= 0) {
 				return "Please check following data: " + entry.getKey();
 			}
-			
+
 			if (entry.getKey().equals("Zip Code") || entry.getKey().equals("Credit Limit")) {
 				try {
 					Integer.parseInt(entry.getValue());
@@ -94,7 +95,7 @@ public class CreateCustomer extends JPanel implements Tool {
 				}
 			}
 		}
-		
+
 		clientController.create(obj, type);
 		return "Customer added";
 

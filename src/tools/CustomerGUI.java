@@ -117,7 +117,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		pnlSouth.add(btnSearch);
 		pnlSouth.add(btnPurchase);
 		pnlSouth.add(btnClear);
-		
+
 	}
 
 	private void addListeners() {
@@ -147,7 +147,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	}
 
 	private class ButtonListener implements ActionListener {
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
@@ -223,7 +223,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	public boolean getRezizable() {
 		return true;
 	}
-	
+
 	@Override
 	public void updateGUI(Object[] values) {
 

@@ -31,6 +31,7 @@ import tools.ProductGUI;
 
 /**
  * Handles client side gui operations of the system.
+ * 
  * @author Robin Overgaard
  * @version 1.0
  */
@@ -42,7 +43,9 @@ public class GUIController {
 
 	/**
 	 * Constructs the client, instantiates a new main workspace window.
-	 * @param clientController controller for communication with the client
+	 * 
+	 * @param clientController
+	 *            controller for communication with the client
 	 */
 	public GUIController(ClientController clientController) {
 
@@ -65,7 +68,8 @@ public class GUIController {
 				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				window.setVisible(true);
 				// window.setJMenuBar(new Menu());
-				window.setIconImage(new ImageIcon(Eviro.APP_ICON).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+				window.setIconImage(
+						new ImageIcon(Eviro.APP_ICON).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
 			}
 		});
 
@@ -113,7 +117,9 @@ public class GUIController {
 
 	/**
 	 * Adds a new toolbox to the desktop
-	 * @param tool the tool to open
+	 * 
+	 * @param tool
+	 *            the tool to open
 	 */
 	public void popup(Tool tool) {
 		Toolbox toolbox = new Toolbox(tool);
@@ -122,6 +128,7 @@ public class GUIController {
 
 	/**
 	 * The sidebar.
+	 * 
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */
@@ -131,11 +138,14 @@ public class GUIController {
 		private JPanel pnlSideNorth = new JPanel();
 		private JPanel pnlSideSouth = new JPanel();
 
-		private JComponent quick[] = new JComponent[] { new ActionJButton("Customer", "find_cust"), new ActionJButton("Invoice", "find_inv"), new ActionJButton("Transaction", "find_trans"), new ActionJButton("Article", "find_art") };
+		private JComponent quick[] = new JComponent[] { new ActionJButton("Customer", "find_cust"),
+				new ActionJButton("Invoice", "find_inv"), new ActionJButton("Transaction", "find_trans"),
+				new ActionJButton("Article", "find_art") };
 
 		private JComponent tools[] = new JComponent[] { new ActionJButton("Create customer", "tool_customer") };
 
-		private JComponent exampleShortcuts[] = new JComponent[] { new ActionJButton("Chat", "tool_chat"), new ActionJButton("Quit", "link_exit") };
+		private JComponent exampleShortcuts[] = new JComponent[] { new ActionJButton("Chat", "tool_chat"),
+				new ActionJButton("Quit", "link_exit") };
 
 		public Sidebar() {
 
@@ -149,7 +159,8 @@ public class GUIController {
 			pnlSideNorth.add(createComponentPanel(tools, "Tools"));
 			pnlSideNorth.add(createComponentPanel(quick, "Find"));
 
-			// pnlSideSouth.add(createComponentPanel(exampleInfo, "Information"));
+			// pnlSideSouth.add(createComponentPanel(exampleInfo,
+			// "Information"));
 			pnlSideSouth.add(createComponentPanel(exampleShortcuts, "System"));
 
 			add(pnlSideNorth, BorderLayout.NORTH);
@@ -178,7 +189,9 @@ public class GUIController {
 
 		/*
 		 * (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		 * 
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
+		 * ActionEvent)
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -212,7 +225,9 @@ public class GUIController {
 		}
 
 		/**
-		 * Customization of JButton that takes it's ActionCommand as a parameter in the constructor.
+		 * Customization of JButton that takes it's ActionCommand as a parameter
+		 * in the constructor.
+		 * 
 		 * @author Robin Overgaard
 		 * @version 1.0
 		 */
@@ -220,7 +235,9 @@ public class GUIController {
 
 			/**
 			 * Constructor.
-			 * @param text the text to display on this button
+			 * 
+			 * @param text
+			 *            the text to display on this button
 			 */
 			public ActionJButton(String text) {
 				super(text);
@@ -228,8 +245,11 @@ public class GUIController {
 
 			/**
 			 * Constructor.
-			 * @param text the text to display on this button
-			 * @param action the action command for this button
+			 * 
+			 * @param text
+			 *            the text to display on this button
+			 * @param action
+			 *            the action command for this button
 			 */
 			public ActionJButton(String text, String action) {
 				this(text);

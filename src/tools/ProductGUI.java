@@ -1,11 +1,15 @@
 package tools;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -44,7 +48,8 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 	private JTextField txtSupplerArticleNumber = new JTextField();
 	private JTextField txtBalance = new JTextField();
 	private JTextField txtStockPlace = new JTextField();
-	private JTextField[] txtAll = { txtArticleNumber, txtName, txtDescription, txtPrice, txtSupplier, txtSupplerArticleNumber, txtEan, txtStockPlace, txtBalance };
+	private JTextField[] txtAll = { txtArticleNumber, txtName, txtDescription, txtPrice, txtSupplier,
+			txtSupplerArticleNumber, txtEan, txtStockPlace, txtBalance };
 
 	private JPanel pnlNorth = new JPanel(new GridLayout(8, 1));
 	private JPanel pnlSouth = new JPanel(new GridLayout(1, 3));
@@ -56,6 +61,9 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 	private JButton btnAdd = new JButton("Add new aricle");
 	private JButton btnEdit = new JButton("Edit article");
 	private JButton btnSave = new JButton("Save");
+	private JButton btnClear = new JButton("Clear fields");
+
+	private Color fieldGray = Color.getHSBColor(0, 0, Float.parseFloat("0.95"));
 
 	private boolean show = false;
 
@@ -106,11 +114,14 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 		pnlNorthEast.add(txtBalance);
 		pnlNorthEast.add(txtStockPlace);
 
-		pnlSouth.add(btnSearchArticle);
-		pnlSouth.add(btnAdd);
 		pnlSouth.add(btnEdit);
 		pnlSouth.add(btnSave);
+		pnlSouth.add(btnSearchArticle);
+		pnlSouth.add(btnAdd);
+		pnlSouth.add(btnClear);
+
 		btnSave.setEnabled(show);
+		btnEdit.setEnabled(false);
 
 	}
 
@@ -120,6 +131,7 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 		btnAdd.addActionListener(listener);
 		btnEdit.addActionListener(listener);
 		btnSave.addActionListener(listener);
+		btnClear.addActionListener(listener);
 
 	}
 
@@ -143,25 +155,36 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 		JOptionPane.showMessageDialog(null, txt);
 	}
 
-	public void searchArticle() {
+	public String checkFields(Object[] obj, int type) {
 
-		ArrayList<Entity> response = clientController.search(getText(), Eviro.ENTITY_PRODUCT);
+		HashMap<String, String> txtList = new HashMap<String, String>();
 
-		if (response.size() == 0) {
+		txtList.put("Name", obj[1].toString());
+		txtList.put("Description", obj[2].toString());
+		txtList.put("Price", obj[3].toString());
+		txtList.put("Supplier", obj[4].toString());
+		txtList.put("supplierArticleNumber", obj[5].toString());
+		txtList.put("ean", obj[6].toString());
+		txtList.put("stockPlace", obj[7].toString());
+		txtList.put("saldo", obj[8].toString());
 
-			JOptionPane.showMessageDialog(this, "No matches, try again by changing or adding information in your search.");
+		for (Map.Entry<String, String> entry : txtList.entrySet()) {
 
-		} else if (response.size() == 1) {
+			if (entry.getValue().trim().length() <= 0) {
+				return "Please check following data: " + entry.getKey();
+			}
 
-			updateGUI(response.get(0).getData());
-
-		} else {
-
-			Object[] searchResultColumns = new Object[] { "Product ID", "Name", "Description", "Price", "Supplier", "SupplierArticleNumber", "EAN", "Stock place", "Balance" };
-
-			guiController.popup(new SearchResults(searchResultColumns, this, response));
-
+			if (entry.getKey().equals("Zip Code") || entry.getKey().equals("Credit Limit")) {
+				try {
+					Integer.parseInt(entry.getValue());
+				} catch (Exception e) {
+					return "Please check following data: " + entry.getKey();
+				}
+			}
 		}
+
+		clientController.create(obj, type);
+		return "Article added";
 
 	}
 
@@ -170,34 +193,79 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			// SEARCH
 			if (e.getSource() == btnSearchArticle) {
 				searchArticle();
-			}
-
-			// ADD
-			else if (e.getSource() == btnAdd) {
-				txtArticleNumber.setText(clientController.create(getText(), Eviro.ENTITY_PRODUCT, true));
-				// clientController.addProduct(txtName.getText(), txtPrice.getText(), txtEan.getText(), txtSupplier.getText(), txtSupplerArticleNumber.getText(), txtDescription.getText(), txtStockPlace.getText(), txtBalance.getText());
-			}
-
-			else if (e.getSource() == btnEdit) {
-				// Kod som fyller i "låser upp" rutorna så att användaren kan redigera
-				btnSave.setEnabled(true);
-			}
-
-			else if (e.getSource() == btnSave) {
-
-				if (clientController.update(getText(), Eviro.ENTITY_PRODUCT)) {
-					displayMessage("Update succesfull!");
-				} else {
-					displayMessage("Update aborted!");
-				}
-
-				btnSave.setEnabled(false);
+			} else if (e.getSource() == btnAdd) {
+				add();
+			} else if (e.getSource() == btnEdit) {
+				edit();
+			} else if (e.getSource() == btnSave) {
+				save();
+			} else if (e.getSource() == btnClear) {
+				clear();
 			}
 		}
+	}
 
+	public void searchArticle() {
+		ArrayList<Entity> response = clientController.search(getText(), Eviro.ENTITY_PRODUCT);
+
+		if (response.size() == 0) {
+			displayMessage("No matches, try again by changing or adding information in your search.");
+		} else if (response.size() == 1) {
+			updateGUI(response.get(0).getData());
+		} else {
+			Object[] searchResultColumns = new Object[] { "Product ID", "Name", "Description", "Price", "Supplier",
+					"SupplierArticleNumber", "EAN", "Stock place", "Balance" };
+			guiController.popup(new SearchResults(searchResultColumns, this, response));
+		}
+	}
+
+	private void add() {
+		txtArticleNumber.setText("");
+		displayMessage(checkFields(getText(), Eviro.ENTITY_PRODUCT));
+		searchArticle();
+	}
+
+	private void edit() {
+		btnSave.setEnabled(!btnSave.isEnabled());
+		for (JTextField t : txtAll) {
+			if (!t.equals(txtArticleNumber)) {
+				t.setEditable(!t.isEditable());
+				if (t.getBackground() == Color.WHITE) {
+					t.setBackground(fieldGray);
+				} else
+					t.setBackground(Color.WHITE);
+			}
+		}
+	}
+
+	private void save() {
+		if (clientController.update(getText(), Eviro.ENTITY_PRODUCT)) {
+			for (JTextField t : txtAll) {
+				t.setEditable(false);
+				t.setBackground(fieldGray);
+			}
+			btnSave.setEnabled(false);
+			displayMessage("Update succesfull!");
+		} else {
+			updateGUI(clientController
+					.search(new Object[] { txtArticleNumber.getText(), null, null, null, null, null, null, null, null },
+							Eviro.ENTITY_PRODUCT)
+					.get(0).getData());
+			displayMessage("Update aborted!");
+		}
+	}
+
+	private void clear() {
+		for (JTextField t : txtAll) {
+			t.setText("");
+			t.setBackground(Color.WHITE);
+			t.setEditable(true);
+			btnSave.setEnabled(false);
+			btnEdit.setEnabled(false);
+			btnAdd.setEnabled(true);
+		}
 	}
 
 	@Override
@@ -221,6 +289,11 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 			}
 
 			txtAll[i].setText((String) values[i]);
+			txtAll[i].setEditable(false);
+			txtAll[i].setBackground(fieldGray);
+			btnAdd.setEnabled(false);
+			btnEdit.setEnabled(true);
+
 		}
 
 	}
