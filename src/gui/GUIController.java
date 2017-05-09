@@ -34,6 +34,9 @@ import tools.ProductGUI;
  * @version 1.0
  */
 
+
+//Nadia testar
+
 public class GUIController {
 
 	private JDesktopPane desktop;
