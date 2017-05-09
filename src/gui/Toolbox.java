@@ -19,7 +19,7 @@ public class Toolbox extends JInternalFrame {
 	static int openFrameCount = 0;
 
 	/**
-	 * Constructs a tool, adds generals and tool specifics.
+	 * Constructs a tool.
 	 * @param tool panel containt toll specifics
 	 * @param whether the toolbox should be resizable or not
 	 */
@@ -29,13 +29,6 @@ public class Toolbox extends JInternalFrame {
 		this.tool = (JPanel) tool;
 		openFrameCount++;
 		setup();
-
-		addInternalFrameListener(new InternalFrameAdapter() {
-			@Override
-			public void internalFrameClosing(InternalFrameEvent e) {
-				openFrameCount--;
-			}
-		});
 
 	}
 
@@ -52,6 +45,14 @@ public class Toolbox extends JInternalFrame {
 				pack();
 				setVisible(true);
 				setLocation(15 * openFrameCount, 15 * openFrameCount);
+
+				addInternalFrameListener(new InternalFrameAdapter() {
+					@Override
+					public void internalFrameClosing(InternalFrameEvent e) {
+						openFrameCount--;
+					}
+				});
+
 			}
 		});
 	}

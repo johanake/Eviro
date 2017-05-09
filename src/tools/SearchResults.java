@@ -49,16 +49,15 @@ public class SearchResults extends JPanel implements Tool {
 				JTable table = (JTable) me.getSource();
 				Point p = me.getPoint();
 				int row = table.rowAtPoint(p);
-				if (me.getClickCount() == 2) {
+				if (me.getClickCount() == 2 && row >= 0) {
 
 					Object[] values = new Object[obj.length];
 
 					for (int i = 0; i < obj.length; i++) {
 						values[i] = table.getValueAt(row, i);
 					}
-					// System.out.println(Arrays.toString(values));
-					gui.updateGUI(values);
 
+					gui.updateGUI(values);
 				}
 
 			}
