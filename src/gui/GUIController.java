@@ -133,7 +133,7 @@ public class GUIController {
 		private JPanel pnlSideSouth = new JPanel();
 
 		private JComponent top[] = new JComponent[] { new ActionJButton("Customer", "tool_cust"), new ActionJButton("Customer", "tool_customer"), new ActionJButton("Invoice", "tool_inv"), new ActionJButton("Article", "tool_art") };
-		private JComponent bottom[] = new JComponent[] { new ActionJButton("Chat", "tool_chat"), new ActionJButton("Settings", "tool_settings"), new ActionJButton("Quit", "link_exit") };
+		private JComponent bottom[] = new JComponent[] { new ActionJButton("Forum", "tool_forum"), new ActionJButton("Settings", "tool_settings"), new ActionJButton("Quit", "link_exit") };
 
 		public Sidebar() {
 
@@ -196,7 +196,7 @@ public class GUIController {
 				popup(new ProductGUI(clientController, getGUIController()));
 				break;
 
-			case "tool_chat":
+			case "tool_forum":
 				popup(new ForumGUI(clientController));
 				break;
 
