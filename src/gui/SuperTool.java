@@ -22,7 +22,6 @@ import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
 import client.ClientController;
-import client.Eviro;
 import enteties.Entity;
 import tools.SearchResults;
 
@@ -53,13 +52,13 @@ public class SuperTool extends JInternalFrame {
 
 	public ArrayList<Entity> search(String[] values, int entitytype) {
 
-		ArrayList<Entity> customerList = clientCtrlr.search(values, entitytype);
+		ArrayList<Entity> resultList = clientCtrlr.search(values, entitytype);
 
-		if (customerList.size() == 0) {
+		if (resultList.size() == 0) {
 			popupMessage("No matches, try again by changing or adding information in your search.");
 			return null;
 		} else
-			return customerList;
+			return resultList;
 	}
 
 	public void search(Updatable tool, LabledTextField[] ltfAll, int entitytype) {
@@ -111,7 +110,7 @@ public class SuperTool extends JInternalFrame {
 		} else {
 			Object[] test = new Object[tool.getValues().length];
 			test[0] = tool.getValues()[0];
-			tool.setValues(clientCtrlr.search(test, Eviro.ENTITY_CUSTOMER).get(0).getData());
+			tool.setValues(clientCtrlr.search(test, entitytype).get(0).getData());
 			popupMessage("Update aborted!");
 			return false;
 		}
