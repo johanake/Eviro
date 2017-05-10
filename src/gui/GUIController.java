@@ -6,6 +6,10 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -30,21 +34,23 @@ import tools.ProductGUI;
 
 /**
  * Handles client side gui operations of the system.
+ * 
  * @author Robin Overgaard
  * @version 1.0
  */
 
-
-//Nadia testar
+// Nadia testar
 
 public class GUIController {
-
+	private KeyPress keyListener = new KeyPress();
 	private JDesktopPane desktop;
 	private ClientController clientController;
 
 	/**
 	 * Constructs the client, instantiates a new main workspace window.
-	 * @param clientController controller for communication with the client
+	 * 
+	 * @param clientController
+	 *            controller for communication with the client
 	 */
 	public GUIController(ClientController clientController) {
 
@@ -57,6 +63,8 @@ public class GUIController {
 
 				setSystemLookAndFeel();
 				JFrame window = new JFrame(Eviro.APP_NAME + " " + Eviro.APP_VERSION);
+				window.addKeyListener(keyListener);
+				window.setFocusable(true);
 				JPanel pnlMain = new JPanel(new BorderLayout());
 				desktop = new JDesktopPane();
 				window.setContentPane(pnlMain);
@@ -67,7 +75,8 @@ public class GUIController {
 				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				window.setVisible(true);
 				// window.setJMenuBar(new Menu());
-				window.setIconImage(new ImageIcon(Eviro.APP_ICON).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+				window.setIconImage(
+						new ImageIcon(Eviro.APP_ICON).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
 			}
 		});
 
@@ -114,7 +123,9 @@ public class GUIController {
 
 	/**
 	 * Adds a new toolbox to the desktop
-	 * @param tool the tool to open
+	 * 
+	 * @param tool
+	 *            the tool to open
 	 */
 	public void popup(Tool tool) {
 		Toolbox toolbox = new Toolbox(tool);
@@ -122,7 +133,56 @@ public class GUIController {
 	}
 
 	/**
+	 * Activates listener to a computer keyboard
+	 * @author nadiaelhaddaoui
+	 *
+	 */
+	private class KeyPress implements KeyListener {
+//		Set<Character> pressed = new HashSet<Character>();
+
+		public synchronized void keyPressed(KeyEvent e) {
+			int keyCode = e.getKeyCode();
+
+			// pressed.add((char) e.getKeyCode());
+			switch (e.getKeyCode()) {
+			case KeyEvent.VK_F1: {
+				popup(new CreateCustomer(clientController));
+				System.out.println("1. Du tryckte på F1");
+				break;
+			}
+			case KeyEvent.VK_F2: {
+				popup(new CustomerGUI(clientController, getGUIController()));
+				System.out.println("2. Du tryckte på F2");
+				break;
+			}
+			case KeyEvent.VK_F3: {
+				System.out.println("3. Du tryckte på F3");
+				break;
+			}
+			default: {
+				System.out.println("Annan knapp " + KeyEvent.getKeyText(keyCode));
+				e.consume();
+				break;
+			}
+			}
+		}
+
+		@Override
+		public synchronized void keyReleased(KeyEvent e) {
+			e.consume();
+
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			e.consume();
+		}
+
+	}
+
+	/**
 	 * The sidebar.
+	 * 
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */
@@ -132,8 +192,11 @@ public class GUIController {
 		private JPanel pnlSideNorth = new JPanel();
 		private JPanel pnlSideSouth = new JPanel();
 
-		private JComponent top[] = new JComponent[] { new ActionJButton("Customer", "tool_cust"), new ActionJButton("Customer", "tool_customer"), new ActionJButton("Invoice", "tool_inv"), new ActionJButton("Article", "tool_art") };
-		private JComponent bottom[] = new JComponent[] { new ActionJButton("Forum", "tool_forum"), new ActionJButton("Settings", "tool_settings"), new ActionJButton("Quit", "link_exit") };
+		private JComponent top[] = new JComponent[] { new ActionJButton("Customer", "tool_cust"),
+				new ActionJButton("Customer", "tool_customer"), new ActionJButton("Invoice", "tool_inv"),
+				new ActionJButton("Article", "tool_art") };
+		private JComponent bottom[] = new JComponent[] { new ActionJButton("Forum", "tool_forum"),
+				new ActionJButton("Settings", "tool_settings"), new ActionJButton("Quit", "link_exit") };
 
 		public Sidebar() {
 
@@ -173,7 +236,9 @@ public class GUIController {
 
 		/*
 		 * (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event. ActionEvent)
+		 * 
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
+		 * ActionEvent)
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -207,7 +272,9 @@ public class GUIController {
 		}
 
 		/**
-		 * Customization of JButton that takes it's ActionCommand as a parameter in the constructor.
+		 * Customization of JButton that takes it's ActionCommand as a parameter
+		 * in the constructor.
+		 * 
 		 * @author Robin Overgaard
 		 * @version 1.0
 		 */
@@ -215,7 +282,9 @@ public class GUIController {
 
 			/**
 			 * Constructor.
-			 * @param text the text to display on this button
+			 * 
+			 * @param text
+			 *            the text to display on this button
 			 */
 			public ActionJButton(String text) {
 				super(text);
@@ -223,8 +292,11 @@ public class GUIController {
 
 			/**
 			 * Constructor.
-			 * @param text the text to display on this button
-			 * @param action the action command for this button
+			 * 
+			 * @param text
+			 *            the text to display on this button
+			 * @param action
+			 *            the action command for this button
 			 */
 			public ActionJButton(String text, String action) {
 				this(text);
