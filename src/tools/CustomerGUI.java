@@ -7,8 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -52,8 +51,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	private JTextField txtEmail = new JTextField();
 	private JTextField txtVATNbr = new JTextField();
 	private JTextField txtCreditLimit = new JTextField();
-	private JTextField[] txtAll = { txtCustomerID, txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail,
-			txtVATNbr, txtCreditLimit };
+	private JTextField[] txtAll = { txtCustomerID, txtName, txtAddress, txtZipCode, txtCity, txtPhoneNbr, txtEmail, txtVATNbr, txtCreditLimit };
 
 	private JButton btnEdit = new JButton("Edit");
 	private JButton btnUpdate = new JButton("Update");
@@ -143,7 +141,6 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 
 	private void displayMessage(String txt) {
 		JOptionPane.showMessageDialog(null, txt);
-
 	}
 
 	private class ButtonListener implements ActionListener {
@@ -173,8 +170,9 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		} else if (customerList.size() == 1) {
 			updateGUI(customerList.get(0).getData());
 		} else {
-			guiController.popup(new SearchResults(new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City",
-					"Phone number", "Email", "VAT number", "Credit Limit" }, getCustomerGUI(), customerList));
+			guiController.popup(new SearchResults(
+					new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" },
+					getCustomerGUI(), customerList));
 		}
 	}
 
@@ -187,9 +185,8 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 			displayMessage("Update succesfull!");
 		} else {
 			updateGUI(clientController
-					.search(new Object[] { txtCustomerID.getText(), null, null, null, null, null, null, null, null },
-							Eviro.ENTITY_CUSTOMER)
-					.get(0).getData());
+					.search(new Object[] { txtCustomerID.getText(), null, null, null, null, null, null, null, null }, Eviro.ENTITY_CUSTOMER).get(0)
+					.getData());
 			displayMessage("Update aborted!");
 		}
 	}

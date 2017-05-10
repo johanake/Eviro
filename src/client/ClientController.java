@@ -1,17 +1,20 @@
 package client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import javax.swing.JOptionPane;
-import enteties.ForumMessage;
+
 import enteties.Customer;
 import enteties.Entity;
+import enteties.ForumMessage;
 import enteties.Invoice;
 import enteties.Product;
 import enteties.Transaction;
+import gui.SuperTool;
 
 /**
  * Creates and sends objects to the client.
- * 
  * @author Robin Overgaard
  * @author Johan Åkesson
  * @version 1.1
@@ -22,7 +25,6 @@ public class ClientController {
 
 	/**
 	 * Creates a ClientController object.
-	 * 
 	 * @param client the client of the system
 	 */
 	public ClientController(Client client) {
@@ -31,11 +33,20 @@ public class ClientController {
 
 	/**
 	 * Creates and sends a "update operation" object to the server.
-	 * 
 	 * @param data data to use when updating
 	 * @param entityType the type of entity to update
 	 */
 	public boolean update(String[] data, int entityType) {
+		return update(null, data, entityType);
+	}
+
+	/**
+	 * Creates and sends a "update operation" object to the server.
+	 * @param tool frame to display popup relative to
+	 * @param data data to use when updating
+	 * @param entityType the type of entity to update
+	 */
+	public boolean update(SuperTool tool, String[] data, int entityType) {
 
 		if (!checkData(data))
 			return false;
@@ -65,8 +76,7 @@ public class ClientController {
 		// If there are differences, display confirm dialog.
 		if (updates.trim().length() > 0) {
 
-			int reply = JOptionPane.showConfirmDialog(null,
-					"Please review the following changes before proceeding:\n" + updates, "Update?",
+			int reply = JOptionPane.showConfirmDialog(tool, "Please review the following changes before proceeding:\n" + updates, "Update?",
 					JOptionPane.OK_CANCEL_OPTION);
 
 			if (reply == JOptionPane.OK_OPTION) {
@@ -91,7 +101,6 @@ public class ClientController {
 
 	/**
 	 * Creates and sends a "create operation" object to the server.
-	 * 
 	 * @param data data to use when creating
 	 * @param entityType the type of entity to create
 	 */
@@ -102,7 +111,6 @@ public class ClientController {
 
 	/**
 	 * Creates and sends a "create operation" object to the server and then waits for response.
-	 * 
 	 * @param data data to use when creating
 	 * @param entityType the type of entity to create
 	 * @param returnId whether the method should return the id of the created database row or not
@@ -123,12 +131,13 @@ public class ClientController {
 
 	/**
 	 * Creates and sends a "search operation" object to the server and then waits for response.
-	 * 
 	 * @param data data to use when searching
 	 * @param entityType the type of entity to search for
 	 * @return the search result from the server
 	 */
 	public ArrayList<Entity> search(Object[] data, int entityType) {
+
+		System.out.println(Arrays.toString(data));
 
 		ArrayList<Entity> response = new ArrayList<Entity>();
 
@@ -149,9 +158,7 @@ public class ClientController {
 	}
 
 	/**
-	 * Checks an array of objects so that 1. it contains atleast 1 object that is not null and 2. it contains atleast 1
-	 * string with a trimmed lenght of more than 0.
-	 * 
+	 * Checks an array of objects so that 1. it contains atleast 1 object that is not null and 2. it contains atleast 1 string with a trimmed lenght of more than 0.
 	 * @param data the arrays of strings to check
 	 * @return whether the controll was successful or not
 	 */
@@ -170,7 +177,6 @@ public class ClientController {
 
 	/**
 	 * Instantiates and returns an empty Entity implementation of the specified entityType.
-	 * 
 	 * @param entityType the type of entity to instantiate
 	 * @return the entity that was instantiated
 	 */
@@ -232,7 +238,6 @@ public class ClientController {
 	 */
 	/**
 	 * Gets all forum messages.
-	 * 
 	 * @return a String array with all forum messages.
 	 */
 	public ArrayList<ForumMessage> getForumMessages() {
@@ -244,7 +249,6 @@ public class ClientController {
 
 	/**
 	 * Adds a new forum message to the database.
-	 * 
 	 * @param res the message to add.
 	 */
 	public void addForumMessage(ForumMessage msg) {

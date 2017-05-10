@@ -2,11 +2,8 @@ package client;
 
 import javax.swing.SwingUtilities;
 
-import server.Server;
-
 /**
  * Contains constants and code to setup and start the system.
- * 
  * @author Robin Overgaard
  * @version 1.0
  */
@@ -40,7 +37,7 @@ public class Eviro {
 	 */
 	private void start() {
 
-		new Server(3500);
+		// new Server(3500);
 		new Client("127.0.0.1", 3500);
 
 	}

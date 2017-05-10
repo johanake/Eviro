@@ -4,15 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultDesktopManager;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -34,8 +37,7 @@ import tools.ProductGUI;
  * @version 1.0
  */
 
-
-//Nadia testar
+// Nadia testar
 
 public class GUIController {
 
@@ -59,6 +61,16 @@ public class GUIController {
 				JFrame window = new JFrame(Eviro.APP_NAME + " " + Eviro.APP_VERSION);
 				JPanel pnlMain = new JPanel(new BorderLayout());
 				desktop = new JDesktopPane();
+
+				desktop.setDesktopManager(new DefaultDesktopManager() {
+					@Override
+					protected Rectangle getBoundsForIconOf(JInternalFrame f) {
+						Rectangle r = super.getBoundsForIconOf(f);
+						r.width = 200;
+						return r;
+					}
+				});
+
 				window.setContentPane(pnlMain);
 				window.add(desktop, BorderLayout.CENTER);
 				window.add(new Sidebar(), BorderLayout.WEST);
@@ -91,7 +103,19 @@ public class GUIController {
 
 				if ("Nimbus".equals(lnfi.getName())) {
 					UIManager.setLookAndFeel(lnfi.getClassName());
+
 					break;
+					// UIManager.setLookAndFeel(new NimbusLookAndFeel() {
+					//
+					// @Override
+					// public UIDefaults getDefaults() {
+					// UIDefaults ret = super.getDefaults();
+					// ret.put("defaultFont", new Font(Font.SANS_SERIF, 0, 11));
+					// return ret;
+					// }
+					//
+					// });
+
 				}
 
 				else {
@@ -119,6 +143,7 @@ public class GUIController {
 	public void popup(Tool tool) {
 		Toolbox toolbox = new Toolbox(tool);
 		desktop.add(toolbox);
+
 	}
 
 	/**
@@ -132,8 +157,16 @@ public class GUIController {
 		private JPanel pnlSideNorth = new JPanel();
 		private JPanel pnlSideSouth = new JPanel();
 
-		private JComponent top[] = new JComponent[] { new ActionJButton("Customer", "tool_cust"), new ActionJButton("Customer", "tool_customer"), new ActionJButton("Invoice", "tool_inv"), new ActionJButton("Article", "tool_art") };
-		private JComponent bottom[] = new JComponent[] { new ActionJButton("Forum", "tool_forum"), new ActionJButton("Settings", "tool_settings"), new ActionJButton("Quit", "link_exit") };
+		private JComponent top[] = new JComponent[] {
+				new ActionJButton("Test", "tool_test"),
+				new ActionJButton("Customer", "tool_cust"),
+				new ActionJButton("Customer", "tool_customer"),
+				new ActionJButton("Invoice", "tool_inv"),
+				new ActionJButton("Article", "tool_art") };
+		private JComponent bottom[] = new JComponent[] {
+				new ActionJButton("Forum", "tool_forum"),
+				new ActionJButton("Settings", "tool_settings"),
+				new ActionJButton("Quit", "link_exit") };
 
 		public Sidebar() {
 
@@ -219,6 +252,7 @@ public class GUIController {
 			 */
 			public ActionJButton(String text) {
 				super(text);
+				this.setActionCommand(text);
 			}
 
 			/**
@@ -227,7 +261,7 @@ public class GUIController {
 			 * @param action the action command for this button
 			 */
 			public ActionJButton(String text, String action) {
-				this(text);
+				super(text);
 				this.setActionCommand(action);
 			}
 
