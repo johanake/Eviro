@@ -131,8 +131,9 @@ public class SuperTool extends JInternalFrame {
 
 	public void setTabs(JPanel[] tabs) {
 
-		for (JPanel t : tabs) {
+		tabbedPane.setBorder(new EmptyBorder(20, 0, 0, 0));
 
+		for (JPanel t : tabs) {
 			tabbedPane.addTab(t.getName(), t);
 		}
 
@@ -240,7 +241,7 @@ public class SuperTool extends JInternalFrame {
 				pnlNorth.setBackground(bgColor);
 				pnlSouth.setBackground(bgColor);
 
-				pnlNorth.setBorder(new EmptyBorder(10, 10, 10, 10));
+				// pnlNorth.setBorder(new EmptyBorder(10, 10, 10, 10));
 				pnlSouth.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.black),
 						BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 

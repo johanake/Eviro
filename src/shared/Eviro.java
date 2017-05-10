@@ -1,6 +1,8 @@
-package client;
+package shared;
 
 import javax.swing.SwingUtilities;
+
+import client.Client;
 
 /**
  * Contains constants and code to setup and start the system.

@@ -11,6 +11,7 @@ import enteties.Invoice;
 import enteties.Product;
 import enteties.Transaction;
 import gui.SuperTool;
+import shared.Eviro;
 
 /**
  * Creates and sends objects to the client.

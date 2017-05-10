@@ -10,13 +10,14 @@ import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import client.Eviro;
+
 import enteties.ForumMessage;
 import enteties.Customer;
 import enteties.Entity;
 import enteties.Invoice;
 import enteties.Product;
 import enteties.Transaction;
+import shared.Eviro;
 
 /**
  * Handles most of the logic between the server and the database. Also logs traffic to and from database.

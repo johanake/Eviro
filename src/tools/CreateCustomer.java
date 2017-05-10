@@ -17,8 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import client.ClientController;
-import client.Eviro;
 import gui.Tool;
+import shared.Eviro;
 
 public class CreateCustomer extends JPanel implements Tool {
 

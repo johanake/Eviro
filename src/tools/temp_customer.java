@@ -7,10 +7,10 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 
 import client.ClientController;
-import client.Eviro;
 import gui.GUIController;
 import gui.SuperTool;
 import gui.Updatable;
+import shared.Eviro;
 
 public class temp_customer extends SuperTool implements Updatable {
 

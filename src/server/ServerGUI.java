@@ -12,7 +12,8 @@ import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
-import client.Eviro;
+
+import shared.Eviro;
 
 public class ServerGUI implements ActionListener {
 

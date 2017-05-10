@@ -16,9 +16,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import client.ClientController;
-import client.Eviro;
 import enteties.Entity;
 import gui.Tool;
+import shared.Eviro;
 
 /*
  * Graphical class to create invoice interface

@@ -27,7 +27,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import client.ClientController;
-import client.Eviro;
+import shared.Eviro;
 import tools.CreateCustomer;
 import tools.CustomerGUI;
 import tools.ForumGUI;

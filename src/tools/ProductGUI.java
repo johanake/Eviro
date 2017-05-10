@@ -18,11 +18,11 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import client.ClientController;
-import client.Eviro;
 import enteties.Entity;
 import gui.GUIController;
 import gui.Tool;
 import gui.Updatable;
+import shared.Eviro;
 
 public class ProductGUI extends JPanel implements Tool, Updatable {
 
