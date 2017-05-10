@@ -136,7 +136,7 @@ public class GUIController {
 	 * Activates listener to a computer keyboard
 	 * @author nadiaelhaddaoui
 	 *
-	 */
+	 */   
 	private class KeyPress implements KeyListener {
 //		Set<Character> pressed = new HashSet<Character>();
 
