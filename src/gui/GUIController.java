@@ -153,6 +153,15 @@ public class GUIController {
 	}
 
 	/**
+	 * Adds a new toolbox to the desktop
+	 * @param tool the tool to open
+	 */
+	public void add(JInternalFrame tool) {
+		desktop.add(tool);
+		tool.moveToFront();
+	}
+
+	/**
 	 * Activates listener to a computer keyboard
 	 * @author nadiaelhaddaoui
 	 */

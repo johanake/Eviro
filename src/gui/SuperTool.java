@@ -23,7 +23,7 @@ import javax.swing.event.InternalFrameEvent;
 
 import client.ClientController;
 import enteties.Entity;
-import tools.SearchResults;
+import tools.temp_searchresult;
 
 public class SuperTool extends JInternalFrame {
 
@@ -77,33 +77,45 @@ public class SuperTool extends JInternalFrame {
 				searchLabels[i] = ltfAll[i].getName();
 			}
 
-			guiCtrlr.popup(new SearchResults(searchLabels, tool, response));
+			guiCtrlr.add(new temp_searchresult(searchLabels, tool, response));
 		}
 	}
 
 	public void create(Updatable tool, int entitytype) {
 
-		ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true);
-
-		if (response.size() == 0) {
-			popupMessage("jkghfdjhgf jdhgf jdhgfj hdgfdhjg fdhg dfjgdjhd ");
-		} else if (response.size() == 1) {
-			tool.setValues(response.get(0).getData());
-		}
-
-		// Object data = clientCtrlr.create(tool.getValues(), entitytype, true);
+		// ArrayList<Entity> searchResponse = clientCtrlr.search(tool.getValues(), entitytype);
 		//
-		// if (data == null) {
-		// popupMessage("dddddddddddddNo matches, try again by changing or adding information in your search.");
+		// if (searchResponse.size() == 0) {
+		//
+		// ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true);
+		//
+		// if (response.size() == 0) {
+		// popupMessage("jkghfdjhgf jdhgf jdhgfj hdgfdhjg fdhg dfjgdjhd ");
+		// } else if (response.size() == 1) {
+		// popupMessage("Added with id: " + response.get(0).getData()[0]);
+		// tool.setValues(response.get(0).getData());
+		// }
+		//
 		// } else {
-		// tool.setValues(((ArrayList<Entity>) data).get(0).getData());
+		//
+		// popupMessage("A _ already exists!");
 		//
 		// }
+
+		//
+		// // Object data = clientCtrlr.create(tool.getValues(), entitytype, true);
+		// //
+		// // if (data == null) {
+		// // popupMessage("dddddddddddddNo matches, try again by changing or adding information in your search.");
+		// // } else {
+		// // tool.setValues(((ArrayList<Entity>) data).get(0).getData());
+		// //
+		// // }
 
 	}
 
 	public boolean update(Updatable tool, int entitytype) {
-		if (clientCtrlr.update(tool.getValues(), entitytype)) {
+		if (clientCtrlr.update(this, tool.getValues(), entitytype)) {
 
 			popupMessage("Update succesfull!");
 			return true;
@@ -111,7 +123,7 @@ public class SuperTool extends JInternalFrame {
 			Object[] test = new Object[tool.getValues().length];
 			test[0] = tool.getValues()[0];
 			tool.setValues(clientCtrlr.search(test, entitytype).get(0).getData());
-			popupMessage("Update aborted!");
+			popupMessage("No changes made, update aborted!");
 			return false;
 		}
 

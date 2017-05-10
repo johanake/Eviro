@@ -1,26 +1,30 @@
 package tools;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 
-import javax.swing.JPanel;
+import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import enteties.Entity;
-import gui.Tool;
 import gui.Updatable;
 
-public class SearchResults extends JPanel implements Tool {
+public class temp_searchresult extends JInternalFrame {
+
 	private JTable table;
 	private DefaultTableModel model;
 	private JScrollPane scrollPane;
 
-	public SearchResults(Object[] obj, Updatable gui, ArrayList<Entity> list) {
+	public temp_searchresult(Object[] obj, Updatable gui, ArrayList<Entity> list) {
+		super("Search Result", true, true, false, true);
+		setLayout(new BorderLayout());
 
 		table = new JTable();
 
@@ -29,18 +33,19 @@ public class SearchResults extends JPanel implements Tool {
 			public boolean isCellEditable(int row, int col) {
 				return false;
 			}
-
 		});
 
-		// table = new JTable(new DefaultTableModel(obj, rows));
 		model = (DefaultTableModel) table.getModel();
 		scrollPane = new JScrollPane(table);
 
-		setLayout(new BorderLayout());
 		add(scrollPane);
-		setVisible(true);
+
 		table.setFillsViewportHeight(true);
 		addCustomer(list);
+
+		setPreferredSize(new Dimension(800, 400));
+		setVisible(true);
+		pack();
 
 		table.addMouseListener(new MouseAdapter() {
 
@@ -58,13 +63,21 @@ public class SearchResults extends JPanel implements Tool {
 					}
 
 					gui.setValues(values);
-
+					close();
 				}
 			}
 		});
 	}
 
-	public SearchResults(Object[] obj, int rows) {
+	private void close() {
+		try {
+			super.setClosed(true);
+		} catch (PropertyVetoException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public temp_searchresult(Object[] obj, int rows) {
 		table = new JTable(new DefaultTableModel(obj, rows));
 		model = (DefaultTableModel) table.getModel();
 		scrollPane = new JScrollPane(table);
@@ -72,7 +85,6 @@ public class SearchResults extends JPanel implements Tool {
 		add(scrollPane);
 		setVisible(true);
 		table.setFillsViewportHeight(true);
-
 	}
 
 	public void addCustomer(ArrayList<Entity> objectList) {
@@ -91,15 +103,4 @@ public class SearchResults extends JPanel implements Tool {
 		return table;
 	}
 
-	@Override
-	public String getTitle() {
-		// TODO Auto-generated method stub
-		return "Search Results";
-	}
-
-	@Override
-	public boolean getRezizable() {
-		// TODO Auto-generated method stub
-		return true;
-	}
 }
