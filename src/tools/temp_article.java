@@ -2,14 +2,12 @@ package tools;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 
 import client.ClientController;
 import client.Eviro;
-import enteties.Entity;
 import gui.GUIController;
 import gui.SuperTool;
 import gui.Updatable;
@@ -17,99 +15,57 @@ import gui.Updatable;
 public class temp_article extends SuperTool implements Updatable {
 
 	private ButtonListener buttonListener;
-	private Tab[] tabs = new Tab[] { new Tab("General"), new Tab("Finance"), new Tab("Comments") };
+	private Tab[] tabs = new Tab[] { new Tab("General"), new Tab("Logistics"), new Tab("Comments") };
 
-	private LabledTextField cust_no = new LabledTextField("No");
-	private LabledTextField cust_name = new LabledTextField("Name");
-	private LabledTextField cust_address = new LabledTextField("Address");
-	private LabledTextField cust_zip = new LabledTextField("Post Code");
-	private LabledTextField cust_city = new LabledTextField("City");
-	private LabledTextField cust_phone = new LabledTextField("Phone No");
-	private LabledTextField cust_email = new LabledTextField("Email");
-	private LabledTextField cust_vat = new LabledTextField("Vat No");
-	private LabledTextField cust_limit = new LabledTextField("Limit");
-	private LabledTextField cust_balance = new LabledTextField("Balance", false);
+	private LabledTextField ltfNo = new LabledTextField("No");
+	private LabledTextField ltfName = new LabledTextField("Name");
+	private LabledTextField ltfDesc = new LabledTextField("Description");
+	private LabledTextField ltfPrice = new LabledTextField("Price");
+	private LabledTextField ltfEan = new LabledTextField("EAN");
+	private LabledTextField ltfSup = new LabledTextField("Supplier");
+	private LabledTextField ltfSupNo = new LabledTextField("Suppler No");
+	private LabledTextField ltfQuantity = new LabledTextField("Quantity");
+	private LabledTextField ltfStockPlace = new LabledTextField("Stock place");
 
-	private LabledTextField[] cust_info = { cust_no, cust_name, cust_address, cust_zip, cust_city, cust_phone, cust_email, cust_vat, cust_limit };
+	private LabledTextField[] ltfAll = { ltfNo, ltfName, ltfDesc, ltfPrice, ltfSup, ltfSupNo, ltfEan, ltfStockPlace, ltfQuantity };
 
-	private JButton[] buttons = new JButton[] {
-			new ActionButton("Edit", "edit"),
-			new ActionButton("Update", "update"),
-			new ActionButton("Search", "search"),
-			new ActionButton("Invoice", "invoice"),
-			new ActionButton("Clear fields", "reset"), };
+	private ActionButton btnNew = new ActionButton("Create New", "create");
+	private ActionButton btnEdit = new ActionButton("Edit", "edit");
+	private ActionButton btnUpdate = new ActionButton("Save", "update");
+	private ActionButton btnFind = new ActionButton("Find", "search");
+	private ActionButton btnReset = new ActionButton("Reset", "reset");
+
+	private JButton[] allButtons = { btnNew, btnEdit, btnUpdate, btnFind, btnReset };
+	private JButton[] defaultButtons = { btnNew, btnFind, btnReset };
+	private JButton[] lookingButtons = { btnEdit, btnReset };
+	private JButton[] editingButtons = { btnUpdate, btnReset };
 
 	public temp_article(ClientController clientController, GUIController guiController) {
-		super("Customer", clientController, guiController);
+		super("Article", clientController, guiController);
 		buttonListener = new ButtonListener();
 		setTabs(tabs);
-		setContent(0, new JComponent[] { cust_no, cust_name, cust_address, new SplitPanel(cust_zip, cust_city), cust_phone, cust_email, cust_vat });
-		setContent(1, new JComponent[] { new SplitPanel(cust_limit, cust_balance) });
-		setButtons(buttons);
-	}
-
-	private String[] getText() {
-
-		String[] text = new String[cust_info.length];
-
-		for (int i = 0; i < cust_info.length; i++) {
-			text[i] = cust_info[i].getText();
-		}
-
-		return text;
-
-	}
-
-	private void search() {
-
-		ArrayList<Entity> customerList = clientCtrlr.search(getText(), Eviro.ENTITY_CUSTOMER);
-
-		if (customerList.size() == 0) {
-			popupMessage("No matches, try again by changing or adding information in your search.");
-		} else if (customerList.size() == 1) {
-			updateGUI(customerList.get(0).getData());
-		} else {
-			guiCtrlr.popup(new SearchResults(
-					new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" },
-					this, customerList));
-		}
-	}
-
-	private void invoice() {
-		guiCtrlr.popup(new InvoiceGUI(clientCtrlr, cust_no.getText()));
+		setContent(0, new JComponent[] { ltfNo, ltfName, ltfDesc, ltfPrice, ltfEan });
+		setContent(1, new JComponent[] { ltfSup, ltfSupNo, ltfQuantity, ltfStockPlace });
+		setButtons(defaultButtons);
 	}
 
 	private void reset() {
 
-		for (int i = 0; i < cust_info.length; i++) {
+		setTfEditable(ltfAll, true);
+		setButtons(defaultButtons);
+		setTitle("Article");
 
-			cust_info[i].setText(null);
-			// cust_info[i].setBackground(fieldGray);
-			// cust_info[i].setEditable(false);
+		for (int i = 0; i < ltfAll.length; i++) {
+
+			ltfAll[i].setText(null);
 		}
 
-		cust_balance.setText(null);
-
-	}
-
-	private void update() {
-		if (clientCtrlr.update(this, getText(), Eviro.ENTITY_CUSTOMER)) {
-			// for (JTextField t : txtAll) {
-			// t.setEditable(false);
-			// t.setBackground(fieldGray);
-			// }
-			popupMessage("Update succesfull!");
-		} else {
-			updateGUI(clientCtrlr.search(new Object[] { cust_no.getText(), null, null, null, null, null, null, null, null }, Eviro.ENTITY_CUSTOMER)
-					.get(0).getData());
-			popupMessage("Update aborted!");
-		}
 	}
 
 	private class ButtonListener implements ActionListener {
 
 		public ButtonListener() {
-			for (JButton btn : buttons) {
+			for (JButton btn : allButtons) {
 				btn.addActionListener(this);
 			}
 		}
@@ -117,24 +73,26 @@ public class temp_article extends SuperTool implements Updatable {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			System.out.println(e.getActionCommand());
-
 			switch (e.getActionCommand()) {
 
-			case "edit":
+			case "create":
+				create(getThis(), Eviro.ENTITY_PRODUCT);
+				break;
 
+			case "edit":
+				setButtons(editingButtons);
+				setTfEditable(ltfAll, true);
 				break;
 
 			case "update":
-				update();
+				if (update(getThis(), Eviro.ENTITY_PRODUCT)) {
+					setButtons(lookingButtons);
+					setTfEditable(ltfAll, false);
+				}
 				break;
 
 			case "search":
-				search();
-				break;
-
-			case "invoice":
-				invoice();
+				search(getThis(), ltfAll, Eviro.ENTITY_PRODUCT);
 				break;
 
 			case "reset":
@@ -149,17 +107,38 @@ public class temp_article extends SuperTool implements Updatable {
 	}
 
 	@Override
-	public void updateGUI(Object[] values) {
-		for (int i = 0; i < cust_info.length; i++) {
+	public void setValues(Object[] values) {
+
+		setTfEditable(ltfAll, false);
+		setButtons(lookingButtons);
+		setTitle(values[0] + " - " + values[1]);
+
+		for (int i = 0; i < ltfAll.length; i++) {
 
 			if (values[i] instanceof Integer) {
 				values[i] = Integer.toString((int) values[i]);
 			}
 
-			cust_info[i].setText((String) values[i]);
-			// cust_info[i].setBackground(fieldGray);
-			// cust_info[i].setEditable(false);
+			ltfAll[i].setText((String) values[i]);
 		}
 
+	}
+
+	@Override
+	public String[] getValues() {
+
+		String[] text = new String[ltfAll.length];
+
+		for (int i = 0; i < ltfAll.length; i++) {
+			text[i] = ltfAll[i].getText();
+		}
+
+		return text;
+
+	}
+
+	@Override
+	public Updatable getThis() {
+		return this;
 	}
 }

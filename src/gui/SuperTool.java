@@ -2,8 +2,10 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -20,6 +22,9 @@ import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
 import client.ClientController;
+import client.Eviro;
+import enteties.Entity;
+import tools.SearchResults;
 
 public class SuperTool extends JInternalFrame {
 
@@ -46,6 +51,73 @@ public class SuperTool extends JInternalFrame {
 		openFrameCount++;
 	}
 
+	public ArrayList<Entity> search(String[] values, int entitytype) {
+
+		ArrayList<Entity> customerList = clientCtrlr.search(values, entitytype);
+
+		if (customerList.size() == 0) {
+			popupMessage("No matches, try again by changing or adding information in your search.");
+			return null;
+		} else
+			return customerList;
+	}
+
+	public void search(Updatable tool, LabledTextField[] ltfAll, int entitytype) {
+
+		ArrayList<Entity> response = clientCtrlr.search(tool.getValues(), entitytype);
+
+		if (response.size() == 0) {
+			popupMessage("No matches, try again by changing or adding information in your search.");
+		} else if (response.size() == 1) {
+			tool.setValues(response.get(0).getData());
+		} else {
+
+			Object[] searchLabels = new Object[tool.getValues().length];
+
+			for (int i = 0; i < tool.getValues().length; i++) {
+				searchLabels[i] = ltfAll[i].getName();
+			}
+
+			guiCtrlr.popup(new SearchResults(searchLabels, tool, response));
+		}
+	}
+
+	public void create(Updatable tool, int entitytype) {
+
+		ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true);
+
+		if (response.size() == 0) {
+			popupMessage("jkghfdjhgf jdhgf jdhgfj hdgfdhjg fdhg dfjgdjhd ");
+		} else if (response.size() == 1) {
+			tool.setValues(response.get(0).getData());
+		}
+
+		// Object data = clientCtrlr.create(tool.getValues(), entitytype, true);
+		//
+		// if (data == null) {
+		// popupMessage("dddddddddddddNo matches, try again by changing or adding information in your search.");
+		// } else {
+		// tool.setValues(((ArrayList<Entity>) data).get(0).getData());
+		//
+		// }
+
+	}
+
+	public boolean update(Updatable tool, int entitytype) {
+		if (clientCtrlr.update(tool.getValues(), entitytype)) {
+
+			popupMessage("Update succesfull!");
+			return true;
+		} else {
+			Object[] test = new Object[tool.getValues().length];
+			test[0] = tool.getValues()[0];
+			tool.setValues(clientCtrlr.search(test, Eviro.ENTITY_CUSTOMER).get(0).getData());
+			popupMessage("Update aborted!");
+			return false;
+		}
+
+	}
+
 	public void setTabs(JPanel[] tabs) {
 
 		for (JPanel t : tabs) {
@@ -60,15 +132,18 @@ public class SuperTool extends JInternalFrame {
 
 	public void setButtons(JButton[] buttons) {
 
+		pnlSouth.removeAll();
+
 		JPanel pnlButtons = new JPanel(new GridLayout(1, buttons.length));
 		pnlButtons.setBackground(bgColor);
-		for (JButton b : buttons) {
 
+		for (JButton b : buttons) {
 			pnlButtons.add(b);
 		}
 
 		pnlSouth.add(pnlButtons, BorderLayout.EAST);
-
+		revalidate();
+		repaint();
 	}
 
 	public void setContent(JComponent[] content) {
@@ -117,13 +192,31 @@ public class SuperTool extends JInternalFrame {
 
 	}
 
-	private void setup() {
+	public void setTfEditable(LabledTextField[] textFields, Boolean enabled) {
 
-		// pnlCenter = new JPanel(new GridLayout(components.length, 1));
-		//
-		// for (JComponent c : components) {
-		// pnlCenter.add(c);
-		// }
+		Color fieldColor;
+
+		if (enabled) {
+			fieldColor = Color.WHITE;
+		}
+
+		else {
+			fieldColor = new Color(214, 217, 223);
+		}
+
+		for (JTextField c : textFields) {
+			c.setEditable(enabled);
+			c.setBackground(fieldColor);
+
+		}
+
+	}
+
+	public void setTfEditable(LabledTextField textField, Boolean enabled) {
+		setTfEditable(new LabledTextField[] { textField }, enabled);
+	}
+
+	private void setup() {
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -143,6 +236,9 @@ public class SuperTool extends JInternalFrame {
 				add(pnlNorth, BorderLayout.NORTH);
 				add(pnlCenter, BorderLayout.CENTER);
 				add(pnlSouth, BorderLayout.SOUTH);
+
+				// Fixar bredden
+				pnlSouth.setPreferredSize(new Dimension(500, 50));
 
 				setLocation(15 * openFrameCount, 15 * openFrameCount);
 				setVisible(true);
@@ -223,7 +319,7 @@ public class SuperTool extends JInternalFrame {
 	public class LabledTextField extends JTextField {
 
 		public LabledTextField(String name, boolean enabled) {
-			setEnabled(enabled);
+			setTfEditable(this, enabled);
 			setName(name);
 		}
 

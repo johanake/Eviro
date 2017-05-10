@@ -32,6 +32,8 @@ import tools.CreateCustomer;
 import tools.CustomerGUI;
 import tools.ForumGUI;
 import tools.ProductGUI;
+import tools.temp_article;
+import tools.temp_customer;
 
 /**
  * Handles client side gui operations of the system.
@@ -214,6 +216,9 @@ public class GUIController {
 				new ActionJButton("Customer", "tool_customer"),
 				new ActionJButton("Invoice", "tool_inv"),
 				new ActionJButton("Article", "tool_art") };
+
+		private JComponent test[] = new JComponent[] { new ActionJButton("Customer", "test_customer"), new ActionJButton("Article", "test_article") };
+
 		private JComponent bottom[] = new JComponent[] {
 				new ActionJButton("Forum", "tool_forum"),
 				new ActionJButton("Settings", "tool_settings"),
@@ -229,6 +234,7 @@ public class GUIController {
 			pnlSideSouth.setLayout(new BoxLayout(pnlSideSouth, BoxLayout.Y_AXIS));
 
 			pnlSideNorth.add(createComponentPanel(top, "Tools"));
+			pnlSideNorth.add(createComponentPanel(test, "Tools"));
 			pnlSideSouth.add(createComponentPanel(bottom, "System"));
 
 			add(pnlSideNorth, BorderLayout.NORTH);
@@ -270,6 +276,14 @@ public class GUIController {
 
 			case "link_exit":
 				System.exit(0);
+				break;
+
+			case "test_article":
+				desktop.add(new temp_article(clientController, getGUIController()));
+				break;
+
+			case "test_customer":
+				desktop.add(new temp_customer(clientController, getGUIController()));
 				break;
 
 			case "tool_cust":

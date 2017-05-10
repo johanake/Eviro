@@ -2,7 +2,6 @@ package tools;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -48,8 +47,16 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 	private JTextField txtSupplerArticleNumber = new JTextField();
 	private JTextField txtBalance = new JTextField();
 	private JTextField txtStockPlace = new JTextField();
-	private JTextField[] txtAll = { txtArticleNumber, txtName, txtDescription, txtPrice, txtSupplier,
-			txtSupplerArticleNumber, txtEan, txtStockPlace, txtBalance };
+	private JTextField[] txtAll = {
+			txtArticleNumber,
+			txtName,
+			txtDescription,
+			txtPrice,
+			txtSupplier,
+			txtSupplerArticleNumber,
+			txtEan,
+			txtStockPlace,
+			txtBalance };
 
 	private JPanel pnlNorth = new JPanel(new GridLayout(8, 1));
 	private JPanel pnlSouth = new JPanel(new GridLayout(1, 3));
@@ -213,10 +220,18 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 		if (response.size() == 0) {
 			displayMessage("No matches, try again by changing or adding information in your search.");
 		} else if (response.size() == 1) {
-			updateGUI(response.get(0).getData());
+			setValues(response.get(0).getData());
 		} else {
-			Object[] searchResultColumns = new Object[] { "Product ID", "Name", "Description", "Price", "Supplier",
-					"SupplierArticleNumber", "EAN", "Stock place", "Balance" };
+			Object[] searchResultColumns = new Object[] {
+					"Product ID",
+					"Name",
+					"Description",
+					"Price",
+					"Supplier",
+					"SupplierArticleNumber",
+					"EAN",
+					"Stock place",
+					"Balance" };
 			guiController.popup(new SearchResults(searchResultColumns, this, response));
 		}
 	}
@@ -249,10 +264,9 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 			btnSave.setEnabled(false);
 			displayMessage("Update succesfull!");
 		} else {
-			updateGUI(clientController
-					.search(new Object[] { txtArticleNumber.getText(), null, null, null, null, null, null, null, null },
-							Eviro.ENTITY_PRODUCT)
-					.get(0).getData());
+			setValues(clientController
+					.search(new Object[] { txtArticleNumber.getText(), null, null, null, null, null, null, null, null }, Eviro.ENTITY_PRODUCT).get(0)
+					.getData());
 			displayMessage("Update aborted!");
 		}
 	}
@@ -280,8 +294,7 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 	}
 
 	@Override
-	public void updateGUI(Object[] values) {
-
+	public void setValues(Object[] values) {
 		for (int i = 0; i < txtAll.length; i++) {
 
 			if (values[i] instanceof Integer) {
@@ -296,6 +309,18 @@ public class ProductGUI extends JPanel implements Tool, Updatable {
 
 		}
 
+	}
+
+	@Override
+	public String[] getValues() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Updatable getThis() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

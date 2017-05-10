@@ -1,7 +1,6 @@
 package client;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
@@ -116,15 +115,33 @@ public class ClientController {
 	 * @param returnId whether the method should return the id of the created database row or not
 	 * @return the search result from the server
 	 */
-	public String create(Object[] data, int entityType, boolean returnId) {
+	// public String create(Object[] data, int entityType, boolean returnId) {
+	//
+	// Entity object = createEntityByType(entityType);
+	// object.setData(data);
+	// object.setOperation(Eviro.DB_ADD);
+	// ArrayList<Entity> response = (ArrayList<Entity>) client.sendObject(object);
+	//
+	// if (returnId)
+	// return response.get(0).getData()[0].toString();
+	//
+	// return null;
+	// }
+
+	public ArrayList<Entity> create(Object[] data, int entityType, boolean returnData) {
+
+		ArrayList<Entity> response = new ArrayList<Entity>();
+
+		if (!checkData(data))
+			return response;
 
 		Entity object = createEntityByType(entityType);
 		object.setData(data);
 		object.setOperation(Eviro.DB_ADD);
-		ArrayList<Entity> response = (ArrayList<Entity>) client.sendObject(object);
+		response = (ArrayList<Entity>) client.sendObject(object);
 
-		if (returnId)
-			return response.get(0).getData()[0].toString();
+		if (returnData)
+			return response;
 
 		return null;
 	}
@@ -136,8 +153,6 @@ public class ClientController {
 	 * @return the search result from the server
 	 */
 	public ArrayList<Entity> search(Object[] data, int entityType) {
-
-		System.out.println(Arrays.toString(data));
 
 		ArrayList<Entity> response = new ArrayList<Entity>();
 
@@ -201,10 +216,6 @@ public class ClientController {
 		return null;
 
 	}
-	
-	
-	
-	
 
 	/*
 	 * 

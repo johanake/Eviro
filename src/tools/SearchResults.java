@@ -57,7 +57,7 @@ public class SearchResults extends JPanel implements Tool {
 						values[i] = table.getValueAt(row, i);
 					}
 
-					gui.updateGUI(values);
+					gui.setValues(values);
 				}
 
 			}

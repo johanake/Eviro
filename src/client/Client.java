@@ -9,9 +9,7 @@ import gui.GUIController;
 
 /**
  * Handles all traffic to and from the server.
- * 
  * @author Mattias Sundquist
- *
  */
 public class Client extends Thread {
 
@@ -24,11 +22,8 @@ public class Client extends Thread {
 
 	/**
 	 * Gives this client a GUI and connects it to the server.
-	 * 
-	 * @param ip
-	 *            The IP of the server.
-	 * @param port
-	 *            The port of the server.
+	 * @param ip The IP of the server.
+	 * @param port The port of the server.
 	 */
 	public Client(String ip, int port) {
 
@@ -49,7 +44,7 @@ public class Client extends Thread {
 			socket = new Socket(ip, port);
 			objInput = new ObjectInputStream(socket.getInputStream());
 			objOutput = new ObjectOutputStream(socket.getOutputStream());
-			start();
+			// start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -73,9 +68,7 @@ public class Client extends Thread {
 
 	/**
 	 * Streams a message object to the server.
-	 * 
-	 * @param o
-	 *            The object to be sent to the server.
+	 * @param o The object to be sent to the server.
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
@@ -104,8 +97,7 @@ public class Client extends Thread {
 	// }
 
 	/**
-	 * The run method for this clients thread. Calls the "waitForMessage()"
-	 * method.
+	 * The run method for this clients thread. Calls the "waitForMessage()" method.
 	 */
 	// public void run() {
 	//

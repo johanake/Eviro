@@ -168,7 +168,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 		if (customerList.size() == 0) {
 			displayMessage("No matches, try again by changing or adding information in your search.");
 		} else if (customerList.size() == 1) {
-			updateGUI(customerList.get(0).getData());
+			setValues(customerList.get(0).getData());
 		} else {
 			guiController.popup(new SearchResults(
 					new Object[] { "Customer ID", "Name", "Address", "Zip Code", "City", "Phone number", "Email", "VAT number", "Credit Limit" },
@@ -184,7 +184,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 			}
 			displayMessage("Update succesfull!");
 		} else {
-			updateGUI(clientController
+			setValues(clientController
 					.search(new Object[] { txtCustomerID.getText(), null, null, null, null, null, null, null, null }, Eviro.ENTITY_CUSTOMER).get(0)
 					.getData());
 			displayMessage("Update aborted!");
@@ -222,8 +222,7 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 	}
 
 	@Override
-	public void updateGUI(Object[] values) {
-
+	public void setValues(Object[] values) {
 		for (int i = 0; i < txtAll.length; i++) {
 
 			if (values[i] instanceof Integer) {
@@ -235,6 +234,18 @@ public class CustomerGUI extends JPanel implements Tool, Updatable {
 			txtAll[i].setEditable(false);
 		}
 
+	}
+
+	@Override
+	public String[] getValues() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Updatable getThis() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
