@@ -7,6 +7,8 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultDesktopManager;
@@ -40,7 +42,7 @@ import tools.ProductGUI;
 // Nadia testar
 
 public class GUIController {
-
+	private KeyPress keyListener = new KeyPress();
 	private JDesktopPane desktop;
 	private ClientController clientController;
 
@@ -59,6 +61,8 @@ public class GUIController {
 
 				setSystemLookAndFeel();
 				JFrame window = new JFrame(Eviro.APP_NAME + " " + Eviro.APP_VERSION);
+				window.addKeyListener(keyListener);
+				window.setFocusable(true);
 				JPanel pnlMain = new JPanel(new BorderLayout());
 				desktop = new JDesktopPane();
 
@@ -147,6 +151,54 @@ public class GUIController {
 	}
 
 	/**
+	 * Activates listener to a computer keyboard
+	 * @author nadiaelhaddaoui
+	 */
+	private class KeyPress implements KeyListener {
+		// Set<Character> pressed = new HashSet<Character>();
+
+		@Override
+		public synchronized void keyPressed(KeyEvent e) {
+			int keyCode = e.getKeyCode();
+
+			// pressed.add((char) e.getKeyCode());
+			switch (e.getKeyCode()) {
+			case KeyEvent.VK_F1: {
+				popup(new CreateCustomer(clientController));
+				System.out.println("1. Du tryckte på F1");
+				break;
+			}
+			case KeyEvent.VK_F2: {
+				popup(new CustomerGUI(clientController, getGUIController()));
+				System.out.println("2. Du tryckte på F2");
+				break;
+			}
+			case KeyEvent.VK_F3: {
+				System.out.println("3. Du tryckte på F3");
+				break;
+			}
+			default: {
+				System.out.println("Annan knapp " + KeyEvent.getKeyText(keyCode));
+				e.consume();
+				break;
+			}
+			}
+		}
+
+		@Override
+		public synchronized void keyReleased(KeyEvent e) {
+			e.consume();
+
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			e.consume();
+		}
+
+	}
+
+	/**
 	 * The sidebar.
 	 * @author Robin Overgaard
 	 * @version 1.0
@@ -158,7 +210,6 @@ public class GUIController {
 		private JPanel pnlSideSouth = new JPanel();
 
 		private JComponent top[] = new JComponent[] {
-				new ActionJButton("Test", "tool_test"),
 				new ActionJButton("Customer", "tool_cust"),
 				new ActionJButton("Customer", "tool_customer"),
 				new ActionJButton("Invoice", "tool_inv"),

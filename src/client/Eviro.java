@@ -9,7 +9,7 @@ import javax.swing.SwingUtilities;
  */
 public class Eviro {
 
-	// Constants
+	// Constants 
 	public static final String APP_NAME = "Eviro Enterprise System";
 	public static final String APP_VERSION = "v0.1";
 	public static final String APP_ICON = "/eviro_icon.png";
