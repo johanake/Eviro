@@ -3,7 +3,9 @@ package tools;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -25,32 +27,63 @@ public class temp_invoice extends SuperTool implements Updatable {
 	private LabledTextField ltfInvNo = new LabledTextField("Invoice-No");
 	private LabledTextField ltfBuyer = new LabledTextField("Buyer");
 	private LabledTextField ltfRef = new LabledTextField("Reference");
+	private LabledTextField ltfSum = new LabledTextField("Total (SEK)");
+	private LabledTextField ltfCreated = new LabledTextField("Created");
+	private LabledTextField ltfDue = new LabledTextField("Due");
 
-	// private LabledTextField ltfPrice = new LabledTextField("Add Quantity");
-
-	private LabledTextField[] ltfAll = { ltfBuyer, ltfRef };
+	private LabledTextField[] ltfAll = { ltfInvNo, ltfCustNo, ltfBuyer, ltfRef, ltfCreated, ltfDue, ltfSum };
 
 	private ActionButton btnNew = new ActionButton("Create", "create");
 	private ActionButton btnReset = new ActionButton("Reset", "reset");
+	private ActionButton btnFind = new ActionButton("Find", "search");
+	private ActionButton btnCredit = new ActionButton("Credit", "credit");
 
-	private JButton[] allButtons = { btnNew, btnReset };
-	private JButton[] defaultButtons = { btnNew, btnReset };
+	private JButton[] allButtons = { btnNew, btnReset, btnFind };
+	private JButton[] defaultButtons = { btnFind, btnReset };
+	private JButton[] editingButtons = { btnNew, btnReset };
+	private JButton[] lookingButtons = { btnCredit, btnReset };
 
 	private Table articles = new Table(this, new Object[] { "Article No", "Name", "Price", "Quantity", "Sum" });
 
 	public temp_invoice(ClientController clientController, GUIController guiController, String customer) {
+
 		super("Invoice", clientController, guiController);
-		buttonListener = new ButtonListener();
-		setContent(new JComponent[] { new SplitPanel(ltfCustNo, ltfInvNo), ltfBuyer, ltfRef });
-		setButtons(defaultButtons);
-		setTfEditable(ltfCustNo, false);
-		setTfEditable(ltfInvNo, false);
+		setup();
+		setButtons(editingButtons);
+
 		ltfCustNo.setText(customer);
+		ltfDue.setText("30");
+		ltfCreated.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+
+		setTfEditable(ltfAll, false);
+		setTfEditable(ltfBuyer, true);
+		setTfEditable(ltfRef, true);
+
 		pnlCenter.add(new JScrollPane(articles), BorderLayout.CENTER);
+
+	}
+
+	public temp_invoice(ClientController clientController, GUIController guiController) {
+
+		super("Invoice", clientController, guiController);
+		setup();
+		setButtons(defaultButtons);
+		setTfEditable(ltfAll, true);
+
+	}
+
+	public void setup() {
+
+		super.setMaximizable(true);
+		buttonListener = new ButtonListener();
+		setContent(new JComponent[] { new SplitPanel(ltfCustNo, ltfInvNo), ltfBuyer, ltfRef, ltfSum, new SplitPanel(ltfCreated, ltfDue) });
+		pnlCenter.add(new JScrollPane(articles), BorderLayout.CENTER);
+
 	}
 
 	private void reset() {
 
+		articles.reset();
 		setTfEditable(ltfAll, true);
 		setButtons(defaultButtons);
 		setTitle("Invoice");
@@ -76,11 +109,22 @@ public class temp_invoice extends SuperTool implements Updatable {
 			switch (e.getActionCommand()) {
 
 			case "create":
-				// create(getThis(), Eviro.ENTITY_);
+
+				ltfInvNo.setText(null);
+				create(getThis(), Eviro.ENTITY_INVOICE);
+				createTransactions(ltfInvNo.getText());
+				// ArrayList<Entity> response = clientCtrlr.create(createInvoice(), Eviro.ENTITY_INVOICE, true);
+				// String invoiceNo = (String) response.get(0).getData()[0];
+				// createTransactions(invoiceNo);
+
 				break;
 
 			case "reset":
 				reset();
+				break;
+
+			case "search":
+				search(getThis(), ltfAll, Eviro.ENTITY_INVOICE);
 				break;
 
 			default:
@@ -91,8 +135,6 @@ public class temp_invoice extends SuperTool implements Updatable {
 	}
 
 	public void getArticle(String articleno, int row) {
-
-		System.out.println("ddd");
 
 		ArrayList<Entity> response = clientCtrlr.search(new String[] { articleno, null, null, null, null, null, null, null, null },
 				Eviro.ENTITY_PRODUCT);
@@ -116,21 +158,74 @@ public class temp_invoice extends SuperTool implements Updatable {
 
 	}
 
+	private boolean createTransactions(String invoiceNbr) {
+
+		// if (articles.getValueAt(0, 0) != null) {
+		// popupMessage("Please add row(s) to invoice before creating.");
+		// return false;
+		// }
+
+		for (int i = 0; i < articles.getRowCount(); i++) {
+
+			if (articles.getValueAt(i, 0) != null) {
+				String[] trans = new String[5];
+				trans[0] = null; // Id set by db.
+				trans[1] = invoiceNbr;
+				trans[2] = (String) articles.getValueAt(i, 0); // Productid
+				trans[3] = (String) articles.getValueAt(i, 3); // Quantity
+				trans[4] = (String) articles.getValueAt(i, 4); // Price
+				clientCtrlr.create(trans, Eviro.ENTITY_TRANSACTION, false);
+			}
+
+		}
+
+		return true;
+
+	}
+
+	private void getTransactions(String invoiceNbr) {
+
+		ArrayList<Entity> response = clientCtrlr.search(new Object[] { null, invoiceNbr, null, null, null }, Eviro.ENTITY_TRANSACTION);
+
+		for (int i = 0; i < response.size(); i++) {
+			articles.populate(response.get(i).getData(), i);
+		}
+
+	}
+
+	public void setTotalPrice() {
+
+		int sum = 0;
+
+		for (int i = 0; i < articles.getRowCount(); i++) {
+
+			if (articles.getValueAt(i, 0) != null) {
+				sum += Integer.parseInt((String) articles.getValueAt(i, 4));
+			}
+
+		}
+
+		ltfSum.setText(Integer.toString(sum));
+
+	}
+
 	@Override
 	public void setValues(Object[] values) {
 
-		// setTfEditable(ltfAll, false);
-		// setButtons(lookingButtons);
-		// setTitle(values[0] + " - " + values[1]);
-		//
-		// for (int i = 0; i < ltfAll.length; i++) {
-		//
-		// if (values[i] instanceof Integer) {
-		// values[i] = Integer.toString((int) values[i]);
-		// }
-		//
-		// ltfAll[i].setText((String) values[i]);
-		// }
+		getTransactions((String) values[0]);
+		setTfEditable(ltfAll, false);
+		btnCredit.setEnabled(false);
+		setButtons(lookingButtons);
+		setTitle(values[0] + " - " + values[2]);
+
+		for (int i = 0; i < ltfAll.length; i++) {
+
+			if (values[i] instanceof Integer) {
+				values[i] = Integer.toString((int) values[i]);
+			}
+
+			ltfAll[i].setText((String) values[i]);
+		}
 
 	}
 

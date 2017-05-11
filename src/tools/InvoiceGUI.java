@@ -10,7 +10,6 @@ import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -148,7 +147,8 @@ public class InvoiceGUI extends JPanel implements Tool {
 
 			if (e.getSource() == btnAdd) {
 
-				ArrayList<Entity> response = clientController.search(new String[] { txtAddProduct.getText(), null, null, null, null, null, null, null, null }, Eviro.ENTITY_PRODUCT);
+				ArrayList<Entity> response = clientController
+						.search(new String[] { txtAddProduct.getText(), null, null, null, null, null, null, null, null }, Eviro.ENTITY_PRODUCT);
 
 				Object[] article = response.get(0).getData();
 
@@ -160,14 +160,13 @@ public class InvoiceGUI extends JPanel implements Tool {
 				info[4] = Integer.toString(Integer.parseInt((String) info[2]) * Integer.parseInt((String) info[3]));
 
 				addProduct(info);
-				
 
 			}
 
 			if (e.getSource() == btnCreate) {
 
-				createTransactions(clientController.create(create(), Eviro.ENTITY_INVOICE, true));
-				JOptionPane.showMessageDialog(null, "Invoice created");
+				// createTransactions(clientController.create(create(), Eviro.ENTITY_INVOICE, true));
+				// JOptionPane.showMessageDialog(null, "Invoice created");
 			}
 
 		}

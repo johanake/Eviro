@@ -31,9 +31,9 @@ import shared.Eviro;
 import tools.CreateCustomer;
 import tools.CustomerGUI;
 import tools.ForumGUI;
-import tools.ProductGUI;
 import tools.temp_article;
 import tools.temp_customer;
+import tools.temp_invoice;
 
 /**
  * Handles client side gui operations of the system.
@@ -220,14 +220,14 @@ public class GUIController {
 		private JPanel pnlSideNorth = new JPanel();
 		private JPanel pnlSideSouth = new JPanel();
 
-		private JComponent top[] = new JComponent[] {
-				new ActionJButton("Customer", "tool_cust"),
-				new ActionJButton("Customer", "tool_customer"),
-				new ActionJButton("Invoice", "tool_inv"),
-				new ActionJButton("Article", "tool_art") };
+		// private JComponent old[] = new JComponent[] {
+		// new ActionJButton("Customer", "tool_cust"),
+		// new ActionJButton("Customer", "tool_customer"),
+		// new ActionJButton("Invoice", "tool_inv"),
+		// new ActionJButton("Article", "tool_art") };
 
-		private JComponent test[] = new JComponent[] {
-				new ActionJButton("Invoice(Test)", "test_invoice"),
+		private JComponent top[] = new JComponent[] {
+				new ActionJButton("Invoice", "test_invoice"),
 				new ActionJButton("Customer", "test_customer"),
 				new ActionJButton("Article", "test_article") };
 
@@ -246,7 +246,6 @@ public class GUIController {
 			pnlSideSouth.setLayout(new BoxLayout(pnlSideSouth, BoxLayout.Y_AXIS));
 
 			pnlSideNorth.add(createComponentPanel(top, "Tools"));
-			pnlSideNorth.add(createComponentPanel(test, "Tools"));
 			pnlSideSouth.add(createComponentPanel(bottom, "System"));
 
 			add(pnlSideNorth, BorderLayout.NORTH);
@@ -282,9 +281,9 @@ public class GUIController {
 
 			switch (e.getActionCommand()) {
 
-			case "tool_customer":
-				popup(new CreateCustomer(clientController));
-				break;
+			// case "tool_customer":
+			// popup(new CreateCustomer(clientController));
+			// break;
 
 			case "link_exit":
 				System.exit(0);
@@ -298,13 +297,17 @@ public class GUIController {
 				desktop.add(new temp_customer(clientController, getGUIController()));
 				break;
 
-			case "tool_cust":
-				popup(new CustomerGUI(clientController, getGUIController()));
+			case "test_invoice":
+				desktop.add(new temp_invoice(clientController, getGUIController()));
 				break;
 
-			case "tool_art":
-				popup(new ProductGUI(clientController, getGUIController()));
-				break;
+			// case "tool_cust":
+			// popup(new CustomerGUI(clientController, getGUIController()));
+			// break;
+			//
+			// case "tool_art":
+			// popup(new ProductGUI(clientController, getGUIController()));
+			// break;
 
 			case "tool_forum":
 				popup(new ForumGUI(clientController));

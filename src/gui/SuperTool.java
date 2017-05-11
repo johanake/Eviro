@@ -85,28 +85,16 @@ public class SuperTool extends JInternalFrame {
 
 		ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true);
 
-		System.out.println(response.size());
-
 		if (response.size() == 0) {
-			popupMessage("jkghfdjhgf jdhgf jdhgfj hdgfdhjg fdhg dfjgdjhd ");
+			popupMessage("Inget svar!");
 		} else if (response.size() == 1) {
-			popupMessage("Added with id: " + response.get(0).getData()[0]);
+			popupMessage("Created \"entitytype\" with id: " + response.get(0).getData()[0]);
 			tool.setValues(response.get(0).getData());
 		} else {
-
-			popupMessage("A _ already exists!");
+			// TODO Byta ut entitytype mot sträng motsvarande entity, getEntityNamebyId(entitytype) i eviro.java
+			popupMessage("A \"entitytype\" with the same values already exists!");
 
 		}
-
-		//
-		// // Object data = clientCtrlr.create(tool.getValues(), entitytype, true);
-		// //
-		// // if (data == null) {
-		// // popupMessage("dddddddddddddNo matches, try again by changing or adding information in your search.");
-		// // } else {
-		// // tool.setValues(((ArrayList<Entity>) data).get(0).getData());
-		// //
-		// // }
 
 	}
 
@@ -199,28 +187,6 @@ public class SuperTool extends JInternalFrame {
 		pnl.add(pnlContent, BorderLayout.NORTH);
 
 	}
-
-	// public void setCustomContent(JPanel pnl, JComponent[] content) {
-	//
-	// JPanel pnlContent = new JPanel(new BorderLayout());
-	// JPanel pnlContentLeft = new JPanel(new GridLayout(content.length, 1));
-	// JPanel pnlContentRight = new JPanel(new GridLayout(content.length, 1));
-	//
-	// pnlContent.setBorder(new EmptyBorder(15, 15, 15, 15));
-	//
-	// pnlContentRight.setBorder(new EmptyBorder(0, 10, 0, 0));
-	// pnlContentLeft.setBorder(new EmptyBorder(0, 0, 0, 10));
-	//
-	// for (JComponent c : content) {
-	// pnlContentLeft.add(new JLabel(c.getName() + ":"));
-	// pnlContentRight.add(c);
-	// }
-	//
-	// pnlContent.add(pnlContentLeft, BorderLayout.WEST);
-	// pnlContent.add(pnlContentRight, BorderLayout.CENTER);
-	// pnl.add(pnlContent, BorderLayout.CENTER);
-	//
-	// }
 
 	public void setTfEditable(LabledTextField[] textFields, Boolean enabled) {
 

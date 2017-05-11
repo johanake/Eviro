@@ -92,14 +92,19 @@ public class Table extends JTable {
 				price = Integer.parseInt((String) getValueAt(row, 2));
 				quantity = Integer.parseInt((String) getValueAt(row, 3));
 			} catch (NumberFormatException nfe) {
-
+				// price = 0;
+				// quantity = 1;
 			}
 
-			model.setValueAt(price * quantity, row, 4);
+			model.setValueAt(Integer.toString(price * quantity), row, 4);
 		}
+
+		invoice.setTotalPrice();
+
 	};
 
 	public void populate(ArrayList<Entity> objectList) {
+
 		for (int i = 0; i < objectList.size(); i++) {
 			model.addRow(objectList.get(i).getData());
 		}
@@ -111,6 +116,13 @@ public class Table extends JTable {
 		for (int i = 0; i < info.length; i++) {
 			model.setValueAt(info[i], row, i);
 		}
+
+	}
+
+	public void reset() {
+
+		model.setRowCount(0);
+		model.setRowCount(100);
 
 	}
 
