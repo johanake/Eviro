@@ -136,11 +136,13 @@ public class ClientController {
 		if (!checkData(data))
 			return response;
 
-		Entity object = createEntityByType(entityType);
-		object.setData(data);
-		object.setOperation(Eviro.DB_ADD);
-		response = (ArrayList<Entity>) client.sendObject(object);
-
+		response = search(data, entityType);
+		if (response.isEmpty()){
+			Entity object = createEntityByType(entityType);
+			object.setData(data);
+			object.setOperation(Eviro.DB_ADD);
+			response = (ArrayList<Entity>) client.sendObject(object);
+		}
 		if (returnData)
 			return response;
 
