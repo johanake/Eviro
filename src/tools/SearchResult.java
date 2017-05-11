@@ -12,13 +12,13 @@ import enteties.Entity;
 import gui.Table;
 import gui.Updatable;
 
-public class temp_searchresult extends JInternalFrame {
+public class SearchResult extends JInternalFrame {
 
 	private Table table;
 	private DefaultTableModel model;
 	private JScrollPane scrollPane;
 
-	public temp_searchresult(Object[] obj, Updatable gui, ArrayList<Entity> list) {
+	public SearchResult(Object[] obj, Updatable gui, ArrayList<Entity> list) {
 		super("Search Result", true, true, false, true);
 		setLayout(new BorderLayout());
 		table = new Table(this, obj, gui, list);

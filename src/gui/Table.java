@@ -14,12 +14,12 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import enteties.Entity;
-import tools.temp_invoice;
+import tools.InvoiceTool;
 
 public class Table extends JTable {
 
 	private DefaultTableModel model;
-	private temp_invoice invoice;
+	private InvoiceTool invoice;
 
 	// General
 	public Table(Object[] obj, int rows, boolean editable) {
@@ -69,7 +69,7 @@ public class Table extends JTable {
 	}
 
 	// Products constructor
-	public Table(temp_invoice invoice, Object[] obj) {
+	public Table(InvoiceTool invoice, Object[] obj) {
 		this(obj, 100, true);
 		this.invoice = invoice;
 	}

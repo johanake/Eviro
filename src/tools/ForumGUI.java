@@ -12,6 +12,7 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -24,18 +25,17 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
 import client.ClientController;
 import enteties.ForumMessage;
 import gui.GUIController;
-import gui.Tool;
+import old.OldTool;
 
 /**
  * A forum for Eviro users.
- * 
  * @author Mattias Sundquist
- *
  */
-public class ForumGUI extends JPanel implements Tool, ActionListener {
+public class ForumGUI extends JPanel implements OldTool, ActionListener {
 
 	private JButton btnOpen = new JButton("Open Message");
 	private JButton btnUpdate = new JButton("Update");
@@ -97,6 +97,7 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 		Object[] obj = { "Date", "User", "Topic" };
 		table.setModel(new DefaultTableModel(obj, 0) {
 
+			@Override
 			public boolean isCellEditable(int row, int col) {
 
 				return false;
@@ -123,39 +124,42 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 				int length = messageList.get(row).getData().length;
 				if (me.getClickCount() == 2 && row >= 0) {
 					Object[] values = messageList.get(row).getData();
-					guiController.popup(new ReadWriteMessage(values));
+					guiController.oldpopup(new ReadWriteMessage(values));
 				}
 			}
 		});
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == btnUpdate)
 			updateChat();
 		if (e.getSource() == btnNew)
-			guiController.popup(new ReadWriteMessage());
+			guiController.oldpopup(new ReadWriteMessage());
 		if (e.getSource() == btnOpen) {
 			int row = table.getSelectedRow();
 			if (row != -1) {
 				Object[] values = messageList.get(row).getData();
-				guiController.popup(new ReadWriteMessage(values));
+				guiController.oldpopup(new ReadWriteMessage(values));
 			} else
 				JOptionPane.showMessageDialog(null, "No message is selected.");
 		}
 	}
 
+	@Override
 	public String getTitle() {
 
 		return "Eviro forum";
 	}
 
+	@Override
 	public boolean getRezizable() {
 
 		return true;
 	}
 
-	private class ReadWriteMessage extends JPanel implements Tool, ActionListener {
+	private class ReadWriteMessage extends JPanel implements OldTool, ActionListener {
 
 		private JPanel pnlLabels = new JPanel();
 		private JPanel pnlText = new JPanel();

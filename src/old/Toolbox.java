@@ -1,4 +1,4 @@
-package gui;
+package old;
 
 import java.awt.Dimension;
 
@@ -8,8 +8,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
-/**
- * Floating container for the tools used in the system.
+/***
+ * Floating container for the tools used in the system.*
  * @author Robin Overgaard
  * @version 1.0
  */
@@ -23,7 +23,7 @@ public class Toolbox extends JInternalFrame {
 	 * @param tool panel containt toll specifics
 	 * @param whether the toolbox should be resizable or not
 	 */
-	public Toolbox(Tool tool) {
+	public Toolbox(OldTool tool) {
 
 		super(tool.getTitle(), tool.getRezizable(), true, false, true);
 		this.tool = (JPanel) tool;

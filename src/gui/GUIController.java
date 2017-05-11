@@ -28,13 +28,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import client.ClientController;
+import old.OldTool;
+import old.Toolbox;
 import shared.Eviro;
-import tools.CreateCustomer;
-import tools.CustomerGUI;
+import tools.ArticleTool;
+import tools.CustomerTool;
 import tools.ForumGUI;
-import tools.temp_article;
-import tools.temp_customer;
-import tools.temp_invoice;
+import tools.InvoiceTool;
 
 /**
  * Handles client side gui operations of the system.
@@ -147,10 +147,9 @@ public class GUIController {
 	 * Adds a new toolbox to the desktop
 	 * @param tool the tool to open
 	 */
-	public void popup(Tool tool) {
+	public void oldpopup(OldTool tool) {
 		Toolbox toolbox = new Toolbox(tool);
 		desktop.add(toolbox);
-
 	}
 
 	/**
@@ -176,16 +175,18 @@ public class GUIController {
 			// pressed.add((char) e.getKeyCode());
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_F1: {
-				popup(new CreateCustomer(clientController));
+				add(new InvoiceTool(clientController, getGUIController()));
 				System.out.println("1. Du tryckte på F1");
 				break;
 			}
 			case KeyEvent.VK_F2: {
-				popup(new CustomerGUI(clientController, getGUIController()));
+
+				add(new CustomerTool(clientController, getGUIController()));
 				System.out.println("2. Du tryckte på F2");
 				break;
 			}
 			case KeyEvent.VK_F3: {
+				add(new ArticleTool(clientController, getGUIController()));
 				System.out.println("3. Du tryckte på F3");
 				break;
 			}
@@ -291,15 +292,15 @@ public class GUIController {
 				break;
 
 			case "test_article":
-				desktop.add(new temp_article(clientController, getGUIController()));
+				desktop.add(new ArticleTool(clientController, getGUIController()));
 				break;
 
 			case "test_customer":
-				desktop.add(new temp_customer(clientController, getGUIController()));
+				desktop.add(new CustomerTool(clientController, getGUIController()));
 				break;
 
 			case "test_invoice":
-				desktop.add(new temp_invoice(clientController, getGUIController()));
+				desktop.add(new InvoiceTool(clientController, getGUIController()));
 				break;
 
 			// case "tool_cust":
@@ -311,7 +312,7 @@ public class GUIController {
 			// break;
 
 			case "tool_forum":
-				popup(new ForumGUI(clientController, getGUIController()));
+				oldpopup(new ForumGUI(clientController, getGUIController()));
 				break;
 
 			default:

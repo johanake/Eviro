@@ -10,7 +10,7 @@ import enteties.ForumMessage;
 import enteties.Invoice;
 import enteties.Product;
 import enteties.Transaction;
-import gui.SuperTool;
+import gui.Tool;
 import shared.Eviro;
 
 /**
@@ -46,7 +46,7 @@ public class ClientController {
 	 * @param data data to use when updating
 	 * @param entityType the type of entity to update
 	 */
-	public boolean update(SuperTool tool, String[] data, int entityType) {
+	public boolean update(Tool tool, String[] data, int entityType) {
 
 		if (!checkData(data))
 			return false;
