@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -109,7 +110,7 @@ public class GUIController {
 
 				if ("Nimbus".equals(lnfi.getName())) {
 					UIManager.setLookAndFeel(lnfi.getClassName());
-
+					UIManager.put("nimbusBase", new Color(51, 140, 80));
 					break;
 					// UIManager.setLookAndFeel(new NimbusLookAndFeel() {
 					//

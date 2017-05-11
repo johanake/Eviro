@@ -120,10 +120,8 @@ public class Table extends JTable {
 	}
 
 	public void reset() {
-
 		model.setRowCount(0);
 		model.setRowCount(100);
-
 	}
 
 }
