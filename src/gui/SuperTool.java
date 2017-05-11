@@ -31,9 +31,9 @@ public class SuperTool extends JInternalFrame {
 
 	private Menu menu = new Menu();
 
-	private JPanel pnlNorth = new JPanel(new BorderLayout());
-	private JPanel pnlCenter = new JPanel(new BorderLayout());
-	private JPanel pnlSouth = new JPanel(new BorderLayout());
+	public JPanel pnlNorth = new JPanel(new BorderLayout());
+	public JPanel pnlCenter = new JPanel(new BorderLayout());
+	public JPanel pnlSouth = new JPanel(new BorderLayout());
 
 	private JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -203,6 +203,28 @@ public class SuperTool extends JInternalFrame {
 		pnl.add(pnlContent, BorderLayout.NORTH);
 
 	}
+
+	// public void setCustomContent(JPanel pnl, JComponent[] content) {
+	//
+	// JPanel pnlContent = new JPanel(new BorderLayout());
+	// JPanel pnlContentLeft = new JPanel(new GridLayout(content.length, 1));
+	// JPanel pnlContentRight = new JPanel(new GridLayout(content.length, 1));
+	//
+	// pnlContent.setBorder(new EmptyBorder(15, 15, 15, 15));
+	//
+	// pnlContentRight.setBorder(new EmptyBorder(0, 10, 0, 0));
+	// pnlContentLeft.setBorder(new EmptyBorder(0, 0, 0, 10));
+	//
+	// for (JComponent c : content) {
+	// pnlContentLeft.add(new JLabel(c.getName() + ":"));
+	// pnlContentRight.add(c);
+	// }
+	//
+	// pnlContent.add(pnlContentLeft, BorderLayout.WEST);
+	// pnlContent.add(pnlContentRight, BorderLayout.CENTER);
+	// pnl.add(pnlContent, BorderLayout.CENTER);
+	//
+	// }
 
 	public void setTfEditable(LabledTextField[] textFields, Boolean enabled) {
 

@@ -226,7 +226,10 @@ public class GUIController {
 				new ActionJButton("Invoice", "tool_inv"),
 				new ActionJButton("Article", "tool_art") };
 
-		private JComponent test[] = new JComponent[] { new ActionJButton("Customer", "test_customer"), new ActionJButton("Article", "test_article") };
+		private JComponent test[] = new JComponent[] {
+				new ActionJButton("Invoice(Test)", "test_invoice"),
+				new ActionJButton("Customer", "test_customer"),
+				new ActionJButton("Article", "test_article") };
 
 		private JComponent bottom[] = new JComponent[] {
 				new ActionJButton("Forum", "tool_forum"),

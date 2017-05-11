@@ -51,7 +51,7 @@ public class temp_customer extends SuperTool implements Updatable {
 	}
 
 	private void invoice() {
-		guiCtrlr.popup(new InvoiceGUI(clientCtrlr, ltfNo.getText()));
+		guiCtrlr.add(new temp_invoice(clientCtrlr, guiCtrlr, ltfNo.getText()));
 	}
 
 	private void reset() {
@@ -89,6 +89,7 @@ public class temp_customer extends SuperTool implements Updatable {
 			case "edit":
 				setButtons(editingButtons);
 				setTfEditable(ltfAll, true);
+				setTfEditable(ltfNo, false);
 				break;
 
 			case "update":
