@@ -42,7 +42,7 @@ public class Tool extends JInternalFrame {
 	public ClientController clientCtrlr;
 	public GUIController guiCtrlr;
 
-	public Tool(String title, ClientController clientController, GUIController guiController) {
+	protected Tool(String title, ClientController clientController, GUIController guiController) {
 		super(title, true, true, false, true);
 		this.clientCtrlr = clientController;
 		this.guiCtrlr = guiController;
@@ -50,7 +50,7 @@ public class Tool extends JInternalFrame {
 		openFrameCount++;
 	}
 
-	public ArrayList<Entity> search(String[] values, int entitytype) {
+	protected ArrayList<Entity> search(String[] values, int entitytype) {
 
 		ArrayList<Entity> resultList = clientCtrlr.search(values, entitytype);
 
@@ -61,7 +61,22 @@ public class Tool extends JInternalFrame {
 			return resultList;
 	}
 
-	public void search(Updatable tool, LabledTextField[] ltfAll, int entitytype) {
+	protected void get(Updatable tool, int entitytype) {
+
+		ArrayList<Entity> response = clientCtrlr.getAll(entitytype);
+
+		Object[][] results = new Object[response.size()][4];
+
+		for (int i = 0; i < results.length; i++) {
+			results[i] = response.get(i).getData();
+
+		}
+
+		tool.setValues(results);
+
+	}
+
+	protected void search(Updatable tool, LabledTextField[] ltfAll, int entitytype) {
 
 		ArrayList<Entity> response = clientCtrlr.search(tool.getValues(), entitytype);
 
@@ -81,7 +96,7 @@ public class Tool extends JInternalFrame {
 		}
 	}
 
-	public void create(Updatable tool, int entitytype) {
+	protected void create(Updatable tool, int entitytype) {
 
 		ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true);
 
@@ -98,7 +113,7 @@ public class Tool extends JInternalFrame {
 
 	}
 
-	public boolean update(Updatable tool, int entitytype) {
+	protected boolean update(Updatable tool, int entitytype) {
 		if (clientCtrlr.update(this, tool.getValues(), entitytype)) {
 
 			popupMessage("Update succesfull!");
@@ -113,7 +128,7 @@ public class Tool extends JInternalFrame {
 
 	}
 
-	public void setTabs(JPanel[] tabs) {
+	protected void setTabs(JPanel[] tabs) {
 
 		tabbedPane.setBorder(new EmptyBorder(20, 0, 0, 0));
 
@@ -126,7 +141,7 @@ public class Tool extends JInternalFrame {
 
 	}
 
-	public void setButtons(JButton[] buttons) {
+	protected void setButtons(JButton[] buttons) {
 
 		pnlSouth.removeAll();
 
@@ -142,7 +157,7 @@ public class Tool extends JInternalFrame {
 		repaint();
 	}
 
-	public void setContent(JComponent[] content) {
+	protected void setContent(JComponent[] content) {
 
 		if (tabbedPane.getTabCount() > 0) {
 			setContent(0, content);
@@ -154,7 +169,7 @@ public class Tool extends JInternalFrame {
 
 	}
 
-	public void setContent(int tabIndex, JComponent[] content) {
+	protected void setContent(int tabIndex, JComponent[] content) {
 
 		if (tabbedPane.getTabCount() <= 0) {
 			setContent(pnlCenter, content);
@@ -166,8 +181,11 @@ public class Tool extends JInternalFrame {
 		}
 	}
 
-	public void setContent(JPanel pnl, JComponent[] content) {
+	protected void setContent(JPanel pnl, JComponent[] content) {
+		setContent(pnl, BorderLayout.NORTH, content);
+	}
 
+	protected void setContent(JPanel pnl, Object constraints, JComponent[] content) {
 		JPanel pnlContent = new JPanel(new BorderLayout());
 		JPanel pnlContentLeft = new JPanel(new GridLayout(content.length, 1));
 		JPanel pnlContentRight = new JPanel(new GridLayout(content.length, 1));
@@ -184,11 +202,11 @@ public class Tool extends JInternalFrame {
 
 		pnlContent.add(pnlContentLeft, BorderLayout.WEST);
 		pnlContent.add(pnlContentRight, BorderLayout.CENTER);
-		pnl.add(pnlContent, BorderLayout.NORTH);
+		pnl.add(pnlContent, constraints);
 
 	}
 
-	public void setTfEditable(LabledTextField[] textFields, Boolean enabled) {
+	protected void setTfEditable(LabledTextField[] textFields, Boolean enabled) {
 
 		Color fieldColor;
 
@@ -208,7 +226,7 @@ public class Tool extends JInternalFrame {
 
 	}
 
-	public void setTfEditable(LabledTextField textField, Boolean enabled) {
+	protected void setTfEditable(LabledTextField textField, Boolean enabled) {
 		setTfEditable(new LabledTextField[] { textField }, enabled);
 	}
 
@@ -254,6 +272,10 @@ public class Tool extends JInternalFrame {
 
 	protected void popupMessage(String txt) {
 		JOptionPane.showMessageDialog(this, txt);
+	}
+
+	protected JInternalFrame getFrame() {
+		return this;
 	}
 
 	/**

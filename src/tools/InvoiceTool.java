@@ -14,8 +14,8 @@ import javax.swing.JScrollPane;
 import client.ClientController;
 import enteties.Entity;
 import gui.GUIController;
-import gui.Tool;
 import gui.Table;
+import gui.Tool;
 import gui.Updatable;
 import shared.Eviro;
 
@@ -43,7 +43,7 @@ public class InvoiceTool extends Tool implements Updatable {
 	private JButton[] editingButtons = { btnNew, btnReset };
 	private JButton[] lookingButtons = { btnCredit, btnReset };
 
-	private Table articles = new Table(this, new Object[] { "Article No", "Name", "Price", "Quantity", "Sum" });
+	private Table articles = new Table(this, new Object[] { "Article No", "Name", "Price", "Quantity", "Sum" }, true);
 
 	public InvoiceTool(ClientController clientController, GUIController guiController, String customer) {
 

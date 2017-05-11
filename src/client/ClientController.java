@@ -137,7 +137,7 @@ public class ClientController {
 			return response;
 
 		response = search(data, entityType);
-		if (response.isEmpty()){
+		if (response.isEmpty()) {
 			Entity object = createEntityByType(entityType);
 			object.setData(data);
 			object.setOperation(Eviro.DB_ADD);
@@ -216,62 +216,34 @@ public class ClientController {
 			return new Transaction();
 		}
 
+		else if (entityType == Eviro.ENTITY_FORUMMESSAGE) {
+			return new ForumMessage();
+		}
+
 		return null;
 
 	}
 
-	/*
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-	/**
-	 * Gets all forum messages.
-	 * @return a String array with all forum messages.
-	 */
-	public ArrayList<ForumMessage> getForumMessages() {
+	public ArrayList<Entity> getAll(int entityType) {
 
-		ForumMessage cm = new ForumMessage();
-		cm.setOperation(Eviro.DB_GETALL);
-		return (ArrayList<ForumMessage>) client.sendObject(cm);
+		ArrayList<Entity> response = new ArrayList<Entity>();
+
+		Entity object = createEntityByType(entityType);//
+
+		object.setOperation(Eviro.DB_GETALL);
+
+		response = (ArrayList<Entity>) client.sendObject(object);
+		return response;
+
 	}
 
-	/**
-	 * Adds a new forum message to the database.
-	 * @param res the message to add.
-	 */
-	public void addForumMessage(ForumMessage msg) {
-		msg.setOperation(Eviro.DB_ADD);
-		client.sendObject(msg);
-	}
+	// /**
+	// * Adds a new forum message to the database.
+	// * @param res the message to add.
+	// */
+	// public void addForumMessage(ForumMessage msg) {
+	// msg.setOperation(Eviro.DB_ADD);
+	// client.sendObject(msg);
+	// }
 
 }

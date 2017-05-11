@@ -28,12 +28,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import client.ClientController;
-import old.OldTool;
-import old.Toolbox;
 import shared.Eviro;
 import tools.ArticleTool;
 import tools.CustomerTool;
-import tools.ForumGUI;
+import tools.ForumTool;
 import tools.InvoiceTool;
 
 /**
@@ -147,15 +145,6 @@ public class GUIController {
 	 * Adds a new toolbox to the desktop
 	 * @param tool the tool to open
 	 */
-	public void oldpopup(OldTool tool) {
-		Toolbox toolbox = new Toolbox(tool);
-		desktop.add(toolbox);
-	}
-
-	/**
-	 * Adds a new toolbox to the desktop
-	 * @param tool the tool to open
-	 */
 	public void add(JInternalFrame tool) {
 		desktop.add(tool);
 		tool.moveToFront();
@@ -229,9 +218,9 @@ public class GUIController {
 		// new ActionJButton("Article", "tool_art") };
 
 		private JComponent top[] = new JComponent[] {
-				new ActionJButton("Invoice", "test_invoice"),
-				new ActionJButton("Customer", "test_customer"),
-				new ActionJButton("Article", "test_article") };
+				new ActionJButton("Invoice", "tool_invoice"),
+				new ActionJButton("Customer", "tool_customer"),
+				new ActionJButton("Article", "tool_article") };
 
 		private JComponent bottom[] = new JComponent[] {
 				new ActionJButton("Forum", "tool_forum"),
@@ -283,36 +272,24 @@ public class GUIController {
 
 			switch (e.getActionCommand()) {
 
-			// case "tool_customer":
-			// popup(new CreateCustomer(clientController));
-			// break;
-
 			case "link_exit":
 				System.exit(0);
 				break;
 
-			case "test_article":
+			case "tool_article":
 				desktop.add(new ArticleTool(clientController, getGUIController()));
 				break;
 
-			case "test_customer":
+			case "tool_customer":
 				desktop.add(new CustomerTool(clientController, getGUIController()));
 				break;
 
-			case "test_invoice":
+			case "tool_invoice":
 				desktop.add(new InvoiceTool(clientController, getGUIController()));
 				break;
 
-			// case "tool_cust":
-			// popup(new CustomerGUI(clientController, getGUIController()));
-			// break;
-			//
-			// case "tool_art":
-			// popup(new ProductGUI(clientController, getGUIController()));
-			// break;
-
 			case "tool_forum":
-				oldpopup(new ForumGUI(clientController, getGUIController()));
+				desktop.add(new ForumTool(clientController, getGUIController()));
 				break;
 
 			default:

@@ -68,10 +68,19 @@ public class Table extends JTable {
 
 	}
 
-	// Products constructor
-	public Table(InvoiceTool invoice, Object[] obj) {
-		this(obj, 100, true);
-		this.invoice = invoice;
+	public Table(Tool tool, Object[] obj) {
+
+		this(tool, obj, false);
+
+	}
+
+	public Table(Tool tool, Object[] obj, Boolean editable) {
+
+		this(obj, 100, editable);
+
+		if (tool instanceof InvoiceTool)
+			this.invoice = (InvoiceTool) tool;
+
 	}
 
 	@Override
@@ -113,7 +122,7 @@ public class Table extends JTable {
 
 	public void populate(Object[] info, int row) {
 
-		for (int i = 0; i < info.length; i++) {
+		for (int i = 0; i < model.getColumnCount(); i++) {
 			model.setValueAt(info[i], row, i);
 		}
 
