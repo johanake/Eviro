@@ -52,8 +52,15 @@ public class ServerGUI implements ActionListener {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
 		window.setContentPane(pnlMain);
+		
+		// KOD SOM KANSKE SKA ÄNDRAS
+		
 //		btnConnect.addActionListener(this);			
 //		btnDisconnect.addActionListener(this);
+		btnConnect.setEnabled(false);
+		btnDisconnect.setEnabled(false);
+		
+		// KOD SOM KANSKE SKA ÄNDRAS
 	}
 
 	public void append(String text) {

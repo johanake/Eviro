@@ -1,18 +1,23 @@
 package tools;
 
+import java.awt.Adjustable;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -24,6 +29,12 @@ import enteties.ForumMessage;
 import gui.GUIController;
 import gui.Tool;
 
+/**
+ * A forum for Eviro users.
+ * 
+ * @author Mattias Sundquist
+ *
+ */
 public class ForumGUI extends JPanel implements Tool, ActionListener {
 
 	private JButton btnOpen = new JButton("Open Message");
@@ -44,6 +55,7 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 		setupTable();
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(600, 400));
+		setBorder(new EmptyBorder(10, 10, 10, 10));
 		add(sp, BorderLayout.CENTER);
 		add(pnlSouth, BorderLayout.SOUTH);
 		pnlSouth.add(btnOpen);
@@ -52,6 +64,23 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 		btnUpdate.addActionListener(this);
 		btnNew.addActionListener(this);
 		btnOpen.addActionListener(this);
+		scrollToBottom();
+	}
+
+	private void scrollToBottom() {
+
+		JScrollBar verticalBar = sp.getVerticalScrollBar();
+		AdjustmentListener downScroller = new AdjustmentListener() {
+
+			@Override
+			public void adjustmentValueChanged(AdjustmentEvent e) {
+
+				Adjustable adjustable = e.getAdjustable();
+				adjustable.setValue(adjustable.getMaximum());
+				verticalBar.removeAdjustmentListener(this);
+			}
+		};
+		verticalBar.addAdjustmentListener(downScroller);
 	}
 
 	public void updateChat() {
@@ -60,6 +89,7 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 		for (int i = model.getRowCount(); i < list.size(); i++) {
 			model.addRow(list.get(i).getData());
 		}
+		scrollToBottom();
 	}
 
 	private void setupTable() {
@@ -92,10 +122,8 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 				int row = table.rowAtPoint(p);
 				int length = messageList.get(row).getData().length;
 				if (me.getClickCount() == 2 && row >= 0) {
-
 					Object[] values = messageList.get(row).getData();
 					guiController.popup(new ReadWriteMessage(values));
-
 				}
 			}
 		});
@@ -109,8 +137,11 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 			guiController.popup(new ReadWriteMessage());
 		if (e.getSource() == btnOpen) {
 			int row = table.getSelectedRow();
-			Object[] values = messageList.get(row).getData();
-			guiController.popup(new ReadWriteMessage(values));
+			if (row != -1) {
+				Object[] values = messageList.get(row).getData();
+				guiController.popup(new ReadWriteMessage(values));
+			} else
+				JOptionPane.showMessageDialog(null, "No message is selected.");
 		}
 	}
 
@@ -132,7 +163,7 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 		private JButton btnSend = new JButton("Send");
 		private JTextField txtTopic = new JTextField();
 		private JTextArea txtArea = new JTextArea();
-		private JScrollPane sb = new JScrollPane(txtArea);
+		private JScrollPane sp = new JScrollPane(txtArea);
 		private JLabel lblTopic = new JLabel("Topic");
 		private JLabel lblMessage = new JLabel("Message");
 
@@ -147,7 +178,7 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 			pnlLabels.add(lblTopic);
 			pnlLabels.add(lblMessage);
 			pnlText.add(txtTopic, BorderLayout.NORTH);
-			pnlText.add(sb);
+			pnlText.add(sp);
 			pnlSouth.add(btnSend);
 			txtArea.setLineWrap(true);
 			txtArea.setWrapStyleWord(true);
@@ -169,7 +200,7 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 		@Override
 		public boolean getRezizable() {
 
-			return false;
+			return true;
 		}
 
 		@Override
@@ -182,13 +213,14 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == btnSend) {
-				Object[] obj = { null, "Anon", txtTopic.getText(), txtArea.getText() };
-				ForumMessage fm = new ForumMessage(obj);
-				clientController.addForumMessage(fm);
+				if (!txtArea.getText().equals("") && !txtTopic.getText().equals("")) {
+					Object[] obj = { null, "Anon", txtTopic.getText(), txtArea.getText() };
+					ForumMessage fm = new ForumMessage(obj);
+					messageList.add(fm);
+					clientController.addForumMessage(fm);
+				} else
+					JOptionPane.showMessageDialog(null, "You must enter a topic and a message");
 			}
-
 		}
-
 	}
-
 }

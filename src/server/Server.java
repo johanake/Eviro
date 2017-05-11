@@ -33,12 +33,20 @@ public class Server extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Starts the server
+	 */
 	public void connect() {
-		start();		
+
+		start();
 	}
-	
+
+	/**
+	 * Disconnects the server
+	 */
 	public void disconnect() {
+
 		interrupt();
 		try {
 			serverSocket.close();
@@ -116,8 +124,7 @@ public class Server extends Thread {
 
 			while (!interrupted()) {
 				try {
-					Object inObj = objInput.readObject();
-					objOutput.writeObject(serverController.operationHandler((Entity) inObj));
+					objOutput.writeObject(serverController.operationHandler((Entity) objInput.readObject()));
 					objOutput.flush();
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
