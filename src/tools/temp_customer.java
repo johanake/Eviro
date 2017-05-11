@@ -83,6 +83,7 @@ public class temp_customer extends SuperTool implements Updatable {
 			switch (e.getActionCommand()) {
 
 			case "create":
+				ltfNo.setText(null);
 				create(getThis(), Eviro.ENTITY_CUSTOMER);
 				break;
 

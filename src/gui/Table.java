@@ -68,16 +68,20 @@ public class Table extends JTable {
 
 	}
 
+	// Products constructor
+	public Table(temp_invoice invoice, Object[] obj) {
+		this(obj, 100, true);
+		this.invoice = invoice;
+	}
+
 	@Override
 	public void editingStopped(ChangeEvent e) {
-		// getting these values before calling super.editingStopped(e); because they get erased.
+
 		int row = getEditingRow();
 		int col = getEditingColumn();
-		super.editingStopped(e); // must call the super code to have a working edition
+		super.editingStopped(e);
 
 		if (col == 0) {
-			// invoice.getArticle(getValueAt(row, col));
-			// String value = (String) getValueAt(getSelectedRow(), 0);
 			invoice.getArticle((String) getValueAt(row, col), row);
 		}
 
@@ -94,13 +98,6 @@ public class Table extends JTable {
 			model.setValueAt(price * quantity, row, 4);
 		}
 	};
-
-	// Products
-	public Table(temp_invoice invoice, Object[] obj) {
-		this(obj, 10, true);
-		this.invoice = invoice;
-
-	}
 
 	public void populate(ArrayList<Entity> objectList) {
 		for (int i = 0; i < objectList.size(); i++) {

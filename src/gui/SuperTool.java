@@ -83,24 +83,20 @@ public class SuperTool extends JInternalFrame {
 
 	public void create(Updatable tool, int entitytype) {
 
-		// ArrayList<Entity> searchResponse = clientCtrlr.search(tool.getValues(), entitytype);
-		//
-		// if (searchResponse.size() == 0) {
-		//
-		// ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true);
-		//
-		// if (response.size() == 0) {
-		// popupMessage("jkghfdjhgf jdhgf jdhgfj hdgfdhjg fdhg dfjgdjhd ");
-		// } else if (response.size() == 1) {
-		// popupMessage("Added with id: " + response.get(0).getData()[0]);
-		// tool.setValues(response.get(0).getData());
-		// }
-		//
-		// } else {
-		//
-		// popupMessage("A _ already exists!");
-		//
-		// }
+		ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true);
+
+		System.out.println(response.size());
+
+		if (response.size() == 0) {
+			popupMessage("jkghfdjhgf jdhgf jdhgfj hdgfdhjg fdhg dfjgdjhd ");
+		} else if (response.size() == 1) {
+			popupMessage("Added with id: " + response.get(0).getData()[0]);
+			tool.setValues(response.get(0).getData());
+		} else {
+
+			popupMessage("A _ already exists!");
+
+		}
 
 		//
 		// // Object data = clientCtrlr.create(tool.getValues(), entitytype, true);
