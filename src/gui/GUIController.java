@@ -163,27 +163,26 @@ public class GUIController {
 
 			// pressed.add((char) e.getKeyCode());
 			switch (e.getKeyCode()) {
-			case KeyEvent.VK_F1: {
-				add(new InvoiceTool(clientController, getGUIController()));
+			case KeyEvent.VK_F1: 
+				add(new CustomerTool(clientController, getGUIController()));
 				System.out.println("1. Du tryckte på F1");
 				break;
-			}
-			case KeyEvent.VK_F2: {
-
-				add(new CustomerTool(clientController, getGUIController()));
+			
+			case KeyEvent.VK_F2: 
+				add(new InvoiceTool(clientController, getGUIController()));
 				System.out.println("2. Du tryckte på F2");
 				break;
-			}
-			case KeyEvent.VK_F3: {
+			
+			case KeyEvent.VK_F3: 
 				add(new ArticleTool(clientController, getGUIController()));
 				System.out.println("3. Du tryckte på F3");
 				break;
-			}
-			default: {
+			
+			default: 
 				System.out.println("Annan knapp " + KeyEvent.getKeyText(keyCode));
 				e.consume();
 				break;
-			}
+			
 			}
 		}
 
