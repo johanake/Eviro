@@ -307,7 +307,7 @@ public class GUIController {
 				break;
 
 			case "tool_forum":
-				popup(new ForumGUI(clientController));
+				popup(new ForumGUI(clientController, getGUIController()));
 				break;
 
 			default:
