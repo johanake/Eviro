@@ -80,24 +80,26 @@ public class Table extends JTable {
 			// String value = (String) getValueAt(getSelectedRow(), 0);
 			invoice.getArticle((String) getValueAt(row, col), row);
 		}
+
+		else if (col == 2 || col == 3) {
+			int price = 0;
+			int quantity = 0;
+			try {
+				price = Integer.parseInt((String) getValueAt(row, 2));
+				quantity = Integer.parseInt((String) getValueAt(row, 3));
+			} catch (NumberFormatException nfe) {
+
+			}
+
+			model.setValueAt(price * quantity, row, 4);
+		}
 	};
 
 	// Products
 	public Table(temp_invoice invoice, Object[] obj) {
 		this(obj, 10, true);
 		this.invoice = invoice;
-		// model.addTableModelListener(new TableModelListener() {
-		// @Override
-		// public void tableChanged(TableModelEvent tableModelEvent) {
-		//
-		// // getCellEditor().stopCellEditing();
-		// if (isEditing()) {
-		// String value = (String) getValueAt(getSelectedRow(), 0);
-		// invoice.getArticle(value);
-		//
-		// }
-		// }
-		// });
+
 	}
 
 	public void populate(ArrayList<Entity> objectList) {
