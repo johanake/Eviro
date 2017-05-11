@@ -3,16 +3,19 @@ package tools;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 
 import client.ClientController;
+import enteties.Entity;
 import gui.GUIController;
 import gui.SuperTool;
 import gui.Table;
 import gui.Updatable;
+import shared.Eviro;
 
 public class temp_invoice extends SuperTool implements Updatable {
 
@@ -33,7 +36,7 @@ public class temp_invoice extends SuperTool implements Updatable {
 	private JButton[] allButtons = { btnNew, btnReset };
 	private JButton[] defaultButtons = { btnNew, btnReset };
 
-	private Table articles = new Table(new Object[] { "Article No", "Name", "Price", "Quantity", "Sum" });
+	private Table articles = new Table(this, new Object[] { "Article No", "Name", "Price", "Quantity", "Sum" });
 
 	public temp_invoice(ClientController clientController, GUIController guiController, String customer) {
 		super("Invoice", clientController, guiController);
@@ -85,6 +88,32 @@ public class temp_invoice extends SuperTool implements Updatable {
 				break;
 			}
 		}
+	}
+
+	public void getArticle(String articleno, int row) {
+
+		System.out.println("ddd");
+
+		ArrayList<Entity> response = clientCtrlr.search(new String[] { articleno, null, null, null, null, null, null, null, null },
+				Eviro.ENTITY_PRODUCT);
+
+		if (response.size() == 1) {
+			Object[] article = response.get(0).getData();
+
+			Object[] info = new Object[5];
+			info[0] = article[0];
+			info[1] = article[1];
+			info[2] = article[3];
+			info[3] = "1";
+			info[4] = Integer.toString(Integer.parseInt((String) info[2]) * Integer.parseInt((String) info[3]));
+
+			articles.populate(info, row);
+		}
+
+		else {
+			articles.populate(new Object[] { null, null, null, null, null }, row);
+		}
+
 	}
 
 	@Override

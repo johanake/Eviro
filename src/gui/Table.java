@@ -8,20 +8,24 @@ import java.util.ArrayList;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import enteties.Entity;
+import tools.temp_invoice;
 
 public class Table extends JTable {
 
 	private DefaultTableModel model;
+	private temp_invoice invoice;
 
-	public Table(Object[] obj, boolean editable) {
+	// General
+	public Table(Object[] obj, int rows, boolean editable) {
 		setFillsViewportHeight(true);
 
-		setModel(new DefaultTableModel(obj, 0) {
+		setModel(new DefaultTableModel(obj, rows) {
 			@Override
 			public boolean isCellEditable(int row, int col) {
 				return editable;
@@ -32,8 +36,9 @@ public class Table extends JTable {
 
 	}
 
+	// Search result
 	public Table(JInternalFrame frame, Object[] obj, Updatable gui, ArrayList<Entity> list) {
-		this(obj, false);
+		this(obj, 0, false);
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(getModel());
 		setRowSorter(sorter);
 		populate(list);
@@ -63,18 +68,51 @@ public class Table extends JTable {
 
 	}
 
-	public Table(Object[] obj) {
-		this(obj, true);
+	@Override
+	public void editingStopped(ChangeEvent e) {
+		// getting these values before calling super.editingStopped(e); because they get erased.
+		int row = getEditingRow();
+		int col = getEditingColumn();
+		super.editingStopped(e); // must call the super code to have a working edition
+
+		if (col == 0) {
+			// invoice.getArticle(getValueAt(row, col));
+			// String value = (String) getValueAt(getSelectedRow(), 0);
+			invoice.getArticle((String) getValueAt(row, col), row);
+		}
+	};
+
+	// Products
+	public Table(temp_invoice invoice, Object[] obj) {
+		this(obj, 10, true);
+		this.invoice = invoice;
+		// model.addTableModelListener(new TableModelListener() {
+		// @Override
+		// public void tableChanged(TableModelEvent tableModelEvent) {
+		//
+		// // getCellEditor().stopCellEditing();
+		// if (isEditing()) {
+		// String value = (String) getValueAt(getSelectedRow(), 0);
+		// invoice.getArticle(value);
+		//
+		// }
+		// }
+		// });
 	}
 
 	public void populate(ArrayList<Entity> objectList) {
 		for (int i = 0; i < objectList.size(); i++) {
 			model.addRow(objectList.get(i).getData());
 		}
+
 	}
 
-	public void populate(Object[] info) {
-		model.addRow(info);
+	public void populate(Object[] info, int row) {
+
+		for (int i = 0; i < info.length; i++) {
+			model.setValueAt(info[i], row, i);
+		}
+
 	}
 
 }
