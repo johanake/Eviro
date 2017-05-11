@@ -13,7 +13,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -82,11 +81,12 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 		for (int i = 0; i < messageList.size(); i++) {
 			model.addRow(messageList.get(i).getData());
 		}
-		
+
 		table.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mousePressed(MouseEvent me) {
+
 				JTable table = (JTable) me.getSource();
 				Point p = me.getPoint();
 				int row = table.rowAtPoint(p);
@@ -109,11 +109,7 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 			guiController.popup(new ReadWriteMessage());
 		if (e.getSource() == btnOpen) {
 			int row = table.getSelectedRow();
-			Object[] values = new Object[table.getColumnCount()];
-			System.out.println(table.getColumnCount());
-			for (int i = 0; i < table.getColumnCount(); i++) {
-				values[i] = table.getValueAt(row, i);
-			}
+			Object[] values = messageList.get(row).getData();
 			guiController.popup(new ReadWriteMessage(values));
 		}
 	}
@@ -160,7 +156,7 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 			add(pnlSouth, BorderLayout.SOUTH);
 			btnSend.addActionListener(this);
 		}
-		
+
 		public ReadWriteMessage(Object[] values) {
 			this();
 			txtTopic.setText(values[2].toString());
@@ -186,11 +182,11 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == btnSend) {
-				Object[] obj = {null, "Anon", txtTopic.getText(), txtArea.getText()};
+				Object[] obj = { null, "Anon", txtTopic.getText(), txtArea.getText() };
 				ForumMessage fm = new ForumMessage(obj);
 				clientController.addForumMessage(fm);
 			}
-			
+
 		}
 
 	}
