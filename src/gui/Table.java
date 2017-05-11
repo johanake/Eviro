@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import javax.swing.JInternalFrame;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import enteties.Entity;
 
@@ -32,6 +34,8 @@ public class Table extends JTable {
 
 	public Table(JInternalFrame frame, Object[] obj, Updatable gui, ArrayList<Entity> list) {
 		this(obj, false);
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(getModel());
+		setRowSorter(sorter);
 		populate(list);
 		addMouseListener(new MouseAdapter() {
 
