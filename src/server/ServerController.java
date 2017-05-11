@@ -148,9 +148,7 @@ public class ServerController {
 	 */
 	private String buildGetAllQuery(Entity ei) {
 
-		Object[] info = ei.getData();
 		String tableName = getTableName(ei);
-		String[] colNames = getColNames(ei, tableName);
 		String query = "SELECT * FROM " + tableName;
 
 		logAppend(query);
@@ -308,7 +306,9 @@ public class ServerController {
 					ei.add(new ForumMessage(new Object[] {
 							rs.getString(1),
 							rs.getString(2),
-							rs.getString(3) }));
+							rs.getString(3),
+							rs.getString(4) }));
+
 				}
 			}
 		} catch (SQLException e) {
