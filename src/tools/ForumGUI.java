@@ -53,6 +53,7 @@ public class ForumGUI extends JPanel implements Tool, ActionListener {
 	}
 
 	public void updateChat() {
+
 		ArrayList<ForumMessage> list = clientController.getForumMessages();
 		for (int i = model.getRowCount(); i < list.size(); i++) {
 			model.addRow(list.get(i).getData());

@@ -28,6 +28,7 @@ public class Server extends Thread {
 		new ServerGUI(serverController, this);
 		try {
 			serverSocket = new ServerSocket(port);
+			start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
