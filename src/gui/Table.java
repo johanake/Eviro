@@ -95,17 +95,17 @@ public class Table extends JTable {
 		}
 
 		else if (col == 2 || col == 3) {
-			int price = 0;
-			int quantity = 0;
+			Double price = 0.0;
+			Double quantity = 0.0;
 			try {
-				price = Integer.parseInt((String) getValueAt(row, 2));
-				quantity = Integer.parseInt((String) getValueAt(row, 3));
+				price = Double.parseDouble((String) getValueAt(row, 2));
+				quantity = Double.parseDouble((String) getValueAt(row, 3));
 			} catch (NumberFormatException nfe) {
 				// price = 0;
 				// quantity = 1;
 			}
 
-			model.setValueAt(Integer.toString(price * quantity), row, 4);
+			model.setValueAt(Double.toString(price * quantity), row, 4);
 		}
 
 		invoice.setTotalPrice();
