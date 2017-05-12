@@ -1,13 +1,16 @@
 package tools;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 
 import client.ClientController;
 import gui.GUIController;
+import gui.Table;
 import gui.Tool;
 import gui.Updatable;
 import shared.Eviro;
@@ -15,7 +18,11 @@ import shared.Eviro;
 public class CustomerTool extends Tool implements Updatable {
 
 	private ButtonListener buttonListener;
-	private Tab[] tabs = new Tab[] { new Tab("General"), new Tab("Finance"), new Tab("Comments") };
+	
+	Tab tabComments = new Tab("Comments");
+	Table tblComments = new Table(this, new Object[]{"Date", "Comments"});
+	
+	private Tab[] tabs = new Tab[] { new Tab("General"), new Tab("Finance"), tabComments };
 
 	private LabledTextField ltfNo = new LabledTextField("No");
 	private LabledTextField ltfName = new LabledTextField("Name");
@@ -47,7 +54,13 @@ public class CustomerTool extends Tool implements Updatable {
 		setTabs(tabs);
 		setContent(0, new JComponent[] { ltfNo, ltfName, ltfAddress, new SplitPanel(ltfZip, ltfCity), ltfPhone, ltfEmail, ltfVat });
 		setContent(1, new JComponent[] { new SplitPanel(ltfLimit, ltfBalance) });
+		
 		setButtons(defaultButtons);
+		
+		tabComments.setPreferredSize(new Dimension(1, 150));
+		tabComments.add(new JScrollPane(tblComments));
+		tblComments.getColumnModel().getColumn(0).setMinWidth(50);
+		tblComments.getColumnModel().getColumn(0).setMaxWidth(50);
 	}
 
 	private void invoice() {
