@@ -26,13 +26,14 @@ public class Client extends Thread {
 	 * @param port The port of the server.
 	 */
 	public Client(String ip, int port) {
-
-		new GUIController(clientController = new ClientController(this));
-
 		this.ip = ip;
 		this.port = port;
 		connectToServer();
+		new GUIController(clientController = new ClientController(this));
 
+		
+
+		
 	}
 
 	/**

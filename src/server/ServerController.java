@@ -17,6 +17,7 @@ import enteties.ForumMessage;
 import enteties.Invoice;
 import enteties.Product;
 import enteties.Transaction;
+import enteties.User;
 import shared.Eviro;
 
 /**
@@ -48,7 +49,7 @@ public class ServerController {
 		}
 	}
 
-	public void getServerGUI(ServerGUI serverGUI) {
+	public void setServerGUI(ServerGUI serverGUI) {
 
 		this.serverGUI = serverGUI;
 	}
@@ -111,6 +112,8 @@ public class ServerController {
 			tableName = "transaction";
 		else if (ei instanceof ForumMessage)
 			tableName = "forummessage";
+		else if (ei instanceof User)
+			tableName = "user";
 
 		return tableName;
 	}
@@ -309,6 +312,11 @@ public class ServerController {
 							rs.getString(3),
 							rs.getString(4) }));
 
+				} else if (rs.getMetaData().toString().contains("tableName=user")) {
+					ei.add(new ForumMessage(new Object[] {
+							rs.getString(1),
+							rs.getString(2),
+							rs.getString(3), }));
 				}
 			}
 		} catch (SQLException e) {

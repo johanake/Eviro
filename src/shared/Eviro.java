@@ -28,6 +28,8 @@ public class Eviro {
 	public static final int ENTITY_PRODUCT = 3;
 	public static final int ENTITY_TRANSACTION = 4;
 	public static final int ENTITY_FORUMMESSAGE = 5;
+	public static final int ENTITY_USER= 6;
+
 
 	/**
 	 * Setup system before instantiation.

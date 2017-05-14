@@ -59,7 +59,8 @@ public class GUIController {
 
 			@Override
 			public void run() {
-
+				
+				
 				setSystemLookAndFeel();
 				JFrame window = new JFrame(Eviro.APP_NAME + " " + Eviro.APP_VERSION);
 				window.addKeyListener(keyListener);
@@ -83,7 +84,7 @@ public class GUIController {
 				window.setMinimumSize(new Dimension(1200, 720));
 				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				window.setVisible(true);
-				window.setJMenuBar(new Menu());
+				// window.setJMenuBar(new Menu());
 				window.setIconImage(new ImageIcon(Eviro.APP_ICON).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
 			}
 		});
@@ -156,7 +157,7 @@ public class GUIController {
 	 */
 	private class KeyPress implements KeyListener {
 		// Set<Character> pressed = new HashSet<Character>();
-		
+
 		@Override
 		public synchronized void keyPressed(KeyEvent e) {
 			int keyCode = e.getKeyCode();

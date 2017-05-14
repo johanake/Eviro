@@ -4,12 +4,15 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import org.jasypt.util.password.StrongPasswordEncryptor;
+
 import enteties.Customer;
 import enteties.Entity;
 import enteties.ForumMessage;
 import enteties.Invoice;
 import enteties.Product;
 import enteties.Transaction;
+import enteties.User;
 import gui.Tool;
 import shared.Eviro;
 
@@ -20,6 +23,7 @@ import shared.Eviro;
  * @version 1.1
  */
 public class ClientController {
+	private StrongPasswordEncryptor passCryptor = new StrongPasswordEncryptor();
 
 	private Client client;
 
@@ -29,8 +33,27 @@ public class ClientController {
 	 */
 	public ClientController(Client client) {
 		this.client = client;
+		boolean logIn = false;
+		while(logIn() == false){
+		}
+		
 	}
 
+	public boolean logIn(){
+		String userInput = JOptionPane.showInputDialog(null, "Type username", "Client Login", JOptionPane.OK_OPTION);
+		String passInput = JOptionPane.showInputDialog(null, "Type password", "Client Login", JOptionPane.OK_OPTION);
+	
+		ArrayList<Entity> userList = search(new Object[] {"", userInput, ""}, Eviro.ENTITY_USER);
+		System.out.println(userList.size());
+		if(userList.isEmpty()){
+			return false;
+		} else 	if(passCryptor.checkPassword(passInput, (String) userList.get(0).getData()[2])){
+			return true;
+		} 
+		else{
+			return false;
+		}
+	}
 	/**
 	 * Creates and sends a "update operation" object to the server.
 	 * @param data data to use when updating
@@ -164,10 +187,12 @@ public class ClientController {
 
 		// Create entity, type by entityType
 		Entity object = createEntityByType(entityType);//
-
 		// Populate
 		object.setData(data);
 		object.setOperation(Eviro.DB_SEARCH);
+		
+		System.out.println((String)object.getData()[1]);
+
 
 		// Get and return response
 		response = (ArrayList<Entity>) client.sendObject(object);
@@ -218,6 +243,10 @@ public class ClientController {
 
 		else if (entityType == Eviro.ENTITY_FORUMMESSAGE) {
 			return new ForumMessage();
+		}
+		
+		else if (entityType == Eviro.ENTITY_USER) {
+			return new User();
 		}
 
 		return null;
