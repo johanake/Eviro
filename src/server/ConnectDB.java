@@ -2,10 +2,6 @@ package server;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-<<<<<<< HEAD
-=======
-import java.sql.PreparedStatement;
->>>>>>> origin/peterbranch
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -31,17 +27,12 @@ public class ConnectDB {
 	private String connectionString = "jdbc:mysql://195.178.232.16:3306/m10p4305";
 	private Connection connection;
 	private Statement stmt;
-<<<<<<< HEAD
 	private FileReader reader;
 	private Properties properties = new Properties();
 	private BasicTextEncryptor textCryptor = new BasicTextEncryptor();
 	private StrongPasswordEncryptor passCryptor = new StrongPasswordEncryptor();
 
 
-=======
-	private PreparedStatement ps;
-	
->>>>>>> origin/peterbranch
 	/**
 	 * Connects to the database
 	 */
@@ -83,40 +74,12 @@ public class ConnectDB {
 	 * @param query
 	 *            The information to add to the database.
 	 */
-<<<<<<< HEAD
 	public synchronized void executeInsertOrDeleteQuery(String query) {
-=======
-	public synchronized boolean executeInsertDeleteQuery(String query) {
-		boolean executed = false;
 		try {
-			executed = !stmt.execute(query);
+			stmt.execute(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return executed;
-				
-	}
-	
-/// exempel på att hämta resultset för att kunna skicka tilbaka antingen i sin helhet eller utbruten data.	
-	public synchronized ResultSet executeSelectQuery(String query){
-		ResultSet rs = null;
-		try {
-			rs = stmt.executeQuery(query); 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return rs;
-	}
-	
-	public synchronized PreparedStatement executeUpdateQuery(String query){
->>>>>>> origin/peterbranch
-		try {
-			ps = connection.prepareStatement(query);			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return ps;
 	}
 
 	public synchronized ResultSet executeGetQuery(String query) {

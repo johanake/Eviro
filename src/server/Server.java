@@ -5,16 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-<<<<<<< HEAD
 import enteties.Entity;
-=======
-import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
->>>>>>> origin/peterbranch
 
 /**
  * Handles all Client.
@@ -133,14 +124,8 @@ public class Server extends Thread {
 
 			while (!interrupted()) {
 				try {
-<<<<<<< HEAD
 					objOutput.writeObject(serverController.operationHandler((Entity) objInput.readObject()));
 					objOutput.flush();
-=======
-					objOutput.writeObject(serverController.commandHandler(objInput.readObject()));
-					objOutput.flush();
-//					serverController.commandHandler(objInput.readObject(), this.objOutput);
->>>>>>> origin/peterbranch
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
 				}
