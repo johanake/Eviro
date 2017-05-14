@@ -7,7 +7,6 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 
 import client.ClientController;
 import gui.GUIController;
@@ -27,10 +26,11 @@ public class ArticleTool extends Tool implements Updatable {
 	private LabledTextField ltfEan = new LabledTextField("EAN");
 	private LabledTextField ltfSup = new LabledTextField("Supplier");
 	private LabledTextField ltfSupNo = new LabledTextField("Suppler No");
-	private LabledTextField ltfQuantity = new LabledTextField("Quantity");
 	private LabledTextField ltfStockPlace = new LabledTextField("Stock place");
+	private LabledTextField ltfQuantity = new LabledTextField("Quantity", false, true);
 
 	private LabledTextField[] ltfAll = { ltfNo, ltfName, ltfDesc, ltfPrice, ltfSup, ltfSupNo, ltfEan, ltfStockPlace, ltfQuantity };
+	private LabledTextField[] ltfRequired = { ltfName, ltfDesc, ltfPrice, ltfSup };
 
 	private ActionButton btnNew = new ActionButton("Create New", "create");
 	private ActionButton btnEdit = new ActionButton("Edit", "edit");
@@ -42,13 +42,14 @@ public class ArticleTool extends Tool implements Updatable {
 	private JButton[] defaultButtons = { btnNew, btnFind, btnReset };
 	private JButton[] lookingButtons = { btnEdit, btnReset };
 	private JButton[] editingButtons = { btnUpdate, btnReset };
-	
+
 	private KeyPress keyListener = new KeyPress();
 
 	public ArticleTool(ClientController clientController, GUIController guiController) {
 		super("Article", clientController, guiController);
 		buttonListener = new ButtonListener();
 		setTabs(tabs);
+		ltfQuantity.setText("0");
 		setContent(0, new JComponent[] { ltfNo, ltfName, ltfDesc, ltfPrice, ltfEan });
 		setContent(1, new JComponent[] { ltfSup, ltfSupNo, ltfQuantity, ltfStockPlace });
 		setButtons(defaultButtons);
@@ -68,50 +69,52 @@ public class ArticleTool extends Tool implements Updatable {
 		}
 
 	}
-	
+
 	private class KeyPress implements KeyListener {
 		// Set<Character> pressed = new HashSet<Character>();
 
+		@Override
 		public synchronized void keyPressed(KeyEvent e) {
 			int keyCode = e.getKeyCode();
 
 			// pressed.add((char) e.getKeyCode());
-//			ClientController clientController = new ClientController();
-//			GUIController gController;
+			// ClientController clientController = new ClientController();
+			// GUIController gController;
 			switch (e.getKeyCode()) {
-//			case KeyEvent.VK_F1: {
-//				System.out.println("1. Du tryckte på F1 från ArticleTool");
-//				break;
-//			}
-			case KeyEvent.VK_F2:  //Trycker på SÖK knappen på articleTool
+			// case KeyEvent.VK_F1: {
+			// System.out.println("1. Du tryckte på F1 från ArticleTool");
+			// break;
+			// }
+			case KeyEvent.VK_F2: // Trycker på SÖK knappen på articleTool
 				search(getThis(), ltfAll, Eviro.ENTITY_PRODUCT);
 				System.out.println("2. Du tryckte på F2 från ArticleTool");
 				break;
-			
-			case KeyEvent.VK_F3:  //Fnkar ej. Trycker på SAVE knappen på articleTool
+
+			case KeyEvent.VK_F3: // Fnkar ej. Trycker på SAVE knappen på articleTool
 				setButtons(lookingButtons);
 				setTfEditable(ltfAll, false);
 				System.out.println("3. Du tryckte på F3 från ArticleTool");
 				break;
-			
-			default: 
+
+			default:
 				System.out.println("ArtcleTool. Annan knapp " + KeyEvent.getKeyText(keyCode));
 				e.consume();
 				break;
-			
-			}
-		}
-			
-			public synchronized void keyReleased(KeyEvent e) {
-				e.consume();
 
 			}
-
-			
-			public void keyTyped(KeyEvent e) {
-				e.consume();
-			}
 		}
+
+		@Override
+		public synchronized void keyReleased(KeyEvent e) {
+			e.consume();
+
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			e.consume();
+		}
+	}
 
 	private class ButtonListener implements ActionListener {
 
@@ -127,7 +130,10 @@ public class ArticleTool extends Tool implements Updatable {
 			switch (e.getActionCommand()) {
 
 			case "create":
-				create(getThis(), Eviro.ENTITY_PRODUCT);
+				if (validate(ltfRequired)) {
+					ltfNo.setText(null);
+					create(getThis(), Eviro.ENTITY_PRODUCT);
+				}
 				break;
 
 			case "edit":
@@ -136,9 +142,11 @@ public class ArticleTool extends Tool implements Updatable {
 				break;
 
 			case "update":
-				if (update(getThis(), Eviro.ENTITY_PRODUCT)) {
-					setButtons(lookingButtons);
-					setTfEditable(ltfAll, false);
+				if (validate(ltfRequired)) {
+					if (update(getThis(), Eviro.ENTITY_PRODUCT)) {
+						setButtons(lookingButtons);
+						setTfEditable(ltfAll, false);
+					}
 				}
 				break;
 
@@ -157,7 +165,7 @@ public class ArticleTool extends Tool implements Updatable {
 		}
 	}
 
-	
+	@Override
 	public void setValues(Object[] values) {
 
 		setTfEditable(ltfAll, false);
@@ -175,20 +183,33 @@ public class ArticleTool extends Tool implements Updatable {
 
 	}
 
-	
+	@Override
 	public String[] getValues() {
+		return getValues(false);
+	}
+
+	@Override
+	public String[] getValues(boolean getNames) {
 
 		String[] text = new String[ltfAll.length];
 
 		for (int i = 0; i < ltfAll.length; i++) {
-			text[i] = ltfAll[i].getText();
+
+			if (getNames)
+				text[i] = ltfAll[i].getName();
+			else {
+				text[i] = ltfAll[i].getText();
+			}
+
 		}
 
 		return text;
 
 	}
 
+	@Override
 	public Updatable getThis() {
 		return this;
 	}
+
 }

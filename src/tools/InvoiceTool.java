@@ -231,11 +231,22 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	@Override
 	public String[] getValues() {
+		return getValues(false);
+	}
+
+	@Override
+	public String[] getValues(boolean getNames) {
 
 		String[] text = new String[ltfAll.length];
 
 		for (int i = 0; i < ltfAll.length; i++) {
-			text[i] = ltfAll[i].getText();
+
+			if (getNames)
+				text[i] = ltfAll[i].getName();
+			else {
+				text[i] = ltfAll[i].getText();
+			}
+
 		}
 
 		return text;
@@ -246,4 +257,5 @@ public class InvoiceTool extends Tool implements Updatable {
 	public Updatable getThis() {
 		return this;
 	}
+
 }

@@ -33,26 +33,26 @@ public class ClientController {
 	 */
 	public ClientController(Client client) {
 		this.client = client;
-		while(logIn() == false){
-		}
-		
+		// while (logIn() == false) {
+		// }
+
 	}
 
-	public boolean logIn(){
+	public boolean logIn() {
 		String userInput = JOptionPane.showInputDialog(null, "Type username", "Client Login", JOptionPane.OK_OPTION);
 		String passInput = JOptionPane.showInputDialog(null, "Type password", "Client Login", JOptionPane.OK_OPTION);
-	
-		ArrayList<Entity> userList = search(new Object[] {"", userInput, ""}, Eviro.ENTITY_USER);
+
+		ArrayList<Entity> userList = search(new Object[] { "", userInput, "" }, Eviro.ENTITY_USER);
 		System.out.println(userList.size());
-		if(userList.isEmpty()){
+		if (userList.isEmpty()) {
 			return false;
-		} else 	if(passCryptor.checkPassword(passInput, (String) userList.get(0).getData()[2])){
+		} else if (passCryptor.checkPassword(passInput, (String) userList.get(0).getData()[2])) {
 			return true;
-		} 
-		else{
+		} else {
 			return false;
 		}
 	}
+
 	/**
 	 * Creates and sends a "update operation" object to the server.
 	 * @param data data to use when updating
@@ -91,6 +91,11 @@ public class ClientController {
 			}
 
 			if (!oldData[i].equals(data[i])) {
+
+				if (oldData[i].toString().trim().length() <= 0) {
+					oldData[i] = "Empty";
+				}
+
 				updates += oldData[i] + " -> " + data[i] + "\n";
 			}
 		}
@@ -131,26 +136,6 @@ public class ClientController {
 		create(data, entityType, false);
 	}
 
-	/**
-	 * Creates and sends a "create operation" object to the server and then waits for response.
-	 * @param data data to use when creating
-	 * @param entityType the type of entity to create
-	 * @param returnId whether the method should return the id of the created database row or not
-	 * @return the search result from the server
-	 */
-	// public String create(Object[] data, int entityType, boolean returnId) {
-	//
-	// Entity object = createEntityByType(entityType);
-	// object.setData(data);
-	// object.setOperation(Eviro.DB_ADD);
-	// ArrayList<Entity> response = (ArrayList<Entity>) client.sendObject(object);
-	//
-	// if (returnId)
-	// return response.get(0).getData()[0].toString();
-	//
-	// return null;
-	// }
-
 	public ArrayList<Entity> create(Object[] data, int entityType, boolean returnData) {
 
 		ArrayList<Entity> response = new ArrayList<Entity>();
@@ -189,11 +174,28 @@ public class ClientController {
 		// Populate
 		object.setData(data);
 		object.setOperation(Eviro.DB_SEARCH);
-		
-		System.out.println((String)object.getData()[1]);
 
+		System.out.println((String) object.getData()[1]);
 
 		// Get and return response
+		response = (ArrayList<Entity>) client.sendObject(object);
+		return response;
+
+	}
+
+	/**
+	 * Creates and sends a "get all" object to the server and then waits for response.
+	 * @param entityType the type of entity to get
+	 * @return the result returned from the server
+	 */
+	public ArrayList<Entity> getAllbyType(int entityType) {
+
+		ArrayList<Entity> response = new ArrayList<Entity>();
+
+		Entity object = createEntityByType(entityType);//
+
+		object.setOperation(Eviro.DB_GETALL);
+
 		response = (ArrayList<Entity>) client.sendObject(object);
 		return response;
 
@@ -243,7 +245,7 @@ public class ClientController {
 		else if (entityType == Eviro.ENTITY_FORUMMESSAGE) {
 			return new ForumMessage();
 		}
-		
+
 		else if (entityType == Eviro.ENTITY_USER) {
 			return new User();
 		}
@@ -251,27 +253,5 @@ public class ClientController {
 		return null;
 
 	}
-
-	public ArrayList<Entity> getAll(int entityType) {
-
-		ArrayList<Entity> response = new ArrayList<Entity>();
-
-		Entity object = createEntityByType(entityType);//
-
-		object.setOperation(Eviro.DB_GETALL);
-
-		response = (ArrayList<Entity>) client.sendObject(object);
-		return response;
-
-	}
-
-	// /**
-	// * Adds a new forum message to the database.
-	// * @param res the message to add.
-	// */
-	// public void addForumMessage(ForumMessage msg) {
-	// msg.setOperation(Eviro.DB_ADD);
-	// client.sendObject(msg);
-	// }
 
 }

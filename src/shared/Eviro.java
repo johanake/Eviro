@@ -28,8 +28,7 @@ public class Eviro {
 	public static final int ENTITY_PRODUCT = 3;
 	public static final int ENTITY_TRANSACTION = 4;
 	public static final int ENTITY_FORUMMESSAGE = 5;
-	public static final int ENTITY_USER= 6;
-
+	public static final int ENTITY_USER = 6;
 
 	/**
 	 * Setup system before instantiation.
@@ -45,6 +44,35 @@ public class Eviro {
 
 		new Server(3500);
 		new Client("127.0.0.1", 3500);
+
+	}
+
+	public static String getEntityNameByNumber(int entityType) {
+
+		switch (entityType) {
+
+		case ENTITY_CUSTOMER:
+			return "customer";
+
+		case ENTITY_INVOICE:
+			return "invoice";
+
+		case ENTITY_PRODUCT:
+			return "article";
+
+		case ENTITY_TRANSACTION:
+			return "transaction";
+
+		case ENTITY_FORUMMESSAGE:
+			return "post";
+
+		case ENTITY_USER:
+			return "user";
+
+		default:
+			return "entity";
+
+		}
 
 	}
 

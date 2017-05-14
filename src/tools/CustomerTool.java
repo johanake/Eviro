@@ -2,6 +2,7 @@ package tools;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -25,9 +26,10 @@ public class CustomerTool extends Tool implements Updatable {
 	private LabledTextField ltfPhone = new LabledTextField("Phone No");
 	private LabledTextField ltfEmail = new LabledTextField("Email");
 	private LabledTextField ltfVat = new LabledTextField("Vat No");
-	private LabledTextField ltfLimit = new LabledTextField("Limit");
+	private LabledTextField ltfLimit = new LabledTextField("Limit", true, true);
 	private LabledTextField ltfBalance = new LabledTextField("Balance", false);
 	private LabledTextField[] ltfAll = { ltfNo, ltfName, ltfAddress, ltfZip, ltfCity, ltfPhone, ltfEmail, ltfVat, ltfLimit };
+	private LabledTextField[] ltfRequired = { ltfName, ltfAddress, ltfZip, ltfCity, ltfPhone, ltfLimit };
 
 	private ActionButton btnNew = new ActionButton("Create New", "create");
 	private ActionButton btnEdit = new ActionButton("Edit", "edit");
@@ -83,8 +85,10 @@ public class CustomerTool extends Tool implements Updatable {
 			switch (e.getActionCommand()) {
 
 			case "create":
-				ltfNo.setText(null);
-				create(getThis(), Eviro.ENTITY_CUSTOMER);
+				if (validate(ltfRequired)) {
+					ltfNo.setText(null);
+					create(getThis(), Eviro.ENTITY_CUSTOMER);
+				}
 				break;
 
 			case "edit":
@@ -94,9 +98,11 @@ public class CustomerTool extends Tool implements Updatable {
 				break;
 
 			case "update":
-				if (update(getThis(), Eviro.ENTITY_CUSTOMER)) {
-					setButtons(lookingButtons);
-					setTfEditable(ltfAll, false);
+				if (validate(ltfRequired)) {
+					if (update(getThis(), Eviro.ENTITY_CUSTOMER)) {
+						setButtons(lookingButtons);
+						setTfEditable(ltfAll, false);
+					}
 				}
 				break;
 
@@ -139,12 +145,25 @@ public class CustomerTool extends Tool implements Updatable {
 
 	@Override
 	public String[] getValues() {
+		return getValues(false);
+	}
+
+	@Override
+	public String[] getValues(boolean getNames) {
 
 		String[] text = new String[ltfAll.length];
 
 		for (int i = 0; i < ltfAll.length; i++) {
-			text[i] = ltfAll[i].getText();
+
+			if (getNames)
+				text[i] = ltfAll[i].getName();
+			else {
+				text[i] = ltfAll[i].getText();
+			}
+
 		}
+
+		System.out.println("getnames:" + getNames + "=" + Arrays.toString(text));
 
 		return text;
 

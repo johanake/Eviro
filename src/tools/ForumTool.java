@@ -63,6 +63,12 @@ public class ForumTool extends Tool implements Updatable {
 	}
 
 	@Override
+	public String[] getValues(boolean getNames) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public Updatable getThis() {
 		return this;
 	}
@@ -187,5 +193,12 @@ public class ForumTool extends Tool implements Updatable {
 				}
 			}
 		}
+
+		@Override
+		public String[] getValues(boolean getNames) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
+
 }

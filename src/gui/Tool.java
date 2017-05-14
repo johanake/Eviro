@@ -23,6 +23,7 @@ import javax.swing.event.InternalFrameEvent;
 
 import client.ClientController;
 import enteties.Entity;
+import shared.Eviro;
 import tools.SearchResult;
 
 public class Tool extends JInternalFrame {
@@ -63,7 +64,7 @@ public class Tool extends JInternalFrame {
 
 	protected void get(Updatable tool, int entitytype) {
 
-		ArrayList<Entity> response = clientCtrlr.getAll(entitytype);
+		ArrayList<Entity> response = clientCtrlr.getAllbyType(entitytype);
 
 		Object[][] results = new Object[response.size()][4];
 
@@ -101,13 +102,13 @@ public class Tool extends JInternalFrame {
 		ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true);
 
 		if (response.size() == 0) {
-			popupMessage("Inget svar!");
+			popupMessage("Server returned 0 items!");
 		} else if (response.size() == 1) {
-			popupMessage("Created \"entitytype\" with id: " + response.get(0).getData()[0]);
+			popupMessage("A " + Eviro.getEntityNameByNumber(entitytype) + " has been created with id no: " + response.get(0).getData()[0]);
 			tool.setValues(response.get(0).getData());
 		} else {
 			// TODO Byta ut entitytype mot sträng motsvarande entity, getEntityNamebyId(entitytype) i eviro.java
-			popupMessage("A \"entitytype\" with the same values already exists!");
+			popupMessage("A " + Eviro.getEntityNameByNumber(entitytype) + " with the same values already exists!");
 
 		}
 
@@ -116,7 +117,7 @@ public class Tool extends JInternalFrame {
 	protected boolean update(Updatable tool, int entitytype) {
 		if (clientCtrlr.update(this, tool.getValues(), entitytype)) {
 
-			popupMessage("Update succesfull!");
+			popupMessage("The " + Eviro.getEntityNameByNumber(entitytype) + " has been succesfully updated!");
 			return true;
 		} else {
 			Object[] test = new Object[tool.getValues().length];
@@ -274,6 +275,42 @@ public class Tool extends JInternalFrame {
 		JOptionPane.showMessageDialog(this, txt);
 	}
 
+	protected boolean validate(LabledTextField[] fields) {
+
+		String check = "";
+		String[] values = new String[fields.length];
+		String[] names = new String[fields.length];
+
+		for (int i = 0; i < values.length; i++) {
+
+			values[i] = fields[i].getText();
+			names[i] = fields[i].getName();
+
+			if (fields[i].getIsNumber()) {
+				try {
+					Integer.parseInt(values[i]);
+				} catch (NumberFormatException e) {
+					check += "\n" + names[i] + " - (has to be an integer)";
+				}
+			}
+
+			else if (values[i] == null || values[i].trim().length() <= 0) {
+				check += "\n" + names[i];
+			}
+
+		}
+
+		if (check.trim().length() > 0)
+
+		{
+			JOptionPane.showMessageDialog(this, "Please check the following fields before continuing:" + check);
+			return false;
+		}
+
+		return true;
+
+	}
+
 	protected JInternalFrame getFrame() {
 		return this;
 	}
@@ -336,13 +373,24 @@ public class Tool extends JInternalFrame {
 	 */
 	public class LabledTextField extends JTextField {
 
-		public LabledTextField(String name, boolean enabled) {
+		private boolean isNumber = false;
+
+		public LabledTextField(String name, boolean enabled, boolean isNumber) {
 			setTfEditable(this, enabled);
 			setName(name);
+			this.isNumber = isNumber;
+		}
+
+		public LabledTextField(String name, boolean enabled) {
+			this(name, enabled, false);
 		}
 
 		public LabledTextField(String name) {
 			this(name, true);
+		}
+
+		public boolean getIsNumber() {
+			return isNumber;
 		}
 
 	}
