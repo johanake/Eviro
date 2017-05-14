@@ -280,30 +280,49 @@ public class Tool extends JInternalFrame {
 		String check = "";
 		String[] values = new String[fields.length];
 		String[] names = new String[fields.length];
+		Color bgColor = Color.WHITE;
+		// Color errColor = new Color(169, 46, 34); // Röd?
+		Color errColor = new Color(255, 220, 35);
 
 		for (int i = 0; i < values.length; i++) {
 
 			values[i] = fields[i].getText();
 			names[i] = fields[i].getName();
+			fields[i].setBackground(bgColor);
 
-			if (fields[i].getIsNumber()) {
+			if (fields[i].isInteger()) {
 				try {
 					Integer.parseInt(values[i]);
 				} catch (NumberFormatException e) {
-					check += "\n" + names[i] + " - (has to be an integer)";
+					check += "\n" + names[i] + " (number)";
+					fields[i].setBackground(errColor);
+				}
+			}
+
+			else if (fields[i].isDouble()) {
+
+				values[i] = values[i].replaceAll(",", ".");
+				fields[i].setText(values[i]);
+
+				try {
+					Double.parseDouble(values[i]);
+				} catch (NumberFormatException e) {
+					check += "\n" + names[i] + " (decimal number)";
+					fields[i].setBackground(errColor);
 				}
 			}
 
 			else if (values[i] == null || values[i].trim().length() <= 0) {
 				check += "\n" + names[i];
+				fields[i].setBackground(errColor);
 			}
 
 		}
 
-		if (check.trim().length() > 0)
+		if (check.trim().length() > 0) {
 
-		{
-			JOptionPane.showMessageDialog(this, "Please check the following fields before continuing:" + check);
+			JOptionPane.showMessageDialog(this, "Please check the following fields before continuing:" + check, "Required fields missing",
+					JOptionPane.INFORMATION_MESSAGE);
 			return false;
 		}
 
@@ -311,22 +330,35 @@ public class Tool extends JInternalFrame {
 
 	}
 
+	/**
+	 * Returns a instance of this JInternalFrame.
+	 * @return a instance of this JInternalFrame
+	 */
 	protected JInternalFrame getFrame() {
 		return this;
 	}
 
 	/**
-	 * Customization of JPanel that takes it's name as a parameter in the constructor.
+	 * Customization of JPanel that takes its name and LayoutManager as parameters in the constructor.
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */
 	public class Tab extends JPanel {
 
+		/**
+		 * Creates a tab with a name and a specified LayoutManager.
+		 * @param name the name for the tab
+		 * @param layout the LayoutManager to use for the tab
+		 */
 		public Tab(String name, LayoutManager layout) {
 			super(layout);
 			setName(name);
 		}
 
+		/**
+		 * Creates a tab with a name and a BorderLayout LayoutManager.
+		 * @param name the name for the tab
+		 */
 		public Tab(String name) {
 			this(name, new BorderLayout());
 		}
@@ -334,13 +366,19 @@ public class Tool extends JInternalFrame {
 	}
 
 	/**
-	 * Customization of JPanel that takes it's name as a parameter in the constructor.
+	 * Customization of JPanel that by default is split in two.
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */
 	public class SplitPanel extends JPanel {
 
+		/**
+		 * Creates the splitted panel and sets its name to a combination of reght and left.
+		 * @param left the left panel
+		 * @param right the right panel
+		 */
 		public SplitPanel(JComponent left, JComponent right) {
+
 			setLayout(new GridLayout(1, 2));
 
 			String name = "";
@@ -367,36 +405,83 @@ public class Tool extends JInternalFrame {
 	}
 
 	/**
-	 * Customization of JPanel that takes it's name as a parameter in the constructor.
+	 * Customization of JTextField that takes its name, its enabled state and its validation type as parameters in the constructor.
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */
 	public class LabledTextField extends JTextField {
 
-		private boolean isNumber = false;
+		private boolean isInteger = false; // Used while validating the field value.
+		private boolean isDouble = false; // Used while validating the field value.
 
-		public LabledTextField(String name, boolean enabled, boolean isNumber) {
+		/**
+		 * Constructor.
+		 * @param name the name of this text field
+		 * @param enabled whether the input field should be enabled or not
+		 * @param fieldValueType type of data to validate the input for
+		 */
+		public LabledTextField(String name, boolean enabled, int fieldValueType) {
 			setTfEditable(this, enabled);
 			setName(name);
-			this.isNumber = isNumber;
+
+			switch (fieldValueType) {
+
+			case Eviro.VALIDATOR_DOUBLE:
+				isDouble = true;
+				break;
+
+			case Eviro.VALIDATOR_INTEGER:
+				isInteger = true;
+				break;
+
+			}
+
 		}
 
+		/**
+		 * Constructor.
+		 * @param name the name of this text field
+		 * @param enabled whether the input field should be enabled or not
+		 */
 		public LabledTextField(String name, boolean enabled) {
-			this(name, enabled, false);
+			this(name, enabled, 0);
 		}
 
+		/**
+		 * Constructor.
+		 * @param name the name of this text field
+		 * @param fieldValueType type of data to validate the input for
+		 */
+		public LabledTextField(String name, int fieldValueType) {
+			this(name, true, fieldValueType);
+		}
+
+		/**
+		 * Constructor.
+		 * @param name the name of this text field
+		 */
 		public LabledTextField(String name) {
 			this(name, true);
 		}
 
-		public boolean getIsNumber() {
-			return isNumber;
+		/**
+		 * @return
+		 */
+		public boolean isInteger() {
+			return isInteger;
+		}
+
+		/**
+		 * @return
+		 */
+		public boolean isDouble() {
+			return isDouble;
 		}
 
 	}
 
 	/**
-	 * Customization of JButton that takes it's ActionCommand as a parameter in the constructor.
+	 * Customization of JButton that takes its ActionCommand as a parameter in the constructor.
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */

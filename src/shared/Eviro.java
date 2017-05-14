@@ -30,6 +30,9 @@ public class Eviro {
 	public static final int ENTITY_FORUMMESSAGE = 5;
 	public static final int ENTITY_USER = 6;
 
+	public static final int VALIDATOR_INTEGER = 1;
+	public static final int VALIDATOR_DOUBLE = 2;
+
 	/**
 	 * Setup system before instantiation.
 	 */

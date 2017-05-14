@@ -22,12 +22,12 @@ public class ArticleTool extends Tool implements Updatable {
 	private LabledTextField ltfNo = new LabledTextField("No");
 	private LabledTextField ltfName = new LabledTextField("Name");
 	private LabledTextField ltfDesc = new LabledTextField("Description");
-	private LabledTextField ltfPrice = new LabledTextField("Price");
+	private LabledTextField ltfPrice = new LabledTextField("Price", Eviro.VALIDATOR_DOUBLE);
 	private LabledTextField ltfEan = new LabledTextField("EAN");
 	private LabledTextField ltfSup = new LabledTextField("Supplier");
 	private LabledTextField ltfSupNo = new LabledTextField("Suppler No");
 	private LabledTextField ltfStockPlace = new LabledTextField("Stock place");
-	private LabledTextField ltfQuantity = new LabledTextField("Quantity", false, true);
+	private LabledTextField ltfQuantity = new LabledTextField("Quantity", false, Eviro.VALIDATOR_INTEGER);
 
 	private LabledTextField[] ltfAll = { ltfNo, ltfName, ltfDesc, ltfPrice, ltfSup, ltfSupNo, ltfEan, ltfStockPlace, ltfQuantity };
 	private LabledTextField[] ltfRequired = { ltfName, ltfDesc, ltfPrice, ltfSup };

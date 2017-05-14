@@ -26,7 +26,7 @@ public class CustomerTool extends Tool implements Updatable {
 	private LabledTextField ltfPhone = new LabledTextField("Phone No");
 	private LabledTextField ltfEmail = new LabledTextField("Email");
 	private LabledTextField ltfVat = new LabledTextField("Vat No");
-	private LabledTextField ltfLimit = new LabledTextField("Limit", true, true);
+	private LabledTextField ltfLimit = new LabledTextField("Limit", true, Eviro.VALIDATOR_INTEGER);
 	private LabledTextField ltfBalance = new LabledTextField("Balance", false);
 	private LabledTextField[] ltfAll = { ltfNo, ltfName, ltfAddress, ltfZip, ltfCity, ltfPhone, ltfEmail, ltfVat, ltfLimit };
 	private LabledTextField[] ltfRequired = { ltfName, ltfAddress, ltfZip, ltfCity, ltfPhone, ltfLimit };
