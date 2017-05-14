@@ -33,7 +33,6 @@ public class ClientController {
 	 */
 	public ClientController(Client client) {
 		this.client = client;
-		boolean logIn = false;
 		while(logIn() == false){
 		}
 		
