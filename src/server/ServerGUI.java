@@ -28,7 +28,7 @@ public class ServerGUI implements ActionListener {
 	public ServerGUI(ServerController serverController, Server server) {
 		this();
 		this.server = server;
-		serverController.setServerGUI(this);
+//		serverController.setServerGUI(this);
 	}
 
 	public ServerGUI() {

@@ -13,6 +13,8 @@ import enteties.Invoice;
 import enteties.Product;
 import enteties.Transaction;
 import enteties.User;
+import gui.GUIController;
+import gui.Login;
 import gui.Tool;
 import shared.Eviro;
 
@@ -22,9 +24,9 @@ import shared.Eviro;
  * @author Johan Åkesson
  * @version 1.1
  */
-public class ClientController {
+public class ClientController{
 	private StrongPasswordEncryptor passCryptor = new StrongPasswordEncryptor();
-
+	private boolean online = false;
 	private Client client;
 
 	/**
@@ -32,6 +34,7 @@ public class ClientController {
 	 * @param client the client of the system
 	 */
 	public ClientController(Client client) {
+<<<<<<< Updated upstream
 		this.client = client;
 		// while (logIn() == false) {
 		// }
@@ -47,11 +50,31 @@ public class ClientController {
 		if (userList.isEmpty()) {
 			return false;
 		} else if (passCryptor.checkPassword(passInput, (String) userList.get(0).getData()[2])) {
+=======
+		this.client = client;		
+	}
+	
+	public boolean checkPassword(String user, String pass){
+		ArrayList<Entity> userList = search(new Object[] {"", user, ""}, Eviro.ENTITY_USER);
+		if(userList.isEmpty()){
+			return false;
+		} 
+		else if(passCryptor.checkPassword(pass, (String) userList.get(0).getData()[2])){
+			if(isOnline() == false){
+				setOnline(true);
+			}
+>>>>>>> Stashed changes
 			return true;
 		} else {
 			return false;
 		}
 	}
+<<<<<<< Updated upstream
+=======
+	public StrongPasswordEncryptor getPassCryptor() {
+		return passCryptor;
+	}
+>>>>>>> Stashed changes
 
 	/**
 	 * Creates and sends a "update operation" object to the server.
@@ -254,4 +277,37 @@ public class ClientController {
 
 	}
 
+<<<<<<< Updated upstream
+=======
+	public ArrayList<Entity> getAll(int entityType) {
+
+		ArrayList<Entity> response = new ArrayList<Entity>();
+
+		Entity object = createEntityByType(entityType);//
+
+		object.setOperation(Eviro.DB_GETALL);
+
+		response = (ArrayList<Entity>) client.sendObject(object);
+		return response;
+
+	}
+
+	public synchronized boolean isOnline() {
+		return online;
+	}
+
+	public synchronized void setOnline(boolean online) {
+		this.online = online;
+	}
+
+	// /**
+	// * Adds a new forum message to the database.
+	// * @param res the message to add.
+	// */
+	// public void addForumMessage(ForumMessage msg) {
+	// msg.setOperation(Eviro.DB_ADD);
+	// client.sendObject(msg);
+	// }
+
+>>>>>>> Stashed changes
 }

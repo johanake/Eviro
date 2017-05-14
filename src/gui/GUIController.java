@@ -29,6 +29,7 @@ import javax.swing.border.TitledBorder;
 
 import client.ClientController;
 import shared.Eviro;
+import tools.AdminTool;
 import tools.ArticleTool;
 import tools.CustomerTool;
 import tools.ForumTool;
@@ -54,7 +55,10 @@ public class GUIController {
 	public GUIController(ClientController clientController) {
 
 		this.clientController = clientController;
-
+		
+		new Thread(new Login(clientController)).start();
+		while(clientController.isOnline() == false);
+		
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
@@ -223,6 +227,7 @@ public class GUIController {
 				new ActionJButton("Article", "tool_article") };
 
 		private JComponent bottom[] = new JComponent[] {
+				new ActionJButton("Admin", "tool_admin"),
 				new ActionJButton("Forum", "tool_forum"),
 				new ActionJButton("Settings", "tool_settings"),
 				new ActionJButton("Quit", "link_exit") };
@@ -290,6 +295,15 @@ public class GUIController {
 
 			case "tool_forum":
 				desktop.add(new ForumTool(clientController, getGUIController()));
+				break;
+				
+			case "tool_admin": //LÖSENORDET ÄR "password"
+				String pass = JOptionPane.showInputDialog(desktop,"Enter admin password", "Admin Sign In", JOptionPane.DEFAULT_OPTION);
+				if (clientController.checkPassword("admin", pass)){
+					desktop.add(new AdminTool(clientController, getGUIController()));
+				} 
+				else {
+					JOptionPane.showMessageDialog(desktop,"Wrong password, try again", "Admin Sign In", JOptionPane.ERROR_MESSAGE);				}
 				break;
 
 			default:

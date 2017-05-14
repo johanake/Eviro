@@ -8,9 +8,9 @@ import java.io.*;
 import java.util.Properties;
 
 import javax.swing.JOptionPane;
-public class enryptTest {
+public class EncryptTest {
 
-	public enryptTest() {
+	public EncryptTest() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -21,7 +21,7 @@ public class enryptTest {
 		StrongPasswordEncryptor pcryptor = new StrongPasswordEncryptor();
 		BasicTextEncryptor tcryptor = new BasicTextEncryptor();
 		tcryptor.setPassword("eviroadmin");
-		System.out.println(pcryptor.encryptPassword("password"));
+		System.out.println(tcryptor.encrypt("127.0.0.1"));
 
 
 	}

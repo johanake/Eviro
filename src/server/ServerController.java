@@ -1,15 +1,23 @@
 package server;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+
+import javax.swing.JOptionPane;
+
+import org.jasypt.util.password.StrongPasswordEncryptor;
+import org.jasypt.util.text.BasicTextEncryptor;
 
 import enteties.Customer;
 import enteties.Entity;
@@ -21,22 +29,79 @@ import enteties.User;
 import shared.Eviro;
 
 /**
- * Handles most of the logic between the server and the database. Also logs traffic to and from database.
+ * Handles most of the logic between the server and the database. Also logs
+ * traffic to and from database.
+ * 
  * @author Mattias Sundquist, Peter Folke
  */
 public class ServerController {
-
+	
+	private ConnectDB connectDB;
+	private ServerGUI serverGUI;
+	
 	private Logger log = Logger.getLogger("log");
 	private FileHandler fhLog;
 	private SimpleFormatter sfLog = new SimpleFormatter();
-	private ConnectDB database;
-	private ServerGUI serverGUI;
+	
+	private FileReader reader;
+	private Properties properties = new Properties();
+	private BasicTextEncryptor textCryptor = new BasicTextEncryptor();
+	private StrongPasswordEncryptor passCryptor = new StrongPasswordEncryptor();
 
 	/**
 	 * Gets an instance of the ConnectDB class
 	 */
 	public ServerController() {
-		database = new ConnectDB();
+		login();
+		connectDB = new ConnectDB(this);
+		setUpLogger();
+		serverGUI = new ServerGUI(this, null);
+	}
+	
+	/**
+	 * 
+	 */
+	private void login(){
+		try {
+			properties.load(reader = new FileReader("serverConfig"));
+//			String pass = null;
+			String pass = "eviroadmin"; //TEMPORÄRT FÖR ATT SLIPPA SKRIVA IN LÖSEN
+			while (pass == null) {
+				pass = checkPassword();
+			}
+			textCryptor.setPassword(pass);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private String checkPassword() {
+		String input = JOptionPane.showInputDialog(null, "Sign in with server password", "Eviro Server Login",
+				JOptionPane.DEFAULT_OPTION);
+		if (passCryptor.checkPassword(input, properties.getProperty("admin"))) {
+			return input;
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public String decrypt(String property) {
+		return textCryptor.decrypt(properties.getProperty(property));
+	}
+
+	/**
+	 * 
+	 */
+	private void setUpLogger(){
 		try {
 			File logDir = new File("logs");
 			logDir.mkdir();
@@ -49,13 +114,9 @@ public class ServerController {
 		}
 	}
 
-	public void setServerGUI(ServerGUI serverGUI) {
-
-		this.serverGUI = serverGUI;
-	}
-
 	/**
 	 * Adds a new info message in the logger.
+	 * 
 	 * @param msg
 	 */
 	public void logAppend(String msg) {
@@ -65,8 +126,11 @@ public class ServerController {
 	}
 
 	/**
-	 * Handles objects coming from the server. Finds out what operation to perform based on the getOperation method in the EntityInterface
-	 * @param ei The object coming from the server.
+	 * Handles objects coming from the server. Finds out what operation to
+	 * perform based on the getOperation method in the EntityInterface
+	 * 
+	 * @param ei
+	 *            The object coming from the server.
 	 */
 	public ArrayList<Entity> operationHandler(Entity ei) {
 
@@ -74,29 +138,32 @@ public class ServerController {
 
 		switch (ei.getOperation()) {
 		case Eviro.DB_ADD:
-			database.executeInsertOrDeleteQuery(buildInsertQuery(ei));
-			returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
+			connectDB.executeInsertOrDeleteQuery(buildInsertQuery(ei));
+			returnObject = createList(connectDB.executeGetQuery(buildSearchQuery(ei)));
 			break;
 		case Eviro.DB_SEARCH:
-			returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
+			returnObject = createList(connectDB.executeGetQuery(buildSearchQuery(ei)));
 			break;
 		case Eviro.DB_UPDATE:
-			database.executeUpdateQuery(buildUpdateQuery(ei));
-			returnObject = createList(database.executeGetQuery(buildSearchQuery(ei)));
+			connectDB.executeUpdateQuery(buildUpdateQuery(ei));
+			returnObject = createList(connectDB.executeGetQuery(buildSearchQuery(ei)));
 			break;
 		case Eviro.DB_DELETE:
-			database.executeInsertOrDeleteQuery(buildDeleteQuery(ei));
+			connectDB.executeInsertOrDeleteQuery(buildDeleteQuery(ei));
 			break;
 		case Eviro.DB_GETALL:
-			returnObject = createList(database.executeGetQuery(buildGetAllQuery(ei)));
+			returnObject = createList(connectDB.executeGetQuery(buildGetAllQuery(ei)));
 			break;
 		}
 		return returnObject;
 	}
 
 	/**
-	 * Checks which Object the EntityInterface is an instance of and returns that objects table name.
-	 * @param ei The EntityInterface to check instance of.
+	 * Checks which Object the EntityInterface is an instance of and returns
+	 * that objects table name.
+	 * 
+	 * @param ei
+	 *            The EntityInterface to check instance of.
 	 * @return A String with the Objects table name.
 	 */
 	private String getTableName(Entity ei) {
@@ -119,14 +186,18 @@ public class ServerController {
 	}
 
 	/**
-	 * Asks the database for the tables column names with the MySql command "DESCRIBE table_name". The name of the table itself is provided by an EntityInterface.
-	 * @param ei An EntityInterface with a method to read the table name.
+	 * Asks the database for the tables column names with the MySql command
+	 * "DESCRIBE table_name". The name of the table itself is provided by an
+	 * EntityInterface.
+	 * 
+	 * @param ei
+	 *            An EntityInterface with a method to read the table name.
 	 * @return A String array with all the table names.
 	 */
 	private String[] getColNames(Entity ei, String tableName) {
 
 		String query = "DESCRIBE " + tableName;
-		ResultSet rs = database.executeGetQuery(query);
+		ResultSet rs = connectDB.executeGetQuery(query);
 		try {
 			ArrayList<String> temp = new ArrayList<String>();
 			temp.add(tableName);
@@ -145,7 +216,9 @@ public class ServerController {
 	}
 
 	/**
-	 * Builds a "get all" query based on the information in the Entity given in the parameter.
+	 * Builds a "get all" query based on the information in the Entity given in
+	 * the parameter.
+	 * 
 	 * @param ei
 	 * @return
 	 */
@@ -160,8 +233,11 @@ public class ServerController {
 	}
 
 	/**
-	 * Builds a search-query based on information in the EntityInterface given in the parameter.
-	 * @param ei The EntityInterface to build the search-query around.
+	 * Builds a search-query based on information in the EntityInterface given
+	 * in the parameter.
+	 * 
+	 * @param ei
+	 *            The EntityInterface to build the search-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
 	private String buildSearchQuery(Entity ei) {
@@ -186,8 +262,11 @@ public class ServerController {
 	}
 
 	/**
-	 * Builds an insert-query based on information in the EntityInterface given in the parameter.
-	 * @param ei The EntityInterface to build the insert-query around.
+	 * Builds an insert-query based on information in the EntityInterface given
+	 * in the parameter.
+	 * 
+	 * @param ei
+	 *            The EntityInterface to build the insert-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
 	private String buildInsertQuery(Entity ei) {
@@ -216,8 +295,11 @@ public class ServerController {
 	}
 
 	/**
-	 * Builds an update-query based on information in the EntityInterface given in the parameter. Expects that the EntityInterface id is specified.
-	 * @param ei The EntityInterface to build the update-query around.
+	 * Builds an update-query based on information in the EntityInterface given
+	 * in the parameter. Expects that the EntityInterface id is specified.
+	 * 
+	 * @param ei
+	 *            The EntityInterface to build the update-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
 	private String buildUpdateQuery(Entity ei) {
@@ -240,8 +322,11 @@ public class ServerController {
 	}
 
 	/**
-	 * Build a delete-query based on the information in the ENtityInterface given in the parameter. Expects that the EntityInterface id is specified.
-	 * @param ei The EntityInterface to build the update-query around.
+	 * Build a delete-query based on the information in the ENtityInterface
+	 * given in the parameter. Expects that the EntityInterface id is specified.
+	 * 
+	 * @param ei
+	 *            The EntityInterface to build the update-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
 	private String buildDeleteQuery(Entity ei) {
@@ -257,9 +342,13 @@ public class ServerController {
 	}
 
 	/**
-	 * Builds an Arraylist of EntityInterfaces based on the resultset given in the parameter.
-	 * @param rs The resultset to build the Arraylist on.
-	 * @return An ArrayList of EntityInterfaces containing the EntityInterfaces from the resultset.
+	 * Builds an Arraylist of EntityInterfaces based on the resultset given in
+	 * the parameter.
+	 * 
+	 * @param rs
+	 *            The resultset to build the Arraylist on.
+	 * @return An ArrayList of EntityInterfaces containing the EntityInterfaces
+	 *         from the resultset.
 	 */
 	private ArrayList<Entity> createList(ResultSet rs) {
 
@@ -268,55 +357,25 @@ public class ServerController {
 			while (rs.next()) {
 
 				if (rs.getMetaData().toString().contains("tableName=customer")) {
-					ei.add(new Customer(new Object[] {
-							rs.getString(1),
-							rs.getString(2),
-							rs.getString(3),
-							rs.getString(4),
-							rs.getString(5),
-							rs.getString(6),
-							rs.getString(7),
-							rs.getString(8),
+					ei.add(new Customer(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3),
+							rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8),
 							rs.getInt(9) }));
 				} else if (rs.getMetaData().toString().contains("tableName=invoice")) {
-					ei.add(new Invoice(new Object[] {
-							rs.getString(1),
-							rs.getString(2),
-							rs.getString(3),
-							rs.getString(4),
-							rs.getString(5),
-							rs.getString(6),
-							rs.getString(7) }));
+					ei.add(new Invoice(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3),
+							rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) }));
 				} else if (rs.getMetaData().toString().contains("tableName=product")) {
-					ei.add(new Product(new Object[] {
-							rs.getString(1),
-							rs.getString(2),
-							rs.getString(3),
-							rs.getString(4),
-							rs.getString(5),
-							rs.getString(6),
-							rs.getString(7),
-							rs.getString(8),
+					ei.add(new Product(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3),
+							rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8),
 							rs.getInt(9) }));
 				} else if (rs.getMetaData().toString().contains("tableName=transaction")) {
-					ei.add(new Transaction(new Object[] {
-							rs.getString(1),
-							rs.getString(2),
-							rs.getString(3),
-							rs.getString(4),
-							rs.getString(5) }));
+					ei.add(new Transaction(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3),
+							rs.getString(4), rs.getString(5) }));
 				} else if (rs.getMetaData().toString().contains("tableName=forummessage")) {
-					ei.add(new ForumMessage(new Object[] {
-							rs.getString(1),
-							rs.getString(2),
-							rs.getString(3),
-							rs.getString(4) }));
+					ei.add(new ForumMessage(
+							new Object[] { rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4) }));
 
 				} else if (rs.getMetaData().toString().contains("tableName=user")) {
-					ei.add(new ForumMessage(new Object[] {
-							rs.getString(1),
-							rs.getString(2),
-							rs.getString(3), }));
+					ei.add(new ForumMessage(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3), }));
 				}
 			}
 		} catch (SQLException e) {

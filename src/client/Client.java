@@ -6,12 +6,13 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import gui.GUIController;
+import gui.Login;
 
 /**
  * Handles all traffic to and from the server.
  * @author Mattias Sundquist
  */
-public class Client extends Thread {
+public class Client extends Thread{
 
 	private ClientController clientController;
 	private String ip;
@@ -29,12 +30,9 @@ public class Client extends Thread {
 		this.ip = ip;
 		this.port = port;
 		connectToServer();
-		new GUIController(clientController = new ClientController(this));
-
-		
-
-		
+		new GUIController(clientController = new ClientController(this));	
 	}
+	
 
 	/**
 	 * Creates input and output streams and starts a new Thread.
