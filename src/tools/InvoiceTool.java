@@ -128,6 +128,7 @@ public class InvoiceTool extends Tool implements Updatable {
 		};
 
 		scrollPane = new JScrollPane(articles);
+		scrollPane.setPreferredSize(new Dimension(1, 150));
 		pnlCenter.add(scrollPane, BorderLayout.CENTER);
 		setButtons(editingButtons);
 
@@ -332,6 +333,7 @@ public class InvoiceTool extends Tool implements Updatable {
 
 		articles = new Table((DefaultTableModel) articles.getModel(), false);
 		scrollPane = new JScrollPane(articles);
+		scrollPane.setPreferredSize(new Dimension(1, 150));
 		pnlCenter.add(scrollPane, BorderLayout.CENTER);
 
 		this.setBounds(this.getX(), this.getY(), this.getWidth(), 450);
