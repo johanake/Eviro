@@ -135,6 +135,7 @@ public class CustomerTool extends Tool implements Updatable {
 		ArrayList<Entity> invoices = clientCtrlr.search(new Object[] { null, customerNo, null, null, null, null, null }, Eviro.ENTITY_INVOICE);
 
 		Double balance = 0.00;
+		ltfBalance.setText("0.00");
 
 		for (int i = 0; i < invoices.size(); i++) {
 
@@ -158,7 +159,11 @@ public class CustomerTool extends Tool implements Updatable {
 		Double balance = Double.parseDouble(ltfBalance.getText());
 		Double limit = Double.parseDouble(ltfLimit.getText());
 
-		if (balance >= limit) {
+		if (limit == 0) {
+			popupMessage("Unable to create invoice, customer credit limit is: 0.00:-", "Credit limit error", JOptionPane.ERROR_MESSAGE);
+			// popupMessage("Unable to create invoice, customer credit limit is: 0.00:-");
+
+		} else if (balance > limit) {
 
 			int reply = JOptionPane.showConfirmDialog(this, "The credit limit is exceeded by " + (balance - limit) + ":-, proceed?", "Proceed?",
 					JOptionPane.OK_CANCEL_OPTION);
@@ -171,7 +176,9 @@ public class CustomerTool extends Tool implements Updatable {
 
 		}
 
-		// guiCtrlr.add(new InvoiceTool(clientCtrlr, guiCtrlr, ltfNo.getText()));
+		else {
+			guiCtrlr.add(new InvoiceTool(clientCtrlr, guiCtrlr, ltfNo.getText()));
+		}
 	}
 
 	private void reset() {

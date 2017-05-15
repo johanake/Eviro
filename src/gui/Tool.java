@@ -272,7 +272,15 @@ public class Tool extends JInternalFrame {
 	 * @param txt the text to display on the popup
 	 */
 	protected void popupMessage(String txt) {
-		JOptionPane.showMessageDialog(this, txt);
+		popupMessage(txt, "Message", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	/**
+	 * Displays a popup message positioned relative to this frame.
+	 * @param txt the text to display on the popup
+	 */
+	protected void popupMessage(String message, String title, int messageType) {
+		JOptionPane.showMessageDialog(this, message, title, messageType);
 	}
 
 	/**
@@ -330,8 +338,8 @@ public class Tool extends JInternalFrame {
 
 		if (check.length() > 0) {
 
-			JOptionPane.showMessageDialog(this, "Please check the following fields before continuing:" + check, "Required fields missing",
-					JOptionPane.INFORMATION_MESSAGE);
+			popupMessage("Please check the following fields before continuing:" + check, "Required fields missing", JOptionPane.INFORMATION_MESSAGE);
+
 			return false;
 		}
 
