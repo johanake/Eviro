@@ -138,6 +138,15 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
+	// public InvoiceTool(ClientController clientController, GUIController guiController, ) {
+	//
+	// super("Invoice", clientController, guiController);
+	// setup();
+	// setButtons(defaultButtons);
+	// setTfEditable(ltfAll, true);
+	//
+	// }
+
 	public void setup() {
 
 		super.setMaximizable(true);
@@ -200,6 +209,11 @@ public class InvoiceTool extends Tool implements Updatable {
 				break;
 			}
 		}
+	}
+
+	public void search(String invoiceNo) {
+		ltfInvNo.setText(invoiceNo);
+		search(getThis(), ltfAll, Eviro.ENTITY_INVOICE);
 	}
 
 	public void getArticle(String articleno, int row) {

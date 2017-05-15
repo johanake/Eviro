@@ -6,14 +6,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 
 import client.ClientController;
+import enteties.Entity;
 import gui.GUIController;
 import gui.Table;
 import gui.Tool;
@@ -45,10 +48,10 @@ public class CustomerTool extends Tool implements Updatable {
 	private LabledTextField[] ltfRequired = { ltfName, ltfAddress, ltfZip, ltfCity, ltfPhone, ltfLimit };
 
 	private ActionButton btnNew = new ActionButton("Create New", "create");
-	private ActionButton btnEdit = new ActionButton("Edit", "edit");
+	private ActionButton btnEdit = new ActionButton("Edit Customer", "edit");
 	private ActionButton btnUpdate = new ActionButton("Save", "update");
 	private ActionButton btnFind = new ActionButton("Find", "search");
-	private ActionButton btnInvoice = new ActionButton("Invoice", "invoice");
+	private ActionButton btnInvoice = new ActionButton("New Invoice", "invoice");
 	private ActionButton btnReset = new ActionButton("Reset", "reset");
 
 	private JButton[] allButtons = { btnNew, btnEdit, btnUpdate, btnFind, btnInvoice, btnReset };
@@ -63,7 +66,7 @@ public class CustomerTool extends Tool implements Updatable {
 		setContent(0, new JComponent[] { ltfNo, ltfName, ltfAddress, new SplitPanel(ltfZip, ltfCity), ltfPhone, ltfEmail, ltfVat });
 		setContent(1, new JComponent[] { new SplitPanel(ltfLimit, ltfBalance) });
 		setButtons(defaultButtons);
-
+		ltfBalance.setText("0.00");
 		createCommentsTable();
 		createInvoiceTable();
 
@@ -92,7 +95,7 @@ public class CustomerTool extends Tool implements Updatable {
 
 	private void createInvoiceTable() {
 
-		tblInvoices = new Table(new Object[] { "Invoice-No", "Buyer", "Created", "Total" }, false) {
+		tblInvoices = new Table(new Object[] { "Created", "Invoice-No", "Buyer", "Total" }, false) {
 			@Override
 			public void editingStopped(ChangeEvent e) {
 				int row = getEditingRow();
@@ -112,7 +115,12 @@ public class CustomerTool extends Tool implements Updatable {
 				Point p = me.getPoint();
 				int row = table.rowAtPoint(p);
 				if (me.getClickCount() == 2 && row >= 0) {
-					// TODO Beteende här!
+
+					if (tblInvoices.getValueAt(tblInvoices.getSelectedRow(), 1) != null) {
+						InvoiceTool invoiceTool = new InvoiceTool(clientCtrlr, guiCtrlr);
+						invoiceTool.search((String) tblInvoices.getValueAt(tblInvoices.getSelectedRow(), 1));
+						guiCtrlr.add(invoiceTool);
+					}
 				}
 			}
 		});
@@ -122,16 +130,57 @@ public class CustomerTool extends Tool implements Updatable {
 
 	}
 
+	private void getInvoices(String customerNo) {
+
+		ArrayList<Entity> invoices = clientCtrlr.search(new Object[] { null, customerNo, null, null, null, null, null }, Eviro.ENTITY_INVOICE);
+
+		Double balance = 0.00;
+
+		for (int i = 0; i < invoices.size(); i++) {
+
+			balance += Double.parseDouble((String) invoices.get(i).getData()[6]);
+
+			Object[] invoiceData = new Object[4];
+
+			invoiceData[0] = invoices.get(i).getData()[4];
+			invoiceData[1] = invoices.get(i).getData()[0];
+			invoiceData[2] = invoices.get(i).getData()[2];
+			invoiceData[3] = invoices.get(i).getData()[6];
+
+			ltfBalance.setText(Double.toString(balance));
+			tblInvoices.populate(invoiceData, i);
+		}
+
+	}
+
 	private void invoice() {
 
-		// if (ltfBalance.getText() > ltfLimit.getText()) {
-		//
-		// }
+		Double balance = Double.parseDouble(ltfBalance.getText());
+		Double limit = Double.parseDouble(ltfLimit.getText());
 
-		guiCtrlr.add(new InvoiceTool(clientCtrlr, guiCtrlr, ltfNo.getText()));
+		if (balance >= limit) {
+
+			int reply = JOptionPane.showConfirmDialog(this, "The credit limit is exceeded by " + (balance - limit) + ":-, proceed?", "Proceed?",
+					JOptionPane.OK_CANCEL_OPTION);
+
+			if (reply == JOptionPane.OK_OPTION) {
+
+				guiCtrlr.add(new InvoiceTool(clientCtrlr, guiCtrlr, ltfNo.getText()));
+
+			}
+
+		}
+
+		// guiCtrlr.add(new InvoiceTool(clientCtrlr, guiCtrlr, ltfNo.getText()));
 	}
 
 	private void reset() {
+
+		if (tblInvoices != null)
+			tblInvoices.reset();
+
+		if (tblComments != null)
+			tblComments.reset();
 
 		setTfEditable(ltfAll, true);
 		setButtons(defaultButtons);
@@ -202,6 +251,8 @@ public class CustomerTool extends Tool implements Updatable {
 
 	@Override
 	public void setValues(Object[] values) {
+
+		getInvoices((String) values[0]);
 
 		setTfEditable(ltfAll, false);
 		setButtons(lookingButtons);

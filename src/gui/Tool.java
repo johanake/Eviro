@@ -298,6 +298,8 @@ public class Tool extends JInternalFrame {
 			if (fields[i].isInteger()) {
 
 				values[i] = values[i].replaceAll(" ", "");
+				fields[i].setText(values[i]);
+
 				try {
 					Integer.parseInt(values[i]);
 				} catch (NumberFormatException e) {
