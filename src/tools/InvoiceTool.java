@@ -185,27 +185,42 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	private void getTransactions(String invoiceNbr) {
 
-		ArrayList<Entity> response = clientCtrlr.search(new Object[] { null, invoiceNbr, null, null, null }, Eviro.ENTITY_TRANSACTION);
+		ArrayList<Entity> transaction = clientCtrlr.search(new Object[] { null, invoiceNbr, null, null, null }, Eviro.ENTITY_TRANSACTION);
 
-		for (int i = 0; i < response.size(); i++) {
-			articles.populate(response.get(i).getData(), i);
+		for (int i = 0; i < transaction.size(); i++) {
+
+			ArrayList<Entity> article = clientCtrlr.search(
+					new String[] { (String) transaction.get(i).getData()[2], null, null, null, null, null, null, null, null },
+					Eviro.ENTITY_PRODUCT);
+
+			Object[] articleData = article.get(0).getData();
+			Object[] transactionData = transaction.get(i).getData();
+
+			Object[] row = new Object[5];
+			row[0] = transactionData[2];
+			row[1] = articleData[1];
+			row[2] = Double.parseDouble((String) transactionData[4]) / Double.parseDouble((String) transactionData[3]); // Price
+			row[3] = transactionData[3]; // Quantity
+			row[4] = transactionData[4]; // Total
+
+			articles.populate(row, i);
 		}
 
 	}
 
 	public void setTotalPrice() {
 
-		int sum = 0;
+		Double sum = 0.00;
 
 		for (int i = 0; i < articles.getRowCount(); i++) {
 
 			if (articles.getValueAt(i, 0) != null) {
-				sum += Integer.parseInt((String) articles.getValueAt(i, 4));
+				sum += Double.parseDouble((String) articles.getValueAt(i, 4));
 			}
 
 		}
 
-		ltfSum.setText(Integer.toString(sum));
+		ltfSum.setText(Double.toString(sum));
 
 	}
 
@@ -217,6 +232,8 @@ public class InvoiceTool extends Tool implements Updatable {
 		btnCredit.setEnabled(false);
 		setButtons(lookingButtons);
 		setTitle(values[0] + " - " + values[2]);
+
+		articles = new Table(this, new Object[] { "Article No", "Name", "Price", "Quantity", "Sum" }, true);
 
 		for (int i = 0; i < ltfAll.length; i++) {
 
