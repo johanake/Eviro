@@ -1,13 +1,21 @@
 package tools;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
 
 import client.ClientController;
 import gui.GUIController;
+import gui.Table;
 import gui.Tool;
 import gui.Updatable;
 import shared.Eviro;
@@ -15,7 +23,13 @@ import shared.Eviro;
 public class CustomerTool extends Tool implements Updatable {
 
 	private ButtonListener buttonListener;
-	private Tab[] tabs = new Tab[] { new Tab("General"), new Tab("Finance"), new Tab("Comments") };
+
+	private Table tblComments;
+	private Table tblInvoices;
+
+	private Tab tabComments = new Tab("Comments");
+	private Tab tabFinance = new Tab("Finance");
+	private Tab[] tabs = new Tab[] { new Tab("General"), tabFinance, tabComments };
 
 	private LabledTextField ltfNo = new LabledTextField("No");
 	private LabledTextField ltfName = new LabledTextField("Name");
@@ -49,6 +63,60 @@ public class CustomerTool extends Tool implements Updatable {
 		setContent(0, new JComponent[] { ltfNo, ltfName, ltfAddress, new SplitPanel(ltfZip, ltfCity), ltfPhone, ltfEmail, ltfVat });
 		setContent(1, new JComponent[] { new SplitPanel(ltfLimit, ltfBalance) });
 		setButtons(defaultButtons);
+
+		createCommentsTable();
+		createInvoiceTable();
+
+	}
+
+	private void createCommentsTable() {
+		tblComments = new Table(new Object[] { "Date", "Comment" }, true) {
+			@Override
+			public void editingStopped(ChangeEvent e) {
+				int row = getEditingRow();
+				int col = getEditingColumn();
+				super.editingStopped(e);
+				getColumnModel().getColumn(0).setWidth(100);
+				getColumnModel().getColumn(0).setMaxWidth(100);
+
+				// TODO Beteende här!
+
+			}
+		};
+
+		tabComments.setPreferredSize(new Dimension(1, 150));
+		tabComments.add(new JScrollPane(tblComments));
+	}
+
+	private void createInvoiceTable() {
+
+		tblInvoices = new Table(new Object[] { "Invoice-No", "Buyer", "Created", "Total" }, false) {
+			@Override
+			public void editingStopped(ChangeEvent e) {
+				int row = getEditingRow();
+				int col = getEditingColumn();
+				super.editingStopped(e);
+
+				// TODO Beteende här!
+
+			}
+		};
+
+		tblInvoices.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent me) {
+				JTable table = (JTable) me.getSource();
+				Point p = me.getPoint();
+				int row = table.rowAtPoint(p);
+				if (me.getClickCount() == 2 && row >= 0) {
+					// TODO Beteende här!
+				}
+			}
+		});
+
+		tabFinance.add(new JScrollPane(tblInvoices));
+
 	}
 
 	private void invoice() {

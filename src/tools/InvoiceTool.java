@@ -24,7 +24,7 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	private ButtonListener buttonListener;
 
-	private LabledTextField ltfCustNo = new LabledTextField("Customer-");
+	private LabledTextField ltfCustNo = new LabledTextField("Customer");
 	private LabledTextField ltfInvNo = new LabledTextField("Invoice-No");
 	private LabledTextField ltfBuyer = new LabledTextField("Buyer");
 	private LabledTextField ltfRef = new LabledTextField("Reference");
