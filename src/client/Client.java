@@ -5,8 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import enteties.User;
 import gui.GUIController;
 import gui.Login;
+
 
 /**
  * Handles all traffic to and from the server.
@@ -29,8 +31,9 @@ public class Client extends Thread{
 	public Client(String ip, int port) {
 		this.ip = ip;
 		this.port = port;
+		clientController = new ClientController(this);
 		connectToServer();
-		new GUIController(clientController = new ClientController(this));	
+		new GUIController(clientController);	
 	}
 	
 
@@ -40,7 +43,7 @@ public class Client extends Thread{
 	private void connectToServer() {
 
 		try {
-			socket = new Socket(ip, port);
+			socket = new Socket(clientController.getProperty("ip"), Integer.parseInt(clientController.getProperty("port")));
 			objInput = new ObjectInputStream(socket.getInputStream());
 			objOutput = new ObjectOutputStream(socket.getOutputStream());
 			// start();

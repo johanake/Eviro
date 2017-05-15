@@ -1,10 +1,15 @@
 package client;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
 import org.jasypt.util.password.StrongPasswordEncryptor;
+import org.jasypt.util.text.BasicTextEncryptor;
 
 import enteties.Customer;
 import enteties.Entity;
@@ -24,7 +29,9 @@ import shared.Eviro;
  */
 public class ClientController {
 	private StrongPasswordEncryptor passCryptor = new StrongPasswordEncryptor();
-	private boolean online = false;
+	private FileReader reader;
+	private Properties properties = new Properties();
+	private User activeUser = null;
 	private Client client;
 
 	/**
@@ -33,6 +40,13 @@ public class ClientController {
 	 */
 	public ClientController(Client client) {
 		this.client = client;
+		try {
+			reader = new FileReader("clientConfig");
+			properties.load(reader);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public boolean checkPassword(String user, String pass) {
@@ -40,13 +54,19 @@ public class ClientController {
 		if (userList.isEmpty()) {
 			return false;
 		} else if (passCryptor.checkPassword(pass, (String) userList.get(0).getData()[2])) {
-			if (isOnline() == false) {
-				setOnline(true);
+			if (activeUser == null) {
+				setActiveUser(userList.get(0).getData());
+//				activeUser.setOperation(Eviro.LOGIN);
+//				client.sendObject(activeUser);
 			}
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	public String getProperty(String property) {
+		return properties.getProperty(property);
 	}
 
 	public StrongPasswordEncryptor getPassCryptor() {
@@ -252,12 +272,13 @@ public class ClientController {
 
 	}
 
-	public synchronized boolean isOnline() {
-		return online;
+	public synchronized User getActiveUser() {
+		return activeUser;
 	}
 
-	public synchronized void setOnline(boolean online) {
-		this.online = online;
+	public synchronized void setActiveUser(Object[] data) {
+		this.activeUser = new User();
+		activeUser.setData(data);
 	}
 
 }

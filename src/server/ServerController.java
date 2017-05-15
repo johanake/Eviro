@@ -38,7 +38,7 @@ public class ServerController {
 	
 	private ConnectDB connectDB;
 	private ServerGUI serverGUI;
-	
+		
 	private Logger log = Logger.getLogger("log");
 	private FileHandler fhLog;
 	private SimpleFormatter sfLog = new SimpleFormatter();
