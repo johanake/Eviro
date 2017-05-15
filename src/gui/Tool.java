@@ -296,6 +296,8 @@ public class Tool extends JInternalFrame {
 			fields[i].setBackground(bgColor);
 
 			if (fields[i].isInteger()) {
+
+				values[i] = values[i].replaceAll(" ", "");
 				try {
 					Integer.parseInt(values[i]);
 				} catch (NumberFormatException e) {
