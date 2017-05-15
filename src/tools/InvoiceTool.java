@@ -10,6 +10,7 @@ import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
+import javax.swing.event.ChangeEvent;
 
 import client.ClientController;
 import enteties.Entity;
@@ -43,12 +44,79 @@ public class InvoiceTool extends Tool implements Updatable {
 	private JButton[] editingButtons = { btnNew, btnReset };
 	private JButton[] lookingButtons = { btnCredit, btnReset };
 
-	private Table articles = new Table(this, new Object[] { "Article No", "Name", "Price", "Quantity", "Sum" }, true);
+	private Table articles = null;
 
 	public InvoiceTool(ClientController clientController, GUIController guiController, String customer) {
 
 		super("Invoice", clientController, guiController);
+
 		setup();
+		articles = new Table(new Object[] { "Article No", "Name", "Unit Price", "Qty", "Total" }, true) {
+
+			/*
+			 * (non-Javadoc)
+			 * @see javax.swing.JTable#editingStopped(javax.swing.event.ChangeEvent)
+			 */
+			@Override
+			public void editingStopped(ChangeEvent e) {
+
+				int row = getEditingRow();
+				int col = getEditingColumn();
+				super.editingStopped(e);
+
+				if (col == 0) {
+					getArticle((String) getValueAt(row, col), row);
+				}
+
+				else if (col == 2 || col == 3) {
+
+					Double price, total;
+					int quantity;
+
+					// replaceAll(",", "."); TODO Implement?
+
+					try {
+						price = Double.parseDouble((String) getValueAt(row, 2));
+						quantity = Integer.parseInt((String) getValueAt(row, 3));
+						total = price * quantity;
+
+					} catch (NumberFormatException nfe) {
+						total = 0.0;
+						price = 0.0;
+						quantity = 0;
+					}
+
+					getModel().setValueAt(Double.toString(total), row, 4);
+					getModel().setValueAt(Double.toString(price), row, 2);
+					getModel().setValueAt(Integer.toString(quantity), row, 3);
+					setTotalPrice();
+				}
+
+				else if (col == 4) {
+
+					Double price, total;
+					int quantity;
+
+					try {
+						quantity = Integer.parseInt((String) getValueAt(row, 3));
+						total = Double.parseDouble((String) getValueAt(row, 4));
+						price = total / quantity;
+					} catch (NumberFormatException nfe) {
+						total = 0.0;
+						price = 0.0;
+						quantity = 0;
+					}
+					getModel().setValueAt(Double.toString(total), row, 4);
+					getModel().setValueAt(Double.toString(price), row, 2);
+					getModel().setValueAt(Integer.toString(quantity), row, 3);
+					setTotalPrice();
+
+				}
+
+			};
+
+		};
+		pnlCenter.add(new JScrollPane(articles), BorderLayout.CENTER);
 		setButtons(editingButtons);
 
 		ltfCustNo.setText(customer);
@@ -58,8 +126,6 @@ public class InvoiceTool extends Tool implements Updatable {
 		setTfEditable(ltfAll, false);
 		setTfEditable(ltfBuyer, true);
 		setTfEditable(ltfRef, true);
-
-		pnlCenter.add(new JScrollPane(articles), BorderLayout.CENTER);
 
 	}
 
@@ -77,13 +143,14 @@ public class InvoiceTool extends Tool implements Updatable {
 		super.setMaximizable(true);
 		buttonListener = new ButtonListener();
 		setContent(new JComponent[] { new SplitPanel(ltfCustNo, ltfInvNo), ltfBuyer, ltfRef, ltfSum, new SplitPanel(ltfCreated, ltfDue) });
-		pnlCenter.add(new JScrollPane(articles), BorderLayout.CENTER);
 
 	}
 
 	private void reset() {
 
-		articles.reset();
+		if (articles != null)
+			articles.reset();
+
 		setTfEditable(ltfAll, true);
 		setButtons(defaultButtons);
 		setTitle("Invoice");
@@ -226,6 +293,10 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	@Override
 	public void setValues(Object[] values) {
+		articles = new Table(new Object[] { "Article No", "Name", "Price", "Quantity", "Sum" }, false);
+		pnlCenter.add(new JScrollPane(articles), BorderLayout.CENTER);
+		this.setBounds(this.getX(), this.getY(), this.getWidth(), 450);
+		// articles = new Table2(new Object[] { "Article No", "Name", "Price", "Quantity", "Sum" }, false, this);
 
 		getTransactions((String) values[0]);
 		setTfEditable(ltfAll, false);
@@ -233,12 +304,14 @@ public class InvoiceTool extends Tool implements Updatable {
 		setButtons(lookingButtons);
 		setTitle(values[0] + " - " + values[2]);
 
-		articles = new Table(this, new Object[] { "Article No", "Name", "Price", "Quantity", "Sum" }, true);
-
 		for (int i = 0; i < ltfAll.length; i++) {
 
 			if (values[i] instanceof Integer) {
 				values[i] = Integer.toString((int) values[i]);
+			}
+
+			else if (values[i] instanceof Double) {
+				values[i] = Double.toString((Double) values[i]);
 			}
 
 			ltfAll[i].setText((String) values[i]);

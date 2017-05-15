@@ -236,15 +236,12 @@ public class Tool extends JInternalFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				// setJMenuBar(menu);
-				setLayout(new BorderLayout());
 
-				// setPreferredSize(new Dimension(640, 480));
+				setLayout(new BorderLayout());
 
 				pnlNorth.setBackground(bgColor);
 				pnlSouth.setBackground(bgColor);
 
-				// pnlNorth.setBorder(new EmptyBorder(10, 10, 10, 10));
 				pnlSouth.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.black),
 						BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
@@ -252,8 +249,7 @@ public class Tool extends JInternalFrame {
 				add(pnlCenter, BorderLayout.CENTER);
 				add(pnlSouth, BorderLayout.SOUTH);
 
-				// Fixar bredden
-				pnlSouth.setPreferredSize(new Dimension(500, 50));
+				pnlSouth.setPreferredSize(new Dimension(500, 50)); // Fixar bredden
 
 				setLocation(15 * openFrameCount, 15 * openFrameCount);
 				setVisible(true);
@@ -271,10 +267,19 @@ public class Tool extends JInternalFrame {
 		});
 	}
 
+	/**
+	 * Displays a popup message positioned relative to this frame.
+	 * @param txt the text to display on the popup
+	 */
 	protected void popupMessage(String txt) {
 		JOptionPane.showMessageDialog(this, txt);
 	}
 
+	/**
+	 * Validates input and displays appropriate warning messages.
+	 * @param fields array of fields to validate
+	 * @return whether all fields were successfully validated or not
+	 */
 	protected boolean validate(LabledTextField[] fields) {
 
 		String check = "";
@@ -319,7 +324,7 @@ public class Tool extends JInternalFrame {
 
 		}
 
-		if (check.trim().length() > 0) {
+		if (check.length() > 0) {
 
 			JOptionPane.showMessageDialog(this, "Please check the following fields before continuing:" + check, "Required fields missing",
 					JOptionPane.INFORMATION_MESSAGE);
@@ -465,14 +470,16 @@ public class Tool extends JInternalFrame {
 		}
 
 		/**
-		 * @return
+		 * Returns whether the textfields text should convert to integer.
+		 * @return whether the textfields text should convert to integer
 		 */
 		public boolean isInteger() {
 			return isInteger;
 		}
 
 		/**
-		 * @return
+		 * Returns whether the textfields text should convert to double.
+		 * @return whether the textfields text should convert to double
 		 */
 		public boolean isDouble() {
 			return isDouble;

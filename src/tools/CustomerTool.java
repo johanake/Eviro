@@ -2,7 +2,6 @@ package tools;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -162,8 +161,6 @@ public class CustomerTool extends Tool implements Updatable {
 			}
 
 		}
-
-		System.out.println("getnames:" + getNames + "=" + Arrays.toString(text));
 
 		return text;
 

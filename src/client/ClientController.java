@@ -13,8 +13,6 @@ import enteties.Invoice;
 import enteties.Product;
 import enteties.Transaction;
 import enteties.User;
-import gui.GUIController;
-import gui.Login;
 import gui.Tool;
 import shared.Eviro;
 
@@ -24,9 +22,9 @@ import shared.Eviro;
  * @author Johan Åkesson
  * @version 1.1
  */
-public class ClientController{
+public class ClientController {
 	private StrongPasswordEncryptor passCryptor = new StrongPasswordEncryptor();
-	private boolean online = false;
+	private boolean online = true;
 	private Client client;
 
 	/**
@@ -36,14 +34,13 @@ public class ClientController{
 	public ClientController(Client client) {
 		this.client = client;
 	}
-	
-	public boolean checkPassword(String user, String pass){
-		ArrayList<Entity> userList = search(new Object[] {"", user, ""}, Eviro.ENTITY_USER);
-		if(userList.isEmpty()){
+
+	public boolean checkPassword(String user, String pass) {
+		ArrayList<Entity> userList = search(new Object[] { "", user, "" }, Eviro.ENTITY_USER);
+		if (userList.isEmpty()) {
 			return false;
-		} 
-		else if(passCryptor.checkPassword(pass, (String) userList.get(0).getData()[2])){
-			if(isOnline() == false){
+		} else if (passCryptor.checkPassword(pass, (String) userList.get(0).getData()[2])) {
+			if (isOnline() == false) {
 				setOnline(true);
 			}
 			return true;
@@ -178,8 +175,6 @@ public class ClientController{
 		object.setData(data);
 		object.setOperation(Eviro.DB_SEARCH);
 
-		System.out.println((String) object.getData()[1]);
-
 		// Get and return response
 		response = (ArrayList<Entity>) client.sendObject(object);
 		return response;
@@ -286,6 +281,5 @@ public class ClientController{
 	// msg.setOperation(Eviro.DB_ADD);
 	// client.sendObject(msg);
 	// }
-
 
 }

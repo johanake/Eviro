@@ -1,8 +1,11 @@
 package tools;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 
@@ -10,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import client.ClientController;
 import gui.GUIController;
@@ -35,7 +39,7 @@ public class ForumTool extends Tool implements Updatable {
 
 	private ArrayList<Object[]> messageList = new ArrayList<Object[]>();
 
-	private Table posts = new Table(this, new Object[] { "Date", "User", "Topic" });
+	private Table posts = new Table(new Object[] { "Date", "User", "Topic" }, false);
 
 	public ForumTool(ClientController clientController, GUIController guiController) {
 		super("Eviro Forum", clientController, guiController);
@@ -47,10 +51,31 @@ public class ForumTool extends Tool implements Updatable {
 		posts.getColumnModel().getColumn(1).setMaxWidth(150);
 		buttonListener = new ButtonListener();
 		get(this, Eviro.ENTITY_FORUMMESSAGE);
+
+		posts.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent me) {
+				JTable table = (JTable) me.getSource();
+				Point p = me.getPoint();
+				int row = table.rowAtPoint(p);
+				if (me.getClickCount() == 2 && row >= 0) {
+
+					if (posts.getValueAt(posts.getSelectedRow(), 0) != null) {
+						guiCtrlr.add(new ReadWriteMessage("Read/Write Message", messageList.get(posts.getSelectedRow())));
+					} else {
+						JOptionPane.showMessageDialog(null, "No message is selected.");
+					}
+
+				}
+			}
+		});
+
 	}
 
 	@Override
 	public void setValues(Object[] values) {
+		messageList.clear();
 		for (int i = 0; i < values.length; i++) {
 			messageList.add((Object[]) values[i]);
 			posts.populate((Object[]) values[i], i);

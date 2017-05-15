@@ -27,10 +27,10 @@ public class ArticleTool extends Tool implements Updatable {
 	private LabledTextField ltfSup = new LabledTextField("Supplier");
 	private LabledTextField ltfSupNo = new LabledTextField("Suppler No");
 	private LabledTextField ltfStockPlace = new LabledTextField("Stock place");
-	private LabledTextField ltfQuantity = new LabledTextField("Quantity", false, Eviro.VALIDATOR_INTEGER);
+	private LabledTextField ltfQuantity = new LabledTextField("Quantity", Eviro.VALIDATOR_INTEGER);
 
 	private LabledTextField[] ltfAll = { ltfNo, ltfName, ltfDesc, ltfPrice, ltfSup, ltfSupNo, ltfEan, ltfStockPlace, ltfQuantity };
-	private LabledTextField[] ltfRequired = { ltfName, ltfDesc, ltfPrice, ltfSup };
+	private LabledTextField[] ltfRequired = { ltfName, ltfDesc, ltfPrice, ltfSup, ltfQuantity };
 
 	private ActionButton btnNew = new ActionButton("Create New", "create");
 	private ActionButton btnEdit = new ActionButton("Edit", "edit");
@@ -49,7 +49,6 @@ public class ArticleTool extends Tool implements Updatable {
 		super("Article", clientController, guiController);
 		buttonListener = new ButtonListener();
 		setTabs(tabs);
-		ltfQuantity.setText("0");
 		setContent(0, new JComponent[] { ltfNo, ltfName, ltfDesc, ltfPrice, ltfEan });
 		setContent(1, new JComponent[] { ltfSup, ltfSupNo, ltfQuantity, ltfStockPlace });
 		setButtons(defaultButtons);
