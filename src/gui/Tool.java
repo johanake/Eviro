@@ -101,13 +101,14 @@ public class Tool extends JInternalFrame {
 
 		ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true);
 
+		System.out.println("response: " + response.size());
+
 		if (response.size() == 0) {
 			popupMessage("Server returned 0 items!");
 		} else if (response.size() == 1) {
-			popupMessage("A " + Eviro.getEntityNameByNumber(entitytype) + " has been created with id no: " + response.get(0).getData()[0]);
+			popupMessage(Eviro.getEntityNameByNumber(entitytype) + " created with id no: " + response.get(0).getData()[0]);
 			tool.setValues(response.get(0).getData());
 		} else {
-			// TODO Byta ut entitytype mot sträng motsvarande entity, getEntityNamebyId(entitytype) i eviro.java
 			popupMessage("A " + Eviro.getEntityNameByNumber(entitytype) + " with the same values already exists!");
 
 		}

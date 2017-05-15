@@ -27,6 +27,39 @@ public class Table extends JTable {
 		});
 
 		this.model = (DefaultTableModel) getModel();
+		setModel(model);
+
+	}
+
+	/**
+	 * Creates a table with 100 empty rows.
+	 * @param columns the columns to display in the table
+	 * @param editable whether the table is editable or not
+	 */
+	public Table(DefaultTableModel model, boolean editable) {
+		setFillsViewportHeight(true);
+
+		Object[] columns = new Object[model.getColumnCount()];
+
+		for (int i = 0; i < columns.length; i++) {
+			columns[i] = model.getColumnName(i);
+		}
+
+		setModel(new DefaultTableModel(columns, 100) {
+			@Override
+			public boolean isCellEditable(int row, int col) {
+				return editable;
+			}
+
+		});
+
+		for (int i = 0; i < model.getRowCount(); i++) {
+			for (int j = 0; j < model.getColumnCount(); j++) {
+				getModel().setValueAt(model.getValueAt(i, j), i, j);
+			}
+		}
+
+		this.model = (DefaultTableModel) getModel();
 
 	}
 

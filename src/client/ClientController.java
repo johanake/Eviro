@@ -24,7 +24,7 @@ import shared.Eviro;
  */
 public class ClientController {
 	private StrongPasswordEncryptor passCryptor = new StrongPasswordEncryptor();
-	private boolean online = false;
+	private boolean online = true;
 	private Client client;
 
 	/**

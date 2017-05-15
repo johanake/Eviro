@@ -1,6 +1,7 @@
 package tools;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.print.PrinterException;
@@ -13,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.event.ChangeEvent;
+import javax.swing.table.DefaultTableModel;
 
 import client.ClientController;
 import enteties.Entity;
@@ -48,6 +50,8 @@ public class InvoiceTool extends Tool implements Updatable {
 	private JButton[] editingButtons = { btnNew, btnReset };
 	private JButton[] lookingButtons = { btnCredit, btnPrint, btnReset };
 
+	private JScrollPane scrollPane;
+
 	private Table articles = null;
 
 	public InvoiceTool(ClientController clientController, GUIController guiController, String customer) {
@@ -64,6 +68,7 @@ public class InvoiceTool extends Tool implements Updatable {
 			@Override
 			public void editingStopped(ChangeEvent e) {
 
+				// TODO Behöver skrivas om så den funkar även om man ändrar ordning
 				int row = getEditingRow();
 				int col = getEditingColumn();
 				super.editingStopped(e);
@@ -90,10 +95,10 @@ public class InvoiceTool extends Tool implements Updatable {
 						quantity = 0;
 					}
 
-					getModel().setValueAt(Double.toString(total), row, 4);
-					getModel().setValueAt(Double.toString(price), row, 2);
-					getModel().setValueAt(Integer.toString(quantity), row, 3);
-					setTotalPrice();
+					setValueAt(Double.toString(total), row, 4);
+					setValueAt(Double.toString(price), row, 2);
+					setValueAt(Integer.toString(quantity), row, 3);
+
 				}
 
 				else if (col == 4) {
@@ -110,22 +115,26 @@ public class InvoiceTool extends Tool implements Updatable {
 						price = 0.0;
 						quantity = 0;
 					}
-					getModel().setValueAt(Double.toString(total), row, 4);
-					getModel().setValueAt(Double.toString(price), row, 2);
-					getModel().setValueAt(Integer.toString(quantity), row, 3);
-					setTotalPrice();
+					setValueAt(Double.toString(total), row, 4);
+					setValueAt(Double.toString(price), row, 2);
+					setValueAt(Integer.toString(quantity), row, 3);
 
 				}
+
+				setTotalPrice();
 
 			};
 
 		};
-		pnlCenter.add(new JScrollPane(articles), BorderLayout.CENTER);
+
+		scrollPane = new JScrollPane(articles);
+		pnlCenter.add(scrollPane, BorderLayout.CENTER);
 		setButtons(editingButtons);
 
 		ltfCustNo.setText(customer);
-		ltfDue.setText("30");
 		ltfCreated.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		ltfDue.setText("30");
+		ltfSum.setText("0.00");
 
 		setTfEditable(ltfAll, false);
 		setTfEditable(ltfBuyer, true);
@@ -136,20 +145,12 @@ public class InvoiceTool extends Tool implements Updatable {
 	public InvoiceTool(ClientController clientController, GUIController guiController) {
 
 		super("Invoice", clientController, guiController);
+		articles = new Table(new Object[] { "Article No", "Name", "Unit Price", "Qty", "Total" }, false);
 		setup();
 		setButtons(defaultButtons);
 		setTfEditable(ltfAll, true);
 
 	}
-
-	// public InvoiceTool(ClientController clientController, GUIController guiController, ) {
-	//
-	// super("Invoice", clientController, guiController);
-	// setup();
-	// setButtons(defaultButtons);
-	// setTfEditable(ltfAll, true);
-	//
-	// }
 
 	public void setup() {
 
@@ -258,20 +259,21 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	private boolean createTransactions(String invoiceNbr) {
 
-		// if (articles.getValueAt(0, 0) != null) {
+		// if (articles.getValueAt(0, 0) == null) {
 		// popupMessage("Please add row(s) to invoice before creating.");
 		// return false;
 		// }
 
-		for (int i = 0; i < articles.getRowCount(); i++) {
+		for (int i = 0; i < articles.getModel().getRowCount(); i++) {
 
-			if (articles.getValueAt(i, 0) != null) {
+			if (articles.getModel().getValueAt(i, 0) != null) {
+
 				String[] trans = new String[5];
 				trans[0] = null; // Id set by db.
 				trans[1] = invoiceNbr;
-				trans[2] = (String) articles.getValueAt(i, 0); // Productid
-				trans[3] = (String) articles.getValueAt(i, 3); // Quantity
-				trans[4] = (String) articles.getValueAt(i, 4); // Price
+				trans[2] = (String) articles.getModel().getValueAt(i, 0); // Productid
+				trans[3] = (String) articles.getModel().getValueAt(i, 3); // Quantity
+				trans[4] = (String) articles.getModel().getValueAt(i, 4); // Price
 				clientCtrlr.create(trans, Eviro.ENTITY_TRANSACTION, false);
 			}
 
@@ -324,10 +326,16 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	@Override
 	public void setValues(Object[] values) {
-		articles = new Table(new Object[] { "Article No", "Name", "Price", "Quantity", "Sum" }, false);
-		pnlCenter.add(new JScrollPane(articles), BorderLayout.CENTER);
+
+		if (scrollPane != null)
+			pnlCenter.remove(scrollPane);
+
+		articles = new Table((DefaultTableModel) articles.getModel(), false);
+		scrollPane = new JScrollPane(articles);
+		pnlCenter.add(scrollPane, BorderLayout.CENTER);
+
 		this.setBounds(this.getX(), this.getY(), this.getWidth(), 450);
-		// articles = new Table2(new Object[] { "Article No", "Name", "Price", "Quantity", "Sum" }, false, this);
+		this.setMinimumSize(new Dimension(this.getMinimumSize().width, 450));
 
 		getTransactions((String) values[0]);
 		setTfEditable(ltfAll, false);
