@@ -142,4 +142,10 @@ public class AdminTool extends Tool implements Updatable {
 	public Updatable getThis() {
 		return this;
 	}
+
+	@Override
+	public String[] getValues(boolean getNames) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
