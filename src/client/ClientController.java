@@ -34,24 +34,7 @@ public class ClientController{
 	 * @param client the client of the system
 	 */
 	public ClientController(Client client) {
-<<<<<<< Updated upstream
 		this.client = client;
-		// while (logIn() == false) {
-		// }
-
-	}
-
-	public boolean logIn() {
-		String userInput = JOptionPane.showInputDialog(null, "Type username", "Client Login", JOptionPane.OK_OPTION);
-		String passInput = JOptionPane.showInputDialog(null, "Type password", "Client Login", JOptionPane.OK_OPTION);
-
-		ArrayList<Entity> userList = search(new Object[] { "", userInput, "" }, Eviro.ENTITY_USER);
-		System.out.println(userList.size());
-		if (userList.isEmpty()) {
-			return false;
-		} else if (passCryptor.checkPassword(passInput, (String) userList.get(0).getData()[2])) {
-=======
-		this.client = client;		
 	}
 	
 	public boolean checkPassword(String user, String pass){
@@ -63,18 +46,15 @@ public class ClientController{
 			if(isOnline() == false){
 				setOnline(true);
 			}
->>>>>>> Stashed changes
 			return true;
 		} else {
 			return false;
 		}
 	}
-<<<<<<< Updated upstream
-=======
+
 	public StrongPasswordEncryptor getPassCryptor() {
 		return passCryptor;
 	}
->>>>>>> Stashed changes
 
 	/**
 	 * Creates and sends a "update operation" object to the server.
@@ -277,8 +257,6 @@ public class ClientController{
 
 	}
 
-<<<<<<< Updated upstream
-=======
 	public ArrayList<Entity> getAll(int entityType) {
 
 		ArrayList<Entity> response = new ArrayList<Entity>();
@@ -309,5 +287,5 @@ public class ClientController{
 	// client.sendObject(msg);
 	// }
 
->>>>>>> Stashed changes
+
 }
