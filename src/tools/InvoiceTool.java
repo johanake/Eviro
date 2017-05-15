@@ -180,6 +180,7 @@ public class InvoiceTool extends Tool implements Updatable {
 				ltfInvNo.setText(null);
 				create(getThis(), Eviro.ENTITY_INVOICE);
 				createTransactions(ltfInvNo.getText());
+
 				// ArrayList<Entity> response = clientCtrlr.create(createInvoice(), Eviro.ENTITY_INVOICE, true);
 				// String invoiceNo = (String) response.get(0).getData()[0];
 				// createTransactions(invoiceNo);

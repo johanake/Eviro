@@ -34,7 +34,7 @@ public class CustomerTool extends Tool implements Updatable {
 	private LabledTextField ltfNo = new LabledTextField("No");
 	private LabledTextField ltfName = new LabledTextField("Name");
 	private LabledTextField ltfAddress = new LabledTextField("Address");
-	private LabledTextField ltfZip = new LabledTextField("Post Code");
+	private LabledTextField ltfZip = new LabledTextField("Post Code", true, Eviro.VALIDATOR_INTEGER);
 	private LabledTextField ltfCity = new LabledTextField("City");
 	private LabledTextField ltfPhone = new LabledTextField("Phone No");
 	private LabledTextField ltfEmail = new LabledTextField("Email");
@@ -71,19 +71,21 @@ public class CustomerTool extends Tool implements Updatable {
 
 	private void createCommentsTable() {
 		tblComments = new Table(new Object[] { "Date", "Comment" }, true) {
+
 			@Override
 			public void editingStopped(ChangeEvent e) {
 				int row = getEditingRow();
 				int col = getEditingColumn();
 				super.editingStopped(e);
-				getColumnModel().getColumn(0).setWidth(100);
-				getColumnModel().getColumn(0).setMaxWidth(100);
 
 				// TODO Beteende här!
 
 			}
+
 		};
 
+		tblComments.getColumnModel().getColumn(0).setWidth(100);
+		tblComments.getColumnModel().getColumn(0).setMaxWidth(100);
 		tabComments.setPreferredSize(new Dimension(1, 150));
 		tabComments.add(new JScrollPane(tblComments));
 	}
@@ -115,11 +117,17 @@ public class CustomerTool extends Tool implements Updatable {
 			}
 		});
 
+		tabFinance.setPreferredSize(new Dimension(1, 150));
 		tabFinance.add(new JScrollPane(tblInvoices));
 
 	}
 
 	private void invoice() {
+
+		// if (ltfBalance.getText() > ltfLimit.getText()) {
+		//
+		// }
+
 		guiCtrlr.add(new InvoiceTool(clientCtrlr, guiCtrlr, ltfNo.getText()));
 	}
 

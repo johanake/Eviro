@@ -24,7 +24,7 @@ import shared.Eviro;
  */
 public class ClientController {
 	private StrongPasswordEncryptor passCryptor = new StrongPasswordEncryptor();
-	private boolean online = true;
+	private boolean online = false;
 	private Client client;
 
 	/**
@@ -252,19 +252,6 @@ public class ClientController {
 
 	}
 
-	public ArrayList<Entity> getAll(int entityType) {
-
-		ArrayList<Entity> response = new ArrayList<Entity>();
-
-		Entity object = createEntityByType(entityType);//
-
-		object.setOperation(Eviro.DB_GETALL);
-
-		response = (ArrayList<Entity>) client.sendObject(object);
-		return response;
-
-	}
-
 	public synchronized boolean isOnline() {
 		return online;
 	}
@@ -272,14 +259,5 @@ public class ClientController {
 	public synchronized void setOnline(boolean online) {
 		this.online = online;
 	}
-
-	// /**
-	// * Adds a new forum message to the database.
-	// * @param res the message to add.
-	// */
-	// public void addForumMessage(ForumMessage msg) {
-	// msg.setOperation(Eviro.DB_ADD);
-	// client.sendObject(msg);
-	// }
 
 }
