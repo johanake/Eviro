@@ -34,6 +34,8 @@ public class SearchResult extends JInternalFrame {
 		setVisible(true);
 		pack();
 
+		table.setToolTipText("Double click to open");
+
 		table.addMouseListener(new MouseAdapter() {
 
 			@Override

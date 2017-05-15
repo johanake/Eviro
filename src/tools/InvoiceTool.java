@@ -3,6 +3,8 @@ package tools;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +16,7 @@ import javax.swing.event.ChangeEvent;
 
 import client.ClientController;
 import enteties.Entity;
+import enteties.Invoice;
 import gui.GUIController;
 import gui.Table;
 import gui.Tool;
@@ -38,11 +41,12 @@ public class InvoiceTool extends Tool implements Updatable {
 	private ActionButton btnReset = new ActionButton("Reset", "reset");
 	private ActionButton btnFind = new ActionButton("Find", "search");
 	private ActionButton btnCredit = new ActionButton("Credit", "credit");
+	private ActionButton btnPrint = new ActionButton("Print", "print");
 
-	private JButton[] allButtons = { btnNew, btnReset, btnFind };
+	private JButton[] allButtons = { btnNew, btnReset, btnFind, btnPrint };
 	private JButton[] defaultButtons = { btnFind, btnReset };
 	private JButton[] editingButtons = { btnNew, btnReset };
-	private JButton[] lookingButtons = { btnCredit, btnReset };
+	private JButton[] lookingButtons = { btnCredit, btnPrint, btnReset };
 
 	private Table articles = null;
 
@@ -185,19 +189,17 @@ public class InvoiceTool extends Tool implements Updatable {
 			switch (e.getActionCommand()) {
 
 			case "create":
-
 				ltfInvNo.setText(null);
 				create(getThis(), Eviro.ENTITY_INVOICE);
 				createTransactions(ltfInvNo.getText());
-
-				// ArrayList<Entity> response = clientCtrlr.create(createInvoice(), Eviro.ENTITY_INVOICE, true);
-				// String invoiceNo = (String) response.get(0).getData()[0];
-				// createTransactions(invoiceNo);
-
 				break;
 
 			case "reset":
 				reset();
+				break;
+
+			case "print":
+				print();
 				break;
 
 			case "search":
@@ -214,6 +216,20 @@ public class InvoiceTool extends Tool implements Updatable {
 	public void search(String invoiceNo) {
 		ltfInvNo.setText(invoiceNo);
 		search(getThis(), ltfAll, Eviro.ENTITY_INVOICE);
+	}
+
+	public void print() {
+
+		PrinterJob pj = PrinterJob.getPrinterJob();
+		pj.setPrintable(new Invoice(getValues()));
+		if (pj.printDialog()) {
+			try {
+				pj.print();
+			} catch (PrinterException exc) {
+				System.out.println(exc);
+			}
+		}
+
 	}
 
 	public void getArticle(String articleno, int row) {

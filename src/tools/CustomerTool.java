@@ -6,7 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -81,6 +83,8 @@ public class CustomerTool extends Tool implements Updatable {
 				int col = getEditingColumn();
 				super.editingStopped(e);
 
+				tblComments.setValueAt(new SimpleDateFormat("yy-MM-dd").format(new Date()), tblComments.getSelectedRow(), 0);
+
 				// TODO Beteende här!
 
 			}
@@ -95,18 +99,9 @@ public class CustomerTool extends Tool implements Updatable {
 
 	private void createInvoiceTable() {
 
-		tblInvoices = new Table(new Object[] { "Created", "Invoice-No", "Buyer", "Total" }, false) {
-			@Override
-			public void editingStopped(ChangeEvent e) {
-				int row = getEditingRow();
-				int col = getEditingColumn();
-				super.editingStopped(e);
+		tblInvoices = new Table(new Object[] { "Created", "Invoice-No", "Buyer", "Total" }, false);
 
-				// TODO Beteende här!
-
-			}
-		};
-
+		tblInvoices.setToolTipText("Double click to open invoice");
 		tblInvoices.addMouseListener(new MouseAdapter() {
 
 			@Override
