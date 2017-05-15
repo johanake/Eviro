@@ -57,7 +57,7 @@ public class GUIController {
 		this.clientController = clientController;
 		
 		new Thread(new Login(clientController)).start();
-		while(clientController.isOnline() == false);
+		while(clientController.getActiveUser() == null);
 		
 		SwingUtilities.invokeLater(new Runnable() {
 
