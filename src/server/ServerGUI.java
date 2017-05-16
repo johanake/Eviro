@@ -61,6 +61,8 @@ public class ServerGUI implements ActionListener {
 		btnDisconnect.setEnabled(false);
 		
 		// KOD SOM KANSKE SKA ÄNDRAS
+		
+		window.pack();
 	}
 
 	public void append(String text) {

@@ -20,6 +20,7 @@ import gui.GUIController;
 import gui.Table;
 import gui.Tool;
 import gui.Updatable;
+import gui.Tool.Tab;
 import shared.Eviro;
 
 /**
@@ -30,6 +31,9 @@ public class ForumTool extends Tool implements Updatable {
 
 	private ButtonListener buttonListener;
 
+	private Tab tab1 = new Tab("Tab 1");
+	private Tab[] tabs = new Tab[] { tab1, new Tab("General") };
+	
 	private ActionButton btnOpen = new ActionButton("Open Message", "open");
 	private ActionButton btnUpdate = new ActionButton("Update", "update");
 	private ActionButton btnNew = new ActionButton("New Message", "new");
@@ -44,7 +48,8 @@ public class ForumTool extends Tool implements Updatable {
 	public ForumTool(ClientController clientController, GUIController guiController) {
 		super("Eviro Forum", clientController, guiController);
 		setButtons(defaultButtons);
-		pnlCenter.add(new JScrollPane(posts), BorderLayout.CENTER);
+		setTabs(tabs);
+		tab1.add(new JScrollPane(posts), BorderLayout.CENTER);
 		posts.getColumnModel().getColumn(0).setMinWidth(150);
 		posts.getColumnModel().getColumn(0).setMaxWidth(150);
 		posts.getColumnModel().getColumn(1).setMinWidth(150);
