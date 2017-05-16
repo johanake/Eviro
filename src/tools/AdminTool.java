@@ -2,9 +2,11 @@ package tools;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JPasswordField;
 
 import client.ClientController;
 import gui.GUIController;
@@ -19,9 +21,9 @@ public class AdminTool extends Tool implements Updatable {
 
 	private LabledTextField ltfUserID = new LabledTextField("User ID");
 	private LabledTextField ltfUserName = new LabledTextField("User Name");
-	private LabledTextField ltfUserPassword = new LabledTextField("User Password");
-	private LabledTextField[] ltfAll = { ltfUserID, ltfUserName, ltfUserPassword };
-	
+	private JPasswordField jpfUserPassword = new JPasswordField();
+	private LabledTextField[] ltfAll = { ltfUserID, ltfUserName, new LabledTextField("User Password") };
+
 	private ActionButton btnNew = new ActionButton("Create New", "create");
 	private ActionButton btnEdit = new ActionButton("Edit", "edit");
 	private ActionButton btnUpdate = new ActionButton("Save", "update");
@@ -37,8 +39,9 @@ public class AdminTool extends Tool implements Updatable {
 		super("Admin", clientController, guiController);
 		buttonListener = new ButtonListener();
 		setTabs(tabs);
-		setContent(0, new JComponent[] { ltfUserID, ltfUserName, ltfUserPassword});
-		setContent(1, new JComponent[] { });
+		jpfUserPassword.setName("User Password");
+		setContent(0, new JComponent[] { ltfUserID, ltfUserName, jpfUserPassword });
+		setContent(1, new JComponent[] {});
 		setButtons(defaultButtons);
 	}
 
@@ -47,6 +50,7 @@ public class AdminTool extends Tool implements Updatable {
 		setTfEditable(ltfAll, true);
 		setButtons(defaultButtons);
 		setTitle("Admin");
+		jpfUserPassword.setText(null);
 
 		for (int i = 0; i < ltfAll.length; i++) {
 
@@ -76,7 +80,7 @@ public class AdminTool extends Tool implements Updatable {
 				setButtons(editingButtons);
 				setTfEditable(ltfAll, true);
 				setTfEditable(ltfUserID, false);
-				ltfUserPassword.setText("");
+				jpfUserPassword.setText(null);
 				break;
 
 			case "update":
@@ -87,6 +91,7 @@ public class AdminTool extends Tool implements Updatable {
 				break;
 
 			case "search":
+				jpfUserPassword.setText(null);
 				search(getThis(), ltfAll, Eviro.ENTITY_USER);
 				break;
 
@@ -108,7 +113,7 @@ public class AdminTool extends Tool implements Updatable {
 		setButtons(lookingButtons);
 		setTitle(values[0] + " - " + values[1]);
 
-		for (int i = 0; i < ltfAll.length-1; i++) {
+		for (int i = 0; i < ltfAll.length - 1; i++) {
 
 			if (values[i] instanceof Integer) {
 				values[i] = Integer.toString((int) values[i]);
@@ -125,14 +130,20 @@ public class AdminTool extends Tool implements Updatable {
 
 		String[] text = new String[ltfAll.length];
 
-		text[0] = ltfAll[0].getText();
-		text[1] = ltfAll[1].getText();
-		if(ltfAll[2].getText().isEmpty()){
-			text[2] = "";
-		} 
-		else {
-			text[2] = super.clientCtrlr.getPassCryptor().encryptPassword(ltfAll[2].getText());
+		for (int i = 0; i < ltfAll.length-1; i++) {
+			text[i] = ltfAll[i].getText();
 		}
+		
+		text[2] = clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword()));
+//		
+//		text[2] = new String(jpfUserPassword.getPassword());
+//		
+//		System.out.println("password: " + jpfUserPassword.getPassword());
+//		
+//		if (text[2] != null) 
+//			text[2] = clientCtrlr.getPassCryptor().encryptPassword(text[2]);
+//
+//		System.out.println(Arrays.toString(text));
 		
 		return text;
 

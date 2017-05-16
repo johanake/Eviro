@@ -17,6 +17,7 @@ import enteties.Invoice;
 import enteties.Product;
 import enteties.Transaction;
 import enteties.User;
+import gui.GUIController;
 import gui.Tool;
 import shared.Eviro;
 
@@ -38,15 +39,23 @@ public class ClientController {
 	 * Creates a ClientController object.
 	 * @param client the client of the system
 	 */
-	public ClientController(Client client) {
-		this.client = client;
+	public ClientController() {
+		
 		try {
 			reader = new FileReader("clientConfig");
 			properties.load(reader);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		this.client = new Client(this);
+		
+		new GUIController(this);
+	
+	}
 
+	public Client getClient() {
+		return this.client;
 	}
 
 	public boolean checkPassword(String user, String pass) {

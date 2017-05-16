@@ -64,7 +64,6 @@ public class GUIController {
 			@Override
 			public void run() {
 				
-				
 				setSystemLookAndFeel();
 				JFrame window = new JFrame(Eviro.APP_NAME + " " + Eviro.APP_VERSION);
 				window.addKeyListener(keyListener);

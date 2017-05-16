@@ -30,15 +30,14 @@ public class Login extends JFrame implements ActionListener, Runnable {
 	private JLabel passLabel = new JLabel("Password");
 	private JTextField userField = new JTextField("peter");
 	private JTextField passField = new JPasswordField("test");
-	private JPanel fieldPanel = new JPanel(new GridLayout(2, 2)); 
+	private JPanel fieldPanel = new JPanel(new GridLayout(2, 2));
 
 	private JButton loginButton = new JButton("Login");
 	private JButton adminButton = new JButton("Admin");
-	private JPanel buttonPanel = new JPanel(new GridLayout(1, 2)); 
+	private JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
 
 	private Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-	private	BorderLayout layout = new BorderLayout();
-
+	private BorderLayout layout = new BorderLayout();
 
 	public Login(ClientController clientController) {
 		this.clientController = clientController;
@@ -56,7 +55,7 @@ public class Login extends JFrame implements ActionListener, Runnable {
 		fieldPanel.add(userField);
 		fieldPanel.add(passLabel);
 		fieldPanel.add(passField);
-		
+
 		buttonPanel.add(adminButton);
 		buttonPanel.add(loginButton);
 		add(fieldPanel, BorderLayout.NORTH);
@@ -75,69 +74,80 @@ public class Login extends JFrame implements ActionListener, Runnable {
 		switch (e.getActionCommand()) {
 
 		case "Login":
-			if (clientController.checkPassword(userField.getText(), passField.getText())) {
-				this.dispose();
-			} else {
-				userField.setText("");
-				passField.setText("");
-				JOptionPane.showMessageDialog(null, "Wrong username or password, please try again", "Login Failed",
-						JOptionPane.ERROR_MESSAGE);
+
+
+			
+			if (!clientController.getClient().connectToServer()) {
+				JOptionPane.showMessageDialog(this, "Unable to connect to server!\nPlease try again or contact admin.");
 			}
+
+			else {
+				if (clientController.checkPassword(userField.getText(), passField.getText())) {
+					this.dispose();
+				} else {
+					userField.setText("");
+					passField.setText("");
+					JOptionPane.showMessageDialog(null, "Wrong username or password, please try again", "Login Failed",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+
 			break;
+
 		case "Admin":
-			String pass = JOptionPane.showInputDialog(null,"Enter admin password", "Admin Sign In", JOptionPane.DEFAULT_OPTION);
-			if (clientController.getPassCryptor().checkPassword(pass, clientController.getProperty("admin"))){
+			String pass = JOptionPane.showInputDialog(null, "Enter admin password", "Admin Sign In",
+					JOptionPane.DEFAULT_OPTION);
+			if (clientController.getPassCryptor().checkPassword(pass, clientController.getProperty("admin"))) {
 				new AdminLogin();
 			}
-			
-			
+
 			break;
 		}
 	}
-	
-	private class AdminLogin extends JFrame implements ActionListener{
+
+	private class AdminLogin extends JFrame implements ActionListener {
 		private JLabel ipLabel = new JLabel("Server IP");
 		private JLabel portLabel = new JLabel("Server Port");
 		private JTextField ipField = new JTextField();
 		private JTextField portField = new JTextField();
 		private JPanel fieldPanel = new JPanel(new GridLayout(2, 2));
-		
+
 		private JButton editButton = new JButton("Edit");
 		private JButton saveButton = new JButton("Save");
-		private JPanel buttonPanel = new JPanel(new GridLayout(1, 2)); 
-		
-		private	BorderLayout layout = new BorderLayout();
-		
-		public AdminLogin(){
+		private JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
+
+		private BorderLayout layout = new BorderLayout();
+
+		public AdminLogin() {
 			setTitle("Eviro Enterprise System - Admin");
 			setSize(new Dimension(300, 150));
 			setResizable(false);
 			layout.setHgap(5);
 			setLayout(layout);
-			
+
 			ipField.setText(clientController.getProperty("ip"));
 			ipField.setEditable(false);
 			portField.setText(clientController.getProperty("port"));
 			portField.setEditable(false);
 
-			
 			fieldPanel.add(ipLabel);
 			fieldPanel.add(ipField);
 			fieldPanel.add(portLabel);
 			fieldPanel.add(portField);
-			
+
 			editButton.setEnabled(true);
 			saveButton.setEnabled(false);
 			buttonPanel.add(editButton);
 			buttonPanel.add(saveButton);
 			add(fieldPanel, BorderLayout.NORTH);
 			add(buttonPanel, BorderLayout.SOUTH);
-			
+
 			editButton.addActionListener(this);
 			saveButton.addActionListener(this);
 
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			setLocation(screenDim.width / 2 - this.getSize().width / 2, screenDim.height / 2 - this.getSize().height / 2);
+			setLocation(screenDim.width / 2 - this.getSize().width / 2,
+					screenDim.height / 2 - this.getSize().height / 2);
 			setVisible(true);
 		}
 
@@ -145,28 +155,28 @@ public class Login extends JFrame implements ActionListener, Runnable {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println(e.getActionCommand());
 			switch (e.getActionCommand()) {
-				case "Edit":
-					ipField.setEditable(true);
-					portField.setEditable(true);
-					editButton.setEnabled(false);
-					saveButton.setEnabled(true);
-					break;
-					
-				case "Save":
-					clientController.setProperty("ip", ipField.getText());
-					clientController.setProperty("port", portField.getText());
-					ipField.setEditable(false);
-					portField.setEditable(false);
-					editButton.setEnabled(true);
-					saveButton.setEnabled(false);
-					break;
+			case "Edit":
+				ipField.setEditable(true);
+				portField.setEditable(true);
+				editButton.setEnabled(false);
+				saveButton.setEnabled(true);
+				break;
+
+			case "Save":
+				clientController.setProperty("ip", ipField.getText());
+				clientController.setProperty("port", portField.getText());
+				ipField.setEditable(false);
+				portField.setEditable(false);
+				editButton.setEnabled(true);
+				saveButton.setEnabled(false);
+				break;
 
 			}
 		}
-		
+
 	}
-	
-	public void main(String[] args){
+
+	public void main(String[] args) {
 		new Login(null);
 	}
 }

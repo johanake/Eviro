@@ -3,6 +3,7 @@ package shared;
 import javax.swing.SwingUtilities;
 
 import client.Client;
+import client.ClientController;
 import server.Server;
 
 /**
@@ -46,12 +47,7 @@ public class Eviro {
 	private void start() {
 		
 		new Server(3500);
-		new Client("127.0.0.1", 3500);
-<<<<<<< HEAD
-		new Client("127.0.0.1", 3500);
-		//Jag vill ha det på detta VISET!!!!!!!!!!!!!!!!
-=======
->>>>>>> origin/master
+		new ClientController();
 
 	}
 

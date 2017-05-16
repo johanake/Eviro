@@ -51,17 +51,6 @@ public class Tool extends JInternalFrame {
 		openFrameCount++;
 	}
 
-	protected ArrayList<Entity> search(String[] values, int entitytype) {
-
-		ArrayList<Entity> resultList = clientCtrlr.search(values, entitytype);
-
-		if (resultList.size() == 0) {
-			popupMessage("No matches, try again by changing or adding information in your search.");
-			return null;
-		} else
-			return resultList;
-	}
-
 	protected void get(Updatable tool, int entitytype) {
 
 		ArrayList<Entity> response = clientCtrlr.getAllbyType(entitytype);
@@ -77,6 +66,17 @@ public class Tool extends JInternalFrame {
 
 	}
 
+	protected ArrayList<Entity> search(String[] values, int entitytype) {
+
+		ArrayList<Entity> resultList = clientCtrlr.search(values, entitytype);
+
+		if (resultList.size() == 0) {
+			popupMessage("No matches, try again by changing or adding information in your search.");
+			return null;
+		} else
+			return resultList;
+	}
+	
 	protected void search(Updatable tool, LabledTextField[] ltfAll, int entitytype) {
 
 		ArrayList<Entity> response = clientCtrlr.search(tool.getValues(), entitytype);
