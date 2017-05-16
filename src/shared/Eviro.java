@@ -44,7 +44,7 @@ public class Eviro {
 	 * Instantiate the main component(s) of the system.
 	 */
 	private void start() {
-
+		
 		new Server(3500);
 		new Client("127.0.0.1", 3500);
 <<<<<<< HEAD
