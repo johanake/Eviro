@@ -47,6 +47,10 @@ public class Eviro {
 
 		new Server(3500);
 		new Client("127.0.0.1", 3500);
+		new Server(3500);
+		new Server(3500);
+		new Server(3500);
+		// kuk
 
 	}
 
