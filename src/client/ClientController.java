@@ -1,6 +1,7 @@
 package client;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -28,6 +29,7 @@ import shared.Eviro;
 public class ClientController {
 	private StrongPasswordEncryptor passCryptor = new StrongPasswordEncryptor();
 	private FileReader reader;
+	private FileWriter writer;
 	private Properties properties = new Properties();
 	private User activeUser = null;
 	private Client client;
@@ -65,6 +67,16 @@ public class ClientController {
 
 	public String getProperty(String property) {
 		return properties.getProperty(property);
+	}
+	
+	public void setProperty(String property, String value) {
+		String oldProperty = getProperty(property);
+		properties.setProperty(property, value);
+		try {
+			properties.store(new FileWriter("clientConfig"), "Changed: " + property + " (old = " + value + ")" );
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public StrongPasswordEncryptor getPassCryptor() {

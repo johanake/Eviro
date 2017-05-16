@@ -1,4 +1,5 @@
+#Changed: port (old = 3501)
+#Tue May 16 16:03:55 CEST 2017
 admin=D7fLbsO+cB6zXfdKAnwozlaMtMHXg63UUlBFechXT0FwE0LhRED2iqWuJqPj2ft3
-ip=127.0.0.1
 port=3500
-
+ip=127.0.0.1

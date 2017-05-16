@@ -19,6 +19,7 @@ import javax.swing.SwingUtilities;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
 import client.ClientController;
+import server.ServerController;
 import shared.Eviro;
 import tools.AdminTool;
 
@@ -32,7 +33,7 @@ public class Login extends JFrame implements ActionListener, Runnable {
 	private JPanel fieldPanel = new JPanel(new GridLayout(2, 2)); 
 
 	private JButton loginButton = new JButton("Login");
-	private JButton adminButton = new JButton("Admin§");
+	private JButton adminButton = new JButton("Admin");
 	private JPanel buttonPanel = new JPanel(new GridLayout(1, 2)); 
 
 	private Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -84,8 +85,85 @@ public class Login extends JFrame implements ActionListener, Runnable {
 			}
 			break;
 		case "Admin":
+			String pass = JOptionPane.showInputDialog(null,"Enter admin password", "Admin Sign In", JOptionPane.DEFAULT_OPTION);
+			if (clientController.getPassCryptor().checkPassword(pass, clientController.getProperty("admin"))){
+				new AdminLogin();
+			}
+			
+			
 			break;
 		}
+	}
+	
+	private class AdminLogin extends JFrame implements ActionListener{
+		private JLabel ipLabel = new JLabel("Server IP");
+		private JLabel portLabel = new JLabel("Server Port");
+		private JTextField ipField = new JTextField();
+		private JTextField portField = new JTextField();
+		private JPanel fieldPanel = new JPanel(new GridLayout(2, 2));
+		
+		private JButton editButton = new JButton("Edit");
+		private JButton saveButton = new JButton("Save");
+		private JPanel buttonPanel = new JPanel(new GridLayout(1, 2)); 
+		
+		private	BorderLayout layout = new BorderLayout();
+		
+		public AdminLogin(){
+			setTitle("Eviro Enterprise System - Admin");
+			setSize(new Dimension(300, 150));
+			setResizable(false);
+			layout.setHgap(5);
+			setLayout(layout);
+			
+			ipField.setText(clientController.getProperty("ip"));
+			ipField.setEditable(false);
+			portField.setText(clientController.getProperty("port"));
+			portField.setEditable(false);
+
+			
+			fieldPanel.add(ipLabel);
+			fieldPanel.add(ipField);
+			fieldPanel.add(portLabel);
+			fieldPanel.add(portField);
+			
+			editButton.setEnabled(true);
+			saveButton.setEnabled(false);
+			buttonPanel.add(editButton);
+			buttonPanel.add(saveButton);
+			add(fieldPanel, BorderLayout.NORTH);
+			add(buttonPanel, BorderLayout.SOUTH);
+			
+			editButton.addActionListener(this);
+			saveButton.addActionListener(this);
+
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			setLocation(screenDim.width / 2 - this.getSize().width / 2, screenDim.height / 2 - this.getSize().height / 2);
+			setVisible(true);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println(e.getActionCommand());
+			switch (e.getActionCommand()) {
+				case "Edit":
+					ipField.setEditable(true);
+					portField.setEditable(true);
+					editButton.setEnabled(false);
+					saveButton.setEnabled(true);
+					break;
+					
+				case "Save":
+					clientController.setProperty("ip", ipField.getText());
+					clientController.setProperty("port", portField.getText());
+					ipField.setEditable(false);
+					portField.setEditable(false);
+					editButton.setEnabled(true);
+					saveButton.setEnabled(false);
+					break;
+
+			}
+		}
+		
 	}
 	
 	public void main(String[] args){
