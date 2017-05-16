@@ -22,7 +22,8 @@ public class AdminTool extends Tool implements Updatable {
 	private LabledTextField ltfUserID = new LabledTextField("User ID");
 	private LabledTextField ltfUserName = new LabledTextField("User Name");
 	private JPasswordField jpfUserPassword = new JPasswordField();
-	private LabledTextField[] ltfAll = { ltfUserID, ltfUserName, new LabledTextField("User Password") };
+	private LabledTextField ltfUserPassword = new LabledTextField("User Password");
+	private LabledTextField[] ltfAll = { ltfUserID, ltfUserName, ltfUserPassword};
 
 	private ActionButton btnNew = new ActionButton("Create New", "create");
 	private ActionButton btnEdit = new ActionButton("Edit", "edit");
@@ -72,6 +73,7 @@ public class AdminTool extends Tool implements Updatable {
 			switch (e.getActionCommand()) {
 
 			case "create":
+				ltfUserPassword.setText(clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword())));
 				ltfUserID.setText(null);
 				create(getThis(), Eviro.ENTITY_USER);
 				break;
@@ -91,7 +93,7 @@ public class AdminTool extends Tool implements Updatable {
 				break;
 
 			case "search":
-				jpfUserPassword.setText(null);
+				ltfUserPassword.setText(null);
 				search(getThis(), ltfAll, Eviro.ENTITY_USER);
 				break;
 
@@ -130,11 +132,11 @@ public class AdminTool extends Tool implements Updatable {
 
 		String[] text = new String[ltfAll.length];
 
-		for (int i = 0; i < ltfAll.length-1; i++) {
+		for (int i = 0; i < ltfAll.length; i++) {
 			text[i] = ltfAll[i].getText();
 		}
 		
-		text[2] = clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword()));
+//		text[2] = clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword()));
 //		
 //		text[2] = new String(jpfUserPassword.getPassword());
 //		
