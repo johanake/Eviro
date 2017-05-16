@@ -20,7 +20,6 @@ import gui.GUIController;
 import gui.Table;
 import gui.Tool;
 import gui.Updatable;
-import gui.Tool.Tab;
 import shared.Eviro;
 
 /**
@@ -33,7 +32,7 @@ public class ForumTool extends Tool implements Updatable {
 
 	private Tab tab1 = new Tab("Tab 1");
 	private Tab[] tabs = new Tab[] { tab1, new Tab("General") };
-	
+
 	private ActionButton btnOpen = new ActionButton("Open Message", "open");
 	private ActionButton btnUpdate = new ActionButton("Update", "update");
 	private ActionButton btnNew = new ActionButton("New Message", "new");
@@ -66,7 +65,7 @@ public class ForumTool extends Tool implements Updatable {
 				int row = table.rowAtPoint(p);
 				if (me.getClickCount() == 2 && row >= 0) {
 
-					if (posts.getValueAt(posts.getSelectedRow(), 0) != null) {
+					if (posts.getModel().getValueAt(posts.getSelectedRow(), 0) != null) {
 						guiCtrlr.add(new ReadWriteMessage("Read/Write Message", messageList.get(posts.getSelectedRow())));
 					} else {
 						JOptionPane.showMessageDialog(null, "No message is selected.");
@@ -125,7 +124,7 @@ public class ForumTool extends Tool implements Updatable {
 				break;
 
 			case "open":
-				if (posts.getValueAt(posts.getSelectedRow(), 0) != null) {
+				if (posts.getModel().getValueAt(posts.getSelectedRow(), 0) != null) {
 					guiCtrlr.add(new ReadWriteMessage("Read/Write Message", messageList.get(posts.getSelectedRow())));
 				} else {
 					JOptionPane.showMessageDialog(null, "No message is selected.");

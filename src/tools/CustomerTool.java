@@ -83,7 +83,7 @@ public class CustomerTool extends Tool implements Updatable {
 				int col = getEditingColumn();
 				super.editingStopped(e);
 
-				tblComments.setValueAt(new SimpleDateFormat("yy-MM-dd").format(new Date()), tblComments.getSelectedRow(), 0);
+				tblComments.getModel().setValueAt(new SimpleDateFormat("yy-MM-dd").format(new Date()), tblComments.getSelectedRow(), 0);
 
 				// TODO Beteende här!
 
@@ -111,9 +111,9 @@ public class CustomerTool extends Tool implements Updatable {
 				int row = table.rowAtPoint(p);
 				if (me.getClickCount() == 2 && row >= 0) {
 
-					if (tblInvoices.getValueAt(tblInvoices.getSelectedRow(), 1) != null) {
+					if (tblInvoices.getModel().getValueAt(tblInvoices.getSelectedRow(), 1) != null) {
 						InvoiceTool invoiceTool = new InvoiceTool(clientCtrlr, guiCtrlr);
-						invoiceTool.search((String) tblInvoices.getValueAt(tblInvoices.getSelectedRow(), 1));
+						invoiceTool.search((String) tblInvoices.getModel().getValueAt(tblInvoices.getSelectedRow(), 1));
 						guiCtrlr.add(invoiceTool);
 					}
 				}

@@ -48,7 +48,7 @@ public class SearchResult extends JInternalFrame {
 					Object[] values = new Object[obj.length];
 
 					for (int i = 0; i < obj.length; i++) {
-						values[i] = table.getValueAt(row, i);
+						values[i] = table.getModel().getValueAt(row, i);
 					}
 					gui.setValues(values);
 					try {
