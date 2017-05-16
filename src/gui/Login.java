@@ -145,7 +145,6 @@ public class Login extends JFrame implements ActionListener, Runnable {
 			editButton.addActionListener(this);
 			saveButton.addActionListener(this);
 
-			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setLocation(screenDim.width / 2 - this.getSize().width / 2,
 					screenDim.height / 2 - this.getSize().height / 2);
 			setVisible(true);
