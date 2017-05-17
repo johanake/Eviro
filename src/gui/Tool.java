@@ -20,6 +20,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import javax.swing.text.JTextComponent;
 
 import client.ClientController;
 import enteties.Entity;
@@ -210,7 +211,7 @@ public class Tool extends JInternalFrame {
 
 	}
 
-	protected void setTfEditable(LabledTextField[] textFields, Boolean enabled) {
+	protected void setTfEditable(JTextComponent[] fields, Boolean enabled) {
 
 		Color fieldColor;
 
@@ -222,7 +223,7 @@ public class Tool extends JInternalFrame {
 			fieldColor = new Color(214, 217, 223);
 		}
 
-		for (JTextField c : textFields) {
+		for (JTextComponent c : fields) {
 			c.setEditable(enabled);
 			c.setBackground(fieldColor);
 
@@ -230,8 +231,8 @@ public class Tool extends JInternalFrame {
 
 	}
 
-	protected void setTfEditable(LabledTextField textField, Boolean enabled) {
-		setTfEditable(new LabledTextField[] { textField }, enabled);
+	protected void setTfEditable(JTextComponent field, Boolean enabled) {
+		setTfEditable(new JTextComponent[] { field }, enabled);
 	}
 
 	private void setup() {

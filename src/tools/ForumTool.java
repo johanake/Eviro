@@ -13,8 +13,12 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
+import javax.swing.text.JTextComponent;
 
 import client.ClientController;
 import gui.GUIController;
@@ -152,12 +156,12 @@ public class ForumTool extends Tool implements Updatable {
 		private JButton[] lookingButtons = { btnDelete };
 
 		private LabledTextField ltfTopic = new LabledTextField("Topic");
-		private LabledTextField ltfMsg = new LabledTextField("Message");
+		JTextArea txtMessage = new JTextArea();
 
 		public ReadWriteMessage(String title) {
 			super(title, ForumTool.this.clientCtrlr, ForumTool.this.guiCtrlr);
 			setup();
-			setTfEditable(new LabledTextField[] { ltfTopic, ltfMsg }, true);
+			setTfEditable(new JTextComponent[] { ltfTopic, txtMessage }, true);
 			setButtons(defaultButtons);
 		}
 
@@ -165,20 +169,30 @@ public class ForumTool extends Tool implements Updatable {
 			super(title, ForumTool.this.clientCtrlr, ForumTool.this.guiCtrlr);
 			setValues(values);
 			setup();
-			setTfEditable(new LabledTextField[] { ltfTopic, ltfMsg }, false);
+			setTfEditable(new JTextComponent[] { ltfTopic, txtMessage }, false);
 			btnDelete.setEnabled(false);
 			setButtons(lookingButtons);
 		}
 
 		public void setup() {
-			setContent(new JComponent[] { ltfTopic, ltfMsg });
+
+			JPanel pnlMessage = new JPanel(new BorderLayout());
+			txtMessage.setLineWrap(true);
+			// txtMessage.setWrapStyleWord(true);
+			txtMessage.setRows(5);
+			// pnlMessage.add(new JLabel("Message"), BorderLayout.NORTH);
+			pnlMessage.add(new JScrollPane(txtMessage), BorderLayout.CENTER);
+			pnlMessage.setBorder(new EmptyBorder(0, 15, 15, 15));
+
+			setContent(new JComponent[] { ltfTopic });
+			pnlCenter.add(pnlMessage, BorderLayout.CENTER);
 			buttonListener = new ButtonListener();
 		}
 
 		@Override
 		public void setValues(Object[] values) {
 			ltfTopic.setText((String) values[2]);
-			ltfMsg.setText((String) values[3]);
+			txtMessage.setText((String) values[3]);
 
 		}
 
@@ -207,8 +221,8 @@ public class ForumTool extends Tool implements Updatable {
 				switch (e.getActionCommand()) {
 
 				case "send":
-					if (ltfTopic.getText().trim().length() > 0 && ltfMsg.getText().trim().length() > 0) {
-						Object[] obj = { null, "Anon", ltfTopic.getText(), ltfMsg.getText() };
+					if (ltfTopic.getText().trim().length() > 0 && txtMessage.getText().trim().length() > 0) {
+						Object[] obj = { null, "Anon", ltfTopic.getText(), txtMessage.getText() };
 						ForumTool.this.clientCtrlr.create(obj, Eviro.ENTITY_FORUMMESSAGE);
 
 						try {
