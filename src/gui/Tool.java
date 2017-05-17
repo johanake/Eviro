@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -135,8 +136,31 @@ public class Tool extends JInternalFrame {
 
 		tabbedPane.setBorder(new EmptyBorder(20, 0, 0, 0));
 
-		for (JPanel t : tabs) {
-			tabbedPane.addTab(t.getName(), t);
+		// for (JPanel t : tabs) {
+		// tabbedPane.addTab(t.getName(), t);
+		// }
+
+		for (int i = 0; i < tabs.length; i++) {
+
+			tabbedPane.addTab(tabs[i].getName(), tabs[i]);
+
+			switch (i) {
+			case 0:
+				tabbedPane.setMnemonicAt(i, KeyEvent.VK_1);
+				break;
+			case 1:
+				tabbedPane.setMnemonicAt(i, KeyEvent.VK_2);
+				break;
+			case 2:
+				tabbedPane.setMnemonicAt(i, KeyEvent.VK_3);
+				break;
+			case 3:
+				tabbedPane.setMnemonicAt(i, KeyEvent.VK_4);
+				break;
+			case 4:
+				tabbedPane.setMnemonicAt(i, KeyEvent.VK_5);
+				break;
+			}
 		}
 
 		pnlCenter.setBackground(bgColor);
