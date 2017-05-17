@@ -46,12 +46,13 @@ public class InvoiceTool extends Tool implements Updatable {
 	private ActionButton btnCredit = new ActionButton("Credit", "credit");
 	private ActionButton btnPrint = new ActionButton("Print", "print");
 	private ActionButton btnBook = new ActionButton("Create", "book");
+	private ActionButton btnArticle = new ActionButton("Add article", "article");
 
-	private JButton[] allButtons = { btnNew, btnReset, btnFind, btnPrint, btnCredit, btnBook };
+	private JButton[] allButtons = { btnNew, btnReset, btnFind, btnPrint, btnCredit, btnBook, btnArticle };
 	private JButton[] defaultButtons = { btnFind, btnReset };
-	private JButton[] editingButtons = { btnNew, btnReset };
+	private JButton[] editingButtons = { btnNew, btnArticle, btnReset };
 	private JButton[] lookingButtons = { btnCredit, btnPrint, btnReset };
-	private JButton[] creditButtons = { btnBook, btnReset };
+	private JButton[] creditButtons = { btnBook, btnArticle, btnReset };
 
 	private JScrollPane scrollPane;
 
@@ -231,6 +232,10 @@ public class InvoiceTool extends Tool implements Updatable {
 
 			case "book":
 				createCreditInvoice();
+				break;
+				
+			case "article":
+				guiCtrlr.add(new ArticleTool(getThisTool(), clientCtrlr, guiCtrlr));
 				break;
 
 			default:
@@ -443,6 +448,10 @@ public class InvoiceTool extends Tool implements Updatable {
 		ltfSum.setText(Double.toString(sum));
 
 	}
+	
+	public void addArticle(String[] values) {
+		articles.populate(values, 0);
+	}
 
 	@Override
 	public void setValues(Object[] values) {
@@ -500,6 +509,10 @@ public class InvoiceTool extends Tool implements Updatable {
 
 		return text;
 
+	}
+	
+	public InvoiceTool getThisTool() {
+		return this;
 	}
 
 	@Override

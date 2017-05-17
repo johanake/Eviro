@@ -3,10 +3,9 @@ package tools;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-
+import java.beans.PropertyVetoException;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-
 import client.ClientController;
 import gui.GUIController;
 import gui.Tool;
@@ -28,7 +27,8 @@ public class ArticleTool extends Tool implements Updatable {
 	private LabledTextField ltfStockPlace = new LabledTextField("Stock place");
 	private LabledTextField ltfQuantity = new LabledTextField("Quantity", Eviro.VALIDATOR_INTEGER);
 
-	private LabledTextField[] ltfAll = { ltfNo, ltfName, ltfDesc, ltfPrice, ltfSup, ltfSupNo, ltfEan, ltfStockPlace, ltfQuantity };
+	private LabledTextField[] ltfAll = { ltfNo, ltfName, ltfDesc, ltfPrice, ltfSup, ltfSupNo, ltfEan, ltfStockPlace,
+			ltfQuantity };
 	private LabledTextField[] ltfRequired = { ltfName, ltfDesc, ltfPrice, ltfSup, ltfQuantity };
 
 	private ActionButton btnNew = new ActionButton("Create New", "create");
@@ -36,11 +36,17 @@ public class ArticleTool extends Tool implements Updatable {
 	private ActionButton btnUpdate = new ActionButton("Save", "update");
 	private ActionButton btnFind = new ActionButton("Find", "search");
 	private ActionButton btnReset = new ActionButton("Reset", "reset");
+	private ActionButton btnAdd = new ActionButton("Add to invoice", "add");
 
-	private JButton[] allButtons = { btnNew, btnEdit, btnUpdate, btnFind, btnReset };
+	private JButton[] allButtons = { btnNew, btnEdit, btnUpdate, btnFind, btnReset, btnAdd };
 	private JButton[] defaultButtons = { btnNew, btnFind, btnReset };
 	private JButton[] lookingButtons = { btnEdit, btnReset };
 	private JButton[] editingButtons = { btnUpdate, btnReset };
+	private JButton[] openedFromInvoiceButtons = { btnFind };
+	private JButton[] sendToInvoiceButtons = { btnAdd };
+
+	private boolean sendingToInvoice;
+	private InvoiceTool invoiceGUI;
 
 	// private KeyPress keyListener = new KeyPress();
 
@@ -58,6 +64,13 @@ public class ArticleTool extends Tool implements Updatable {
 		btnUpdate.setMnemonic(KeyEvent.VK_S);
 		btnFind.setMnemonic(KeyEvent.VK_F);
 		btnReset.setMnemonic(KeyEvent.VK_R);
+	}
+
+	public ArticleTool(InvoiceTool invoiceGUI, ClientController clientCtrlr, GUIController guiCtrlr) {
+		this(clientCtrlr, guiCtrlr);
+		this.invoiceGUI = invoiceGUI;
+		setButtons(openedFromInvoiceButtons);
+		sendingToInvoice = true;
 	}
 
 	private void reset() {
@@ -132,38 +145,44 @@ public class ArticleTool extends Tool implements Updatable {
 
 			switch (e.getActionCommand()) {
 
-			case "create":
-				if (validate(ltfRequired)) {
-					ltfNo.setText(null);
-					create(getThis(), Eviro.ENTITY_PRODUCT);
-				}
-				break;
-
-			case "edit":
-				setButtons(editingButtons);
-				setTfEditable(ltfAll, true);
-				break;
-
-			case "update":
-				if (validate(ltfRequired)) {
-					if (update(getThis(), Eviro.ENTITY_PRODUCT)) {
-						setButtons(lookingButtons);
-						setTfEditable(ltfAll, false);
+				case "create":
+					if (validate(ltfRequired)) {
+						ltfNo.setText(null);
+						create(getThis(), Eviro.ENTITY_PRODUCT);
 					}
-				}
-				break;
+					break;
 
-			case "search":
-				search(getThis(), ltfAll, Eviro.ENTITY_PRODUCT);
-				break;
+				case "edit":
+					setButtons(editingButtons);
+					setTfEditable(ltfAll, true);
+					break;
 
-			case "reset":
-				reset();
-				break;
+				case "update":
+					if (validate(ltfRequired)) {
+						if (update(getThis(), Eviro.ENTITY_PRODUCT)) {
+							setButtons(lookingButtons);
+							setTfEditable(ltfAll, false);
+						}
+					}
+					break;
 
-			default:
+				case "search":
+					search(getThis(), ltfAll, Eviro.ENTITY_PRODUCT);
+					break;
 
-				break;
+				case "reset":
+					reset();
+					break;
+					
+				case "add":
+					String[] allValues = getValues();
+					String[] returnValues = {allValues[0], allValues[1], allValues[3], "0", "0"};
+					invoiceGUI.addArticle(returnValues);
+					break;
+
+				default:
+
+					break;
 			}
 		}
 	}
@@ -172,7 +191,10 @@ public class ArticleTool extends Tool implements Updatable {
 	public void setValues(Object[] values) {
 
 		setTfEditable(ltfAll, false);
-		setButtons(lookingButtons);
+		if (sendingToInvoice)
+			setButtons(sendToInvoiceButtons);
+		else
+			setButtons(lookingButtons);
 		setTitle(values[0] + " - " + values[1]);
 
 		for (int i = 0; i < ltfAll.length; i++) {
@@ -188,6 +210,7 @@ public class ArticleTool extends Tool implements Updatable {
 
 	@Override
 	public String[] getValues() {
+
 		return getValues(false);
 	}
 
@@ -212,6 +235,7 @@ public class ArticleTool extends Tool implements Updatable {
 
 	@Override
 	public Updatable getThis() {
+
 		return this;
 	}
 
