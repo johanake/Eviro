@@ -10,13 +10,11 @@ import java.awt.print.PrinterJob;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
-
 import client.ClientController;
 import enteties.Entity;
 import enteties.Invoice;
@@ -67,6 +65,7 @@ public class InvoiceTool extends Tool implements Updatable {
 
 			/*
 			 * (non-Javadoc)
+			 * 
 			 * @see javax.swing.JTable#editingStopped(javax.swing.event.ChangeEvent)
 			 */
 			@Override
@@ -161,6 +160,7 @@ public class InvoiceTool extends Tool implements Updatable {
 	}
 
 	private void setupButtonShortcuts() {
+
 		btnNew.setMnemonic(KeyEvent.VK_N);
 		btnFind.setMnemonic(KeyEvent.VK_F);
 		btnReset.setMnemonic(KeyEvent.VK_R);
@@ -173,7 +173,8 @@ public class InvoiceTool extends Tool implements Updatable {
 
 		super.setMaximizable(true);
 		buttonListener = new ButtonListener();
-		setContent(new JComponent[] { new SplitPanel(ltfCustNo, ltfInvNo), ltfBuyer, ltfRef, ltfSum, new SplitPanel(ltfCreated, ltfDue) });
+		setContent(new JComponent[] { new SplitPanel(ltfCustNo, ltfInvNo), ltfBuyer, ltfRef, ltfSum,
+				new SplitPanel(ltfCreated, ltfDue) });
 
 	}
 
@@ -206,46 +207,47 @@ public class InvoiceTool extends Tool implements Updatable {
 
 			switch (e.getActionCommand()) {
 
-			case "create":
-				ltfInvNo.setText(null);
-				create(getThis(), Eviro.ENTITY_INVOICE);
-				createTransactions(ltfInvNo.getText());
-				break;
+				case "create":
+					ltfInvNo.setText(null);
+					create(getThis(), Eviro.ENTITY_INVOICE);
+					createTransactions(ltfInvNo.getText());
+					break;
 
-			case "reset":
-				reset();
-				break;
+				case "reset":
+					reset();
+					break;
 
-			case "print":
-				print();
-				break;
+				case "print":
+					print();
+					break;
 
-			case "search":
-				search(getThis(), ltfAll, Eviro.ENTITY_INVOICE);
-				break;
+				case "search":
+					search(getThis(), ltfAll, Eviro.ENTITY_INVOICE);
+					break;
 
-			case "credit":
-				setButtons(creditButtons);
-				setTfEditable(ltfBuyer, true);
-				credit();
-				break;
+				case "credit":
+					setButtons(creditButtons);
+					setTfEditable(ltfBuyer, true);
+					credit();
+					break;
 
-			case "book":
-				createCreditInvoice();
-				break;
-				
-			case "article":
-				guiCtrlr.add(new ArticleTool(getThisTool(), clientCtrlr, guiCtrlr));
-				break;
+				case "book":
+					createCreditInvoice();
+					break;
 
-			default:
+				case "article":
+					guiCtrlr.add(new ArticleTool(getThisTool(), clientCtrlr, guiCtrlr));
+					break;
 
-				break;
+				default:
+
+					break;
 			}
 		}
 	}
 
 	public void search(String invoiceNo) {
+
 		ltfInvNo.setText(invoiceNo);
 		search(getThis(), ltfAll, Eviro.ENTITY_INVOICE);
 	}
@@ -261,6 +263,7 @@ public class InvoiceTool extends Tool implements Updatable {
 
 			/*
 			 * (non-Javadoc)
+			 * 
 			 * @see javax.swing.JTable#editingStopped(javax.swing.event.ChangeEvent)
 			 */
 			@Override
@@ -339,6 +342,7 @@ public class InvoiceTool extends Tool implements Updatable {
 	}
 
 	private void createCreditInvoice() {
+
 		ltfInvNo.setText(null);
 		create(getThis(), Eviro.ENTITY_INVOICE);
 		createTransactions(ltfInvNo.getText());
@@ -360,8 +364,8 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	public void getArticle(String articleno, int row) {
 
-		ArrayList<Entity> response = clientCtrlr.search(new String[] { articleno, null, null, null, null, null, null, null, null },
-				Eviro.ENTITY_PRODUCT);
+		ArrayList<Entity> response = clientCtrlr.search(
+				new String[] { articleno, null, null, null, null, null, null, null, null }, Eviro.ENTITY_PRODUCT);
 
 		if (response.size() == 1) {
 			Object[] article = response.get(0).getData();
@@ -410,13 +414,13 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	private void getTransactions(String invoiceNbr) {
 
-		ArrayList<Entity> transaction = clientCtrlr.search(new Object[] { null, invoiceNbr, null, null, null }, Eviro.ENTITY_TRANSACTION);
+		ArrayList<Entity> transaction = clientCtrlr.search(new Object[] { null, invoiceNbr, null, null, null },
+				Eviro.ENTITY_TRANSACTION);
 
 		for (int i = 0; i < transaction.size(); i++) {
 
-			ArrayList<Entity> article = clientCtrlr.search(
-					new String[] { (String) transaction.get(i).getData()[2], null, null, null, null, null, null, null, null },
-					Eviro.ENTITY_PRODUCT);
+			ArrayList<Entity> article = clientCtrlr.search(new String[] { (String) transaction.get(i).getData()[2],
+					null, null, null, null, null, null, null, null }, Eviro.ENTITY_PRODUCT);
 
 			Object[] articleData = article.get(0).getData();
 			Object[] transactionData = transaction.get(i).getData();
@@ -448,9 +452,17 @@ public class InvoiceTool extends Tool implements Updatable {
 		ltfSum.setText(Double.toString(sum));
 
 	}
-	
+
 	public void addArticle(String[] values) {
-		articles.populate(values, 0);
+
+		int rowCount = articles.getRowCount();
+		for (int i = 0; i < rowCount; i++) {
+			if (articles.getValueAt(i, 0) == null) {
+				rowCount = i;
+				break;
+			}
+		}
+		articles.populate(values, rowCount);
 	}
 
 	@Override
@@ -489,6 +501,7 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	@Override
 	public String[] getValues() {
+
 		return getValues(false);
 	}
 
@@ -510,13 +523,15 @@ public class InvoiceTool extends Tool implements Updatable {
 		return text;
 
 	}
-	
+
 	public InvoiceTool getThisTool() {
+
 		return this;
 	}
 
 	@Override
 	public Updatable getThis() {
+
 		return this;
 	}
 
