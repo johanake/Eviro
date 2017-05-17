@@ -32,7 +32,7 @@ import shared.Eviro;
 import tools.AdminTool;
 import tools.ArticleTool;
 import tools.CustomerTool;
-import tools.ForumTool;
+import tools.SocialTool;
 import tools.InvoiceTool;
 
 /**
@@ -65,7 +65,7 @@ public class GUIController {
 			public void run() {
 				
 				setSystemLookAndFeel();
-				JFrame window = new JFrame(Eviro.APP_NAME + " " + Eviro.APP_VERSION);
+				JFrame window = new JFrame(Eviro.APP_NAME + " " + Eviro.APP_VERSION + " " + clientController.getActiveUser().getData()[1]);
 				window.addKeyListener(keyListener);
 				window.setFocusable(true);
 				JPanel pnlMain = new JPanel(new BorderLayout());
@@ -227,7 +227,7 @@ public class GUIController {
 
 		private JComponent bottom[] = new JComponent[] {
 				new ActionJButton("Admin", "tool_admin"),
-				new ActionJButton("Forum", "tool_forum"),
+				new ActionJButton("Social", "tool_social"),
 				new ActionJButton("Settings", "tool_settings"),
 				new ActionJButton("Quit", "link_exit") };
 
@@ -292,8 +292,8 @@ public class GUIController {
 				desktop.add(new InvoiceTool(clientController, getGUIController()));
 				break;
 
-			case "tool_forum":
-				desktop.add(new ForumTool(clientController, getGUIController()));
+			case "tool_social":
+				desktop.add(new SocialTool(clientController, getGUIController()));
 				break;
 				
 			case "tool_admin": //LÖSENORDET ÄR "password"
