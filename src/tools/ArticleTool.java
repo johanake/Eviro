@@ -4,8 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyVetoException;
+
 import javax.swing.JButton;
 import javax.swing.JComponent;
+
 import client.ClientController;
 import gui.GUIController;
 import gui.Tool;
@@ -27,7 +29,15 @@ public class ArticleTool extends Tool implements Updatable {
 	private LabledTextField ltfStockPlace = new LabledTextField("Stock place");
 	private LabledTextField ltfQuantity = new LabledTextField("Quantity", Eviro.VALIDATOR_INTEGER);
 
-	private LabledTextField[] ltfAll = { ltfNo, ltfName, ltfDesc, ltfPrice, ltfSup, ltfSupNo, ltfEan, ltfStockPlace,
+	private LabledTextField[] ltfAll = {
+			ltfNo,
+			ltfName,
+			ltfDesc,
+			ltfPrice,
+			ltfSup,
+			ltfSupNo,
+			ltfEan,
+			ltfStockPlace,
 			ltfQuantity };
 	private LabledTextField[] ltfRequired = { ltfName, ltfDesc, ltfPrice, ltfSup, ltfQuantity };
 
@@ -145,44 +155,51 @@ public class ArticleTool extends Tool implements Updatable {
 
 			switch (e.getActionCommand()) {
 
-				case "create":
-					if (validate(ltfRequired)) {
-						ltfNo.setText(null);
-						create(getThis(), Eviro.ENTITY_PRODUCT);
+			case "create":
+				if (validate(ltfRequired)) {
+					ltfNo.setText(null);
+					create(getThis(), Eviro.ENTITY_PRODUCT);
+				}
+				break;
+
+			case "edit":
+				setButtons(editingButtons);
+				setTfEditable(ltfAll, true);
+				break;
+
+			case "update":
+				if (validate(ltfRequired)) {
+					if (update(getThis(), Eviro.ENTITY_PRODUCT)) {
+						setButtons(lookingButtons);
+						setTfEditable(ltfAll, false);
 					}
-					break;
+				}
+				break;
 
-				case "edit":
-					setButtons(editingButtons);
-					setTfEditable(ltfAll, true);
-					break;
+			case "search":
+				search(getThis(), ltfAll, Eviro.ENTITY_PRODUCT);
+				break;
 
-				case "update":
-					if (validate(ltfRequired)) {
-						if (update(getThis(), Eviro.ENTITY_PRODUCT)) {
-							setButtons(lookingButtons);
-							setTfEditable(ltfAll, false);
-						}
-					}
-					break;
+			case "reset":
+				reset();
+				break;
 
-				case "search":
-					search(getThis(), ltfAll, Eviro.ENTITY_PRODUCT);
-					break;
+			case "add":
+				String[] allValues = getValues();
+				String[] returnValues = { allValues[0], allValues[1], allValues[3], "1", null };
+				invoiceGUI.addArticle(returnValues);
 
-				case "reset":
-					reset();
-					break;
-					
-				case "add":
-					String[] allValues = getValues();
-					String[] returnValues = {allValues[0], allValues[1], allValues[3], "0", "0"};
-					invoiceGUI.addArticle(returnValues);
-					break;
+				try {
+					setClosed(true);
+				} catch (PropertyVetoException e1) {
+					e1.printStackTrace();
+				}
 
-				default:
+				break;
 
-					break;
+			default:
+
+				break;
 			}
 		}
 	}
@@ -191,10 +208,12 @@ public class ArticleTool extends Tool implements Updatable {
 	public void setValues(Object[] values) {
 
 		setTfEditable(ltfAll, false);
+
 		if (sendingToInvoice)
 			setButtons(sendToInvoiceButtons);
 		else
 			setButtons(lookingButtons);
+
 		setTitle(values[0] + " - " + values[1]);
 
 		for (int i = 0; i < ltfAll.length; i++) {

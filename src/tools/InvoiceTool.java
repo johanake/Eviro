@@ -10,11 +10,13 @@ import java.awt.print.PrinterJob;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
+
 import client.ClientController;
 import enteties.Entity;
 import enteties.Invoice;
@@ -65,7 +67,6 @@ public class InvoiceTool extends Tool implements Updatable {
 
 			/*
 			 * (non-Javadoc)
-			 * 
 			 * @see javax.swing.JTable#editingStopped(javax.swing.event.ChangeEvent)
 			 */
 			@Override
@@ -76,55 +77,7 @@ public class InvoiceTool extends Tool implements Updatable {
 				int col = getEditingColumn();
 				super.editingStopped(e);
 
-				if (col == 0) {
-					getArticle((String) getModel().getValueAt(row, col), row);
-				}
-
-				else if (col == 2 || col == 3) {
-
-					Double price, total;
-					int quantity;
-
-					// replaceAll(",", "."); TODO Implement?
-
-					try {
-						price = Double.parseDouble((String) getModel().getValueAt(row, 2));
-						quantity = Integer.parseInt((String) getModel().getValueAt(row, 3));
-						total = price * quantity;
-
-					} catch (NumberFormatException nfe) {
-						total = 0.0;
-						price = 0.0;
-						quantity = 0;
-					}
-
-					getModel().setValueAt(Double.toString(total), row, 4);
-					getModel().setValueAt(Double.toString(price), row, 2);
-					getModel().setValueAt(Integer.toString(quantity), row, 3);
-
-				}
-
-				else if (col == 4) {
-
-					Double price, total;
-					int quantity;
-
-					try {
-						quantity = Integer.parseInt((String) getModel().getValueAt(row, 3));
-						total = Double.parseDouble((String) getModel().getValueAt(row, 4));
-						price = total / quantity;
-					} catch (NumberFormatException nfe) {
-						total = 0.0;
-						price = 0.0;
-						quantity = 0;
-					}
-					getModel().setValueAt(Double.toString(total), row, 4);
-					getModel().setValueAt(Double.toString(price), row, 2);
-					getModel().setValueAt(Integer.toString(quantity), row, 3);
-
-				}
-
-				setTotalPrice();
+				calculate(this, row, col);
 
 			}
 
@@ -159,6 +112,60 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
+	public void calculate(Table table, int row, int col) {
+
+		if (col == 0) {
+			getArticle((String) table.getModel().getValueAt(row, col), row);
+		}
+
+		else if (col == 2 || col == 3) {
+
+			Double price, total;
+			int quantity;
+
+			// replaceAll(",", "."); TODO Implement?
+
+			try {
+				price = Double.parseDouble((String) table.getModel().getValueAt(row, 2));
+				quantity = Integer.parseInt((String) table.getModel().getValueAt(row, 3));
+				total = price * quantity;
+
+			} catch (NumberFormatException nfe) {
+				total = 0.0;
+				price = 0.0;
+				quantity = 0;
+			}
+
+			table.getModel().setValueAt(Double.toString(total), row, 4);
+			table.getModel().setValueAt(Double.toString(price), row, 2);
+			table.getModel().setValueAt(Integer.toString(quantity), row, 3);
+
+		}
+
+		else if (col == 4) {
+
+			Double price, total;
+			int quantity;
+
+			try {
+				quantity = Integer.parseInt((String) table.getModel().getValueAt(row, 3));
+				total = Double.parseDouble((String) table.getModel().getValueAt(row, 4));
+				price = total / quantity;
+			} catch (NumberFormatException nfe) {
+				total = 0.0;
+				price = 0.0;
+				quantity = 0;
+			}
+			table.getModel().setValueAt(Double.toString(total), row, 4);
+			table.getModel().setValueAt(Double.toString(price), row, 2);
+			table.getModel().setValueAt(Integer.toString(quantity), row, 3);
+
+		}
+
+		setTotalPrice();
+
+	}
+
 	private void setupButtonShortcuts() {
 
 		btnNew.setMnemonic(KeyEvent.VK_N);
@@ -173,7 +180,11 @@ public class InvoiceTool extends Tool implements Updatable {
 
 		super.setMaximizable(true);
 		buttonListener = new ButtonListener();
-		setContent(new JComponent[] { new SplitPanel(ltfCustNo, ltfInvNo), ltfBuyer, ltfRef, ltfSum,
+		setContent(new JComponent[] {
+				new SplitPanel(ltfCustNo, ltfInvNo),
+				ltfBuyer,
+				ltfRef,
+				ltfSum,
 				new SplitPanel(ltfCreated, ltfDue) });
 
 	}
@@ -207,41 +218,41 @@ public class InvoiceTool extends Tool implements Updatable {
 
 			switch (e.getActionCommand()) {
 
-				case "create":
-					ltfInvNo.setText(null);
-					create(getThis(), Eviro.ENTITY_INVOICE);
-					createTransactions(ltfInvNo.getText());
-					break;
+			case "create":
+				ltfInvNo.setText(null);
+				create(getThis(), Eviro.ENTITY_INVOICE);
+				createTransactions(ltfInvNo.getText());
+				break;
 
-				case "reset":
-					reset();
-					break;
+			case "reset":
+				reset();
+				break;
 
-				case "print":
-					print();
-					break;
+			case "print":
+				print();
+				break;
 
-				case "search":
-					search(getThis(), ltfAll, Eviro.ENTITY_INVOICE);
-					break;
+			case "search":
+				search(getThis(), ltfAll, Eviro.ENTITY_INVOICE);
+				break;
 
-				case "credit":
-					setButtons(creditButtons);
-					setTfEditable(ltfBuyer, true);
-					credit();
-					break;
+			case "credit":
+				setButtons(creditButtons);
+				setTfEditable(ltfBuyer, true);
+				credit();
+				break;
 
-				case "book":
-					createCreditInvoice();
-					break;
+			case "book":
+				createCreditInvoice();
+				break;
 
-				case "article":
-					guiCtrlr.add(new ArticleTool(getThisTool(), clientCtrlr, guiCtrlr));
-					break;
+			case "article":
+				guiCtrlr.add(new ArticleTool(getThisTool(), clientCtrlr, guiCtrlr));
+				break;
 
-				default:
+			default:
 
-					break;
+				break;
 			}
 		}
 	}
@@ -263,7 +274,6 @@ public class InvoiceTool extends Tool implements Updatable {
 
 			/*
 			 * (non-Javadoc)
-			 * 
 			 * @see javax.swing.JTable#editingStopped(javax.swing.event.ChangeEvent)
 			 */
 			@Override
@@ -274,55 +284,7 @@ public class InvoiceTool extends Tool implements Updatable {
 				int col = getEditingColumn();
 				super.editingStopped(e);
 
-				if (col == 0) {
-					getArticle((String) getModel().getValueAt(row, col), row);
-				}
-
-				else if (col == 2 || col == 3) {
-
-					Double price, total;
-					int quantity;
-
-					// replaceAll(",", "."); TODO Implement?
-
-					try {
-						price = Double.parseDouble((String) getModel().getValueAt(row, 2));
-						quantity = Integer.parseInt((String) getModel().getValueAt(row, 3));
-						total = price * quantity;
-
-					} catch (NumberFormatException nfe) {
-						total = 0.0;
-						price = 0.0;
-						quantity = 0;
-					}
-
-					getModel().setValueAt(Double.toString(total), row, 4);
-					getModel().setValueAt(Double.toString(price), row, 2);
-					getModel().setValueAt(Integer.toString(quantity), row, 3);
-
-				}
-
-				else if (col == 4) {
-
-					Double price, total;
-					int quantity;
-
-					try {
-						quantity = Integer.parseInt((String) getValueAt(row, 3));
-						total = Double.parseDouble((String) getValueAt(row, 4));
-						price = total / quantity;
-					} catch (NumberFormatException nfe) {
-						total = 0.0;
-						price = 0.0;
-						quantity = 0;
-					}
-					getModel().setValueAt(Double.toString(total), row, 4);
-					getModel().setValueAt(Double.toString(price), row, 2);
-					getModel().setValueAt(Integer.toString(quantity), row, 3);
-
-				}
-
-				setTotalPrice();
+				calculate(this, row, col);
 
 			}
 
@@ -419,8 +381,16 @@ public class InvoiceTool extends Tool implements Updatable {
 
 		for (int i = 0; i < transaction.size(); i++) {
 
-			ArrayList<Entity> article = clientCtrlr.search(new String[] { (String) transaction.get(i).getData()[2],
-					null, null, null, null, null, null, null, null }, Eviro.ENTITY_PRODUCT);
+			ArrayList<Entity> article = clientCtrlr.search(new String[] {
+					(String) transaction.get(i).getData()[2],
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null }, Eviro.ENTITY_PRODUCT);
 
 			Object[] articleData = article.get(0).getData();
 			Object[] transactionData = transaction.get(i).getData();
@@ -463,6 +433,7 @@ public class InvoiceTool extends Tool implements Updatable {
 			}
 		}
 		articles.populate(values, rowCount);
+		calculate(articles, rowCount, 3);
 	}
 
 	@Override
