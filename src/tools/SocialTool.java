@@ -5,11 +5,11 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -18,7 +18,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.JTextComponent;
+
 import client.ClientController;
 import gui.GUIController;
 import gui.Table;
@@ -28,7 +31,6 @@ import shared.Eviro;
 
 /**
  * A forum for Eviro users.
- * 
  * @author Mattias Sundquist
  */
 public class SocialTool extends Tool implements Updatable {
@@ -43,9 +45,11 @@ public class SocialTool extends Tool implements Updatable {
 	private ActionButton btnOpen = new ActionButton("Open Message", "open");
 	private ActionButton btnUpdate = new ActionButton("Update", "update");
 	private ActionButton btnNew = new ActionButton("New Message", "new");
+	private ActionButton btnTest = new ActionButton("Test", "test");
 
-	private JButton[] allButtons = { btnOpen, btnUpdate, btnNew };
+	private JButton[] allButtons = { btnOpen, btnUpdate, btnNew, btnTest };
 	private JButton[] defaultButtons = { btnOpen, btnUpdate, btnNew };
+	private JButton[] todoButtons = { btnTest };
 
 	private ArrayList<Object[]> messageList = new ArrayList<Object[]>();
 
@@ -84,6 +88,21 @@ public class SocialTool extends Tool implements Updatable {
 		btnOpen.setMnemonic(KeyEvent.VK_O);
 		btnUpdate.setMnemonic(KeyEvent.VK_U);
 		btnNew.setMnemonic(KeyEvent.VK_N);
+
+		tabbedPane.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+
+				if (tabbedPane.getSelectedComponent() == tab1) {
+					setButtons(defaultButtons);
+				}
+
+				else if (tabbedPane.getSelectedComponent() == tab2) {
+					setButtons(todoButtons);
+				}
+
+			}
+		});
 
 	}
 
@@ -190,22 +209,22 @@ public class SocialTool extends Tool implements Updatable {
 
 			switch (e.getActionCommand()) {
 
-				case "update":
-					get(getThis(), Eviro.ENTITY_FORUMMESSAGE);
-					break;
+			case "update":
+				get(getThis(), Eviro.ENTITY_FORUMMESSAGE);
+				break;
 
-				case "new":
-					guiCtrlr.add(new ReadWriteMessage("Write new Message"));
-					break;
+			case "new":
+				guiCtrlr.add(new ReadWriteMessage("Write new Message"));
+				break;
 
-				case "open":
-					if (posts.getModel().getValueAt(posts.getSelectedRow(), 0) != null) {
-						Object[] obj = messageList.get(posts.getSelectedRow());
-						guiCtrlr.add(new ReadWriteMessage("Read message from " + obj[1].toString(), obj));
-					} else {
-						JOptionPane.showMessageDialog(null, "No message is selected.");
-					}
-					break;
+			case "open":
+				if (posts.getModel().getValueAt(posts.getSelectedRow(), 0) != null) {
+					Object[] obj = messageList.get(posts.getSelectedRow());
+					guiCtrlr.add(new ReadWriteMessage("Read message from " + obj[1].toString(), obj));
+				} else {
+					JOptionPane.showMessageDialog(null, "No message is selected.");
+				}
+				break;
 
 			}
 		}
@@ -288,23 +307,26 @@ public class SocialTool extends Tool implements Updatable {
 
 				switch (e.getActionCommand()) {
 
-					case "send":
-						if (ltfTopic.getText().trim().length() > 0 && txtMessage.getText().trim().length() > 0) {
-							Object[] obj = { null, clientCtrlr.getActiveUser().getData()[1], ltfTopic.getText(),
-									txtMessage.getText() };
-							SocialTool.this.clientCtrlr.create(obj, Eviro.ENTITY_FORUMMESSAGE);
+				case "send":
+					if (ltfTopic.getText().trim().length() > 0 && txtMessage.getText().trim().length() > 0) {
+						Object[] obj = {
+								null,
+								clientCtrlr.getActiveUser().getData()[1],
+								ltfTopic.getText(),
+								txtMessage.getText() };
+						SocialTool.this.clientCtrlr.create(obj, Eviro.ENTITY_FORUMMESSAGE);
 
-							try {
-								getFrame().setClosed(true);
-							} catch (PropertyVetoException e1) {
-								e1.printStackTrace();
-							}
+						try {
+							getFrame().setClosed(true);
+						} catch (PropertyVetoException e1) {
+							e1.printStackTrace();
+						}
 
-							get(getThis(), Eviro.ENTITY_FORUMMESSAGE);
+						get(getThis(), Eviro.ENTITY_FORUMMESSAGE);
 
-						} else
-							JOptionPane.showMessageDialog(null, "You must enter a topic and a message");
-						break;
+					} else
+						JOptionPane.showMessageDialog(null, "You must enter a topic and a message");
+					break;
 
 				}
 			}

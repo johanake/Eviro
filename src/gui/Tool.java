@@ -38,7 +38,7 @@ public class Tool extends JInternalFrame {
 	public JPanel pnlCenter = new JPanel(new BorderLayout());
 	public JPanel pnlSouth = new JPanel(new BorderLayout());
 
-	private JTabbedPane tabbedPane = new JTabbedPane();
+	public JTabbedPane tabbedPane = new JTabbedPane();
 
 	static int openFrameCount = 0;
 
