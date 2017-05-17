@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.text.SimpleDateFormat;
@@ -69,8 +70,6 @@ public class InvoiceTool extends Tool implements Updatable {
 			 */
 			@Override
 			public void editingStopped(ChangeEvent e) {
-
-				calculate(this);
 
 				// TODO Behöver skrivas om så den funkar även om man ändrar ordning
 				int row = getEditingRow();
@@ -145,12 +144,9 @@ public class InvoiceTool extends Tool implements Updatable {
 		setTfEditable(ltfBuyer, true);
 		setTfEditable(ltfRef, true);
 
+		setupButtonShortcuts();
+
 	}
-
-	private void calculate(Table table) {
-		// TODO Auto-generated method stub
-
-	};
 
 	public InvoiceTool(ClientController clientController, GUIController guiController) {
 
@@ -159,7 +155,17 @@ public class InvoiceTool extends Tool implements Updatable {
 		setup();
 		setButtons(defaultButtons);
 		setTfEditable(ltfAll, true);
+		setupButtonShortcuts();
 
+	}
+
+	private void setupButtonShortcuts() {
+		btnNew.setMnemonic(KeyEvent.VK_N);
+		btnFind.setMnemonic(KeyEvent.VK_F);
+		btnReset.setMnemonic(KeyEvent.VK_R);
+		btnCredit.setMnemonic(KeyEvent.VK_C);
+		btnPrint.setMnemonic(KeyEvent.VK_P);
+		btnBook.setMnemonic(KeyEvent.VK_C);
 	}
 
 	public void setup() {

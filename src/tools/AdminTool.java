@@ -2,7 +2,6 @@ package tools;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -23,7 +22,7 @@ public class AdminTool extends Tool implements Updatable {
 	private LabledTextField ltfUserName = new LabledTextField("User Name");
 	private JPasswordField jpfUserPassword = new JPasswordField();
 	private LabledTextField ltfUserPassword = new LabledTextField("User Password");
-	private LabledTextField[] ltfAll = { ltfUserID, ltfUserName, ltfUserPassword};
+	private LabledTextField[] ltfAll = { ltfUserID, ltfUserName, ltfUserPassword };
 
 	private ActionButton btnNew = new ActionButton("Create New", "create");
 	private ActionButton btnEdit = new ActionButton("Edit", "edit");
@@ -38,7 +37,7 @@ public class AdminTool extends Tool implements Updatable {
 
 	public AdminTool(ClientController clientController, GUIController guiController) {
 		super("Admin", clientController, guiController);
-		buttonListener = new ButtonListener();
+		// buttonListener = new ButtonListener();
 		setTabs(tabs);
 		jpfUserPassword.setName("User Password");
 		setContent(0, new JComponent[] { ltfUserID, ltfUserName, jpfUserPassword });
@@ -135,18 +134,18 @@ public class AdminTool extends Tool implements Updatable {
 		for (int i = 0; i < ltfAll.length; i++) {
 			text[i] = ltfAll[i].getText();
 		}
-		
-//		text[2] = clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword()));
-//		
-//		text[2] = new String(jpfUserPassword.getPassword());
-//		
-//		System.out.println("password: " + jpfUserPassword.getPassword());
-//		
-//		if (text[2] != null) 
-//			text[2] = clientCtrlr.getPassCryptor().encryptPassword(text[2]);
-//
-//		System.out.println(Arrays.toString(text));
-		
+
+		// text[2] = clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword()));
+		//
+		// text[2] = new String(jpfUserPassword.getPassword());
+		//
+		// System.out.println("password: " + jpfUserPassword.getPassword());
+		//
+		// if (text[2] != null)
+		// text[2] = clientCtrlr.getPassCryptor().encryptPassword(text[2]);
+		//
+		// System.out.println(Arrays.toString(text));
+
 		return text;
 
 	}

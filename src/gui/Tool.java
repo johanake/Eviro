@@ -76,7 +76,7 @@ public class Tool extends JInternalFrame {
 		} else
 			return resultList;
 	}
-	
+
 	protected void search(Updatable tool, LabledTextField[] ltfAll, int entitytype) {
 
 		ArrayList<Entity> response = clientCtrlr.search(tool.getValues(), entitytype);
@@ -145,6 +145,8 @@ public class Tool extends JInternalFrame {
 
 	protected void setButtons(JButton[] buttons) {
 
+		setFocusable(true);
+		requestFocusInWindow();
 		pnlSouth.removeAll();
 
 		JPanel pnlButtons = new JPanel(new GridLayout(1, buttons.length));

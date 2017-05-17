@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
@@ -71,7 +72,12 @@ public class CustomerTool extends Tool implements Updatable {
 		ltfBalance.setText("0.00");
 		createCommentsTable();
 		createInvoiceTable();
-
+		btnNew.setMnemonic(KeyEvent.VK_N);
+		btnEdit.setMnemonic(KeyEvent.VK_E);
+		btnUpdate.setMnemonic(KeyEvent.VK_U);
+		btnFind.setMnemonic(KeyEvent.VK_F);
+		btnInvoice.setMnemonic(KeyEvent.VK_I);
+		btnReset.setMnemonic(KeyEvent.VK_R);
 	}
 
 	private void createCommentsTable() {

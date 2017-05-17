@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
@@ -74,6 +75,10 @@ public class ForumTool extends Tool implements Updatable {
 				}
 			}
 		});
+
+		btnOpen.setMnemonic(KeyEvent.VK_O);
+		btnUpdate.setMnemonic(KeyEvent.VK_U);
+		btnNew.setMnemonic(KeyEvent.VK_N);
 
 	}
 
