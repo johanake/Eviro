@@ -366,7 +366,7 @@ public class InvoiceTool extends Tool implements Updatable {
 			info[1] = article[1];
 			info[2] = article[3];
 			info[3] = "1";
-			info[4] = Integer.toString(Integer.parseInt((String) info[2]) * Integer.parseInt((String) info[3]));
+			info[4] = Double.toString(Double.parseDouble((String) info[2]) * Double.parseDouble((String) info[3]));
 
 			articles.populate(info, row);
 		}
