@@ -53,6 +53,7 @@ public class SocialTool extends Tool implements Updatable {
 	private ArrayList<Object[]> messageList = new ArrayList<Object[]>();
 
 	private Table posts = new Table(new Object[] { "Date", "User", "Topic" }, false);
+	private Table toDos = new Table(new Object[] { "Date", "User", "Topic" }, false);
 
 	public SocialTool(ClientController clientController, GUIController guiController) {
 		super("Social", clientController, guiController);

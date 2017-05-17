@@ -58,9 +58,12 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	private Table articles = null;
 
-	public InvoiceTool(ClientController clientController, GUIController guiController, String customer) {
+	private CustomerTool customerGUI;
+
+	public InvoiceTool(CustomerTool customerGUI, ClientController clientController, GUIController guiController, String customer) {
 
 		super("Invoice", clientController, guiController);
+		this.customerGUI = customerGUI;
 
 		setup();
 		articles = new Table(new Object[] { "Article No", "Name", "Unit Price", "Qty", "Total" }, true) {
@@ -222,6 +225,8 @@ public class InvoiceTool extends Tool implements Updatable {
 				ltfInvNo.setText(null);
 				create(getThis(), Eviro.ENTITY_INVOICE);
 				createTransactions(ltfInvNo.getText());
+				String no = customerGUI.getValues()[0];
+				customerGUI.getInvoices(no);
 				break;
 
 			case "reset":

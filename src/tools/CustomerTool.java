@@ -131,7 +131,7 @@ public class CustomerTool extends Tool implements Updatable {
 
 	}
 
-	private void getInvoices(String customerNo) {
+	public void getInvoices(String customerNo) {
 
 		ArrayList<Entity> invoices = clientCtrlr.search(new Object[] { null, customerNo, null, null, null, null, null }, Eviro.ENTITY_INVOICE);
 
@@ -171,14 +171,14 @@ public class CustomerTool extends Tool implements Updatable {
 
 			if (reply == JOptionPane.OK_OPTION) {
 
-				guiCtrlr.add(new InvoiceTool(clientCtrlr, guiCtrlr, ltfNo.getText()));
+				guiCtrlr.add(new InvoiceTool(getThisTool(), clientCtrlr, guiCtrlr, ltfNo.getText()));
 
 			}
 
 		}
 
 		else {
-			guiCtrlr.add(new InvoiceTool(clientCtrlr, guiCtrlr, ltfNo.getText()));
+			guiCtrlr.add(new InvoiceTool(getThisTool(), clientCtrlr, guiCtrlr, ltfNo.getText()));
 		}
 	}
 
@@ -299,6 +299,10 @@ public class CustomerTool extends Tool implements Updatable {
 
 		return text;
 
+	}
+
+	private CustomerTool getThisTool() {
+		return this;
 	}
 
 	@Override
