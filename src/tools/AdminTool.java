@@ -37,7 +37,7 @@ public class AdminTool extends Tool implements Updatable {
 
 	public AdminTool(ClientController clientController, GUIController guiController) {
 		super("Admin", clientController, guiController);
-		// buttonListener = new ButtonListener();
+		buttonListener = new ButtonListener();
 		setTabs(tabs);
 		jpfUserPassword.setName("User Password");
 		setContent(0, new JComponent[] { ltfUserID, ltfUserName, jpfUserPassword });
