@@ -91,6 +91,18 @@ public class ClientController {
 	public StrongPasswordEncryptor getPassCryptor() {
 		return passCryptor;
 	}
+	
+	public void specificUpdate(String invoiceNbr, int entity, String status){
+		System.out.println("specific start");
+		String[] data ={status, invoiceNbr};		
+		Entity object = createEntityByType(entity);
+		object.setData(data);
+		object.setOperation(Eviro.DB_SPECIFICUPDATE);
+		System.out.println("specific end");
+		client.sendObject(object);
+		
+		
+	}
 
 	/**
 	 * Creates and sends a "update operation" object to the server.

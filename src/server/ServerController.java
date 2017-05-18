@@ -145,6 +145,9 @@ public class ServerController {
 		case Eviro.DB_GETALL:
 			returnObject = createList(connectDB.executeGetQuery(buildGetAllQuery(ei)));
 			break;
+		case Eviro.DB_SPECIFICUPDATE:
+			buildSpecificUpdateQuery(ei);
+			break;
 		}
 		return returnObject;
 	}
@@ -224,7 +227,8 @@ public class ServerController {
 		Object[] info = ei.getData();
 		String tableName = getTableName(ei);
 
-		String[] colNames = getColNames(ei, tableName);
+		String[] colNames = getColNames(ei, tableName);	
+		
 		String query = "SELECT * FROM " + tableName + " WHERE ";
 		String and = "";
 
@@ -293,6 +297,20 @@ public class ServerController {
 		System.out.println("buildUpdateQuery: " + query);
 		return query;
 	}
+	
+	private String buildSpecificUpdateQuery(Entity ei) {
+
+		Object[] info = ei.getData();
+		String tableName = getTableName(ei);
+		String[] colNames = getColNames(ei, tableName);
+		String query = "UPDATE " + tableName + " SET Status = '" + info[0] + "' WHERE invoice ID =" + info[1]; 
+
+		logAppend(query);
+		System.out.println("SPECIFIC: " + query);
+		return query;
+		
+		
+	}
 
 	/**
 	 * Build a delete-query based on the information in the ENtityInterface given in the parameter. Expects that the EntityInterface id is specified.
@@ -341,7 +359,8 @@ public class ServerController {
 							rs.getString(4),
 							rs.getString(5),
 							rs.getString(6),
-							rs.getString(7) }));
+							rs.getString(7),
+							rs.getString(8)}));
 				} else if (rs.getMetaData().toString().contains("tableName=product")) {
 					ei.add(new Product(new Object[] {
 							rs.getString(1),

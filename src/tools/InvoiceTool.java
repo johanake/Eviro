@@ -37,8 +37,9 @@ public class InvoiceTool extends Tool implements Updatable {
 	private LabledTextField ltfSum = new LabledTextField("Total (SEK)");
 	private LabledTextField ltfCreated = new LabledTextField("Created");
 	private LabledTextField ltfDue = new LabledTextField("Due");
+	private LabledTextField ltfStatus = new LabledTextField("Status", false);
 
-	private LabledTextField[] ltfAll = { ltfInvNo, ltfCustNo, ltfBuyer, ltfRef, ltfCreated, ltfDue, ltfSum };
+	private LabledTextField[] ltfAll = { ltfInvNo, ltfCustNo, ltfBuyer, ltfRef, ltfCreated, ltfDue, ltfSum, ltfStatus};
 
 	private ActionButton btnNew = new ActionButton("Create", "create");
 	private ActionButton btnReset = new ActionButton("Reset", "reset");
@@ -59,15 +60,15 @@ public class InvoiceTool extends Tool implements Updatable {
 	private Table articles = null;
 
 	private CustomerTool customerGUI;
+	private ClientController clientController;
 
 	public InvoiceTool(CustomerTool customerGUI, ClientController clientController, GUIController guiController, String customer) {
-
+		
 		super("Invoice", clientController, guiController);
 		this.customerGUI = customerGUI;
-
 		setup();
 		articles = new Table(new Object[] { "Article No", "Name", "Unit Price", "Qty", "Total" }, true) {
-
+		
 			/*
 			 * (non-Javadoc)
 			 * @see javax.swing.JTable#editingStopped(javax.swing.event.ChangeEvent)
@@ -188,7 +189,8 @@ public class InvoiceTool extends Tool implements Updatable {
 				ltfBuyer,
 				ltfRef,
 				ltfSum,
-				new SplitPanel(ltfCreated, ltfDue) });
+				new SplitPanel(ltfCreated, ltfDue),
+				ltfStatus});
 
 	}
 
@@ -198,6 +200,7 @@ public class InvoiceTool extends Tool implements Updatable {
 			articles.reset();
 
 		setTfEditable(ltfAll, true);
+		setTfEditable(ltfStatus, false);
 		setButtons(defaultButtons);
 		setTitle("Invoice");
 
@@ -223,6 +226,7 @@ public class InvoiceTool extends Tool implements Updatable {
 
 			case "create":
 				ltfInvNo.setText(null);
+				ltfStatus.setText(Eviro.INVOICE_OPEN);
 				create(getThis(), Eviro.ENTITY_INVOICE);
 				createTransactions(ltfInvNo.getText());
 				String no = customerGUI.getValues()[0];
@@ -309,8 +313,12 @@ public class InvoiceTool extends Tool implements Updatable {
 	}
 
 	private void createCreditInvoice() {
-
+		System.out.println("a" + ltfInvNo.getText());
+		System.out.println("b" + Eviro.ENTITY_INVOICE);
+		System.out.println("c" + Eviro.INVOICE_CREDITED);
+		clientController.specificUpdate(ltfInvNo.getText(),Eviro.ENTITY_INVOICE, Eviro.INVOICE_CREDITED);
 		ltfInvNo.setText(null);
+		ltfStatus.setText(Eviro.INVOICE_CREDITED);
 		create(getThis(), Eviro.ENTITY_INVOICE);
 		createTransactions(ltfInvNo.getText());
 	}
@@ -459,7 +467,7 @@ public class InvoiceTool extends Tool implements Updatable {
 		setTfEditable(ltfAll, false);
 		setButtons(lookingButtons);
 		setTitle(values[0] + " - " + values[2]);
-
+		
 		for (int i = 0; i < ltfAll.length; i++) {
 
 			if (values[i] instanceof Integer) {
@@ -484,8 +492,7 @@ public class InvoiceTool extends Tool implements Updatable {
 	@Override
 	public String[] getValues(boolean getNames) {
 
-		String[] text = new String[ltfAll.length];
-
+		String[] text = new String[ltfAll.length];		
 		for (int i = 0; i < ltfAll.length; i++) {
 
 			if (getNames)

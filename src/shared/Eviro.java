@@ -17,13 +17,18 @@ public class Eviro {
 	public static final String APP_NAME = "Eviro Enterprise System";
 	public static final String APP_VERSION = "v0.1";
 	public static final String APP_ICON = "images/eviro_icon.png";
+	
+	public static final String INVOICE_OPEN = "Open";		//Kom på ett bättre namn /JÅ
+	public static final String INVOICE_CREDITED = "Credited";
+	public static final String INVOICE_PAID = "Paid";
 
 	public static final int DB_ADD = 1;
 	public static final int DB_SEARCH = 2;
 	public static final int DB_UPDATE = 3;
 	public static final int DB_DELETE = 4;
 	public static final int DB_GETALL = 5;
-
+	public static final int DB_SPECIFICUPDATE = 6;
+	
 	public static final int ENTITY_CUSTOMER = 1;
 	public static final int ENTITY_INVOICE = 2;
 	public static final int ENTITY_PRODUCT = 3;
