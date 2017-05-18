@@ -40,18 +40,18 @@ public class ClientController {
 	 * @param client the client of the system
 	 */
 	public ClientController() {
-		
+
 		try {
 			reader = new FileReader("clientConfig");
 			properties.load(reader);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		this.client = new Client(this);
-		
+
 		new GUIController(this);
-	
+
 	}
 
 	public Client getClient() {
@@ -77,12 +77,12 @@ public class ClientController {
 	public String getProperty(String property) {
 		return properties.getProperty(property);
 	}
-	
+
 	public void setProperty(String property, String value) {
 		String oldProperty = getProperty(property);
 		properties.setProperty(property, value);
 		try {
-			properties.store(new FileWriter("clientConfig"), "Changed: " + property + " (old = " + value + ")" );
+			properties.store(new FileWriter("clientConfig"), "Changed: " + property + " (old = " + value + ")");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -245,10 +245,26 @@ public class ClientController {
 	 */
 	private boolean checkData(Object[] data) {
 
+		escape(data);
+
 		for (Object s : data) {
 
 			if (s != null && ((String) s).trim().length() > 0) {
 				return true;
+			}
+
+		}
+
+		return false;
+	}
+
+	private boolean escape(Object[] data) {
+
+		for (int i = 0; i < data.length; i++) {
+
+			if (data[i] != null && ((String) data[i]).trim().length() > 0) {
+				data[i] = ((String) data[i]).replace("'", "''");
+				data[i] = ((String) data[i]).replace("*", "%");
 			}
 
 		}
