@@ -61,11 +61,13 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	private CustomerTool customerGUI;
 	private ClientController clientController;
+	private Updatable temp;
 
 	public InvoiceTool(CustomerTool customerGUI, ClientController clientController, GUIController guiController, String customer) {
 		
 		super("Invoice", clientController, guiController);
 		this.customerGUI = customerGUI;
+		this.clientController = clientController;
 		setup();
 		articles = new Table(new Object[] { "Article No", "Name", "Unit Price", "Qty", "Total" }, true) {
 		
@@ -225,12 +227,13 @@ public class InvoiceTool extends Tool implements Updatable {
 			switch (e.getActionCommand()) {
 
 			case "create":
-				ltfInvNo.setText(null);
+				ltfInvNo.setText(null);		
 				ltfStatus.setText(Eviro.INVOICE_OPEN);
 				create(getThis(), Eviro.ENTITY_INVOICE);
 				createTransactions(ltfInvNo.getText());
 				String no = customerGUI.getValues()[0];
 				customerGUI.getInvoices(no);
+				
 				break;
 
 			case "reset":
@@ -246,6 +249,9 @@ public class InvoiceTool extends Tool implements Updatable {
 				break;
 
 			case "credit":
+				temp = getThis();
+				ltfStatus.setText(Eviro.INVOICE_CREDITED);
+				temp.setValues(ltfAll);
 				setButtons(creditButtons);
 				setTfEditable(ltfBuyer, true);
 				credit();
@@ -253,6 +259,7 @@ public class InvoiceTool extends Tool implements Updatable {
 
 			case "book":
 				createCreditInvoice();
+				update(temp, Eviro.ENTITY_INVOICE);
 				break;
 
 			case "article":
@@ -312,13 +319,8 @@ public class InvoiceTool extends Tool implements Updatable {
 		setTotalPrice();
 	}
 
-	private void createCreditInvoice() {
-		System.out.println("a" + ltfInvNo.getText());
-		System.out.println("b" + Eviro.ENTITY_INVOICE);
-		System.out.println("c" + Eviro.INVOICE_CREDITED);
-		clientController.specificUpdate(ltfInvNo.getText(),Eviro.ENTITY_INVOICE, Eviro.INVOICE_CREDITED);
-		ltfInvNo.setText(null);
-		ltfStatus.setText(Eviro.INVOICE_CREDITED);
+	private void createCreditInvoice() {	
+		ltfInvNo.setText(null);		
 		create(getThis(), Eviro.ENTITY_INVOICE);
 		createTransactions(ltfInvNo.getText());
 	}
