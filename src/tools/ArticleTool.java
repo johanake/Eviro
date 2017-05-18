@@ -9,12 +9,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
 
 import client.ClientController;
 import enteties.Entity;
@@ -26,10 +29,13 @@ import shared.Eviro;
 
 public class ArticleTool extends Tool implements Updatable {
 
-	private ButtonListener buttonListener;
+	// private ButtonListener buttonListener;
+	private Table tblComments;
+	private Table tblSales = new Table(new Object[] { "Transaction No", "Invoice No", "Quantity", "Sum" }, false);
 
+	private Tab tabComments = new Tab("Comments");
 	private Tab tabSales = new Tab("Sales");
-	private Tab[] tabs = new Tab[] { new Tab("General"), new Tab("Logistics"), tabSales, new Tab("Comments") };
+	private Tab[] tabs = new Tab[] { new Tab("General"), new Tab("Logistics"), tabSales, tabComments };
 
 	private LabledTextField ltfNo = new LabledTextField("No");
 	private LabledTextField ltfName = new LabledTextField("Name");
@@ -73,7 +79,6 @@ public class ArticleTool extends Tool implements Updatable {
 	private JButton[] sendToInvoiceButtons = { btnAdd };
 
 	private JScrollPane scrollPane;
-	private Table tblSales = new Table(new Object[] { "Transaction No", "Invoice No", "Quantity", "Sum" }, false);
 
 	private boolean sendingToInvoice;
 	private InvoiceTool invoiceGUI;
@@ -82,7 +87,7 @@ public class ArticleTool extends Tool implements Updatable {
 
 	public ArticleTool(ClientController clientController, GUIController guiController) {
 		super("Article", clientController, guiController);
-		buttonListener = new ButtonListener();
+		new ButtonListener();
 		setTabs(tabs);
 		setContent(0, new JComponent[] { ltfNo, ltfName, ltfDesc, ltfPrice, ltfEan });
 		setContent(1, new JComponent[] { ltfSup, ltfSupNo, ltfQuantity, ltfStockPlace });
@@ -116,6 +121,7 @@ public class ArticleTool extends Tool implements Updatable {
 			}
 		});
 		// addKeyListener(keyListener);
+		createCommentsTable();
 		// setFocusable(true);
 		btnNew.setMnemonic(KeyEvent.VK_N);
 		btnEdit.setMnemonic(KeyEvent.VK_E);
@@ -197,7 +203,56 @@ public class ArticleTool extends Tool implements Updatable {
 		sendingToInvoice = true;
 	}
 
+	private void createCommentsTable() {
+		tblComments = new Table(new Object[] { "Date", "Comment" }, true) {
+
+			@Override
+			public void editingStopped(ChangeEvent e) {
+				int row = getEditingRow();
+				int col = getEditingColumn();
+				super.editingStopped(e);
+
+				if (tblComments.getModel().getValueAt(tblComments.getSelectedRow(), 0) != null) {
+
+				} else {
+					tblComments.getModel().setValueAt(new SimpleDateFormat("yy-MM-dd").format(new Date()), tblComments.getSelectedRow(), 0);
+				}
+				// TODO Beteende här!
+
+			}
+
+		};
+
+		tblComments.getColumnModel().getColumn(0).setWidth(100);
+		tblComments.getColumnModel().getColumn(0).setMaxWidth(100);
+		tabComments.setPreferredSize(new Dimension(1, 150));
+		tabComments.add(new JScrollPane(tblComments));
+	}
+
+	public void getComments(String customerNo) {
+
+		ArrayList<Entity> comments = clientCtrlr.search(new Object[] { customerNo, "product", null },
+				Eviro.ENTITY_COMMENT);
+
+		for (int i = 0; i < comments.size(); i++) {
+
+			Object[] commentData = new Object[2];
+
+			commentData[0] = comments.get(i).getData()[2];
+			commentData[1] = comments.get(i).getData()[1];
+
+			tblComments.populate(commentData, i);
+		}
+
+	}
+
 	private void reset() {
+
+		if (tblComments != null)
+			tblComments.reset();
+
+		if (tblSales != null)
+			tblSales.reset();
 
 		setTfEditable(ltfAll, true);
 		setButtons(defaultButtons);
@@ -208,7 +263,6 @@ public class ArticleTool extends Tool implements Updatable {
 		ltfSalesSum.setText(null);
 		ltfSalesQuantity.setText(null);
 		ltfReturnedQuantity.setText(null);
-		tblSales.reset();
 
 		for (int i = 0; i < ltfAll.length; i++) {
 
@@ -327,7 +381,7 @@ public class ArticleTool extends Tool implements Updatable {
 
 	@Override
 	public void setValues(Object[] values) {
-
+		getComments((String) values[0]);
 		getSales((String) values[0]);
 		setTfEditable(ltfAll, false);
 

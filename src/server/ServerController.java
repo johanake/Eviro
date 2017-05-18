@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.FileHandler;
@@ -18,6 +19,7 @@ import javax.swing.JOptionPane;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.jasypt.util.text.BasicTextEncryptor;
 
+import enteties.Comment;
 import enteties.Customer;
 import enteties.Entity;
 import enteties.ForumMessage;
@@ -145,6 +147,9 @@ public class ServerController {
 		case Eviro.DB_GETALL:
 			returnObject = createList(connectDB.executeGetQuery(buildGetAllQuery(ei)));
 			break;
+		case Eviro.DB_GETCOMMENT:
+			returnObject = createList(connectDB.executeGetQuery(buildGetCommentQuery(ei)));
+			break;
 		}
 		return returnObject;
 	}
@@ -169,6 +174,8 @@ public class ServerController {
 			tableName = "forummessage";
 		else if (ei instanceof User)
 			tableName = "user";
+		else if (ei instanceof Comment)
+			tableName = "comment";
 
 		return tableName;
 	}
@@ -211,6 +218,28 @@ public class ServerController {
 
 		logAppend(query);
 		System.out.println("buildGetAllQuery: " + query);
+		return query;
+	}
+
+	/**
+	 * @param ei The EntityInterface to build the search-query around.
+	 * @return A String-query ready to be executed by the database.
+	 */
+	private String buildGetCommentQuery(Entity ei) {
+
+		Object[] info = ei.getData();
+
+		System.out.println(Arrays.toString(info));
+		String tableName = getTableName(ei);
+		String entity = (String) info[1];
+		String entityNo = (String) info[0];
+
+		String query = "SELECT " + entity + "Id, comment, date FROM " + tableName
+				+ " INNER JOIN " + entity + tableName + " ON " + tableName + ".commentId = " + entity + tableName
+				+ ".commentId WHERE " + entity + "Id = '" + entityNo + "';";
+
+		logAppend(query);
+		System.out.println("buildGetCommentQuery: " + query);
 		return query;
 	}
 
@@ -322,7 +351,13 @@ public class ServerController {
 		try {
 			while (rs.next()) {
 
-				if (rs.getMetaData().toString().contains("tableName=customer")) {
+				if (rs.getMetaData().toString().contains("tableName=comment")) {
+					ei.add(new Comment(new Object[] {
+							rs.getString(1),
+							rs.getString(2),
+							rs.getString(3) }));
+
+				} else if (rs.getMetaData().toString().contains("tableName=customer")) {
 					ei.add(new Customer(new Object[] {
 							rs.getString(1),
 							rs.getString(2),
@@ -333,6 +368,7 @@ public class ServerController {
 							rs.getString(7),
 							rs.getString(8),
 							rs.getInt(9) }));
+
 				} else if (rs.getMetaData().toString().contains("tableName=invoice")) {
 					ei.add(new Invoice(new Object[] {
 							rs.getString(1),
@@ -342,6 +378,7 @@ public class ServerController {
 							rs.getString(5),
 							rs.getString(6),
 							rs.getString(7) }));
+
 				} else if (rs.getMetaData().toString().contains("tableName=product")) {
 					ei.add(new Product(new Object[] {
 							rs.getString(1),
@@ -353,6 +390,7 @@ public class ServerController {
 							rs.getString(7),
 							rs.getString(8),
 							rs.getInt(9) }));
+
 				} else if (rs.getMetaData().toString().contains("tableName=transaction")) {
 					ei.add(new Transaction(new Object[] {
 							rs.getString(1),
@@ -360,12 +398,20 @@ public class ServerController {
 							rs.getString(3),
 							rs.getString(4),
 							rs.getString(5) }));
+
 				} else if (rs.getMetaData().toString().contains("tableName=forummessage")) {
-					ei.add(new ForumMessage(
-							new Object[] { rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4) }));
+					ei.add(new ForumMessage(new Object[] {
+							rs.getString(1),
+							rs.getString(2),
+							rs.getString(3),
+							rs.getString(4) }));
 
 				} else if (rs.getMetaData().toString().contains("tableName=user")) {
-					ei.add(new ForumMessage(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3), }));
+					ei.add(new ForumMessage(new Object[] {
+							rs.getString(1),
+							rs.getString(2),
+							rs.getString(3) }));
+
 				}
 			}
 		} catch (SQLException e) {

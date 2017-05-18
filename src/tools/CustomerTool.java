@@ -70,7 +70,7 @@ public class CustomerTool extends Tool implements Updatable {
 		setContent(1, new JComponent[] { new SplitPanel(ltfLimit, ltfBalance) });
 		setButtons(defaultButtons);
 		ltfBalance.setText("0.00");
-		createCommentsTable();
+		// createCommentsTable();
 		createInvoiceTable();
 		btnNew.setMnemonic(KeyEvent.VK_N);
 		btnEdit.setMnemonic(KeyEvent.VK_E);
@@ -129,6 +129,22 @@ public class CustomerTool extends Tool implements Updatable {
 
 		tabFinance.setPreferredSize(new Dimension(1, 150));
 		tabFinance.add(new JScrollPane(tblInvoices));
+
+	}
+
+	public void getComments(String customerNo) {
+
+		ArrayList<Entity> comments = clientCtrlr.search(new Object[] { null, customerNo, null }, Eviro.ENTITY_COMMENT);
+
+		for (int i = 0; i < comments.size(); i++) {
+
+			Object[] commentData = new Object[4];
+
+			commentData[0] = comments.get(i).getData()[0];
+			commentData[1] = comments.get(i).getData()[1];
+
+			tblInvoices.populate(commentData, i);
+		}
 
 	}
 
@@ -262,6 +278,7 @@ public class CustomerTool extends Tool implements Updatable {
 	public void setValues(Object[] values) {
 
 		getInvoices((String) values[0]);
+		// getComments((String) values[0]);
 
 		setTfEditable(ltfAll, false);
 		setButtons(lookingButtons);

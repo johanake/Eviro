@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
+import enteties.Comment;
 import enteties.Customer;
 import enteties.Entity;
 import enteties.ForumMessage;
@@ -212,7 +213,11 @@ public class ClientController {
 		Entity object = createEntityByType(entityType);//
 		// Populate
 		object.setData(data);
-		object.setOperation(Eviro.DB_SEARCH);
+
+		if (object instanceof Comment)
+			object.setOperation(Eviro.DB_GETCOMMENT);
+		else
+			object.setOperation(Eviro.DB_SEARCH);
 
 		// Get and return response
 		response = (ArrayList<Entity>) client.sendObject(object);
@@ -301,6 +306,10 @@ public class ClientController {
 
 		else if (entityType == Eviro.ENTITY_USER) {
 			return new User();
+		}
+
+		else if (entityType == Eviro.ENTITY_COMMENT) {
+			return new Comment();
 		}
 
 		return null;

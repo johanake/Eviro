@@ -2,7 +2,6 @@ package shared;
 
 import javax.swing.SwingUtilities;
 
-import client.Client;
 import client.ClientController;
 import server.Server;
 
@@ -23,6 +22,7 @@ public class Eviro {
 	public static final int DB_UPDATE = 3;
 	public static final int DB_DELETE = 4;
 	public static final int DB_GETALL = 5;
+	public static final int DB_GETCOMMENT = 6;
 
 	public static final int ENTITY_CUSTOMER = 1;
 	public static final int ENTITY_INVOICE = 2;
@@ -30,6 +30,7 @@ public class Eviro {
 	public static final int ENTITY_TRANSACTION = 4;
 	public static final int ENTITY_FORUMMESSAGE = 5;
 	public static final int ENTITY_USER = 6;
+	public static final int ENTITY_COMMENT = 7;
 
 	public static final int VALIDATOR_INTEGER = 1;
 	public static final int VALIDATOR_DOUBLE = 2;
@@ -45,7 +46,7 @@ public class Eviro {
 	 * Instantiate the main component(s) of the system.
 	 */
 	private void start() {
-		
+
 		new Server(3500);
 		new ClientController();
 
