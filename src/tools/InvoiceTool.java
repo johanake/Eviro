@@ -263,6 +263,8 @@ public class InvoiceTool extends Tool implements Updatable {
 				createCreditInvoice();
 				update(invoice.getThis(), Eviro.ENTITY_INVOICE, true);
 				// update(temp, Eviro.ENTITY_INVOICE);
+				String ni = customerGUI.getValues()[0];
+				customerGUI.getInvoices(ni);				
 				break;
 
 			case "article":
