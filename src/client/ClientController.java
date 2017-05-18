@@ -130,6 +130,9 @@ public class ClientController {
 				oldData[i] = Integer.toString((int) oldData[i]);
 			}
 
+			System.out.println(oldData[i]);
+			System.out.println(data[i]);
+
 			if (!oldData[i].equals(data[i])) {
 
 				if (oldData[i].toString().trim().length() <= 0) {
