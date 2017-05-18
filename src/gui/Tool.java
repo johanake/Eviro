@@ -5,9 +5,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -17,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.InternalFrameAdapter;
@@ -45,12 +49,39 @@ public class Tool extends JInternalFrame {
 	public ClientController clientCtrlr;
 	public GUIController guiCtrlr;
 
+	KeyStroke ctrlF5 = KeyStroke.getKeyStroke(KeyEvent.VK_F5,
+			InputEvent.CTRL_DOWN_MASK, true);
+
 	protected Tool(String title, ClientController clientController, GUIController guiController) {
 		super(title, true, true, false, true);
 		this.clientCtrlr = clientController;
 		this.guiCtrlr = guiController;
 		setup();
 		openFrameCount++;
+
+	}
+
+	public void setBindings(Updatable tool, LabledTextField[] ltfAll, int entityType) {
+		this.getInputMap(JComponent.WHEN_FOCUSED).put(ctrlF5, "refresh");
+		this.getActionMap().put("refresh", new RefreshAction(tool, ltfAll, entityType));
+	}
+
+	public class RefreshAction extends AbstractAction {
+
+		Updatable tool;
+		LabledTextField[] ltfAll;
+		int entityType;
+
+		RefreshAction(Updatable tool, LabledTextField[] ltfAll, int entityType) {
+			this.tool = tool;
+			this.ltfAll = ltfAll;
+			this.entityType = entityType;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			search(tool, ltfAll, entityType);
+		}
 	}
 
 	protected void get(Updatable tool, int entitytype) {
@@ -282,7 +313,6 @@ public class Tool extends JInternalFrame {
 				setLocation(15 * openFrameCount, 15 * openFrameCount);
 				setVisible(true);
 				pack();
-
 				setMinimumSize(getSize());
 				addInternalFrameListener(new InternalFrameAdapter() {
 					@Override
