@@ -150,7 +150,7 @@ public class CustomerTool extends Tool implements Updatable {
 
 	public void getInvoices(String customerNo) {
 
-		ArrayList<Entity> invoices = clientCtrlr.search(new Object[] { null, customerNo, null, null, null, null, null }, Eviro.ENTITY_INVOICE);
+		ArrayList<Entity> invoices = clientCtrlr.search(new Object[] { null, customerNo, null, null, null, null, null, null }, Eviro.ENTITY_INVOICE);
 
 		Double balance = 0.00;
 		ltfBalance.setText("0.00");
@@ -304,9 +304,8 @@ public class CustomerTool extends Tool implements Updatable {
 	public String[] getValues(boolean getNames) {
 
 		String[] text = new String[ltfAll.length];
-
 		for (int i = 0; i < ltfAll.length; i++) {
-
+			
 			if (getNames)
 				text[i] = ltfAll[i].getName();
 			else {

@@ -133,9 +133,7 @@ public class Tool extends JInternalFrame {
 	protected void create(Updatable tool, int entitytype) {
 
 		ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true);
-
-		System.out.println("response: " + response.size());
-
+		
 		if (response.size() == 0) {
 			popupMessage("Server returned 0 items!");
 		} else if (response.size() == 1) {
