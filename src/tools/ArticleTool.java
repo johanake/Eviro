@@ -1,15 +1,21 @@
 package tools;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyVetoException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 
 import client.ClientController;
+import enteties.Entity;
 import gui.GUIController;
+import gui.Table;
 import gui.Tool;
 import gui.Updatable;
 import shared.Eviro;
@@ -17,7 +23,9 @@ import shared.Eviro;
 public class ArticleTool extends Tool implements Updatable {
 
 	private ButtonListener buttonListener;
-	private Tab[] tabs = new Tab[] { new Tab("General"), new Tab("Logistics"), new Tab("Comments") };
+
+	private Tab tabSales = new Tab("Sales");
+	private Tab[] tabs = new Tab[] { new Tab("General"), new Tab("Logistics"), tabSales, new Tab("Comments") };
 
 	private LabledTextField ltfNo = new LabledTextField("No");
 	private LabledTextField ltfName = new LabledTextField("Name");
@@ -28,7 +36,8 @@ public class ArticleTool extends Tool implements Updatable {
 	private LabledTextField ltfSupNo = new LabledTextField("Suppler No");
 	private LabledTextField ltfStockPlace = new LabledTextField("Stock place");
 	private LabledTextField ltfQuantity = new LabledTextField("Quantity", Eviro.VALIDATOR_INTEGER);
-
+	private LabledTextField ltfSalesSum = new LabledTextField("Sum", false);
+	private LabledTextField ltfSalesQuantity = new LabledTextField("Sales Quantity", false);
 	private LabledTextField[] ltfAll = {
 			ltfNo,
 			ltfName,
@@ -55,6 +64,9 @@ public class ArticleTool extends Tool implements Updatable {
 	private JButton[] openedFromInvoiceButtons = { btnFind };
 	private JButton[] sendToInvoiceButtons = { btnAdd };
 
+	private JScrollPane scrollPane;
+	private Table tblSales = new Table(new Object[] { "Transaction No", "Invoice No", "Quantity", "Sum" }, false);
+
 	private boolean sendingToInvoice;
 	private InvoiceTool invoiceGUI;
 
@@ -66,7 +78,13 @@ public class ArticleTool extends Tool implements Updatable {
 		setTabs(tabs);
 		setContent(0, new JComponent[] { ltfNo, ltfName, ltfDesc, ltfPrice, ltfEan });
 		setContent(1, new JComponent[] { ltfSup, ltfSupNo, ltfQuantity, ltfStockPlace });
+		setContent(2, new JComponent[] { new SplitPanel(ltfSalesQuantity, ltfSalesSum) });
 		setButtons(defaultButtons);
+
+		scrollPane = new JScrollPane(tblSales);
+		scrollPane.setPreferredSize(new Dimension(1, 150));
+		tabSales.add(scrollPane, BorderLayout.CENTER);
+
 		// addKeyListener(keyListener);
 		// setFocusable(true);
 		btnNew.setMnemonic(KeyEvent.VK_N);
@@ -74,6 +92,34 @@ public class ArticleTool extends Tool implements Updatable {
 		btnUpdate.setMnemonic(KeyEvent.VK_S);
 		btnFind.setMnemonic(KeyEvent.VK_F);
 		btnReset.setMnemonic(KeyEvent.VK_R);
+	}
+
+	private void getSales(String articleNo) {
+
+		ArrayList<Entity> sales = clientCtrlr.search(new Object[] { null, null, articleNo, null, null }, Eviro.ENTITY_TRANSACTION);
+
+		int quantity = 0;
+		double sum = 0.00;
+
+		for (int i = 0; i < sales.size(); i++) {
+
+			Object[] data = new Object[4];
+
+			data[0] = sales.get(i).getData()[0];
+			data[1] = sales.get(i).getData()[1];
+			data[2] = sales.get(i).getData()[3];
+			data[3] = sales.get(i).getData()[4];
+
+			tblSales.populate(data, i);
+
+			quantity += Integer.parseInt((String) data[2]);
+			sum += Double.parseDouble((String) data[3]);
+
+		}
+
+		ltfSalesSum.setText(Double.toString(sum));
+		ltfSalesQuantity.setText(Integer.toString(quantity));
+
 	}
 
 	public ArticleTool(InvoiceTool invoiceGUI, ClientController clientCtrlr, GUIController guiCtrlr) {
@@ -207,6 +253,7 @@ public class ArticleTool extends Tool implements Updatable {
 	@Override
 	public void setValues(Object[] values) {
 
+		getSales((String) values[0]);
 		setTfEditable(ltfAll, false);
 
 		if (sendingToInvoice)
