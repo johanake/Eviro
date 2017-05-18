@@ -2,15 +2,19 @@ package tools;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import client.ClientController;
 import enteties.Entity;
@@ -37,7 +41,11 @@ public class ArticleTool extends Tool implements Updatable {
 	private LabledTextField ltfStockPlace = new LabledTextField("Stock place");
 	private LabledTextField ltfQuantity = new LabledTextField("Quantity", Eviro.VALIDATOR_INTEGER);
 	private LabledTextField ltfSalesSum = new LabledTextField("Sum", false);
-	private LabledTextField ltfSalesQuantity = new LabledTextField("Sales Quantity", false);
+	private LabledTextField ltfSalesQuantity = new LabledTextField("Sold", false);
+	private LabledTextField ltfReturnedQuantity = new LabledTextField("Returned", false);
+	private LabledTextField ltfPriceHigh = new LabledTextField("H)", false);
+	private LabledTextField ltfPriceLow = new LabledTextField("Price Range (L", false);
+
 	private LabledTextField[] ltfAll = {
 			ltfNo,
 			ltfName,
@@ -78,13 +86,35 @@ public class ArticleTool extends Tool implements Updatable {
 		setTabs(tabs);
 		setContent(0, new JComponent[] { ltfNo, ltfName, ltfDesc, ltfPrice, ltfEan });
 		setContent(1, new JComponent[] { ltfSup, ltfSupNo, ltfQuantity, ltfStockPlace });
-		setContent(2, new JComponent[] { new SplitPanel(ltfSalesQuantity, ltfSalesSum) });
+		setContent(2,
+				new JComponent[] {
+						new SplitPanel(ltfSalesQuantity, ltfReturnedQuantity),
+						ltfSalesSum,
+						new SplitPanel(ltfPriceLow, ltfPriceHigh),
+				});
 		setButtons(defaultButtons);
 
 		scrollPane = new JScrollPane(tblSales);
 		scrollPane.setPreferredSize(new Dimension(1, 150));
 		tabSales.add(scrollPane, BorderLayout.CENTER);
 
+		tblSales.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent me) {
+				JTable table = (JTable) me.getSource();
+				Point p = me.getPoint();
+				int row = table.rowAtPoint(p);
+				if (me.getClickCount() == 2 && row >= 0) {
+
+					if (tblSales.getModel().getValueAt(tblSales.getSelectedRow(), 1) != null) {
+						InvoiceTool invoiceTool = new InvoiceTool(clientCtrlr, guiCtrlr);
+						invoiceTool.search((String) tblSales.getModel().getValueAt(tblSales.getSelectedRow(), 1));
+						guiCtrlr.add(invoiceTool);
+					}
+				}
+			}
+		});
 		// addKeyListener(keyListener);
 		// setFocusable(true);
 		btnNew.setMnemonic(KeyEvent.VK_N);
@@ -98,10 +128,18 @@ public class ArticleTool extends Tool implements Updatable {
 
 		ArrayList<Entity> sales = clientCtrlr.search(new Object[] { null, null, articleNo, null, null }, Eviro.ENTITY_TRANSACTION);
 
-		int quantity = 0;
-		double sum = 0.00;
+		int soldQuantity = 0;
+		int returnedQuantity = 0;
+		int returnedPercentage = 0;
+		double soldSum = 0.00;
+
+		double priceLow = Double.MAX_VALUE;
+		double priceHigh = Double.MIN_VALUE;
 
 		for (int i = 0; i < sales.size(); i++) {
+
+			int rowQuantity = 0;
+			double rowSum = 0.00;
 
 			Object[] data = new Object[4];
 
@@ -112,13 +150,43 @@ public class ArticleTool extends Tool implements Updatable {
 
 			tblSales.populate(data, i);
 
-			quantity += Integer.parseInt((String) data[2]);
-			sum += Double.parseDouble((String) data[3]);
+			rowQuantity = Integer.parseInt((String) data[2]);
+			rowSum = Double.parseDouble((String) data[3]);
 
+			if (rowSum > 0) {
+
+				soldSum += rowSum;
+				soldQuantity += rowQuantity;
+
+				if ((rowSum / rowQuantity) > priceHigh) {
+					priceHigh = rowSum / rowQuantity;
+				}
+
+				if ((rowSum / rowQuantity) < priceLow) {
+					priceLow = rowSum / rowQuantity;
+				}
+			}
+
+			else {
+				returnedQuantity += rowQuantity;
+			}
 		}
 
-		ltfSalesSum.setText(Double.toString(sum));
-		ltfSalesQuantity.setText(Integer.toString(quantity));
+		try {
+			returnedPercentage = (returnedQuantity * 100) / soldQuantity;
+			ltfPriceLow.setText(Double.toString(priceLow));
+			ltfPriceHigh.setText(Double.toString(priceHigh));
+			ltfSalesSum.setText(Double.toString(soldSum));
+			ltfSalesQuantity.setText(Integer.toString(soldQuantity));
+			ltfReturnedQuantity.setText(Integer.toString(returnedQuantity) + " (" + returnedPercentage + "%)");
+		} catch (ArithmeticException e) {
+			returnedPercentage = 0;
+			ltfPriceLow.setText("0");
+			ltfPriceHigh.setText("0");
+			ltfSalesSum.setText("0");
+			ltfSalesQuantity.setText("0");
+			ltfReturnedQuantity.setText("0 (" + returnedPercentage + "%)");
+		}
 
 	}
 
@@ -134,6 +202,13 @@ public class ArticleTool extends Tool implements Updatable {
 		setTfEditable(ltfAll, true);
 		setButtons(defaultButtons);
 		setTitle("Article");
+
+		ltfPriceLow.setText(null);
+		ltfPriceHigh.setText(null);
+		ltfSalesSum.setText(null);
+		ltfSalesQuantity.setText(null);
+		ltfReturnedQuantity.setText(null);
+		tblSales.reset();
 
 		for (int i = 0; i < ltfAll.length; i++) {
 
