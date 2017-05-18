@@ -146,19 +146,24 @@ public class Tool extends JInternalFrame {
 
 	}
 
-	protected boolean update(Updatable tool, int entitytype) {
-		if (clientCtrlr.update(this, tool.getValues(), entitytype)) {
-
+	protected boolean update(Updatable tool, int entitytype, boolean isSilent) {
+		if (clientCtrlr.update(this, tool.getValues(), entitytype, isSilent)) {
+			if(!isSilent)
 			popupMessage("The " + Eviro.getEntityNameByNumber(entitytype) + " has been succesfully updated!");
 			return true;
 		} else {
 			Object[] test = new Object[tool.getValues().length];
 			test[0] = tool.getValues()[0];
 			tool.setValues(clientCtrlr.search(test, entitytype).get(0).getData());
+			if(!isSilent)
 			popupMessage("No changes made, update aborted!");
 			return false;
 		}
 
+	}
+	
+	protected boolean update(Updatable tool, int entitytype) {
+		return update(tool, entitytype, false);
 	}
 
 	protected void setTabs(JPanel[] tabs) {

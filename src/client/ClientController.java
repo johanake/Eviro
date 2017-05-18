@@ -99,7 +99,11 @@ public class ClientController {
 	 * @param entityType the type of entity to update
 	 */
 	public boolean update(String[] data, int entityType) {
-		return update(null, data, entityType);
+		return update(null, data, entityType, false);
+	}
+	
+	public boolean update(Tool tool, String[] data, int entityType) {
+		return update(tool, data, entityType, false);
 	}
 
 	/**
@@ -108,7 +112,7 @@ public class ClientController {
 	 * @param data data to use when updating
 	 * @param entityType the type of entity to update
 	 */
-	public boolean update(Tool tool, String[] data, int entityType) {
+	public boolean update(Tool tool, String[] data, int entityType, boolean isSilent) {
 
 		if (!checkData(data))
 			return false;
@@ -145,9 +149,11 @@ public class ClientController {
 
 		// If there are differences, display confirm dialog.
 		if (updates.trim().length() > 0) {
-
-			int reply = JOptionPane.showConfirmDialog(tool, "Please review the following changes before proceeding:\n" + updates, "Update?",
-					JOptionPane.OK_CANCEL_OPTION);
+			int reply = JOptionPane.OK_OPTION;
+			if(!isSilent){
+				reply = JOptionPane.showConfirmDialog(tool, "Please review the following changes before proceeding:\n" + updates, "Update?",
+						JOptionPane.OK_CANCEL_OPTION);
+			}			
 
 			if (reply == JOptionPane.OK_OPTION) {
 

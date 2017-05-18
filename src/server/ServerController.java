@@ -257,7 +257,8 @@ public class ServerController {
 
 		String query = "SELECT * FROM " + tableName + " WHERE ";
 		String and = "";
-
+		System.out.println(Arrays.toString(colNames));
+		System.out.println(info.length);
 		for (int i = 0; i < colNames.length; i++) {
 			if (info[i] != null && info[i].toString().trim().length() > 0) {
 				query += and + colNames[i] + " LIKE '%" + info[i] + "%'";

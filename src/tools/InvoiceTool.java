@@ -214,7 +214,8 @@ public class InvoiceTool extends Tool implements Updatable {
 	}
 
 	private class ButtonListener implements ActionListener {
-
+		InvoiceTool invoice;
+		
 		public ButtonListener() {
 			for (JButton btn : allButtons) {
 				btn.addActionListener(this);
@@ -223,7 +224,7 @@ public class InvoiceTool extends Tool implements Updatable {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			
 			switch (e.getActionCommand()) {
 
 			case "create":
@@ -249,11 +250,10 @@ public class InvoiceTool extends Tool implements Updatable {
 				break;
 
 			case "credit":
-
-				InvoiceTool invoice = new InvoiceTool(clientCtrlr, guiCtrlr);
+				invoice  = new InvoiceTool(clientCtrlr, guiCtrlr);
 				invoice.setValues(getValues());
 				invoice.updateStatus(Eviro.INVOICE_CREDITED);
-				// guiCtrlr.add(invoice);
+				
 				setButtons(creditButtons);
 				setTfEditable(ltfBuyer, true);
 				credit();
@@ -261,6 +261,7 @@ public class InvoiceTool extends Tool implements Updatable {
 
 			case "book":
 				createCreditInvoice();
+				update(invoice.getThis(), Eviro.ENTITY_INVOICE, true);
 				// update(temp, Eviro.ENTITY_INVOICE);
 				break;
 
@@ -282,8 +283,7 @@ public class InvoiceTool extends Tool implements Updatable {
 	}
 
 	public void updateStatus(String status) {
-		ltfStatus.setText(status);
-		update(getThis(), Eviro.ENTITY_INVOICE);
+		ltfStatus.setText(status);		
 	}
 
 	public void credit() {
@@ -327,12 +327,11 @@ public class InvoiceTool extends Tool implements Updatable {
 	}
 
 	private void createCreditInvoice() {
-		// ltfInvNo.setText(null);
+		ltfInvNo.setText(null);
 		// update(new , Eviro.ENTITY_INVOICE);
 		create(getThis(), Eviro.ENTITY_INVOICE);
 		createTransactions(ltfInvNo.getText());
-
-		update(getThis(), Eviro.ENTITY_CUSTOMER);
+		
 
 	}
 
