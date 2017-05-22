@@ -176,7 +176,7 @@ public class Tool extends JInternalFrame {
 
 		for (int i = 0; i < tabs.length; i++) {
 
-			tabbedPane.addTab(tabs[i].getName(), tabs[i]);
+			tabbedPane.addTab(tabs[i].getName() + " (" + (i + 1) + ")", tabs[i]);
 
 			switch (i) {
 			case 0:
