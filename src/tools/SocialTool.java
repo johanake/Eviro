@@ -40,10 +40,9 @@ public class SocialTool extends Tool implements Updatable {
 	private ActionButton btnOpen = new ActionButton("Open Message", "open");
 	private ActionButton btnUpdate = new ActionButton("Update", "update");
 	private ActionButton btnNew = new ActionButton("New Message", "new");
-	private ActionButton btnTest = new ActionButton("Test", "test");
 
-	private JButton[] allButtons = { btnOpen, btnUpdate, btnNew, btnTest };
-	private JButton[] defaultButtons = { btnOpen, btnUpdate, btnNew };
+	private JButton[] allButtons = { btnOpen, btnUpdate, btnNew };
+//	private JButton[] defaultButtons = { btnOpen, btnUpdate, btnNew };
 
 	private ArrayList<Object[]> messageList = new ArrayList<Object[]>();
 
@@ -51,7 +50,7 @@ public class SocialTool extends Tool implements Updatable {
 
 	public SocialTool(ClientController clientController, GUIController guiController) {
 		super("Social", clientController, guiController);
-		setButtons(defaultButtons);
+		setButtons(allButtons);
 		pnlCenter.add(new JScrollPane(posts), BorderLayout.CENTER);
 		buttonListener = new ButtonListener();
 		get(this, Eviro.ENTITY_FORUMMESSAGE);
