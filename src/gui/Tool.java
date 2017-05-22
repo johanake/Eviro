@@ -137,7 +137,8 @@ public class Tool extends JInternalFrame {
 		if (response.size() == 0) {
 			popupMessage("Server returned 0 items!");
 		} else if (response.size() == 1) {
-			popupMessage(Eviro.getEntityNameByNumber(entitytype) + " created with id no: " + response.get(0).getData()[0]);
+			popupMessage(Eviro.getEntityNameByNumber(entitytype).substring(0, 1).toUpperCase() + Eviro.getEntityNameByNumber(entitytype).substring(1)
+					+ " created with id no: " + response.get(0).getData()[0]);
 			tool.setValues(response.get(0).getData());
 		} else {
 			popupMessage("A " + Eviro.getEntityNameByNumber(entitytype) + " with the same values already exists!");
