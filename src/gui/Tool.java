@@ -315,6 +315,7 @@ public class Tool extends JInternalFrame {
 
 				setLocation(15 * openFrameCount, 15 * openFrameCount);
 				setVisible(true);
+				setFocusable(true);
 				pack();
 				setMinimumSize(getSize());
 				addInternalFrameListener(new InternalFrameAdapter() {

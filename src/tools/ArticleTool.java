@@ -128,6 +128,7 @@ public class ArticleTool extends Tool implements Updatable {
 		btnUpdate.setMnemonic(KeyEvent.VK_S);
 		btnFind.setMnemonic(KeyEvent.VK_F);
 		btnReset.setMnemonic(KeyEvent.VK_R);
+		setBindings(this, ltfAll, Eviro.ENTITY_PRODUCT);
 	}
 
 	private void getSales(String articleNo) {
@@ -219,7 +220,7 @@ public class ArticleTool extends Tool implements Updatable {
 
 				tblComments.getModel().setValueAt(new SimpleDateFormat("yy-MM-dd").format(new Date()), tblComments.getSelectedRow(), 0);
 
-				if (comment != null || comment.trim().length() > 0) {
+				if (comment != null && comment.trim().length() > 0) {
 
 					clientCtrlr.create(
 							new Object[] {

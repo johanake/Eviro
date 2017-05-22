@@ -97,7 +97,7 @@ public class CustomerTool extends Tool implements Updatable {
 
 				tblComments.getModel().setValueAt(new SimpleDateFormat("yy-MM-dd").format(new Date()), tblComments.getSelectedRow(), 0);
 
-				if (comment != null || comment.trim().length() > 0) {
+				if (comment != null && comment.trim().length() > 0) {
 
 					clientCtrlr.create(
 							new Object[] {

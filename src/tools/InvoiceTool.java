@@ -115,6 +115,7 @@ public class InvoiceTool extends Tool implements Updatable {
 		setButtons(defaultButtons);
 		setTfEditable(ltfAll, true);
 		setupButtonShortcuts();
+		setBindings(this, ltfAll, Eviro.ENTITY_INVOICE);
 
 	}
 

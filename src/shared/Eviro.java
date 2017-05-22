@@ -14,9 +14,10 @@ public class Eviro {
 
 	// Constants
 	public static final String APP_NAME = "Eviro Enterprise System";
-	public static final String APP_VERSION = "v0.1";
+	public static final String APP_VERSION = "(Demo)";
 	public static final String APP_ICON = "images/eviro_icon.png";
 
+	// Flytta till invoicetool om dessa enbart används i invoicetool
 	public static final String INVOICE_OPEN = "Open"; // Kom på ett bättre namn /JÅ
 	public static final String INVOICE_CREDITED = "Credited";
 	public static final String INVOICE_PAID = "Paid";
@@ -94,6 +95,9 @@ public class Eviro {
 
 	}
 
+	/**
+	 * Used to test whether a piece of code is executed by the EDt or not
+	 */
 	static void isOnEDT() {
 
 		if (SwingUtilities.isEventDispatchThread()) {
