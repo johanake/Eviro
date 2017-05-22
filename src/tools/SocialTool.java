@@ -37,10 +37,6 @@ public class SocialTool extends Tool implements Updatable {
 
 	private ButtonListener buttonListener;
 
-	private Tab tab1 = new Tab("Wall");
-	private Tab tab2 = new Tab("Todo list");
-	private Tab[] tabs = new Tab[] { tab1, tab2 };
-
 	private ActionButton btnOpen = new ActionButton("Open Message", "open");
 	private ActionButton btnUpdate = new ActionButton("Update", "update");
 	private ActionButton btnNew = new ActionButton("New Message", "new");
@@ -48,21 +44,17 @@ public class SocialTool extends Tool implements Updatable {
 
 	private JButton[] allButtons = { btnOpen, btnUpdate, btnNew, btnTest };
 	private JButton[] defaultButtons = { btnOpen, btnUpdate, btnNew };
-	private JButton[] todoButtons = { btnTest };
 
 	private ArrayList<Object[]> messageList = new ArrayList<Object[]>();
 
 	private Table posts = new Table(new Object[] { "Date", "User", "Topic" }, false);
-	private Table toDos = new Table(new Object[] { "Date", "User", "Topic" }, false);
 
 	public SocialTool(ClientController clientController, GUIController guiController) {
 		super("Social", clientController, guiController);
 		setButtons(defaultButtons);
-		setTabs(tabs);
-		tab1.add(new JScrollPane(posts), BorderLayout.CENTER);
+		pnlCenter.add(new JScrollPane(posts), BorderLayout.CENTER);
 		buttonListener = new ButtonListener();
 		get(this, Eviro.ENTITY_FORUMMESSAGE);
-
 		posts.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -87,23 +79,6 @@ public class SocialTool extends Tool implements Updatable {
 		btnOpen.setMnemonic(KeyEvent.VK_O);
 		btnUpdate.setMnemonic(KeyEvent.VK_U);
 		btnNew.setMnemonic(KeyEvent.VK_N);
-
-		tabbedPane.addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent e) {
-
-				if (tabbedPane.getSelectedComponent() == tab1) {
-					setButtons(defaultButtons);
-				}
-
-				else if (tabbedPane.getSelectedComponent() == tab2) {
-					setButtons(todoButtons);
-				}
-
-			}
-		});
-
 	}
 
 	@Override
