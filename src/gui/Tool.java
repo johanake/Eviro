@@ -132,8 +132,8 @@ public class Tool extends JInternalFrame {
 
 	protected void create(Updatable tool, int entitytype) {
 
-		ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true);
-		
+		ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true, false);
+
 		if (response.size() == 0) {
 			popupMessage("Server returned 0 items!");
 		} else if (response.size() == 1) {
@@ -148,20 +148,20 @@ public class Tool extends JInternalFrame {
 
 	protected boolean update(Updatable tool, int entitytype, boolean isSilent) {
 		if (clientCtrlr.update(this, tool.getValues(), entitytype, isSilent)) {
-			if(!isSilent)
-			popupMessage("The " + Eviro.getEntityNameByNumber(entitytype) + " has been succesfully updated!");
+			if (!isSilent)
+				popupMessage("The " + Eviro.getEntityNameByNumber(entitytype) + " has been succesfully updated!");
 			return true;
 		} else {
 			Object[] test = new Object[tool.getValues().length];
 			test[0] = tool.getValues()[0];
 			tool.setValues(clientCtrlr.search(test, entitytype).get(0).getData());
-			if(!isSilent)
-			popupMessage("No changes made, update aborted!");
+			if (!isSilent)
+				popupMessage("No changes made, update aborted!");
 			return false;
 		}
 
 	}
-	
+
 	protected boolean update(Updatable tool, int entitytype) {
 		return update(tool, entitytype, false);
 	}

@@ -70,7 +70,7 @@ public class CustomerTool extends Tool implements Updatable {
 		setContent(1, new JComponent[] { new SplitPanel(ltfLimit, ltfBalance) });
 		setButtons(defaultButtons);
 		ltfBalance.setText("0.00");
-		// createCommentsTable();
+		createCommentsTable(false);
 		createInvoiceTable();
 		btnNew.setMnemonic(KeyEvent.VK_N);
 		btnEdit.setMnemonic(KeyEvent.VK_E);
@@ -81,8 +81,11 @@ public class CustomerTool extends Tool implements Updatable {
 		setBindings(this, ltfAll, Eviro.ENTITY_CUSTOMER);
 	}
 
-	private void createCommentsTable() {
-		tblComments = new Table(new Object[] { "Date", "Comment" }, true) {
+	private void createCommentsTable(boolean editable) {
+
+		tabComments.removeAll();
+
+		tblComments = new Table(new Object[] { "Date", "Comment" }, editable) {
 
 			@Override
 			public void editingStopped(ChangeEvent e) {
@@ -90,9 +93,20 @@ public class CustomerTool extends Tool implements Updatable {
 				int col = getEditingColumn();
 				super.editingStopped(e);
 
+				String comment = (String) tblComments.getModel().getValueAt(tblComments.getSelectedRow(), 1);
+
 				tblComments.getModel().setValueAt(new SimpleDateFormat("yy-MM-dd").format(new Date()), tblComments.getSelectedRow(), 0);
 
-				// TODO Beteende här!
+				if (comment != null || comment.trim().length() > 0) {
+
+					clientCtrlr.create(
+							new Object[] {
+									ltfNo.getText(),
+									"customer",
+									getValueAt(tblComments.getSelectedRow(), 1),
+									getValueAt(tblComments.getSelectedRow(), 0) },
+							Eviro.ENTITY_COMMENT, false, true);
+				}
 
 			}
 
@@ -102,6 +116,7 @@ public class CustomerTool extends Tool implements Updatable {
 		tblComments.getColumnModel().getColumn(0).setMaxWidth(100);
 		tabComments.setPreferredSize(new Dimension(1, 150));
 		tabComments.add(new JScrollPane(tblComments));
+
 	}
 
 	private void createInvoiceTable() {
@@ -123,6 +138,7 @@ public class CustomerTool extends Tool implements Updatable {
 						invoiceTool.search((String) tblInvoices.getModel().getValueAt(tblInvoices.getSelectedRow(), 1));
 						guiCtrlr.add(invoiceTool);
 					}
+
 				}
 			}
 		});
@@ -134,16 +150,17 @@ public class CustomerTool extends Tool implements Updatable {
 
 	public void getComments(String customerNo) {
 
-		ArrayList<Entity> comments = clientCtrlr.search(new Object[] { null, customerNo, null }, Eviro.ENTITY_COMMENT);
+		ArrayList<Entity> comments = clientCtrlr.search(new Object[] { customerNo, "customer", null },
+				Eviro.ENTITY_COMMENT);
 
 		for (int i = 0; i < comments.size(); i++) {
 
-			Object[] commentData = new Object[4];
+			Object[] commentData = new Object[2];
 
-			commentData[0] = comments.get(i).getData()[0];
+			commentData[0] = comments.get(i).getData()[2];
 			commentData[1] = comments.get(i).getData()[1];
 
-			tblInvoices.populate(commentData, i);
+			tblComments.populate(commentData, i);
 		}
 
 	}
@@ -277,6 +294,8 @@ public class CustomerTool extends Tool implements Updatable {
 	@Override
 	public void setValues(Object[] values) {
 
+		createCommentsTable(true);
+		getComments((String) values[0]);
 		getInvoices((String) values[0]);
 		// getComments((String) values[0]);
 
@@ -305,7 +324,7 @@ public class CustomerTool extends Tool implements Updatable {
 
 		String[] text = new String[ltfAll.length];
 		for (int i = 0; i < ltfAll.length; i++) {
-			
+
 			if (getNames)
 				text[i] = ltfAll[i].getName();
 			else {

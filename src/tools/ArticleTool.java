@@ -121,7 +121,7 @@ public class ArticleTool extends Tool implements Updatable {
 			}
 		});
 		// addKeyListener(keyListener);
-		createCommentsTable();
+		createCommentsTable(false);
 		// setFocusable(true);
 		btnNew.setMnemonic(KeyEvent.VK_N);
 		btnEdit.setMnemonic(KeyEvent.VK_E);
@@ -203,8 +203,11 @@ public class ArticleTool extends Tool implements Updatable {
 		sendingToInvoice = true;
 	}
 
-	private void createCommentsTable() {
-		tblComments = new Table(new Object[] { "Date", "Comment" }, true) {
+	private void createCommentsTable(boolean editable) {
+
+		tabComments.removeAll();
+
+		tblComments = new Table(new Object[] { "Date", "Comment" }, editable) {
 
 			@Override
 			public void editingStopped(ChangeEvent e) {
@@ -212,12 +215,20 @@ public class ArticleTool extends Tool implements Updatable {
 				int col = getEditingColumn();
 				super.editingStopped(e);
 
-				if (tblComments.getModel().getValueAt(tblComments.getSelectedRow(), 0) != null) {
+				String comment = (String) tblComments.getModel().getValueAt(tblComments.getSelectedRow(), 1);
 
-				} else {
-					tblComments.getModel().setValueAt(new SimpleDateFormat("yy-MM-dd").format(new Date()), tblComments.getSelectedRow(), 0);
+				tblComments.getModel().setValueAt(new SimpleDateFormat("yy-MM-dd").format(new Date()), tblComments.getSelectedRow(), 0);
+
+				if (comment != null || comment.trim().length() > 0) {
+
+					clientCtrlr.create(
+							new Object[] {
+									ltfNo.getText(),
+									"product",
+									getValueAt(tblComments.getSelectedRow(), 1),
+									getValueAt(tblComments.getSelectedRow(), 0) },
+							Eviro.ENTITY_COMMENT, false, true);
 				}
-				// TODO Beteende här!
 
 			}
 
@@ -227,6 +238,7 @@ public class ArticleTool extends Tool implements Updatable {
 		tblComments.getColumnModel().getColumn(0).setMaxWidth(100);
 		tabComments.setPreferredSize(new Dimension(1, 150));
 		tabComments.add(new JScrollPane(tblComments));
+
 	}
 
 	public void getComments(String customerNo) {
@@ -381,6 +393,8 @@ public class ArticleTool extends Tool implements Updatable {
 
 	@Override
 	public void setValues(Object[] values) {
+
+		createCommentsTable(true);
 		getComments((String) values[0]);
 		getSales((String) values[0]);
 		setTfEditable(ltfAll, false);

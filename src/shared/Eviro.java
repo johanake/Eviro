@@ -22,11 +22,12 @@ public class Eviro {
 	public static final String INVOICE_PAID = "Paid";
 
 	public static final int DB_ADD = 1;
+	public static final int DB_ADD_COMMENT = 7;
 	public static final int DB_SEARCH = 2;
+	public static final int DB_SEARCH_COMMENT = 6;
 	public static final int DB_UPDATE = 3;
 	public static final int DB_DELETE = 4;
 	public static final int DB_GETALL = 5;
-	public static final int DB_GETCOMMENT = 6;
 
 	public static final int ENTITY_CUSTOMER = 1;
 	public static final int ENTITY_INVOICE = 2;

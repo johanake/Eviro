@@ -130,6 +130,7 @@ public class ServerController {
 		ArrayList<Entity> returnObject = null;
 
 		switch (ei.getOperation()) {
+
 		case Eviro.DB_ADD:
 			connectDB.executeInsertOrDeleteQuery(buildInsertQuery(ei));
 			returnObject = createList(connectDB.executeGetQuery(buildSearchQuery(ei)));
@@ -147,8 +148,11 @@ public class ServerController {
 		case Eviro.DB_GETALL:
 			returnObject = createList(connectDB.executeGetQuery(buildGetAllQuery(ei)));
 			break;
-		case Eviro.DB_GETCOMMENT:
+		case Eviro.DB_SEARCH_COMMENT:
 			returnObject = createList(connectDB.executeGetQuery(buildGetCommentQuery(ei)));
+			break;
+		case Eviro.DB_ADD_COMMENT:
+			buildAndExecuteInsertCommentQuery(ei);
 			break;
 		}
 		return returnObject;
@@ -219,6 +223,33 @@ public class ServerController {
 		logAppend(query);
 		System.out.println("buildGetAllQuery: " + query);
 		return query;
+	}
+
+	/**
+	 * @param ei The EntityInterface to build the search-query around.
+	 */
+	private void buildAndExecuteInsertCommentQuery(Entity ei) {
+
+		Object[] info = ei.getData();
+
+		System.out.println(Arrays.toString(info));
+
+		String tableName = getTableName(ei);
+
+		String entityNo = (String) info[0];
+		String entity = (String) info[1];
+
+		String commentTableQuery = "INSERT INTO comment (comment, date) VALUES ('" + info[2] + "', '" + info[3] + "');";
+		String commentId = connectDB.executeUpdateQueryAndReturnGeneratedId(commentTableQuery);
+		logAppend(commentTableQuery);
+		System.out.println("executeUpdateQueryAndReturnGeneratedId: " + commentTableQuery);
+
+		String entityCommentTableQuery = "INSERT INTO " + entity + "comment (commentId, " + entity + "Id) VALUES ('" + commentId + "', " + entityNo
+				+ ");";
+		connectDB.executeInsertOrDeleteQuery(entityCommentTableQuery);
+		logAppend(entityCommentTableQuery);
+		System.out.println("buildAndExecuteInsertCommentQuery: " + entityCommentTableQuery);
+
 	}
 
 	/**

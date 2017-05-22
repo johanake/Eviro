@@ -5,31 +5,18 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Properties;
-
-import javax.swing.JOptionPane;
-
-import org.jasypt.util.*;
-import org.jasypt.util.password.StrongPasswordEncryptor;
-import org.jasypt.util.text.BasicTextEncryptor;
 
 /**
  * Handles the connection to the database.
- * 
  * @author Peter Folke, Mattias Sundquist
- *
  */
 public class ConnectDB {
-	
+
 	private Connection connection;
 	private Statement stmt;
 
 	/**
 	 * Connects to the database
-	 * 
 	 * @param serverController
 	 */
 	public ConnectDB(ServerController sc) {
@@ -43,9 +30,7 @@ public class ConnectDB {
 
 	/**
 	 * Adds a new query in the database
-	 * 
-	 * @param query
-	 *            The information to add to the database.
+	 * @param query The information to add to the database.
 	 */
 	public synchronized void executeInsertOrDeleteQuery(String query) {
 		try {
@@ -71,6 +56,25 @@ public class ConnectDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public synchronized String executeUpdateQueryAndReturnGeneratedId(String query) {
+
+		try {
+			stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+			ResultSet rs = stmt.getGeneratedKeys();
+
+			if (rs.next()) {
+				return rs.getString(1);
+			}
+
+			rs.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+
 	}
 
 }

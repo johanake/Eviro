@@ -101,7 +101,7 @@ public class ClientController {
 	public boolean update(String[] data, int entityType) {
 		return update(null, data, entityType, false);
 	}
-	
+
 	public boolean update(Tool tool, String[] data, int entityType) {
 		return update(tool, data, entityType, false);
 	}
@@ -150,10 +150,10 @@ public class ClientController {
 		// If there are differences, display confirm dialog.
 		if (updates.trim().length() > 0) {
 			int reply = JOptionPane.OK_OPTION;
-			if(!isSilent){
+			if (!isSilent) {
 				reply = JOptionPane.showConfirmDialog(tool, "Please review the following changes before proceeding:\n" + updates, "Update?",
 						JOptionPane.OK_CANCEL_OPTION);
-			}			
+			}
 
 			if (reply == JOptionPane.OK_OPTION) {
 
@@ -181,22 +181,28 @@ public class ClientController {
 	 * @param entityType the type of entity to create
 	 */
 	public void create(Object[] data, int entityType) {
-
-		create(data, entityType, false);
+		create(data, entityType, false, false);
 	}
 
-	public ArrayList<Entity> create(Object[] data, int entityType, boolean returnData) {
+	public ArrayList<Entity> create(Object[] data, int entityType, boolean returnData, boolean allowDuplicates) {
 
 		ArrayList<Entity> response = new ArrayList<Entity>();
 
 		if (!checkData(data))
 			return response;
 
-		response = search(data, entityType);
+		if (!allowDuplicates)
+			response = search(data, entityType);
+
 		if (response.isEmpty()) {
 			Entity object = createEntityByType(entityType);
 			object.setData(data);
-			object.setOperation(Eviro.DB_ADD);
+
+			if (object instanceof Comment)
+				object.setOperation(Eviro.DB_ADD_COMMENT);
+			else
+				object.setOperation(Eviro.DB_ADD);
+
 			response = (ArrayList<Entity>) client.sendObject(object);
 		}
 		if (returnData)
@@ -224,7 +230,7 @@ public class ClientController {
 		object.setData(data);
 
 		if (object instanceof Comment)
-			object.setOperation(Eviro.DB_GETCOMMENT);
+			object.setOperation(Eviro.DB_SEARCH_COMMENT);
 		else
 			object.setOperation(Eviro.DB_SEARCH);
 

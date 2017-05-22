@@ -215,7 +215,7 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	private class ButtonListener implements ActionListener {
 		InvoiceTool invoice;
-		
+
 		public ButtonListener() {
 			for (JButton btn : allButtons) {
 				btn.addActionListener(this);
@@ -224,7 +224,7 @@ public class InvoiceTool extends Tool implements Updatable {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+
 			switch (e.getActionCommand()) {
 
 			case "create":
@@ -250,10 +250,10 @@ public class InvoiceTool extends Tool implements Updatable {
 				break;
 
 			case "credit":
-				invoice  = new InvoiceTool(clientCtrlr, guiCtrlr);
+				invoice = new InvoiceTool(clientCtrlr, guiCtrlr);
 				invoice.setValues(getValues());
 				invoice.updateStatus(Eviro.INVOICE_CREDITED);
-				
+
 				setButtons(creditButtons);
 				setTfEditable(ltfBuyer, true);
 				credit();
@@ -264,7 +264,7 @@ public class InvoiceTool extends Tool implements Updatable {
 				update(invoice.getThis(), Eviro.ENTITY_INVOICE, true);
 				// update(temp, Eviro.ENTITY_INVOICE);
 				String ni = customerGUI.getValues()[0];
-				customerGUI.getInvoices(ni);				
+				customerGUI.getInvoices(ni);
 				break;
 
 			case "article":
@@ -285,7 +285,7 @@ public class InvoiceTool extends Tool implements Updatable {
 	}
 
 	public void updateStatus(String status) {
-		ltfStatus.setText(status);		
+		ltfStatus.setText(status);
 	}
 
 	public void credit() {
@@ -333,7 +333,6 @@ public class InvoiceTool extends Tool implements Updatable {
 		// update(new , Eviro.ENTITY_INVOICE);
 		create(getThis(), Eviro.ENTITY_INVOICE);
 		createTransactions(ltfInvNo.getText());
-		
 
 	}
 
@@ -392,7 +391,7 @@ public class InvoiceTool extends Tool implements Updatable {
 				trans[2] = (String) articles.getModel().getValueAt(i, 0); // Productid
 				trans[3] = (String) articles.getModel().getValueAt(i, 3); // Quantity
 				trans[4] = (String) articles.getModel().getValueAt(i, 4); // Price
-				clientCtrlr.create(trans, Eviro.ENTITY_TRANSACTION, false);
+				clientCtrlr.create(trans, Eviro.ENTITY_TRANSACTION, false, false);
 			}
 
 		}
