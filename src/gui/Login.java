@@ -33,8 +33,8 @@ public class Login extends JFrame implements ActionListener, Runnable {
 	private JLabel passLabel = new JLabel("Password");	
 	private JPanel labelPanel = new JPanel(new GridLayout(2, 1));
 
-	private JTextField userField = new JTextField("peter");
-	private JTextField passField = new JPasswordField("test");
+	private JTextField userField = new JTextField();
+	private JTextField passField = new JPasswordField();
 	private JPanel fieldPanel = new JPanel(new GridLayout(2, 1));
 
 //	private ImageIcon loginIcon = new ImageIcon("images/transparent_green_logo.png");
