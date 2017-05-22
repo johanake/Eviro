@@ -31,9 +31,9 @@ public class AdminTool extends Tool implements Updatable {
 	private ActionButton btnReset = new ActionButton("Reset", "reset");
 
 	private JButton[] allButtons = { btnNew, btnEdit, btnUpdate, btnFind, btnReset };
-	private JButton[] defaultButtons = { btnNew, btnFind, btnReset };
-	private JButton[] lookingButtons = { btnEdit, btnReset };
-	private JButton[] editingButtons = { btnUpdate, btnReset };
+	private JButton[] defaultButtons = { btnReset, btnFind, btnNew };
+	private JButton[] lookingButtons = { btnReset, btnEdit };
+	private JButton[] editingButtons = { btnReset, btnUpdate};
 
 	public AdminTool(ClientController clientController, GUIController guiController) {
 		super("Admin", clientController, guiController);

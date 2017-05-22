@@ -50,10 +50,10 @@ public class InvoiceTool extends Tool implements Updatable {
 	private ActionButton btnArticle = new ActionButton("Add article", "article");
 
 	private JButton[] allButtons = { btnNew, btnReset, btnFind, btnPrint, btnCredit, btnBook, btnArticle };
-	private JButton[] defaultButtons = { btnFind, btnReset };
-	private JButton[] editingButtons = { btnNew, btnArticle, btnReset };
-	private JButton[] lookingButtons = { btnCredit, btnPrint, btnReset };
-	private JButton[] creditButtons = { btnBook, btnArticle, btnReset };
+	private JButton[] defaultButtons = { btnReset, btnFind };
+	private JButton[] editingButtons = { btnReset, btnArticle,btnNew  };
+	private JButton[] lookingButtons = { btnReset, btnPrint, btnCredit };
+	private JButton[] creditButtons = { btnReset, btnArticle, btnBook };
 
 	private JScrollPane scrollPane;
 
@@ -266,8 +266,6 @@ public class InvoiceTool extends Tool implements Updatable {
 				createCreditInvoice();
 				update(invoice.getThis(), Eviro.ENTITY_INVOICE, true);
 				// update(temp, Eviro.ENTITY_INVOICE);
-				String ni = customerGUI.getValues()[0];
-				customerGUI.getInvoices(ni);
 				break;
 
 			case "article":

@@ -227,7 +227,7 @@ public class GUIController {
 		private JComponent bottom[] = new JComponent[] {
 				new ActionJButton("Admin", "tool_admin"),
 				new ActionJButton("Social", "tool_social"),
-				new ActionJButton("Settings", "tool_settings"),
+			//	new ActionJButton("Settings", "tool_settings"),
 				new ActionJButton("Quit", "link_exit") };
 
 		public Sidebar() {

@@ -72,9 +72,9 @@ public class ArticleTool extends Tool implements Updatable {
 	private ActionButton btnAdd = new ActionButton("Add to invoice", "add");
 
 	private JButton[] allButtons = { btnNew, btnEdit, btnUpdate, btnFind, btnReset, btnAdd };
-	private JButton[] defaultButtons = { btnNew, btnFind, btnReset };
-	private JButton[] lookingButtons = { btnEdit, btnReset };
-	private JButton[] editingButtons = { btnUpdate, btnReset };
+	private JButton[] defaultButtons = { btnReset, btnFind, btnNew };
+	private JButton[] lookingButtons = { btnReset, btnEdit };
+	private JButton[] editingButtons = { btnReset, btnUpdate };
 	private JButton[] openedFromInvoiceButtons = { btnFind };
 	private JButton[] sendToInvoiceButtons = { btnAdd };
 
