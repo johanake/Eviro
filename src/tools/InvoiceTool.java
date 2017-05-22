@@ -181,6 +181,8 @@ public class InvoiceTool extends Tool implements Updatable {
 		btnCredit.setMnemonic(KeyEvent.VK_C);
 		btnPrint.setMnemonic(KeyEvent.VK_P);
 		btnBook.setMnemonic(KeyEvent.VK_C);
+		btnArticle.setMnemonic(KeyEvent.VK_A);
+
 	}
 
 	public void setup() {

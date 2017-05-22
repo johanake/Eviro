@@ -74,7 +74,7 @@ public class CustomerTool extends Tool implements Updatable {
 		createInvoiceTable();
 		btnNew.setMnemonic(KeyEvent.VK_N);
 		btnEdit.setMnemonic(KeyEvent.VK_E);
-		btnUpdate.setMnemonic(KeyEvent.VK_U);
+		btnUpdate.setMnemonic(KeyEvent.VK_S);
 		btnFind.setMnemonic(KeyEvent.VK_F);
 		btnInvoice.setMnemonic(KeyEvent.VK_I);
 		btnReset.setMnemonic(KeyEvent.VK_R);
