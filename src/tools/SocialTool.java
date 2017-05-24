@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import javax.swing.JButton;
@@ -18,8 +17,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.text.JTextComponent;
 import client.ClientController;
 import gui.GUIController;
@@ -29,25 +26,26 @@ import gui.Updatable;
 import shared.Eviro;
 
 /**
- * A forum for Eviro users.
+ * A GUI tool for Eviro users to communicate with other Eviro users.
  * 
  * @author Mattias Sundquist
  */
 public class SocialTool extends Tool implements Updatable {
 
 	private ButtonListener buttonListener;
-
 	private ActionButton btnOpen = new ActionButton("Open Message", "open");
 	private ActionButton btnUpdate = new ActionButton("Update", "update");
 	private ActionButton btnNew = new ActionButton("New Message", "new");
-
 	private JButton[] allButtons = { btnOpen, btnUpdate, btnNew };
-//	private JButton[] defaultButtons = { btnOpen, btnUpdate, btnNew };
-
 	private ArrayList<Object[]> messageList = new ArrayList<Object[]>();
-
 	private Table posts = new Table(new Object[] { "Date", "User", "Topic" }, false);
 
+	/**
+	 * Builds an internal JFrame and creates a "wall" where Eviro users can communicate with each other.
+	 * 
+	 * @param clientController The ClientController to send to the tool
+	 * @param guiController The GUIController to send to the tool
+	 */
 	public SocialTool(ClientController clientController, GUIController guiController) {
 		super("Social", clientController, guiController);
 		setButtons(allButtons);
@@ -80,6 +78,9 @@ public class SocialTool extends Tool implements Updatable {
 		btnNew.setMnemonic(KeyEvent.VK_N);
 	}
 
+	/**
+	 * NOT USED
+	 */
 	@Override
 	public void setValues(Object[] values) {
 
@@ -90,24 +91,39 @@ public class SocialTool extends Tool implements Updatable {
 		}
 	}
 
+	/**
+	 * NOT USED
+	 */
 	@Override
 	public String[] getValues() {
 
 		return null;
 	}
 
+	/**
+	 * NOT USED
+	 */
 	@Override
 	public String[] getValues(boolean getNames) {
 
 		return null;
 	}
 
+	/**
+	 * NOT USED
+	 */
 	@Override
 	public Updatable getThis() {
 
 		return this;
 	}
 
+	/**
+	 * An ActionListener class that handles button clicks.
+	 * 
+	 * @author Mattias Sundquist
+	 *
+	 */
 	private class ButtonListener implements ActionListener {
 
 		public ButtonListener() {
@@ -137,25 +153,32 @@ public class SocialTool extends Tool implements Updatable {
 						JOptionPane.showMessageDialog(null, "No message is selected.");
 					}
 					break;
-
 			}
 		}
 	}
 
+	/**
+	 * A GUI tool used by the SocialTool class to show messages.
+	 * 
+	 * @author Mattias Sundquist
+	 *
+	 */
 	private class ReadWriteMessage extends Tool implements Updatable {
 
 		private ButtonListener buttonListener;
-
 		private ActionButton btnSend = new ActionButton("Send", "send");
 		private ActionButton btnDelete = new ActionButton("Delete", "delete");
-
 		private JButton[] allButtons = { btnSend, btnDelete };
 		private JButton[] defaultButtons = { btnSend };
 		private JButton[] lookingButtons = { btnDelete };
-
 		private LabledTextField ltfTopic = new LabledTextField("Topic");
-		JTextArea txtMessage = new JTextArea();
+		private JTextArea txtMessage = new JTextArea();
 
+		/**
+		 * Constructor for writing a new message
+		 * 
+		 * @param title The windows title.
+		 */
 		public ReadWriteMessage(String title) {
 			super(title, SocialTool.this.clientCtrlr, SocialTool.this.guiCtrlr);
 			setup();
@@ -163,6 +186,12 @@ public class SocialTool extends Tool implements Updatable {
 			setButtons(defaultButtons);
 		}
 
+		/**
+		 * Constructor for reading a message.
+		 * 
+		 * @param title The windows title.
+		 * @param values The topic and message to be read.
+		 */
 		public ReadWriteMessage(String title, Object[] values) {
 			super(title, SocialTool.this.clientCtrlr, SocialTool.this.guiCtrlr);
 			setValues(values);
@@ -173,6 +202,9 @@ public class SocialTool extends Tool implements Updatable {
 			btnSend.setMnemonic(KeyEvent.VK_ENTER);
 		}
 
+		/**
+		 * Sets up the layout and button listeners.
+		 */
 		public void setup() {
 
 			JPanel pnlMessage = new JPanel(new BorderLayout());
@@ -186,26 +218,49 @@ public class SocialTool extends Tool implements Updatable {
 			buttonListener = new ButtonListener();
 		}
 
+		/**
+		 * NOT USED
+		 */
 		@Override
 		public void setValues(Object[] values) {
 
 			ltfTopic.setText((String) values[2]);
 			txtMessage.setText((String) values[3]);
-
 		}
 
+		/**
+		 * NOT USED
+		 */
 		@Override
 		public String[] getValues() {
 
 			return null;
 		}
 
+		/**
+		 * NOT USED
+		 */
 		@Override
 		public Updatable getThis() {
 
 			return SocialTool.this.getThis();
 		}
 
+		/**
+		 * NOT USED
+		 */
+		@Override
+		public String[] getValues(boolean getNames) {
+
+			return null;
+		}
+
+		/**
+		 * An ActionListener class that handles button clicks.
+		 * 
+		 * @author Mattias Sundquist
+		 *
+		 */
 		private class ButtonListener implements ActionListener {
 
 			public ButtonListener() {
@@ -236,16 +291,8 @@ public class SocialTool extends Tool implements Updatable {
 						} else
 							JOptionPane.showMessageDialog(null, "You must enter a topic and a message");
 						break;
-
 				}
 			}
 		}
-
-		@Override
-		public String[] getValues(boolean getNames) {
-
-			return null;
-		}
 	}
-
 }

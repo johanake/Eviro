@@ -28,7 +28,6 @@ public class Server extends Thread {
 	 */
 	public Server(int port) {
 		serverController = new ServerController();
-//		new ServerGUI(serverController, this);
 		try {
 			serverSocket = new ServerSocket(port);
 			start();
