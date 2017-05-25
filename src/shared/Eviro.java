@@ -51,6 +51,11 @@ public class Eviro {
 
 	}
 
+	/**
+	 * Returns the name of a specified entiy type.
+	 * @param entityType the specified entity type
+	 * @return the name of the specified entity type
+	 */
 	public static String getEntityNameByNumber(int entityType) {
 
 		switch (entityType) {

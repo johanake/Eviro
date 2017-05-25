@@ -128,6 +128,13 @@ public class ArticleTool extends Tool implements Updatable {
 		btnReset.setMnemonic(KeyEvent.VK_R);
 	}
 
+	public ArticleTool(InvoiceTool invoiceGUI, ClientController clientCtrlr, GUIController guiCtrlr) {
+		this(clientCtrlr, guiCtrlr);
+		this.invoiceGUI = invoiceGUI;
+		setButtons(openedFromInvoiceButtons);
+		sendingToInvoice = true;
+	}
+
 	private void getSales(String articleNo) {
 
 		ArrayList<Entity> sales = clientCtrlr.search(new Object[] { null, null, articleNo, null, null }, Eviro.ENTITY_TRANSACTION);
@@ -192,13 +199,6 @@ public class ArticleTool extends Tool implements Updatable {
 			ltfReturnedQuantity.setText("0 (" + returnedPercentage + "%)");
 		}
 
-	}
-
-	public ArticleTool(InvoiceTool invoiceGUI, ClientController clientCtrlr, GUIController guiCtrlr) {
-		this(clientCtrlr, guiCtrlr);
-		this.invoiceGUI = invoiceGUI;
-		setButtons(openedFromInvoiceButtons);
-		sendingToInvoice = true;
 	}
 
 	private void createCommentsTable(boolean editable) {
