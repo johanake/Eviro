@@ -3,11 +3,14 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.jar.JarInputStream;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultDesktopManager;
@@ -17,8 +20,11 @@ import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -35,6 +41,7 @@ import tools.SocialTool;
 
 /**
  * Handles client side gui operations of the system.
+ * 
  * @author Robin Overgaard
  * @author Peter Sjögren
  * @version 1.0
@@ -47,7 +54,9 @@ public class GUIController {
 
 	/**
 	 * Constructs the client, instantiates a new main workspace window.
-	 * @param clientController controller for communication with the client
+	 * 
+	 * @param clientController
+	 *            controller for communication with the client
 	 */
 	public GUIController(ClientController clientController) {
 
@@ -63,7 +72,8 @@ public class GUIController {
 			public void run() {
 
 				setSystemLookAndFeel();
-				JFrame window = new JFrame(Eviro.APP_NAME + " " + Eviro.APP_VERSION + " " + clientController.getActiveUser().getData()[1]);
+				JFrame window = new JFrame(
+						Eviro.APP_NAME + " " + Eviro.APP_VERSION + " " + clientController.getActiveUser().getData()[1]);
 				// window.addKeyListener(keyListener);
 				// window.setFocusable(true);
 				JPanel pnlMain = new JPanel(new BorderLayout());
@@ -86,7 +96,8 @@ public class GUIController {
 				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				window.setVisible(true);
 				// window.setJMenuBar(new Menu());
-				window.setIconImage(new ImageIcon(Eviro.APP_ICON).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+				window.setIconImage(
+						new ImageIcon(Eviro.APP_ICON).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
 			}
 		});
 
@@ -134,7 +145,9 @@ public class GUIController {
 
 	/**
 	 * Adds a new toolbox to the desktop
-	 * @param tool the tool to open
+	 * 
+	 * @param tool
+	 *            the tool to open
 	 */
 	public void add(JInternalFrame tool) {
 		desktop.add(tool);
@@ -143,6 +156,7 @@ public class GUIController {
 
 	/**
 	 * The sidebar.
+	 * 
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */
@@ -151,13 +165,10 @@ public class GUIController {
 		private JPanel pnlSideNorth = new JPanel();
 		private JPanel pnlSideSouth = new JPanel();
 
-		private JComponent top[] = new JComponent[] {
-				new ActionJButton("Invoice", "tool_invoice"),
-				new ActionJButton("Customer", "tool_customer"),
-				new ActionJButton("Article", "tool_article") };
+		private JComponent top[] = new JComponent[] { new ActionJButton("Invoice", "tool_invoice"),
+				new ActionJButton("Customer", "tool_customer"), new ActionJButton("Article", "tool_article") };
 
-		private JComponent bottom[] = new JComponent[] {
-				new ActionJButton("Admin", "tool_admin"),
+		private JComponent bottom[] = new JComponent[] { new ActionJButton("Admin", "tool_admin"),
 				new ActionJButton("Social", "tool_social"),
 				// new ActionJButton("Settings", "tool_settings"),
 				new ActionJButton("Quit", "link_exit") };
@@ -183,8 +194,11 @@ public class GUIController {
 
 		/**
 		 * Creates a styled panel for groups in the sidebar.
-		 * @param objects the group of component to build a panel of
-		 * @param title the title displayed on top of the panel
+		 * 
+		 * @param objects
+		 *            the group of component to build a panel of
+		 * @param title
+		 *            the title displayed on top of the panel
 		 * @return the created panel
 		 */
 		private JPanel createComponentPanel(JComponent[] objects, String title) {
@@ -209,7 +223,9 @@ public class GUIController {
 
 		/*
 		 * (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event. ActionEvent)
+		 * 
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
+		 * ActionEvent)
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -237,12 +253,20 @@ public class GUIController {
 				break;
 
 			case "tool_admin": // LÖSENORDET ÄR "password"
-				String pass = JOptionPane.showInputDialog(desktop, "Enter admin password", "Admin Sign In", JOptionPane.DEFAULT_OPTION);
-				if (clientController.checkPassword("admin", pass)) {
-					desktop.add(new AdminTool(clientController, getGUIController()));
-				} else {
-					JOptionPane.showMessageDialog(desktop, "Wrong password, try again", "Admin Sign In", JOptionPane.ERROR_MESSAGE);
-				}
+				new PasswordFrame(desktop.getSize());
+				// String pass;
+				// pass = JOptionPane.showInputDialog(desktop, "Enter admin
+				// password", "Admin Sign In",
+				// JOptionPane.DEFAULT_OPTION);
+				// if (clientController.checkPassword("admin", pass)) {
+				// desktop.add(new AdminTool(clientController,
+				// getGUIController()));
+				// } else {
+				// JOptionPane.showMessageDialog(desktop, "Wrong password, try
+				// again", "Admin Sign In",
+				// JOptionPane.ERROR_MESSAGE);
+				// }
+				// pass = null;
 				break;
 
 			default:
@@ -251,8 +275,66 @@ public class GUIController {
 			}
 		}
 
+		private class PasswordFrame extends JFrame implements ActionListener {
+			private JPasswordField passField = new JPasswordField();
+			private JLabel label = new JLabel("Enter admin password:  ");
+			private JPanel fieldPanel = new JPanel(new GridLayout(1, 2));
+			private JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
+			private JButton loginButton = new JButton("Log In");
+			private JButton abortButton = new JButton("Cancel");
+			private BorderLayout layout = new BorderLayout();
+
+			public PasswordFrame(Dimension dimension) {
+				setTitle("Admin Sign In");
+				setLayout(layout);
+				setSize(new Dimension(300, 80));
+				layout.setHgap(5);
+				setResizable(false);
+
+				fieldPanel.add(label);
+				fieldPanel.add(passField);
+
+				loginButton.addActionListener(this);
+				abortButton.addActionListener(this);
+
+				buttonPanel.add(abortButton);
+				buttonPanel.add(loginButton);
+
+				add(fieldPanel, BorderLayout.NORTH);
+				add(buttonPanel, BorderLayout.SOUTH);
+
+				setLocation(dimension.width / 2 - this.getSize().width / 2,
+						dimension.height / 2 - this.getSize().height / 2);
+				setVisible(true);
+
+			}
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				switch (e.getActionCommand()) {
+
+				case "Log In":
+					if (clientController.checkPassword("admin", new String(passField.getPassword()))) {
+						desktop.add(new AdminTool(clientController, getGUIController()));
+						dispose();
+					} else {
+						passField.setText("");
+						JOptionPane.showMessageDialog(desktop, "Wrong password, try again", "Admin Sign In",
+								JOptionPane.ERROR_MESSAGE);
+					}
+					break;
+
+				case "Cancel":
+					dispose();
+					break;
+				}
+			}
+		}
+
 		/**
-		 * Customization of JButton that takes it's ActionCommand as a parameter in the constructor.
+		 * Customization of JButton that takes it's ActionCommand as a parameter
+		 * in the constructor.
+		 * 
 		 * @author Robin Overgaard
 		 * @version 1.0
 		 */
@@ -260,7 +342,9 @@ public class GUIController {
 
 			/**
 			 * Constructor.
-			 * @param text the text to display on this button
+			 * 
+			 * @param text
+			 *            the text to display on this button
 			 */
 			public ActionJButton(String text) {
 				super(text);
@@ -269,8 +353,11 @@ public class GUIController {
 
 			/**
 			 * Constructor.
-			 * @param text the text to display on this button
-			 * @param action the action command for this button
+			 * 
+			 * @param text
+			 *            the text to display on this button
+			 * @param action
+			 *            the action command for this button
 			 */
 			public ActionJButton(String text, String action) {
 				super(text);

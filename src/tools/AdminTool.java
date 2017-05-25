@@ -14,14 +14,13 @@ import gui.Updatable;
 import shared.Eviro;
 
 /**
+ * A GUI tool for administrating users of the system.
  * 
- * @author peter
- *
+ * @author Peter Sjögren
  */
-
 public class AdminTool extends Tool implements Updatable {
 
-	private Tab[] tabs = new Tab[] { new Tab("Users"), new Tab("Network") };
+	private Tab[] tabs = new Tab[] { new Tab("Users") };
 
 	private LabledTextField ltfUserID = new LabledTextField("User ID");
 	private LabledTextField ltfUserName = new LabledTextField("User Name");
@@ -41,21 +40,32 @@ public class AdminTool extends Tool implements Updatable {
 	private JButton[] editingButtons = { btnReset, btnUpdate };
 	private ButtonListener buttonListener = new ButtonListener();
 
-	
+	/**
+	 * Builds an internal JFrame and creates an interface for managing users and
+	 * passwords that access the system.
+	 * 
+	 * @param clientController
+	 *            The ClientController to send to the tool
+	 * @param guiController
+	 *            The GUIController to send to the tool
+	 */
 	public AdminTool(ClientController clientController, GUIController guiController) {
+		
 		super("Admin", clientController, guiController);
 		setTabs(tabs);
 		jpfUserPassword.setName("User Password");
 		setContent(0, new JComponent[] { ltfUserID, ltfUserName, jpfUserPassword });
-		setContent(1, new JComponent[] {});
 		setButtons(defaultButtons);
 	}
 
+	/**
+	 * Clears all input fields from text.
+	 */
 	private void reset() {
 
 		setTfEditable(ltfAll, true);
 		setButtons(defaultButtons);
-		setTitle("Admin");
+		setTitle("Admin Tool");
 		jpfUserPassword.setText(null);
 
 		for (int i = 0; i < ltfAll.length; i++) {
@@ -64,6 +74,11 @@ public class AdminTool extends Tool implements Updatable {
 		}
 	}
 
+	/**
+	 * An ActionListener class that handles button clicks.
+	 * 
+	 * @author Peter Sjögren
+	 */
 	private class ButtonListener implements ActionListener {
 
 		public ButtonListener() {
@@ -72,6 +87,9 @@ public class AdminTool extends Tool implements Updatable {
 			}
 		}
 
+		/**
+		 * In case "create" the info in the passwordfield get encrypted before being used by any other methods in the system.
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
@@ -82,6 +100,8 @@ public class AdminTool extends Tool implements Updatable {
 						clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword())));
 				ltfUserID.setText(null);
 				create(getThis(), Eviro.ENTITY_USER);
+				jpfUserPassword.setText(null);
+				ltfUserPassword.setText(null);
 				break;
 
 			case "edit":
@@ -89,18 +109,28 @@ public class AdminTool extends Tool implements Updatable {
 				setTfEditable(ltfAll, true);
 				setTfEditable(ltfUserID, false);
 				jpfUserPassword.setText(null);
+				ltfUserPassword.setText(null);
+				jpfUserPassword.setEnabled(true);
 				break;
 
 			case "update":
+				ltfUserPassword.setText(
+						clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword())));
 				if (update(getThis(), Eviro.ENTITY_USER)) {
 					setButtons(lookingButtons);
 					setTfEditable(ltfAll, false);
 				}
+				jpfUserPassword.setText(null);
+				ltfUserPassword.setText(null);
+				jpfUserPassword.setEnabled(false);
 				break;
 
 			case "search":
 				ltfUserPassword.setText(null);
+				jpfUserPassword.setText(null);
 				search(getThis(), ltfAll, Eviro.ENTITY_USER);
+				jpfUserPassword.setEnabled(false);
+
 				break;
 
 			case "reset":
@@ -114,6 +144,9 @@ public class AdminTool extends Tool implements Updatable {
 		}
 	}
 
+	/**
+	 * Sets incoming user info to the text fields
+	 */
 	@Override
 	public void setValues(Object[] values) {
 
@@ -133,6 +166,9 @@ public class AdminTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Gets current user info form the text fields
+	 */
 	@Override
 	public String[] getValues() {
 
@@ -152,7 +188,6 @@ public class AdminTool extends Tool implements Updatable {
 
 	@Override
 	public String[] getValues(boolean getNames) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

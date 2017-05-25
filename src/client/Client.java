@@ -20,7 +20,7 @@ import gui.Login;
 public class Client extends Thread {
 
 	private ClientController clientController;
-	private Socket socket = new Socket();
+	private Socket socket;
 	private ObjectInputStream objInput;
 	private ObjectOutputStream objOutput;
 
@@ -43,12 +43,12 @@ public class Client extends Thread {
 	public boolean connectToServer() {
 
 		try {
+			socket = new Socket();
 			socket.connect(new InetSocketAddress(clientController.getProperty("ip"),
 					Integer.parseInt(clientController.getProperty("port"))), 1000);
 
 			objInput = new ObjectInputStream(socket.getInputStream());
 			objOutput = new ObjectOutputStream(socket.getOutputStream());
-			// start();
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -63,10 +63,10 @@ public class Client extends Thread {
 	public void disconnect() {
 
 		try {
-			interrupt();
-			socket.close();
 			objOutput.close();
 			objInput.close();
+			socket.close();
+			socket = null;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

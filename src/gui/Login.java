@@ -32,26 +32,21 @@ import tools.AdminTool;
  *
  */
 public class Login extends JFrame implements ActionListener, Runnable {
+	
 	private ClientController clientController;
-
 	private JLabel userLabel = new JLabel("Username");
 	private JLabel passLabel = new JLabel("Password");
 	private JPanel labelPanel = new JPanel(new GridLayout(2, 1));
-
 	private JTextField userField = new JTextField();
 	private JTextField passField = new JPasswordField();
 	private JPanel fieldPanel = new JPanel(new GridLayout(2, 1));
-
 	private ImageIcon loginIcon = new ImageIcon(new ImageIcon("images/transparent_green_logo.png").getImage()
 			.getScaledInstance(75, 75, Image.SCALE_DEFAULT));
 	private JLabel iconLabel = new JLabel();
-
 	private JPanel upperpanel = new JPanel(new GridLayout(1, 3));
-
 	private JButton loginButton = new JButton("Login");
 	private JButton adminButton = new JButton("Admin");
 	private JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
-
 	private Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
 	private BorderLayout layout = new BorderLayout();
 
@@ -61,6 +56,7 @@ public class Login extends JFrame implements ActionListener, Runnable {
 
 	@Override
 	public void run() {
+		
 		setTitle("Eviro Enterprise System - Sign In");
 		setSize(new Dimension(300, 130));
 		setResizable(false);
@@ -95,15 +91,14 @@ public class Login extends JFrame implements ActionListener, Runnable {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+	
 		switch (e.getActionCommand()) {
 
 		case "Login":
 
 			if (!clientController.getClient().connectToServer()) {
 				JOptionPane.showMessageDialog(this, "Unable to connect to server!\nPlease try again or contact admin.");
-			}
-
-			else {
+			} else {
 				if (clientController.checkPassword(userField.getText(), passField.getText())) {
 					this.dispose();
 				} else {
@@ -111,36 +106,91 @@ public class Login extends JFrame implements ActionListener, Runnable {
 					passField.setText("");
 					JOptionPane.showMessageDialog(null, "Wrong username or password, please try again", "Login Failed",
 							JOptionPane.ERROR_MESSAGE);
+					clientController.getClient().disconnect();
 				}
 			}
-
 			break;
 
 		case "Admin":
-			String pass = JOptionPane.showInputDialog(null, "Enter admin password", "Admin Sign In",
-					JOptionPane.DEFAULT_OPTION);
-			if (clientController.getPassCryptor().checkPassword(pass, clientController.getProperty("admin"))) {
-				new AdminLogin();
-			}
-
+			new PasswordFrame(screenDim);
 			break;
 		}
 	}
 
-	private class AdminLogin extends JFrame implements ActionListener {
+	private class PasswordFrame extends JFrame implements ActionListener {
+		
+		private JPasswordField passField = new JPasswordField();
+		private JLabel label = new JLabel("Enter admin password:  ");
+		private JPanel fieldPanel = new JPanel(new GridLayout(1, 2));
+		private JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
+		private JButton loginButton = new JButton("Log In");
+		private JButton abortButton = new JButton("Cancel");
+		private BorderLayout layout = new BorderLayout();
+
+		public PasswordFrame(Dimension dimension) {
+			
+			setTitle("Admin Sign In");
+			setLayout(layout);
+			setSize(new Dimension(300, 80));
+			layout.setHgap(5);
+			setResizable(false);
+
+			fieldPanel.add(label);
+			fieldPanel.add(passField);
+
+			loginButton.addActionListener(this);
+			abortButton.addActionListener(this);
+
+			buttonPanel.add(abortButton);
+			buttonPanel.add(loginButton);
+
+			add(fieldPanel, BorderLayout.NORTH);
+			add(buttonPanel, BorderLayout.SOUTH);
+
+			setLocation(dimension.width / 2 - this.getSize().width / 2,
+					dimension.height / 2 - this.getSize().height / 2);
+			setVisible(true);
+
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			switch (e.getActionCommand()) {
+
+			case "Log In":
+				if (clientController.getPassCryptor().checkPassword(new String(passField.getPassword()),
+						clientController.getProperty("admin"))) {
+					new AdminFrame();
+					dispose();
+				} else {
+					passField.setText("");
+					JOptionPane.showMessageDialog(null, "Wrong password, try again", "Admin Sign In",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				break;
+
+			case "Cancel":
+				dispose();
+				break;
+			}
+		}
+	}
+
+	private class AdminFrame extends JFrame implements ActionListener {
+		
 		private JLabel ipLabel = new JLabel("Server IP");
 		private JLabel portLabel = new JLabel("Server Port");
 		private JTextField ipField = new JTextField();
 		private JTextField portField = new JTextField();
 		private JPanel fieldPanel = new JPanel(new GridLayout(2, 2));
-
 		private JButton editButton = new JButton("Edit");
 		private JButton saveButton = new JButton("Save");
 		private JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
-
 		private BorderLayout layout = new BorderLayout();
 
-		public AdminLogin() {
+		public AdminFrame() {
+			
 			setTitle("Eviro Enterprise System - Admin");
 			setSize(new Dimension(300, 150));
 			setResizable(false);
@@ -174,6 +224,7 @@ public class Login extends JFrame implements ActionListener, Runnable {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			
 			switch (e.getActionCommand()) {
 			case "Edit":
 				ipField.setEditable(true);
@@ -190,10 +241,8 @@ public class Login extends JFrame implements ActionListener, Runnable {
 				editButton.setEnabled(true);
 				saveButton.setEnabled(false);
 				break;
-
 			}
 		}
-
 	}
 
 	public void main(String[] args) {

@@ -1,5 +1,11 @@
 package server;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,7 +19,14 @@ import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.jasypt.util.text.BasicTextEncryptor;
 import enteties.Comment;
@@ -25,6 +38,7 @@ import enteties.Product;
 import enteties.Transaction;
 import enteties.User;
 import shared.Eviro;
+import tools.AdminTool;
 
 /**
  * Handles most of the logic between the server and the database. Also logs
@@ -33,7 +47,8 @@ import shared.Eviro;
  * @author Mattias Sundquist, Peter Sjögren
  */
 public class ServerController {
-
+	
+	private Server server;
 	private ConnectDB connectDB;
 	private ServerGUI serverGUI;
 	private Logger log = Logger.getLogger("log");
@@ -46,43 +61,34 @@ public class ServerController {
 
 	/**
 	 * Gets an instance of the ConnectDB class
+	 * 
+	 * @param server
 	 */
-	public ServerController() {
-		login();
-		connectDB = new ConnectDB(this);
+	public ServerController(Server server) {
+		
+		this.server = server;
+		try {
+			properties.load(reader = new FileReader("config/serverConfig.dat"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		serverGUI = new ServerGUI(this, server);
 		setUpLogger();
-		serverGUI = new ServerGUI(this, null);
 	}
 
 	/**
 	 * 
 	 */
-	private void login() {
+	protected boolean login(String pass) {
 
-		try {
-			properties.load(reader = new FileReader("config/serverConfig.dat"));
-			String pass = null;
-			while (pass == null) {
-				pass = checkPassword();
-			}
+		if (passCryptor.checkPassword(pass, properties.getProperty("admin"))) {
 			textCryptor.setPassword(pass);
-		} catch (IOException e1) {
-			e1.printStackTrace();
+			connectDB = new ConnectDB(this);
+			server.connect();
+			
+			return true;
 		}
-	}
-
-	/**
-	 * @return
-	 */
-	private String checkPassword() {
-
-		String input = JOptionPane.showInputDialog(null, "Sign in with server password", "Eviro Server Login",
-				JOptionPane.DEFAULT_OPTION);
-		if (passCryptor.checkPassword(input, properties.getProperty("admin"))) {
-			return input;
-		} else {
-			return null;
-		}
+		return false;
 	}
 
 	/**
@@ -248,9 +254,6 @@ public class ServerController {
 	private void buildAndExecuteInsertCommentQuery(Entity ei) {
 
 		Object[] info = ei.getData();
-
-
-		String tableName = getTableName(ei);
 
 		String entityNo = (String) info[0];
 		String entity = (String) info[1];

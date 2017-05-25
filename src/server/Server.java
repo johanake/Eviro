@@ -1,5 +1,6 @@
 package server;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -28,10 +29,10 @@ public class Server extends Thread {
 	 * @param port The port to which the server will be listening
 	 */
 	public Server(int port) {
-		serverController = new ServerController();
+		
+		serverController = new ServerController(this);
 		try {
 			serverSocket = new ServerSocket(port);
-			start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -41,7 +42,6 @@ public class Server extends Thread {
 	 * Starts the server
 	 */
 	public void connect() {
-
 		start();
 	}
 
@@ -49,7 +49,7 @@ public class Server extends Thread {
 	 * Disconnects the server
 	 */
 	public void disconnect() {
-
+		
 		interrupt();
 		try {
 			serverSocket.close();
@@ -93,12 +93,14 @@ public class Server extends Thread {
 		 * @param socket The client which connected to the server.
 		 */
 		public ClientConnection(Socket socket) {
+			
 			this.socket = socket;
 			serverController.logAppend("Client " + socket.getInetAddress() + " connected!");
+			
 			try {
 				objOutput = new ObjectOutputStream(socket.getOutputStream());
 				objInput = new ObjectInputStream(socket.getInputStream());
-				start();
+				this.start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -111,12 +113,14 @@ public class Server extends Thread {
 
 			serverController.logAppend("Client " + socket.getInetAddress() + " disconnected!");
 			try {
-				socket.close();
 				objOutput.close();
 				objInput.close();
-				interrupt();
+				socket.close();
+				this.interrupt();
 			} catch (IOException e) {
 				e.printStackTrace();
+				this.interrupt();
+
 			}
 		}
 
@@ -131,6 +135,9 @@ public class Server extends Thread {
 					objOutput.flush();
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
+					disconnect();
+					
+					
 				}
 			}
 			disconnect();
