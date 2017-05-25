@@ -67,11 +67,13 @@ public class ServerController {
 	public ServerController(Server server) {
 		
 		this.server = server;
+		
 		try {
 			properties.load(reader = new FileReader("config/serverConfig.dat"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		
 		serverGUI = new ServerGUI(this, server);
 		setUpLogger();
 	}
@@ -82,9 +84,10 @@ public class ServerController {
 	protected boolean login(String pass) {
 
 		if (passCryptor.checkPassword(pass, properties.getProperty("admin"))) {
+			
 			textCryptor.setPassword(pass);
 			connectDB = new ConnectDB(this);
-			server.connect();
+			server.connect(Integer.parseInt(properties.getProperty("port")));
 			
 			return true;
 		}

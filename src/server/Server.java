@@ -28,20 +28,22 @@ public class Server extends Thread {
 	 * 
 	 * @param port The port to which the server will be listening
 	 */
-	public Server(int port) {
+	public Server() {
 		
 		serverController = new ServerController(this);
-		try {
-			serverSocket = new ServerSocket(port);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
 	}
 
 	/**
 	 * Starts the server
 	 */
-	public void connect() {
+	public void connect(int port) {
+		
+		try {
+			serverSocket = new ServerSocket(port);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		start();
 	}
 

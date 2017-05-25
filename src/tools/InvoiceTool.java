@@ -27,7 +27,11 @@ import gui.Updatable;
 import shared.Eviro;
 
 public class InvoiceTool extends Tool implements Updatable {
-
+	
+	public static final String INVOICE_OPEN = "Open"; 
+	public static final String INVOICE_CREDITED = "Credited";
+	public static final String INVOICE_PAID = "Paid";
+	
 	private ButtonListener buttonListener;
 
 	private LabledTextField ltfCustNo = new LabledTextField("Customer");
@@ -507,7 +511,7 @@ public class InvoiceTool extends Tool implements Updatable {
 
 			case "create":
 				ltfInvNo.setText(null);
-				ltfStatus.setText(Eviro.INVOICE_OPEN);
+				ltfStatus.setText(INVOICE_OPEN);
 				create(getThis(), Eviro.ENTITY_INVOICE);
 				createTransactions(ltfInvNo.getText());
 				String no = customerGUI.getValues()[0];
@@ -530,7 +534,7 @@ public class InvoiceTool extends Tool implements Updatable {
 			case "credit":
 				invoice = new InvoiceTool(clientCtrlr, guiCtrlr);
 				invoice.setValues(getValues());
-				invoice.updateStatus(Eviro.INVOICE_CREDITED);
+				invoice.updateStatus(INVOICE_CREDITED);
 
 				setButtons(creditButtons);
 				setTfEditable(ltfBuyer, true);

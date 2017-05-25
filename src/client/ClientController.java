@@ -29,7 +29,7 @@ import shared.Eviro;
  * @author Peter Sjögren
  * @version 1.1
  */
-public class ClientController {
+public class ClientController extends Thread{
 
 	private StrongPasswordEncryptor passCryptor = new StrongPasswordEncryptor();
 	private FileReader reader;
@@ -41,18 +41,19 @@ public class ClientController {
 	 * Creates a ClientController object.
 	 */
 	public ClientController() {
-
 		try {
 			reader = new FileReader("config/clientConfig.dat");
 			properties.load(reader);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void run(){
 
-		this.client = new Client(this);
-
+		client = new Client(this);
 		new GUIController(this);
-
+		
 	}
 
 	/**

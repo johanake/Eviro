@@ -17,11 +17,6 @@ public class Eviro {
 	public static final String APP_VERSION = "(Demo)";
 	public static final String APP_ICON = "images/eviro_icon.png";
 
-	// Flytta till invoicetool om dessa enbart används i invoicetool
-	public static final String INVOICE_OPEN = "Open"; // Kom på ett bättre namn /JÅ
-	public static final String INVOICE_CREDITED = "Credited";
-	public static final String INVOICE_PAID = "Paid";
-
 	public static final int DB_ADD = 1;
 	public static final int DB_ADD_COMMENT = 7;
 	public static final int DB_SEARCH = 2;
@@ -46,11 +41,15 @@ public class Eviro {
 	 */
 	private void start() {
 
-		Thread serverThread = new Server(3500);
+		Thread serverThread = new Server();
+		
+		Thread clientThread = new ClientController();
 		
 		while(!serverThread.isAlive());
 		
-		new ClientController();
+		clientThread.start();
+		
+		
 
 	}
 
