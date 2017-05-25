@@ -18,8 +18,7 @@ import shared.Eviro;
  * 
  * @author Peter Sjögren
  */
-
-	public class AdminTool extends Tool implements Updatable {
+public class AdminTool extends Tool implements Updatable {
 
 	private ButtonListener buttonListener;
 	private Tab[] tabs = new Tab[] { new Tab("Users"), new Tab("Network") };
@@ -52,7 +51,7 @@ import shared.Eviro;
 	 */
 
 	public AdminTool(ClientController clientController, GUIController guiController) {
-		
+
 		super("Admin", clientController, guiController);
 		buttonListener = new ButtonListener();
 		setTabs(tabs);
@@ -62,8 +61,7 @@ import shared.Eviro;
 	}
 
 	/**
-	 * Clears all input fields from text.
-	 * Resets the tool values and behaviour.
+	 * Clears all input fields from text. Resets the tool values and behaviour.
 	 */
 	private void reset() {
 
@@ -80,6 +78,7 @@ import shared.Eviro;
 
 	/**
 	 * ActionListener implementatrion that listens for gui button clicks.
+	 * 
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */
@@ -92,7 +91,8 @@ import shared.Eviro;
 		}
 
 		/**
-		 * In case "create" the info in the passwordfield get encrypted before being used by any other methods in the system.
+		 * In case "create" the info in the passwordfield get encrypted before
+		 * being used by any other methods in the system.
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -100,7 +100,8 @@ import shared.Eviro;
 			switch (e.getActionCommand()) {
 
 			case "create":
-				ltfUserPassword.setText(clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword())));
+				ltfUserPassword.setText(
+						clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword())));
 				ltfUserID.setText(null);
 				create(getThis(), Eviro.ENTITY_USER);
 				jpfUserPassword.setText(null);

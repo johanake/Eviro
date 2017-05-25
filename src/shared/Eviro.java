@@ -46,7 +46,10 @@ public class Eviro {
 	 */
 	private void start() {
 
-		new Server(3500);
+		Thread serverThread = new Server(3500);
+		
+		while(!serverThread.isAlive());
+		
 		new ClientController();
 
 	}
