@@ -198,86 +198,6 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
-	private void reset() {
-
-		if (articles != null)
-			articles.reset();
-
-		setTfEditable(ltfAll, true);
-		setTfEditable(ltfStatus, false);
-		setButtons(defaultButtons);
-		setTitle("Invoice");
-
-		for (int i = 0; i < ltfAll.length; i++) {
-
-			ltfAll[i].setText(null);
-		}
-
-	}
-
-	private class ButtonListener implements ActionListener {
-		InvoiceTool invoice;
-
-		public ButtonListener() {
-			for (JButton btn : allButtons) {
-				btn.addActionListener(this);
-			}
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-
-			switch (e.getActionCommand()) {
-
-			case "create":
-				ltfInvNo.setText(null);
-				ltfStatus.setText(Eviro.INVOICE_OPEN);
-				create(getThis(), Eviro.ENTITY_INVOICE);
-				createTransactions(ltfInvNo.getText());
-				String no = customerGUI.getValues()[0];
-				customerGUI.getInvoices(no);
-
-				break;
-
-			case "reset":
-				reset();
-				break;
-
-			case "print":
-				print();
-				break;
-
-			case "search":
-				search(getThis(), ltfAll, Eviro.ENTITY_INVOICE);
-				break;
-
-			case "credit":
-				invoice = new InvoiceTool(clientCtrlr, guiCtrlr);
-				invoice.setValues(getValues());
-				invoice.updateStatus(Eviro.INVOICE_CREDITED);
-
-				setButtons(creditButtons);
-				setTfEditable(ltfBuyer, true);
-				credit();
-				break;
-
-			case "book":
-				createCreditInvoice();
-				update(invoice.getThis(), Eviro.ENTITY_INVOICE, true);
-				// update(temp, Eviro.ENTITY_INVOICE);
-				break;
-
-			case "article":
-				guiCtrlr.add(new ArticleTool(getThisTool(), clientCtrlr, guiCtrlr));
-				break;
-
-			default:
-
-				break;
-			}
-		}
-	}
-
 	public void search(String invoiceNo) {
 
 		ltfInvNo.setText(invoiceNo);
@@ -462,6 +382,34 @@ public class InvoiceTool extends Tool implements Updatable {
 		calculate(articles, rowCount, 3);
 	}
 
+	public InvoiceTool getThisTool() {
+		return this;
+	}
+
+	/**
+	 * Resets the tool values and behaviour.
+	 */
+	private void reset() {
+
+		if (articles != null)
+			articles.reset();
+
+		setTfEditable(ltfAll, true);
+		setTfEditable(ltfStatus, false);
+		setButtons(defaultButtons);
+		setTitle("Invoice");
+
+		for (int i = 0; i < ltfAll.length; i++) {
+
+			ltfAll[i].setText(null);
+		}
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see gui.Updatable#setValues(java.lang.Object[])
+	 */
 	@Override
 	public void setValues(Object[] values) {
 
@@ -496,12 +444,20 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see gui.Updatable#getValues()
+	 */
 	@Override
 	public String[] getValues() {
 
 		return getValues(false);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see gui.Updatable#getValues(boolean)
+	 */
 	@Override
 	public String[] getValues(boolean getNames) {
 
@@ -520,15 +476,82 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
-	public InvoiceTool getThisTool() {
-
-		return this;
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see gui.Updatable#getThis()
+	 */
 	@Override
 	public Updatable getThis() {
 
 		return this;
+	}
+
+	/**
+	 * ActionListener implementatrion that listens for gui button clicks.
+	 * @author Robin Overgaard
+	 * @version 1.0
+	 */
+	private class ButtonListener implements ActionListener {
+		InvoiceTool invoice;
+
+		public ButtonListener() {
+			for (JButton btn : allButtons) {
+				btn.addActionListener(this);
+			}
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			switch (e.getActionCommand()) {
+
+			case "create":
+				ltfInvNo.setText(null);
+				ltfStatus.setText(Eviro.INVOICE_OPEN);
+				create(getThis(), Eviro.ENTITY_INVOICE);
+				createTransactions(ltfInvNo.getText());
+				String no = customerGUI.getValues()[0];
+				customerGUI.getInvoices(no);
+
+				break;
+
+			case "reset":
+				reset();
+				break;
+
+			case "print":
+				print();
+				break;
+
+			case "search":
+				search(getThis(), ltfAll, Eviro.ENTITY_INVOICE);
+				break;
+
+			case "credit":
+				invoice = new InvoiceTool(clientCtrlr, guiCtrlr);
+				invoice.setValues(getValues());
+				invoice.updateStatus(Eviro.INVOICE_CREDITED);
+
+				setButtons(creditButtons);
+				setTfEditable(ltfBuyer, true);
+				credit();
+				break;
+
+			case "book":
+				createCreditInvoice();
+				update(invoice.getThis(), Eviro.ENTITY_INVOICE, true);
+				// update(temp, Eviro.ENTITY_INVOICE);
+				break;
+
+			case "article":
+				guiCtrlr.add(new ArticleTool(getThisTool(), clientCtrlr, guiCtrlr));
+				break;
+
+			default:
+
+				break;
+			}
+		}
 	}
 
 }

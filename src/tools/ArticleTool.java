@@ -83,8 +83,6 @@ public class ArticleTool extends Tool implements Updatable {
 	private boolean sendingToInvoice;
 	private InvoiceTool invoiceGUI;
 
-	// private KeyPress keyListener = new KeyPress();
-
 	public ArticleTool(ClientController clientController, GUIController guiController) {
 		super("Article", clientController, guiController);
 		new ButtonListener();
@@ -258,6 +256,9 @@ public class ArticleTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Resets the tool values and behaviour.
+	 */
 	private void reset() {
 
 		if (tblComments != null)
@@ -283,52 +284,83 @@ public class ArticleTool extends Tool implements Updatable {
 
 	}
 
-	// private class KeyPress implements KeyListener {
-	// // Set<Character> pressed = new HashSet<Character>();
-	//
-	// @Override
-	// public synchronized void keyPressed(KeyEvent e) {
-	// int keyCode = e.getKeyCode();
-	//
-	// // pressed.add((char) e.getKeyCode());
-	// // ClientController clientController = new ClientController();
-	// // GUIController gController;
-	// switch (e.getKeyCode()) {
-	// // case KeyEvent.VK_F1: {
-	// // System.out.println("1. Du tryckte på F1 från ArticleTool");
-	// // break;
-	// // }
-	// case KeyEvent.VK_F2: // Trycker på SÖK knappen på articleTool
-	// search(getThis(), ltfAll, Eviro.ENTITY_PRODUCT);
-	// System.out.println("2. Du tryckte på F2 från ArticleTool");
-	// break;
-	//
-	// case KeyEvent.VK_F3: // Fnkar ej. Trycker på SAVE knappen på articleTool
-	// setButtons(lookingButtons);
-	// setTfEditable(ltfAll, false);
-	// System.out.println("3. Du tryckte på F3 från ArticleTool");
-	// break;
-	//
-	// default:
-	// System.out.println("ArtcleTool. Annan knapp " + KeyEvent.getKeyText(keyCode));
-	// e.consume();
-	// break;
-	//
-	// }
-	// }
-	//
-	// @Override
-	// public synchronized void keyReleased(KeyEvent e) {
-	// e.consume();
-	//
-	// }
-	//
-	// @Override
-	// public void keyTyped(KeyEvent e) {
-	// e.consume();
-	// }
-	// }
+	/*
+	 * (non-Javadoc)
+	 * @see gui.Updatable#setValues(java.lang.Object[])
+	 */
+	@Override
+	public void setValues(Object[] values) {
 
+		createCommentsTable(true);
+		getComments((String) values[0]);
+		getSales((String) values[0]);
+		setTfEditable(ltfAll, false);
+
+		if (sendingToInvoice)
+			setButtons(sendToInvoiceButtons);
+		else
+			setButtons(lookingButtons);
+
+		setTitle(values[0] + " - " + values[1]);
+
+		for (int i = 0; i < ltfAll.length; i++) {
+
+			if (values[i] instanceof Integer) {
+				values[i] = Integer.toString((int) values[i]);
+			}
+
+			ltfAll[i].setText((String) values[i]);
+		}
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see gui.Updatable#getValues()
+	 */
+	@Override
+	public String[] getValues() {
+
+		return getValues(false);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see gui.Updatable#getValues(boolean)
+	 */
+	@Override
+	public String[] getValues(boolean getNames) {
+
+		String[] text = new String[ltfAll.length];
+
+		for (int i = 0; i < ltfAll.length; i++) {
+
+			if (getNames)
+				text[i] = ltfAll[i].getName();
+			else {
+				text[i] = ltfAll[i].getText();
+			}
+
+		}
+
+		return text;
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see gui.Updatable#getThis()
+	 */
+	@Override
+	public Updatable getThis() {
+		return this;
+	}
+
+	/**
+	 * ActionListener implementatrion that listens for gui button clicks.
+	 * @author Robin Overgaard
+	 * @version 1.0
+	 */
 	private class ButtonListener implements ActionListener {
 
 		public ButtonListener() {
@@ -389,63 +421,6 @@ public class ArticleTool extends Tool implements Updatable {
 				break;
 			}
 		}
-	}
-
-	@Override
-	public void setValues(Object[] values) {
-
-		createCommentsTable(true);
-		getComments((String) values[0]);
-		getSales((String) values[0]);
-		setTfEditable(ltfAll, false);
-
-		if (sendingToInvoice)
-			setButtons(sendToInvoiceButtons);
-		else
-			setButtons(lookingButtons);
-
-		setTitle(values[0] + " - " + values[1]);
-
-		for (int i = 0; i < ltfAll.length; i++) {
-
-			if (values[i] instanceof Integer) {
-				values[i] = Integer.toString((int) values[i]);
-			}
-
-			ltfAll[i].setText((String) values[i]);
-		}
-
-	}
-
-	@Override
-	public String[] getValues() {
-
-		return getValues(false);
-	}
-
-	@Override
-	public String[] getValues(boolean getNames) {
-
-		String[] text = new String[ltfAll.length];
-
-		for (int i = 0; i < ltfAll.length; i++) {
-
-			if (getNames)
-				text[i] = ltfAll[i].getName();
-			else {
-				text[i] = ltfAll[i].getText();
-			}
-
-		}
-
-		return text;
-
-	}
-
-	@Override
-	public Updatable getThis() {
-
-		return this;
 	}
 
 }

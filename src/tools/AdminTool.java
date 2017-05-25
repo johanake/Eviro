@@ -13,14 +13,9 @@ import gui.Tool;
 import gui.Updatable;
 import shared.Eviro;
 
-/**
- * 
- * @author peter
- *
- */
-
 public class AdminTool extends Tool implements Updatable {
 
+	private ButtonListener buttonListener;
 	private Tab[] tabs = new Tab[] { new Tab("Users"), new Tab("Network") };
 
 	private LabledTextField ltfUserID = new LabledTextField("User ID");
@@ -39,11 +34,10 @@ public class AdminTool extends Tool implements Updatable {
 	private JButton[] defaultButtons = { btnReset, btnFind, btnNew };
 	private JButton[] lookingButtons = { btnReset, btnEdit };
 	private JButton[] editingButtons = { btnReset, btnUpdate };
-	private ButtonListener buttonListener = new ButtonListener();
 
-	
 	public AdminTool(ClientController clientController, GUIController guiController) {
 		super("Admin", clientController, guiController);
+		buttonListener = new ButtonListener();
 		setTabs(tabs);
 		jpfUserPassword.setName("User Password");
 		setContent(0, new JComponent[] { ltfUserID, ltfUserName, jpfUserPassword });
@@ -51,6 +45,9 @@ public class AdminTool extends Tool implements Updatable {
 		setButtons(defaultButtons);
 	}
 
+	/**
+	 * Resets the tool values and behaviour.
+	 */
 	private void reset() {
 
 		setTfEditable(ltfAll, true);
@@ -64,6 +61,81 @@ public class AdminTool extends Tool implements Updatable {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see gui.Updatable#setValues(java.lang.Object[])
+	 */
+	@Override
+	public void setValues(Object[] values) {
+
+		setTfEditable(ltfAll, false);
+		setButtons(lookingButtons);
+		setTitle(values[0] + " - " + values[1]);
+
+		for (int i = 0; i < ltfAll.length - 1; i++) {
+
+			if (values[i] instanceof Integer) {
+				values[i] = Integer.toString((int) values[i]);
+			}
+
+			ltfAll[i].setText((String) values[i]);
+		}
+		ltfAll[2].setText("******************");
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see gui.Updatable#getValues()
+	 */
+	@Override
+	public String[] getValues() {
+
+		String[] text = new String[ltfAll.length];
+
+		for (int i = 0; i < ltfAll.length; i++) {
+			text[i] = ltfAll[i].getText();
+		}
+
+		// text[2] = clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword()));
+		//
+		// text[2] = new String(jpfUserPassword.getPassword());
+		//
+		// System.out.println("password: " + jpfUserPassword.getPassword());
+		//
+		// if (text[2] != null)
+		// text[2] = clientCtrlr.getPassCryptor().encryptPassword(text[2]);
+		//
+		// System.out.println(Arrays.toString(text));
+
+		return text;
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see gui.Updatable#getThis()
+	 */
+	@Override
+	public Updatable getThis() {
+		return this;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see gui.Updatable#getValues(boolean)
+	 */
+	@Override
+	public String[] getValues(boolean getNames) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * ActionListener implementatrion that listens for gui button clicks.
+	 * @author Robin Overgaard
+	 * @version 1.0
+	 */
 	private class ButtonListener implements ActionListener {
 
 		public ButtonListener() {
@@ -78,8 +150,7 @@ public class AdminTool extends Tool implements Updatable {
 			switch (e.getActionCommand()) {
 
 			case "create":
-				ltfUserPassword.setText(
-						clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword())));
+				ltfUserPassword.setText(clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword())));
 				ltfUserID.setText(null);
 				create(getThis(), Eviro.ENTITY_USER);
 				break;
@@ -112,47 +183,5 @@ public class AdminTool extends Tool implements Updatable {
 				break;
 			}
 		}
-	}
-
-	@Override
-	public void setValues(Object[] values) {
-
-		setTfEditable(ltfAll, false);
-		setButtons(lookingButtons);
-		setTitle(values[0] + " - " + values[1]);
-
-		for (int i = 0; i < ltfAll.length - 1; i++) {
-
-			if (values[i] instanceof Integer) {
-				values[i] = Integer.toString((int) values[i]);
-			}
-
-			ltfAll[i].setText((String) values[i]);
-		}
-		ltfAll[2].setText("******************");
-
-	}
-
-	@Override
-	public String[] getValues() {
-
-		String[] text = new String[ltfAll.length];
-
-		for (int i = 0; i < ltfAll.length; i++) {
-			text[i] = ltfAll[i].getText();
-		}
-		return text;
-
-	}
-
-	@Override
-	public Updatable getThis() {
-		return this;
-	}
-
-	@Override
-	public String[] getValues(boolean getNames) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
