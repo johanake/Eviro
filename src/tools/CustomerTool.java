@@ -78,7 +78,6 @@ public class CustomerTool extends Tool implements Updatable {
 		btnFind.setMnemonic(KeyEvent.VK_F);
 		btnInvoice.setMnemonic(KeyEvent.VK_I);
 		btnReset.setMnemonic(KeyEvent.VK_R);
-		setBindings(this, ltfAll, Eviro.ENTITY_CUSTOMER);
 	}
 
 	private void createCommentsTable(boolean editable) {

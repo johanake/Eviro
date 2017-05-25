@@ -39,10 +39,8 @@ import tools.SocialTool;
  * @version 1.0
  */
 
-// Nadia testar
-
 public class GUIController {
-	// private KeyPress keyListener = new KeyPress();
+
 	private JDesktopPane desktop;
 	private ClientController clientController;
 
@@ -94,7 +92,7 @@ public class GUIController {
 	}
 
 	/**
-	 * Returns an instance of the GUIController
+	 * Returns the instance of the GUIController
 	 */
 	private GUIController getGUIController() {
 		return this;
@@ -113,17 +111,6 @@ public class GUIController {
 					UIManager.setLookAndFeel(lnfi.getClassName());
 					UIManager.put("nimbusBase", new Color(51, 140, 80));
 					break;
-					// UIManager.setLookAndFeel(new NimbusLookAndFeel() {
-					//
-					// @Override
-					// public UIDefaults getDefaults() {
-					// UIDefaults ret = super.getDefaults();
-					// ret.put("defaultFont", new Font(Font.SANS_SERIF, 0, 11));
-					// return ret;
-					// }
-					//
-					// });
-
 				}
 
 				else {
@@ -153,55 +140,6 @@ public class GUIController {
 		tool.moveToFront();
 	}
 
-	// /**
-	// * Activates listener to a computer keyboard
-	// * @author nadiaelhaddaoui
-	// */
-	// private class KeyPress implements KeyListener {
-	// // Set<Character> pressed = new HashSet<Character>();
-	//
-	// @Override
-	// public synchronized void keyPressed(KeyEvent e) {
-	// int keyCode = e.getKeyCode();
-	//
-	// // pressed.add((char) e.getKeyCode());
-	// switch (e.getKeyCode()) {
-	// case KeyEvent.VK_F1:
-	// add(new CustomerTool(clientController, getGUIController()));
-	// System.out.println("1. Du tryckte på F1");
-	// break;
-	//
-	// case KeyEvent.VK_F2:
-	// add(new InvoiceTool(clientController, getGUIController()));
-	// System.out.println("2. Du tryckte på F2");
-	// break;
-	//
-	// case KeyEvent.VK_F3:
-	// add(new ArticleTool(clientController, getGUIController()));
-	// System.out.println("3. Du tryckte på F3");
-	// break;
-	//
-	// default:
-	// System.out.println("Annan knapp " + KeyEvent.getKeyText(keyCode));
-	// e.consume();
-	// break;
-	//
-	// }
-	// }
-	//
-	// @Override
-	// public synchronized void keyReleased(KeyEvent e) {
-	// e.consume();
-	//
-	// }
-	//
-	// @Override
-	// public void keyTyped(KeyEvent e) {
-	// e.consume();
-	// }
-	//
-	// }
-
 	/**
 	 * The sidebar.
 	 * @author Robin Overgaard
@@ -209,15 +147,8 @@ public class GUIController {
 	 */
 	private class Sidebar extends JPanel implements ActionListener {
 
-		// private ArrayList<Toolbox> activeTools = new ArrayList<Toolbox>();
 		private JPanel pnlSideNorth = new JPanel();
 		private JPanel pnlSideSouth = new JPanel();
-
-		// private JComponent old[] = new JComponent[] {
-		// new ActionJButton("Customer", "tool_cust"),
-		// new ActionJButton("Customer", "tool_customer"),
-		// new ActionJButton("Invoice", "tool_inv"),
-		// new ActionJButton("Article", "tool_art") };
 
 		private JComponent top[] = new JComponent[] {
 				new ActionJButton("Invoice", "tool_invoice"),
@@ -227,9 +158,12 @@ public class GUIController {
 		private JComponent bottom[] = new JComponent[] {
 				new ActionJButton("Admin", "tool_admin"),
 				new ActionJButton("Social", "tool_social"),
-			//	new ActionJButton("Settings", "tool_settings"),
+				// new ActionJButton("Settings", "tool_settings"),
 				new ActionJButton("Quit", "link_exit") };
 
+		/**
+		 * Creates the sidebar.
+		 */
 		public Sidebar() {
 
 			setPreferredSize(new Dimension(175, 0));
@@ -246,6 +180,12 @@ public class GUIController {
 			add(pnlSideSouth, BorderLayout.SOUTH);
 		}
 
+		/**
+		 * Creates a styled panel for groups in the sidebar.
+		 * @param objects the group of component to build a panel of
+		 * @param title the title displayed on top of the panel
+		 * @return the created panel
+		 */
 		private JPanel createComponentPanel(JComponent[] objects, String title) {
 
 			JPanel pnl = new JPanel();

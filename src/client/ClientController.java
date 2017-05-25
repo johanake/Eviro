@@ -26,19 +26,19 @@ import shared.Eviro;
  * Creates and sends objects to the client.
  * @author Robin Overgaard
  * @author Johan Åkesson
+ * @author Peter Folke
  * @version 1.1
  */
 public class ClientController {
+
 	private StrongPasswordEncryptor passCryptor = new StrongPasswordEncryptor();
 	private FileReader reader;
-	private FileWriter writer;
 	private Properties properties = new Properties();
 	private User activeUser = null;
 	private Client client;
 
 	/**
 	 * Creates a ClientController object.
-	 * @param client the client of the system
 	 */
 	public ClientController() {
 
@@ -55,53 +55,23 @@ public class ClientController {
 
 	}
 
-	public Client getClient() {
-		return this.client;
-	}
-
-	public boolean checkPassword(String user, String pass) {
-		ArrayList<Entity> userList = search(new Object[] { "", user, "" }, Eviro.ENTITY_USER);
-		if (userList.isEmpty()) {
-			return false;
-		} else if (passCryptor.checkPassword(pass, (String) userList.get(0).getData()[2])) {
-			if (activeUser == null) {
-				setActiveUser(userList.get(0).getData());
-				// activeUser.setOperation(Eviro.LOGIN);
-				// client.sendObject(activeUser);
-			}
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public String getProperty(String property) {
-		return properties.getProperty(property);
-	}
-
-	public void setProperty(String property, String value) {
-		String oldProperty = getProperty(property);
-		properties.setProperty(property, value);
-		try {
-			properties.store(new FileWriter("clientConfig"), "Changed: " + property + " (old = " + value + ")");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public StrongPasswordEncryptor getPassCryptor() {
-		return passCryptor;
-	}
-
 	/**
 	 * Creates and sends a "update operation" object to the server.
 	 * @param data data to use when updating
 	 * @param entityType the type of entity to update
+	 * @return whether the update was successfull or not
 	 */
 	public boolean update(String[] data, int entityType) {
 		return update(null, data, entityType, false);
 	}
 
+	/**
+	 * Creates and sends a "update operation" object to the server.
+	 * @param tool
+	 * @param data data to use when updating
+	 * @param entityType the type of entity to update
+	 * @return whether the update was successfull or not
+	 */
 	public boolean update(Tool tool, String[] data, int entityType) {
 		return update(tool, data, entityType, false);
 	}
@@ -184,6 +154,14 @@ public class ClientController {
 		create(data, entityType, false, false);
 	}
 
+	/**
+	 * Creates and sends a "create operation" object to the server.
+	 * @param data data to use when creating
+	 * @param entityType the type of entity to create
+	 * @param returnData whether to return data or not
+	 * @param allowDuplicates whether to allow duplicates in the db or not
+	 * @return the created resource
+	 */
 	public ArrayList<Entity> create(Object[] data, int entityType, boolean returnData, boolean allowDuplicates) {
 
 		ArrayList<Entity> response = new ArrayList<Entity>();
@@ -278,7 +256,11 @@ public class ClientController {
 		return false;
 	}
 
-	private boolean escape(Object[] data) {
+	/**
+	 * Escapes potentionally dangerous chars from data.
+	 * @param data the arrays of strings to check
+	 */
+	private void escape(Object[] data) {
 
 		for (int i = 0; i < data.length; i++) {
 
@@ -289,7 +271,6 @@ public class ClientController {
 
 		}
 
-		return false;
 	}
 
 	/**
@@ -329,6 +310,44 @@ public class ClientController {
 
 		return null;
 
+	}
+
+	public Client getClient() {
+		return this.client;
+	}
+
+	public boolean checkPassword(String user, String pass) {
+		ArrayList<Entity> userList = search(new Object[] { "", user, "" }, Eviro.ENTITY_USER);
+		if (userList.isEmpty()) {
+			return false;
+		} else if (passCryptor.checkPassword(pass, (String) userList.get(0).getData()[2])) {
+			if (activeUser == null) {
+				setActiveUser(userList.get(0).getData());
+				// activeUser.setOperation(Eviro.LOGIN);
+				// client.sendObject(activeUser);
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public String getProperty(String property) {
+		return properties.getProperty(property);
+	}
+
+	public void setProperty(String property, String value) {
+		String oldProperty = getProperty(property);
+		properties.setProperty(property, value);
+		try {
+			properties.store(new FileWriter("clientConfig"), "Changed: " + property + " (old = " + value + ")");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public StrongPasswordEncryptor getPassCryptor() {
+		return passCryptor;
 	}
 
 	public synchronized User getActiveUser() {

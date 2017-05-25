@@ -42,13 +42,6 @@ public class Eviro {
 	public static final int VALIDATOR_DOUBLE = 2;
 
 	/**
-	 * Setup system before instantiation.
-	 */
-	private void setup() {
-
-	}
-
-	/**
 	 * Instantiate the main component(s) of the system.
 	 */
 	private void start() {
@@ -90,7 +83,6 @@ public class Eviro {
 	public static void main(String[] args) {
 
 		Eviro app = new Eviro();
-		app.setup();
 		app.start();
 
 	}

@@ -128,7 +128,6 @@ public class ArticleTool extends Tool implements Updatable {
 		btnUpdate.setMnemonic(KeyEvent.VK_S);
 		btnFind.setMnemonic(KeyEvent.VK_F);
 		btnReset.setMnemonic(KeyEvent.VK_R);
-		setBindings(this, ltfAll, Eviro.ENTITY_PRODUCT);
 	}
 
 	private void getSales(String articleNo) {

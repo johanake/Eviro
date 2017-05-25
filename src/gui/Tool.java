@@ -5,12 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -20,7 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.InternalFrameAdapter;
@@ -32,25 +28,24 @@ import enteties.Entity;
 import shared.Eviro;
 import tools.SearchResult;
 
+/**
+ * A class that defines base functionality and ensures a uniform layout for all the tools used in the system.
+ * @author Robin Overgaard
+ * @version 1.0
+ */
+
 public class Tool extends JInternalFrame {
 
-	private Color bgColor = new Color(233, 236, 242);
-
-	private Menu menu = new Menu();
-
-	public JPanel pnlNorth = new JPanel(new BorderLayout());
-	public JPanel pnlCenter = new JPanel(new BorderLayout());
-	public JPanel pnlSouth = new JPanel(new BorderLayout());
-
-	public JTabbedPane tabbedPane = new JTabbedPane();
+	protected JPanel pnlNorth = new JPanel(new BorderLayout());
+	protected JPanel pnlCenter = new JPanel(new BorderLayout());
+	protected JPanel pnlSouth = new JPanel(new BorderLayout());
+	protected JTabbedPane tabbedPane = new JTabbedPane();
+	protected ClientController clientCtrlr;
+	protected GUIController guiCtrlr;
 
 	static int openFrameCount = 0;
 
-	public ClientController clientCtrlr;
-	public GUIController guiCtrlr;
-
-	KeyStroke ctrlF5 = KeyStroke.getKeyStroke(KeyEvent.VK_F5,
-			InputEvent.CTRL_DOWN_MASK, true);
+	private Color bgColor = new Color(233, 236, 242);
 
 	protected Tool(String title, ClientController clientController, GUIController guiController) {
 		super(title, true, true, false, true);
@@ -58,45 +53,6 @@ public class Tool extends JInternalFrame {
 		this.guiCtrlr = guiController;
 		setup();
 		openFrameCount++;
-
-	}
-
-	public void setBindings(Updatable tool, LabledTextField[] ltfAll, int entityType) {
-		this.getInputMap(JComponent.WHEN_FOCUSED).put(ctrlF5, "refresh");
-		this.getActionMap().put("refresh", new RefreshAction(tool, ltfAll, entityType));
-	}
-
-	public class RefreshAction extends AbstractAction {
-
-		Updatable tool;
-		LabledTextField[] ltfAll;
-		int entityType;
-
-		RefreshAction(Updatable tool, LabledTextField[] ltfAll, int entityType) {
-			this.tool = tool;
-			this.ltfAll = ltfAll;
-			this.entityType = entityType;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			search(tool, ltfAll, entityType);
-		}
-	}
-
-	protected void get(Updatable tool, int entitytype) {
-
-		ArrayList<Entity> response = clientCtrlr.getAllbyType(entitytype);
-
-		Object[][] results = new Object[response.size()][4];
-
-		for (int i = 0; i < results.length; i++) {
-			results[i] = response.get(i).getData();
-
-		}
-
-		tool.setValues(results);
-
 	}
 
 	protected ArrayList<Entity> search(String[] values, int entitytype) {
@@ -294,8 +250,10 @@ public class Tool extends JInternalFrame {
 		setTfEditable(new JTextComponent[] { field }, enabled);
 	}
 
+	/**
+	 * Set up ui using the EDT
+	 */
 	private void setup() {
-
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -357,7 +315,6 @@ public class Tool extends JInternalFrame {
 		String[] values = new String[fields.length];
 		String[] names = new String[fields.length];
 		Color bgColor = Color.WHITE;
-		// Color errColor = new Color(169, 46, 34); // Röd?
 		Color errColor = new Color(255, 220, 35);
 
 		for (int i = 0; i < values.length; i++) {

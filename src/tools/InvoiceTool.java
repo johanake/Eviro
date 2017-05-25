@@ -51,7 +51,7 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	private JButton[] allButtons = { btnNew, btnReset, btnFind, btnPrint, btnCredit, btnBook, btnArticle };
 	private JButton[] defaultButtons = { btnReset, btnFind };
-	private JButton[] editingButtons = { btnReset, btnArticle,btnNew  };
+	private JButton[] editingButtons = { btnReset, btnArticle, btnNew };
 	private JButton[] lookingButtons = { btnReset, btnPrint, btnCredit };
 	private JButton[] creditButtons = { btnReset, btnArticle, btnBook };
 
@@ -115,7 +115,6 @@ public class InvoiceTool extends Tool implements Updatable {
 		setButtons(defaultButtons);
 		setTfEditable(ltfAll, true);
 		setupButtonShortcuts();
-		setBindings(this, ltfAll, Eviro.ENTITY_INVOICE);
 
 	}
 

@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -18,7 +19,9 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.JTextComponent;
+
 import client.ClientController;
+import enteties.Entity;
 import gui.GUIController;
 import gui.Table;
 import gui.Tool;
@@ -27,7 +30,6 @@ import shared.Eviro;
 
 /**
  * A GUI tool for Eviro users to communicate with other Eviro users.
- * 
  * @author Mattias Sundquist
  */
 public class SocialTool extends Tool implements Updatable {
@@ -42,7 +44,6 @@ public class SocialTool extends Tool implements Updatable {
 
 	/**
 	 * Builds an internal JFrame and creates a "wall" where Eviro users can communicate with each other.
-	 * 
 	 * @param clientController The ClientController to send to the tool
 	 * @param guiController The GUIController to send to the tool
 	 */
@@ -76,6 +77,21 @@ public class SocialTool extends Tool implements Updatable {
 		btnOpen.setMnemonic(KeyEvent.VK_O);
 		btnUpdate.setMnemonic(KeyEvent.VK_U);
 		btnNew.setMnemonic(KeyEvent.VK_N);
+	}
+
+	protected void get(Updatable tool, int entitytype) {
+
+		ArrayList<Entity> response = clientCtrlr.getAllbyType(entitytype);
+
+		Object[][] results = new Object[response.size()][4];
+
+		for (int i = 0; i < results.length; i++) {
+			results[i] = response.get(i).getData();
+
+		}
+
+		tool.setValues(results);
+
 	}
 
 	/**
@@ -120,9 +136,7 @@ public class SocialTool extends Tool implements Updatable {
 
 	/**
 	 * An ActionListener class that handles button clicks.
-	 * 
 	 * @author Mattias Sundquist
-	 *
 	 */
 	private class ButtonListener implements ActionListener {
 
@@ -137,31 +151,29 @@ public class SocialTool extends Tool implements Updatable {
 
 			switch (e.getActionCommand()) {
 
-				case "update":
-					get(getThis(), Eviro.ENTITY_FORUMMESSAGE);
-					break;
+			case "update":
+				get(getThis(), Eviro.ENTITY_FORUMMESSAGE);
+				break;
 
-				case "new":
-					guiCtrlr.add(new ReadWriteMessage("Write new Message"));
-					break;
+			case "new":
+				guiCtrlr.add(new ReadWriteMessage("Write new Message"));
+				break;
 
-				case "open":
-					if (posts.getModel().getValueAt(posts.getSelectedRow(), 0) != null) {
-						Object[] obj = messageList.get(posts.getSelectedRow());
-						guiCtrlr.add(new ReadWriteMessage("Read message from " + obj[1].toString(), obj));
-					} else {
-						JOptionPane.showMessageDialog(null, "No message is selected.");
-					}
-					break;
+			case "open":
+				if (posts.getModel().getValueAt(posts.getSelectedRow(), 0) != null) {
+					Object[] obj = messageList.get(posts.getSelectedRow());
+					guiCtrlr.add(new ReadWriteMessage("Read message from " + obj[1].toString(), obj));
+				} else {
+					JOptionPane.showMessageDialog(null, "No message is selected.");
+				}
+				break;
 			}
 		}
 	}
 
 	/**
 	 * A GUI tool used by the SocialTool class to show messages.
-	 * 
 	 * @author Mattias Sundquist
-	 *
 	 */
 	private class ReadWriteMessage extends Tool implements Updatable {
 
@@ -176,7 +188,6 @@ public class SocialTool extends Tool implements Updatable {
 
 		/**
 		 * Constructor for writing a new message
-		 * 
 		 * @param title The windows title.
 		 */
 		public ReadWriteMessage(String title) {
@@ -188,7 +199,6 @@ public class SocialTool extends Tool implements Updatable {
 
 		/**
 		 * Constructor for reading a message.
-		 * 
 		 * @param title The windows title.
 		 * @param values The topic and message to be read.
 		 */
@@ -257,9 +267,7 @@ public class SocialTool extends Tool implements Updatable {
 
 		/**
 		 * An ActionListener class that handles button clicks.
-		 * 
 		 * @author Mattias Sundquist
-		 *
 		 */
 		private class ButtonListener implements ActionListener {
 
@@ -274,23 +282,26 @@ public class SocialTool extends Tool implements Updatable {
 
 				switch (e.getActionCommand()) {
 
-					case "send":
-						if (ltfTopic.getText().trim().length() > 0 && txtMessage.getText().trim().length() > 0) {
-							Object[] obj = { null, clientCtrlr.getActiveUser().getData()[1], ltfTopic.getText(),
-									txtMessage.getText() };
-							SocialTool.this.clientCtrlr.create(obj, Eviro.ENTITY_FORUMMESSAGE);
+				case "send":
+					if (ltfTopic.getText().trim().length() > 0 && txtMessage.getText().trim().length() > 0) {
+						Object[] obj = {
+								null,
+								clientCtrlr.getActiveUser().getData()[1],
+								ltfTopic.getText(),
+								txtMessage.getText() };
+						SocialTool.this.clientCtrlr.create(obj, Eviro.ENTITY_FORUMMESSAGE);
 
-							try {
-								getFrame().setClosed(true);
-							} catch (PropertyVetoException e1) {
-								e1.printStackTrace();
-							}
+						try {
+							getFrame().setClosed(true);
+						} catch (PropertyVetoException e1) {
+							e1.printStackTrace();
+						}
 
-							get(getThis(), Eviro.ENTITY_FORUMMESSAGE);
+						get(getThis(), Eviro.ENTITY_FORUMMESSAGE);
 
-						} else
-							JOptionPane.showMessageDialog(null, "You must enter a topic and a message");
-						break;
+					} else
+						JOptionPane.showMessageDialog(null, "You must enter a topic and a message");
+					break;
 				}
 			}
 		}

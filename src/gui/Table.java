@@ -7,6 +7,11 @@ import javax.swing.table.DefaultTableModel;
 
 import enteties.Entity;
 
+/**
+ * A table extension that in it's constructor can set editing to either be enabled or disabled.
+ * @author Robin Overgaard
+ * @version 1.0
+ */
 public class Table extends JTable {
 
 	private DefaultTableModel model;
