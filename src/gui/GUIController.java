@@ -36,6 +36,7 @@ import tools.SocialTool;
 /**
  * Handles client side gui operations of the system.
  * @author Robin Overgaard
+ * @author Peter Sjögren
  * @version 1.0
  */
 

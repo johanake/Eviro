@@ -30,27 +30,25 @@ public class Login extends JFrame implements ActionListener, Runnable {
 	private ClientController clientController;
 
 	private JLabel userLabel = new JLabel("Username");
-	private JLabel passLabel = new JLabel("Password");	
+	private JLabel passLabel = new JLabel("Password");
 	private JPanel labelPanel = new JPanel(new GridLayout(2, 1));
 
 	private JTextField userField = new JTextField();
 	private JTextField passField = new JPasswordField();
 	private JPanel fieldPanel = new JPanel(new GridLayout(2, 1));
 
-//	private ImageIcon loginIcon = new ImageIcon("images/transparent_green_logo.png");
-	private ImageIcon loginIcon = new ImageIcon(new ImageIcon("images/transparent_green_logo.png").getImage().getScaledInstance(75, 75, Image.SCALE_DEFAULT));
-	
+	private ImageIcon loginIcon = new ImageIcon(new ImageIcon("images/transparent_green_logo.png").getImage()
+			.getScaledInstance(75, 75, Image.SCALE_DEFAULT));
 	private JLabel iconLabel = new JLabel();
-	
+
 	private JPanel upperpanel = new JPanel(new GridLayout(1, 3));
 
 	private JButton loginButton = new JButton("Login");
 	private JButton adminButton = new JButton("Admin");
 	private JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
-	
+
 	private Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
 	private BorderLayout layout = new BorderLayout();
-	
 
 	public Login(ClientController clientController) {
 		this.clientController = clientController;
@@ -66,23 +64,22 @@ public class Login extends JFrame implements ActionListener, Runnable {
 
 		labelPanel.add(userLabel);
 		labelPanel.add(userField);
-		
+
 		fieldPanel.add(passLabel);
 		fieldPanel.add(passField);
 
 		iconLabel.setIcon(loginIcon);
-	
+
 		upperpanel.add(iconLabel);
 		upperpanel.add(labelPanel);
 		upperpanel.add(fieldPanel);
 
 		buttonPanel.add(adminButton);
 		buttonPanel.add(loginButton);
-		
+
 		add(upperpanel, BorderLayout.NORTH);
 		add(buttonPanel, BorderLayout.SOUTH);
 
-		
 		loginButton.addActionListener(this);
 		adminButton.addActionListener(this);
 
@@ -97,8 +94,6 @@ public class Login extends JFrame implements ActionListener, Runnable {
 
 		case "Login":
 
-
-			
 			if (!clientController.getClient().connectToServer()) {
 				JOptionPane.showMessageDialog(this, "Unable to connect to server!\nPlease try again or contact admin.");
 			}
@@ -198,6 +193,6 @@ public class Login extends JFrame implements ActionListener, Runnable {
 	}
 
 	public void main(String[] args) {
-	
+
 	}
 }

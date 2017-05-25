@@ -14,6 +14,7 @@ import enteties.User;
  * Handles all Client.
  * 
  * @author Mattias Sundquist
+ * @author Peter Sjögren
  *
  */
 public class Server extends Thread {

@@ -15,7 +15,6 @@ import shared.Eviro;
 
 public class AdminTool extends Tool implements Updatable {
 
-	private ButtonListener buttonListener;
 	private Tab[] tabs = new Tab[] { new Tab("Users"), new Tab("Network") };
 
 	private LabledTextField ltfUserID = new LabledTextField("User ID");
@@ -33,11 +32,12 @@ public class AdminTool extends Tool implements Updatable {
 	private JButton[] allButtons = { btnNew, btnEdit, btnUpdate, btnFind, btnReset };
 	private JButton[] defaultButtons = { btnReset, btnFind, btnNew };
 	private JButton[] lookingButtons = { btnReset, btnEdit };
-	private JButton[] editingButtons = { btnReset, btnUpdate};
+	private JButton[] editingButtons = { btnReset, btnUpdate };
+	private ButtonListener buttonListener = new ButtonListener();
 
+	
 	public AdminTool(ClientController clientController, GUIController guiController) {
 		super("Admin", clientController, guiController);
-		buttonListener = new ButtonListener();
 		setTabs(tabs);
 		jpfUserPassword.setName("User Password");
 		setContent(0, new JComponent[] { ltfUserID, ltfUserName, jpfUserPassword });
@@ -72,7 +72,8 @@ public class AdminTool extends Tool implements Updatable {
 			switch (e.getActionCommand()) {
 
 			case "create":
-				ltfUserPassword.setText(clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword())));
+				ltfUserPassword.setText(
+						clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword())));
 				ltfUserID.setText(null);
 				create(getThis(), Eviro.ENTITY_USER);
 				break;
@@ -134,18 +135,6 @@ public class AdminTool extends Tool implements Updatable {
 		for (int i = 0; i < ltfAll.length; i++) {
 			text[i] = ltfAll[i].getText();
 		}
-
-		// text[2] = clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword()));
-		//
-		// text[2] = new String(jpfUserPassword.getPassword());
-		//
-		// System.out.println("password: " + jpfUserPassword.getPassword());
-		//
-		// if (text[2] != null)
-		// text[2] = clientCtrlr.getPassCryptor().encryptPassword(text[2]);
-		//
-		// System.out.println(Arrays.toString(text));
-
 		return text;
 
 	}

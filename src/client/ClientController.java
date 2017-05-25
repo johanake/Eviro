@@ -26,7 +26,7 @@ import shared.Eviro;
  * Creates and sends objects to the client.
  * @author Robin Overgaard
  * @author Johan Åkesson
- * @author Peter Folke
+ * @author Peter Sjögren
  * @version 1.1
  */
 public class ClientController {
@@ -43,7 +43,7 @@ public class ClientController {
 	public ClientController() {
 
 		try {
-			reader = new FileReader("clientConfig");
+			reader = new FileReader("config/clientConfig.dat");
 			properties.load(reader);
 		} catch (IOException e) {
 			e.printStackTrace();

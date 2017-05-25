@@ -15,6 +15,7 @@ import gui.Login;
  * Handles all traffic to and from the server.
  * 
  * @author Mattias Sundquist
+ * @author Peter Sjögren
  */
 public class Client extends Thread {
 
@@ -34,8 +35,6 @@ public class Client extends Thread {
 	 */
 	public Client(ClientController clientController) {
 		this.clientController = clientController;
-		// connectToServer();
-		// new GUIController(clientController);
 	}
 
 	/**
@@ -44,9 +43,6 @@ public class Client extends Thread {
 	public boolean connectToServer() {
 
 		try {
-			System.out.println(clientController.getProperty("port"));
-			System.out.println(clientController.getProperty("ip"));
-
 			socket.connect(new InetSocketAddress(clientController.getProperty("ip"),
 					Integer.parseInt(clientController.getProperty("port"))), 1000);
 
@@ -93,30 +89,4 @@ public class Client extends Thread {
 		}
 		return null;
 	}
-
-	/**
-	 * Waits for incoming messages from the server. Is called in the run method.
-	 */
-	// public Object waitForObject() {
-	// try {
-	// returnObject = objInput.readObject();
-	// System.out.println("Objekt mottaget i klient");
-	// } catch (ClassNotFoundException | IOException e) {
-	// e.printStackTrace();
-	// }
-	// return returnObject;
-	//
-	// }
-
-	/**
-	 * The run method for this clients thread. Calls the "waitForMessage()"
-	 * method.
-	 */
-	// public void run() {
-	//
-	// while (!interrupted()) {
-	// waitForObject();
-	// }
-	// }
-
 }

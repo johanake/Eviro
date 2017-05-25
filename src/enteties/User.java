@@ -1,7 +1,10 @@
 package enteties;
 
 import java.io.Serializable;
-
+/**
+ * User represents a user entity in the system
+ * @author Peter Sjögren
+ */
 public class User implements Serializable, Entity {
 
 	private int operation;
