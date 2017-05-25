@@ -13,6 +13,12 @@ import gui.Tool;
 import gui.Updatable;
 import shared.Eviro;
 
+/**
+ * 
+ * @author peter
+ *
+ */
+
 public class AdminTool extends Tool implements Updatable {
 
 	private Tab[] tabs = new Tab[] { new Tab("Users"), new Tab("Network") };

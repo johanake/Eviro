@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 /**
  * Handles the connection to the database.
- * @author Peter Folke, Mattias Sundquist
+ * @author Peter Sjögren, Mattias Sundquist
  */
 public class ConnectDB {
 

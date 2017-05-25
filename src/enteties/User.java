@@ -11,7 +11,6 @@ public class User implements Serializable, Entity {
 	private Object[] data;
 
 	public User() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/*

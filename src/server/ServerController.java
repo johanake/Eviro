@@ -30,7 +30,7 @@ import shared.Eviro;
  * Handles most of the logic between the server and the database. Also logs
  * traffic to and from database.
  * 
- * @author Mattias Sundquist, Peter Folke
+ * @author Mattias Sundquist, Peter Sjögren
  */
 public class ServerController {
 
@@ -238,7 +238,6 @@ public class ServerController {
 		String query = "SELECT * FROM " + tableName;
 
 		logAppend(query);
-		System.out.println("buildGetAllQuery: " + query);
 		return query;
 	}
 
@@ -250,7 +249,6 @@ public class ServerController {
 
 		Object[] info = ei.getData();
 
-		System.out.println(Arrays.toString(info));
 
 		String tableName = getTableName(ei);
 
@@ -260,13 +258,11 @@ public class ServerController {
 		String commentTableQuery = "INSERT INTO comment (comment, date) VALUES ('" + info[2] + "', '" + info[3] + "');";
 		String commentId = connectDB.executeUpdateQueryAndReturnGeneratedId(commentTableQuery);
 		logAppend(commentTableQuery);
-		System.out.println("executeUpdateQueryAndReturnGeneratedId: " + commentTableQuery);
 
 		String entityCommentTableQuery = "INSERT INTO " + entity + "comment (commentId, " + entity + "Id) VALUES ('"
 				+ commentId + "', " + entityNo + ");";
 		connectDB.executeInsertOrDeleteQuery(entityCommentTableQuery);
 		logAppend(entityCommentTableQuery);
-		System.out.println("buildAndExecuteInsertCommentQuery: " + entityCommentTableQuery);
 
 	}
 
@@ -279,7 +275,6 @@ public class ServerController {
 
 		Object[] info = ei.getData();
 
-		System.out.println(Arrays.toString(info));
 		String tableName = getTableName(ei);
 		String entity = (String) info[1];
 		String entityNo = (String) info[0];
@@ -289,7 +284,6 @@ public class ServerController {
 				+ entityNo + "';";
 
 		logAppend(query);
-		System.out.println("buildGetCommentQuery: " + query);
 		return query;
 	}
 
@@ -310,8 +304,6 @@ public class ServerController {
 
 		String query = "SELECT * FROM " + tableName + " WHERE ";
 		String and = "";
-		System.out.println(Arrays.toString(colNames));
-		System.out.println(info.length);
 		for (int i = 0; i < colNames.length; i++) {
 			if (info[i] != null && info[i].toString().trim().length() > 0) {
 				query += and + colNames[i] + " LIKE '%" + info[i] + "%'";
@@ -320,7 +312,6 @@ public class ServerController {
 		}
 
 		logAppend(query);
-		System.out.println("buildSearchQuery: " + query);
 		return query;
 	}
 
@@ -353,7 +344,6 @@ public class ServerController {
 		}
 
 		logAppend(query);
-		System.out.println("buildInsertQuery: " + query);
 		return query;
 	}
 
@@ -380,7 +370,6 @@ public class ServerController {
 		query += " WHERE " + colNames[0] + " = " + info[0];
 
 		logAppend(query);
-		System.out.println("buildUpdateQuery: " + query);
 		return query;
 	}
 
@@ -400,7 +389,6 @@ public class ServerController {
 		String query = "DELETE FROM " + tableName + " WHERE " + colNames[0] + " = " + info[0];
 
 		logAppend(query);
-		System.out.println("buildDeleteQuery: " + query);
 		return query;
 	}
 

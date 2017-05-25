@@ -104,9 +104,6 @@ public class ClientController {
 				oldData[i] = Integer.toString((int) oldData[i]);
 			}
 
-			System.out.println(oldData[i]);
-			System.out.println(data[i]);
-
 			if (!oldData[i].equals(data[i])) {
 
 				if (oldData[i].toString().trim().length() <= 0) {
@@ -323,8 +320,6 @@ public class ClientController {
 		} else if (passCryptor.checkPassword(pass, (String) userList.get(0).getData()[2])) {
 			if (activeUser == null) {
 				setActiveUser(userList.get(0).getData());
-				// activeUser.setOperation(Eviro.LOGIN);
-				// client.sendObject(activeUser);
 			}
 			return true;
 		} else {
@@ -337,7 +332,6 @@ public class ClientController {
 	}
 
 	public void setProperty(String property, String value) {
-		String oldProperty = getProperty(property);
 		properties.setProperty(property, value);
 		try {
 			properties.store(new FileWriter("clientConfig"), "Changed: " + property + " (old = " + value + ")");

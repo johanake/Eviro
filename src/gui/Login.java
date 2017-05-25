@@ -26,6 +26,11 @@ import server.ServerController;
 import shared.Eviro;
 import tools.AdminTool;
 
+/**
+ * 
+ * @author peter
+ *
+ */
 public class Login extends JFrame implements ActionListener, Runnable {
 	private ClientController clientController;
 
@@ -169,7 +174,6 @@ public class Login extends JFrame implements ActionListener, Runnable {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println(e.getActionCommand());
 			switch (e.getActionCommand()) {
 			case "Edit":
 				ipField.setEditable(true);
