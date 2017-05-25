@@ -47,6 +47,12 @@ public class Tool extends JInternalFrame {
 
 	private Color bgColor = new Color(233, 236, 242);
 
+	/**
+	 * Constructor, creates the tool.
+	 * @param title the title of the tool
+	 * @param clientController a clientcontroller instance
+	 * @param guiController a guiController instance
+	 */
 	protected Tool(String title, ClientController clientController, GUIController guiController) {
 		super(title, true, true, false, true);
 		this.clientCtrlr = clientController;
@@ -55,6 +61,12 @@ public class Tool extends JInternalFrame {
 		openFrameCount++;
 	}
 
+	/**
+	 * Searches for entities of the specified type.
+	 * @param values the values to search with
+	 * @param entitytype the type of entity
+	 * @return a list containg the search result
+	 */
 	protected ArrayList<Entity> search(String[] values, int entitytype) {
 
 		ArrayList<Entity> resultList = clientCtrlr.search(values, entitytype);
@@ -66,6 +78,12 @@ public class Tool extends JInternalFrame {
 			return resultList;
 	}
 
+	/**
+	 * Searches for entities of the specified type.
+	 * @param tool the updatable implementation to get and set values from/to
+	 * @param ltfAll the textfields containing all the search values
+	 * @param entitytype the type of entity
+	 */
 	protected void search(Updatable tool, LabledTextField[] ltfAll, int entitytype) {
 
 		ArrayList<Entity> response = clientCtrlr.search(tool.getValues(), entitytype);
@@ -86,6 +104,11 @@ public class Tool extends JInternalFrame {
 		}
 	}
 
+	/**
+	 * Creates a new entity of the specified type.
+	 * @param tool the updatable implementation to get and set values from/to
+	 * @param entitytype the type of entity
+	 */
 	protected void create(Updatable tool, int entitytype) {
 
 		ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true, false);
@@ -103,6 +126,13 @@ public class Tool extends JInternalFrame {
 
 	}
 
+	/**
+	 * Updates a entity.
+	 * @param tool the updatable implementation to get and set values from/to
+	 * @param entitytype the type of entity
+	 * @param isSilent
+	 * @return whether the update was succesfull or not
+	 */
 	protected boolean update(Updatable tool, int entitytype, boolean isSilent) {
 		if (clientCtrlr.update(this, tool.getValues(), entitytype, isSilent)) {
 			if (!isSilent)
@@ -119,17 +149,23 @@ public class Tool extends JInternalFrame {
 
 	}
 
+	/**
+	 * Updates a entity.
+	 * @param tool the updatable implementation to get and set values from/to
+	 * @param entitytype the type of entity
+	 * @return whether the update was succesfull or not
+	 */
 	protected boolean update(Updatable tool, int entitytype) {
 		return update(tool, entitytype, false);
 	}
 
+	/**
+	 * Creates tabbed pages in the tool.
+	 * @param tabs the panels to be used as tabs
+	 */
 	protected void setTabs(JPanel[] tabs) {
 
 		tabbedPane.setBorder(new EmptyBorder(20, 0, 0, 0));
-
-		// for (JPanel t : tabs) {
-		// tabbedPane.addTab(t.getName(), t);
-		// }
 
 		for (int i = 0; i < tabs.length; i++) {
 
@@ -159,6 +195,10 @@ public class Tool extends JInternalFrame {
 
 	}
 
+	/**
+	 * Sets what buttons to display in the tool.
+	 * @param buttons the buttons to display
+	 */
 	protected void setButtons(JButton[] buttons) {
 
 		setFocusable(true);
@@ -177,6 +217,10 @@ public class Tool extends JInternalFrame {
 		repaint();
 	}
 
+	/**
+	 * Add content to either the first tab of the tool or if there's no tabs the center panel.
+	 * @param content the content
+	 */
 	protected void setContent(JComponent[] content) {
 
 		if (tabbedPane.getTabCount() > 0) {
@@ -189,6 +233,11 @@ public class Tool extends JInternalFrame {
 
 	}
 
+	/**
+	 * Add content to either the specified tab of the tool or if there's no tabs the center panel.
+	 * @param tabIndex the tab to add the content to
+	 * @param content the content
+	 */
 	protected void setContent(int tabIndex, JComponent[] content) {
 
 		if (tabbedPane.getTabCount() <= 0) {
@@ -201,10 +250,21 @@ public class Tool extends JInternalFrame {
 		}
 	}
 
+	/**
+	 * Add content to the specified panel.
+	 * @param pnl the panel to add the content to
+	 * @param content the content
+	 */
 	protected void setContent(JPanel pnl, JComponent[] content) {
 		setContent(pnl, BorderLayout.NORTH, content);
 	}
 
+	/**
+	 * Add content to the specified panel.
+	 * @param pnl the panel to add the content to
+	 * @param constraints the layout constraint of where to add the content
+	 * @param content the content
+	 */
 	protected void setContent(JPanel pnl, Object constraints, JComponent[] content) {
 		JPanel pnlContent = new JPanel(new BorderLayout());
 		JPanel pnlContentLeft = new JPanel(new GridLayout(content.length, 1));
@@ -226,6 +286,11 @@ public class Tool extends JInternalFrame {
 
 	}
 
+	/**
+	 * Sets whether an array of specified textcomponents shoud be editable or not.
+	 * @param fields the array of textcomponents
+	 * @param enabled whether the textcomponents should be editable or not
+	 */
 	protected void setTfEditable(JTextComponent[] fields, Boolean enabled) {
 
 		Color fieldColor;
@@ -246,12 +311,17 @@ public class Tool extends JInternalFrame {
 
 	}
 
+	/**
+	 * Sets whether a specified textcomponent shoud be editable or not.
+	 * @param field the textcomponent
+	 * @param enabled whether the textcomponent should be editable or not
+	 */
 	protected void setTfEditable(JTextComponent field, Boolean enabled) {
 		setTfEditable(new JTextComponent[] { field }, enabled);
 	}
 
 	/**
-	 * Set up ui using the EDT
+	 * Set up GUI using the EDT.
 	 */
 	private void setup() {
 		SwingUtilities.invokeLater(new Runnable() {

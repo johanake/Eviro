@@ -18,9 +18,11 @@ import shared.Eviro;
  * 
  * @author Peter Sjögren
  */
-public class AdminTool extends Tool implements Updatable {
 
-	private Tab[] tabs = new Tab[] { new Tab("Users") };
+	public class AdminTool extends Tool implements Updatable {
+
+	private ButtonListener buttonListener;
+	private Tab[] tabs = new Tab[] { new Tab("Users"), new Tab("Network") };
 
 	private LabledTextField ltfUserID = new LabledTextField("User ID");
 	private LabledTextField ltfUserName = new LabledTextField("User Name");
@@ -38,7 +40,6 @@ public class AdminTool extends Tool implements Updatable {
 	private JButton[] defaultButtons = { btnReset, btnFind, btnNew };
 	private JButton[] lookingButtons = { btnReset, btnEdit };
 	private JButton[] editingButtons = { btnReset, btnUpdate };
-	private ButtonListener buttonListener = new ButtonListener();
 
 	/**
 	 * Builds an internal JFrame and creates an interface for managing users and
@@ -49,9 +50,11 @@ public class AdminTool extends Tool implements Updatable {
 	 * @param guiController
 	 *            The GUIController to send to the tool
 	 */
+
 	public AdminTool(ClientController clientController, GUIController guiController) {
 		
 		super("Admin", clientController, guiController);
+		buttonListener = new ButtonListener();
 		setTabs(tabs);
 		jpfUserPassword.setName("User Password");
 		setContent(0, new JComponent[] { ltfUserID, ltfUserName, jpfUserPassword });
@@ -60,6 +63,7 @@ public class AdminTool extends Tool implements Updatable {
 
 	/**
 	 * Clears all input fields from text.
+	 * Resets the tool values and behaviour.
 	 */
 	private void reset() {
 
@@ -75,9 +79,9 @@ public class AdminTool extends Tool implements Updatable {
 	}
 
 	/**
-	 * An ActionListener class that handles button clicks.
-	 * 
-	 * @author Peter Sjögren
+	 * ActionListener implementatrion that listens for gui button clicks.
+	 * @author Robin Overgaard
+	 * @version 1.0
 	 */
 	private class ButtonListener implements ActionListener {
 
@@ -96,8 +100,7 @@ public class AdminTool extends Tool implements Updatable {
 			switch (e.getActionCommand()) {
 
 			case "create":
-				ltfUserPassword.setText(
-						clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword())));
+				ltfUserPassword.setText(clientCtrlr.getPassCryptor().encryptPassword(new String(jpfUserPassword.getPassword())));
 				ltfUserID.setText(null);
 				create(getThis(), Eviro.ENTITY_USER);
 				jpfUserPassword.setText(null);
