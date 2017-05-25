@@ -1,133 +1,96 @@
 package gui;
 
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JTable;
-import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
 import enteties.Entity;
-import tools.InvoiceTool;
 
 public class Table extends JTable {
 
 	private DefaultTableModel model;
-	private InvoiceTool invoice;
 
-	// General
-	public Table(Object[] obj, int rows, boolean editable) {
+	/**
+	 * Creates a table with 100 empty rows.
+	 * @param columns the columns to display in the table
+	 * @param editable whether the table is editable or not
+	 */
+	public Table(Object[] columns, boolean editable) {
 		setFillsViewportHeight(true);
 
-		setModel(new DefaultTableModel(obj, rows) {
+		setModel(new DefaultTableModel(columns, 100) {
 			@Override
 			public boolean isCellEditable(int row, int col) {
 				return editable;
 			}
 		});
 
-		model = (DefaultTableModel) getModel();
+		this.model = (DefaultTableModel) getModel();
+		setModel(model);
 
 	}
 
-	// Search result
-	public Table(JInternalFrame frame, Object[] obj, Updatable gui, ArrayList<Entity> list) {
-		this(obj, 0, false);
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(getModel());
-		setRowSorter(sorter);
-		populate(list);
-		addMouseListener(new MouseAdapter() {
+	/**
+	 * Creates a table with 100 empty rows.
+	 * @param columns the columns to display in the table
+	 * @param editable whether the table is editable or not
+	 */
+	public Table(DefaultTableModel model, boolean editable) {
+		setFillsViewportHeight(true);
 
+		Object[] columns = new Object[model.getColumnCount()];
+
+		for (int i = 0; i < columns.length; i++) {
+			columns[i] = model.getColumnName(i);
+		}
+
+		setModel(new DefaultTableModel(columns, 100) {
 			@Override
-			public void mousePressed(MouseEvent me) {
-				JTable table = (JTable) me.getSource();
-				Point p = me.getPoint();
-				int row = table.rowAtPoint(p);
-				if (me.getClickCount() == 2 && row >= 0) {
-
-					Object[] values = new Object[obj.length];
-
-					for (int i = 0; i < obj.length; i++) {
-						values[i] = table.getValueAt(row, i);
-					}
-					gui.setValues(values);
-					try {
-						frame.setClosed(true);
-					} catch (PropertyVetoException e) {
-						e.printStackTrace();
-					}
-				}
+			public boolean isCellEditable(int row, int col) {
+				return editable;
 			}
+
 		});
 
-	}
-
-	public Table(Tool tool, Object[] obj) {
-
-		this(tool, obj, false);
-
-	}
-
-	public Table(Tool tool, Object[] obj, Boolean editable) {
-
-		this(obj, 100, editable);
-
-		if (tool instanceof InvoiceTool)
-			this.invoice = (InvoiceTool) tool;
-
-	}
-
-	@Override
-	public void editingStopped(ChangeEvent e) {
-
-		int row = getEditingRow();
-		int col = getEditingColumn();
-		super.editingStopped(e);
-
-		if (col == 0) {
-			invoice.getArticle((String) getValueAt(row, col), row);
-		}
-
-		else if (col == 2 || col == 3) {
-			int price = 0;
-			int quantity = 0;
-			try {
-				price = Integer.parseInt((String) getValueAt(row, 2));
-				quantity = Integer.parseInt((String) getValueAt(row, 3));
-			} catch (NumberFormatException nfe) {
-				// price = 0;
-				// quantity = 1;
+		for (int i = 0; i < model.getRowCount(); i++) {
+			for (int j = 0; j < model.getColumnCount(); j++) {
+				getModel().setValueAt(model.getValueAt(i, j), i, j);
 			}
-
-			model.setValueAt(Integer.toString(price * quantity), row, 4);
 		}
 
-		invoice.setTotalPrice();
+		this.model = (DefaultTableModel) getModel();
 
-	};
+	}
 
-	public void populate(ArrayList<Entity> objectList) {
-
-		for (int i = 0; i < objectList.size(); i++) {
-			model.addRow(objectList.get(i).getData());
+	/**
+	 * Populates the table with data.
+	 * @param data list of entities to populate the table with
+	 */
+	public void populate(ArrayList<Entity> data) {
+		model.setRowCount(0);
+		for (int i = 0; i < data.size(); i++) {
+			model.addRow(data.get(i).getData());
 		}
 
 	}
 
-	public void populate(Object[] info, int row) {
+	/**
+	 * Populates the table with data.
+	 * @param data array of objects to populate the table with
+	 * @param row the row to add the data to
+	 */
+	public void populate(Object[] data, int row) {
 
 		for (int i = 0; i < model.getColumnCount(); i++) {
-			model.setValueAt(info[i], row, i);
+			model.setValueAt(data[i], row, i);
 		}
 
 	}
 
+	/**
+	 * Resets the table.
+	 */
 	public void reset() {
 		model.setRowCount(0);
 		model.setRowCount(100);

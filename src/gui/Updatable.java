@@ -12,6 +12,8 @@ public interface Updatable {
 
 	public String[] getValues();
 
+	public String[] getValues(boolean getNames);
+
 	public Updatable getThis();
 
 }

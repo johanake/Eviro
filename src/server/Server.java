@@ -5,7 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+
 import enteties.Entity;
+import enteties.User;
 
 /**
  * Handles all Client.
@@ -25,7 +28,6 @@ public class Server extends Thread {
 	 */
 	public Server(int port) {
 		serverController = new ServerController();
-		new ServerGUI(serverController, this);
 		try {
 			serverSocket = new ServerSocket(port);
 			start();

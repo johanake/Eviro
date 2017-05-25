@@ -1,5 +1,10 @@
 package enteties;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
 import java.io.Serializable;
 
 /**
@@ -8,7 +13,7 @@ import java.io.Serializable;
  * @author Robin Overgaard
  */
 
-public class Invoice implements Serializable, Entity {
+public class Invoice implements Serializable, Entity, Printable {
 
 	private int operation;
 	private Object[] data;
@@ -70,6 +75,36 @@ public class Invoice implements Serializable, Entity {
 	public void setData(Object[] data) {
 		this.data = data;
 
+	}
+
+	@Override
+	public int print(Graphics g, PageFormat pf, int page) throws PrinterException {
+		// We have only one page, and 'page'
+		// is zero-based
+		if (page > 0) {
+			return NO_SUCH_PAGE;
+		}
+
+		// User (0,0) is typically outside the
+		// imageable area, so we must translate
+		// by the X and Y values in the PageFormat
+		// to avoid clipping.
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.translate(pf.getImageableX(), pf.getImageableY());
+
+		// Now we perform our rendering
+		g.drawString("Invoice No:" + (String) data[0], 100, 100);
+		g.drawString("Customer No:" + (String) data[1], 100, 150);
+		g.drawString("Buyer:" + (String) data[2], 100, 200);
+		g.drawString("Reference:" + (String) data[3], 100, 250);
+		g.drawString("Issue date:" + (String) data[4], 100, 300);
+		g.drawString("Due date:" + (String) data[5], 100, 350);
+
+		g.drawString("Total sek:" + (String) data[6], 100, 400);
+
+		// tell the caller that this page is part
+		// of the printed document
+		return PAGE_EXISTS;
 	}
 
 }

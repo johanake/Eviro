@@ -5,8 +5,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -16,13 +20,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import javax.swing.text.JTextComponent;
 
 import client.ClientController;
 import enteties.Entity;
+import shared.Eviro;
 import tools.SearchResult;
 
 public class Tool extends JInternalFrame {
@@ -35,12 +42,15 @@ public class Tool extends JInternalFrame {
 	public JPanel pnlCenter = new JPanel(new BorderLayout());
 	public JPanel pnlSouth = new JPanel(new BorderLayout());
 
-	private JTabbedPane tabbedPane = new JTabbedPane();
+	public JTabbedPane tabbedPane = new JTabbedPane();
 
 	static int openFrameCount = 0;
 
 	public ClientController clientCtrlr;
 	public GUIController guiCtrlr;
+
+	KeyStroke ctrlF5 = KeyStroke.getKeyStroke(KeyEvent.VK_F5,
+			InputEvent.CTRL_DOWN_MASK, true);
 
 	protected Tool(String title, ClientController clientController, GUIController guiController) {
 		super(title, true, true, false, true);
@@ -48,6 +58,45 @@ public class Tool extends JInternalFrame {
 		this.guiCtrlr = guiController;
 		setup();
 		openFrameCount++;
+
+	}
+
+	public void setBindings(Updatable tool, LabledTextField[] ltfAll, int entityType) {
+		this.getInputMap(JComponent.WHEN_FOCUSED).put(ctrlF5, "refresh");
+		this.getActionMap().put("refresh", new RefreshAction(tool, ltfAll, entityType));
+	}
+
+	public class RefreshAction extends AbstractAction {
+
+		Updatable tool;
+		LabledTextField[] ltfAll;
+		int entityType;
+
+		RefreshAction(Updatable tool, LabledTextField[] ltfAll, int entityType) {
+			this.tool = tool;
+			this.ltfAll = ltfAll;
+			this.entityType = entityType;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			search(tool, ltfAll, entityType);
+		}
+	}
+
+	protected void get(Updatable tool, int entitytype) {
+
+		ArrayList<Entity> response = clientCtrlr.getAllbyType(entitytype);
+
+		Object[][] results = new Object[response.size()][4];
+
+		for (int i = 0; i < results.length; i++) {
+			results[i] = response.get(i).getData();
+
+		}
+
+		tool.setValues(results);
+
 	}
 
 	protected ArrayList<Entity> search(String[] values, int entitytype) {
@@ -59,21 +108,6 @@ public class Tool extends JInternalFrame {
 			return null;
 		} else
 			return resultList;
-	}
-
-	protected void get(Updatable tool, int entitytype) {
-
-		ArrayList<Entity> response = clientCtrlr.getAll(entitytype);
-
-		Object[][] results = new Object[response.size()][4];
-
-		for (int i = 0; i < results.length; i++) {
-			results[i] = response.get(i).getData();
-
-		}
-
-		tool.setValues(results);
-
 	}
 
 	protected void search(Updatable tool, LabledTextField[] ltfAll, int entitytype) {
@@ -98,42 +132,70 @@ public class Tool extends JInternalFrame {
 
 	protected void create(Updatable tool, int entitytype) {
 
-		ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true);
+		ArrayList<Entity> response = clientCtrlr.create(tool.getValues(), entitytype, true, false);
 
 		if (response.size() == 0) {
-			popupMessage("Inget svar!");
+			popupMessage("Server returned 0 items!");
 		} else if (response.size() == 1) {
-			popupMessage("Created \"entitytype\" with id: " + response.get(0).getData()[0]);
+			popupMessage(Eviro.getEntityNameByNumber(entitytype).substring(0, 1).toUpperCase() + Eviro.getEntityNameByNumber(entitytype).substring(1)
+					+ " created with id no: " + response.get(0).getData()[0]);
 			tool.setValues(response.get(0).getData());
 		} else {
-			// TODO Byta ut entitytype mot sträng motsvarande entity, getEntityNamebyId(entitytype) i eviro.java
-			popupMessage("A \"entitytype\" with the same values already exists!");
+			popupMessage("A " + Eviro.getEntityNameByNumber(entitytype) + " with the same values already exists!");
 
 		}
 
 	}
 
-	protected boolean update(Updatable tool, int entitytype) {
-		if (clientCtrlr.update(this, tool.getValues(), entitytype)) {
-
-			popupMessage("Update succesfull!");
+	protected boolean update(Updatable tool, int entitytype, boolean isSilent) {
+		if (clientCtrlr.update(this, tool.getValues(), entitytype, isSilent)) {
+			if (!isSilent)
+				popupMessage("The " + Eviro.getEntityNameByNumber(entitytype) + " has been succesfully updated!");
 			return true;
 		} else {
 			Object[] test = new Object[tool.getValues().length];
 			test[0] = tool.getValues()[0];
 			tool.setValues(clientCtrlr.search(test, entitytype).get(0).getData());
-			popupMessage("No changes made, update aborted!");
+			if (!isSilent)
+				popupMessage("No changes made, update aborted!");
 			return false;
 		}
 
+	}
+
+	protected boolean update(Updatable tool, int entitytype) {
+		return update(tool, entitytype, false);
 	}
 
 	protected void setTabs(JPanel[] tabs) {
 
 		tabbedPane.setBorder(new EmptyBorder(20, 0, 0, 0));
 
-		for (JPanel t : tabs) {
-			tabbedPane.addTab(t.getName(), t);
+		// for (JPanel t : tabs) {
+		// tabbedPane.addTab(t.getName(), t);
+		// }
+
+		for (int i = 0; i < tabs.length; i++) {
+
+			tabbedPane.addTab(tabs[i].getName() + " (" + (i + 1) + ")", tabs[i]);
+
+			switch (i) {
+			case 0:
+				tabbedPane.setMnemonicAt(i, KeyEvent.VK_1);
+				break;
+			case 1:
+				tabbedPane.setMnemonicAt(i, KeyEvent.VK_2);
+				break;
+			case 2:
+				tabbedPane.setMnemonicAt(i, KeyEvent.VK_3);
+				break;
+			case 3:
+				tabbedPane.setMnemonicAt(i, KeyEvent.VK_4);
+				break;
+			case 4:
+				tabbedPane.setMnemonicAt(i, KeyEvent.VK_5);
+				break;
+			}
 		}
 
 		pnlCenter.setBackground(bgColor);
@@ -143,6 +205,8 @@ public class Tool extends JInternalFrame {
 
 	protected void setButtons(JButton[] buttons) {
 
+		setFocusable(true);
+		requestFocusInWindow();
 		pnlSouth.removeAll();
 
 		JPanel pnlButtons = new JPanel(new GridLayout(1, buttons.length));
@@ -206,7 +270,7 @@ public class Tool extends JInternalFrame {
 
 	}
 
-	protected void setTfEditable(LabledTextField[] textFields, Boolean enabled) {
+	protected void setTfEditable(JTextComponent[] fields, Boolean enabled) {
 
 		Color fieldColor;
 
@@ -218,7 +282,7 @@ public class Tool extends JInternalFrame {
 			fieldColor = new Color(214, 217, 223);
 		}
 
-		for (JTextField c : textFields) {
+		for (JTextComponent c : fields) {
 			c.setEditable(enabled);
 			c.setBackground(fieldColor);
 
@@ -226,8 +290,8 @@ public class Tool extends JInternalFrame {
 
 	}
 
-	protected void setTfEditable(LabledTextField textField, Boolean enabled) {
-		setTfEditable(new LabledTextField[] { textField }, enabled);
+	protected void setTfEditable(JTextComponent field, Boolean enabled) {
+		setTfEditable(new JTextComponent[] { field }, enabled);
 	}
 
 	private void setup() {
@@ -235,15 +299,12 @@ public class Tool extends JInternalFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				// setJMenuBar(menu);
-				setLayout(new BorderLayout());
 
-				// setPreferredSize(new Dimension(640, 480));
+				setLayout(new BorderLayout());
 
 				pnlNorth.setBackground(bgColor);
 				pnlSouth.setBackground(bgColor);
 
-				// pnlNorth.setBorder(new EmptyBorder(10, 10, 10, 10));
 				pnlSouth.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.black),
 						BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
@@ -251,13 +312,12 @@ public class Tool extends JInternalFrame {
 				add(pnlCenter, BorderLayout.CENTER);
 				add(pnlSouth, BorderLayout.SOUTH);
 
-				// Fixar bredden
-				pnlSouth.setPreferredSize(new Dimension(500, 50));
+				pnlSouth.setPreferredSize(new Dimension(500, 50)); // Fixar bredden
 
 				setLocation(15 * openFrameCount, 15 * openFrameCount);
 				setVisible(true);
+				setFocusable(true);
 				pack();
-
 				setMinimumSize(getSize());
 				addInternalFrameListener(new InternalFrameAdapter() {
 					@Override
@@ -270,26 +330,115 @@ public class Tool extends JInternalFrame {
 		});
 	}
 
+	/**
+	 * Displays a popup message positioned relative to this frame.
+	 * @param txt the text to display on the popup
+	 */
 	protected void popupMessage(String txt) {
-		JOptionPane.showMessageDialog(this, txt);
+		popupMessage(txt, "Message", JOptionPane.INFORMATION_MESSAGE);
 	}
 
+	/**
+	 * Displays a popup message positioned relative to this frame.
+	 * @param txt the text to display on the popup
+	 */
+	protected void popupMessage(String message, String title, int messageType) {
+		JOptionPane.showMessageDialog(this, message, title, messageType);
+	}
+
+	/**
+	 * Validates input and displays appropriate warning messages.
+	 * @param fields array of fields to validate
+	 * @return whether all fields were successfully validated or not
+	 */
+	protected boolean validate(LabledTextField[] fields) {
+
+		String check = "";
+		String[] values = new String[fields.length];
+		String[] names = new String[fields.length];
+		Color bgColor = Color.WHITE;
+		// Color errColor = new Color(169, 46, 34); // Röd?
+		Color errColor = new Color(255, 220, 35);
+
+		for (int i = 0; i < values.length; i++) {
+
+			values[i] = fields[i].getText();
+			names[i] = fields[i].getName();
+			fields[i].setBackground(bgColor);
+
+			if (fields[i].isInteger()) {
+
+				values[i] = values[i].replaceAll(" ", "");
+				fields[i].setText(values[i]);
+
+				try {
+					Integer.parseInt(values[i]);
+				} catch (NumberFormatException e) {
+					check += "\n" + names[i] + " (number)";
+					fields[i].setBackground(errColor);
+				}
+			}
+
+			else if (fields[i].isDouble()) {
+
+				values[i] = values[i].replaceAll(",", ".");
+				fields[i].setText(values[i]);
+
+				try {
+					Double.parseDouble(values[i]);
+				} catch (NumberFormatException e) {
+					check += "\n" + names[i] + " (decimal number)";
+					fields[i].setBackground(errColor);
+				}
+			}
+
+			else if (values[i] == null || values[i].trim().length() <= 0) {
+				check += "\n" + names[i];
+				fields[i].setBackground(errColor);
+			}
+
+		}
+
+		if (check.length() > 0) {
+
+			popupMessage("Please check the following fields before continuing:" + check, "Required fields missing", JOptionPane.INFORMATION_MESSAGE);
+
+			return false;
+		}
+
+		return true;
+
+	}
+
+	/**
+	 * Returns a instance of this JInternalFrame.
+	 * @return a instance of this JInternalFrame
+	 */
 	protected JInternalFrame getFrame() {
 		return this;
 	}
 
 	/**
-	 * Customization of JPanel that takes it's name as a parameter in the constructor.
+	 * Customization of JPanel that takes its name and LayoutManager as parameters in the constructor.
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */
 	public class Tab extends JPanel {
 
+		/**
+		 * Creates a tab with a name and a specified LayoutManager.
+		 * @param name the name for the tab
+		 * @param layout the LayoutManager to use for the tab
+		 */
 		public Tab(String name, LayoutManager layout) {
 			super(layout);
 			setName(name);
 		}
 
+		/**
+		 * Creates a tab with a name and a BorderLayout LayoutManager.
+		 * @param name the name for the tab
+		 */
 		public Tab(String name) {
 			this(name, new BorderLayout());
 		}
@@ -297,13 +446,19 @@ public class Tool extends JInternalFrame {
 	}
 
 	/**
-	 * Customization of JPanel that takes it's name as a parameter in the constructor.
+	 * Customization of JPanel that by default is split in two.
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */
 	public class SplitPanel extends JPanel {
 
+		/**
+		 * Creates the splitted panel and sets its name to a combination of reght and left.
+		 * @param left the left panel
+		 * @param right the right panel
+		 */
 		public SplitPanel(JComponent left, JComponent right) {
+
 			setLayout(new GridLayout(1, 2));
 
 			String name = "";
@@ -330,25 +485,85 @@ public class Tool extends JInternalFrame {
 	}
 
 	/**
-	 * Customization of JPanel that takes it's name as a parameter in the constructor.
+	 * Customization of JTextField that takes its name, its enabled state and its validation type as parameters in the constructor.
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */
 	public class LabledTextField extends JTextField {
 
-		public LabledTextField(String name, boolean enabled) {
+		private boolean isInteger = false; // Used while validating the field value.
+		private boolean isDouble = false; // Used while validating the field value.
+
+		/**
+		 * Constructor.
+		 * @param name the name of this text field
+		 * @param enabled whether the input field should be enabled or not
+		 * @param fieldValueType type of data to validate the input for
+		 */
+		public LabledTextField(String name, boolean enabled, int fieldValueType) {
 			setTfEditable(this, enabled);
 			setName(name);
+
+			switch (fieldValueType) {
+
+			case Eviro.VALIDATOR_DOUBLE:
+				isDouble = true;
+				break;
+
+			case Eviro.VALIDATOR_INTEGER:
+				isInteger = true;
+				break;
+
+			}
+
 		}
 
+		/**
+		 * Constructor.
+		 * @param name the name of this text field
+		 * @param enabled whether the input field should be enabled or not
+		 */
+		public LabledTextField(String name, boolean enabled) {
+			this(name, enabled, 0);
+		}
+
+		/**
+		 * Constructor.
+		 * @param name the name of this text field
+		 * @param fieldValueType type of data to validate the input for
+		 */
+		public LabledTextField(String name, int fieldValueType) {
+			this(name, true, fieldValueType);
+		}
+
+		/**
+		 * Constructor.
+		 * @param name the name of this text field
+		 */
 		public LabledTextField(String name) {
 			this(name, true);
+		}
+
+		/**
+		 * Returns whether the textfields text should convert to integer.
+		 * @return whether the textfields text should convert to integer
+		 */
+		public boolean isInteger() {
+			return isInteger;
+		}
+
+		/**
+		 * Returns whether the textfields text should convert to double.
+		 * @return whether the textfields text should convert to double
+		 */
+		public boolean isDouble() {
+			return isDouble;
 		}
 
 	}
 
 	/**
-	 * Customization of JButton that takes it's ActionCommand as a parameter in the constructor.
+	 * Customization of JButton that takes its ActionCommand as a parameter in the constructor.
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */

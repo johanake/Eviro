@@ -8,8 +8,6 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultDesktopManager;
@@ -29,10 +27,11 @@ import javax.swing.border.TitledBorder;
 
 import client.ClientController;
 import shared.Eviro;
+import tools.AdminTool;
 import tools.ArticleTool;
 import tools.CustomerTool;
-import tools.ForumTool;
 import tools.InvoiceTool;
+import tools.SocialTool;
 
 /**
  * Handles client side gui operations of the system.
@@ -43,7 +42,7 @@ import tools.InvoiceTool;
 // Nadia testar
 
 public class GUIController {
-	private KeyPress keyListener = new KeyPress();
+	// private KeyPress keyListener = new KeyPress();
 	private JDesktopPane desktop;
 	private ClientController clientController;
 
@@ -55,16 +54,19 @@ public class GUIController {
 
 		this.clientController = clientController;
 
+		new Thread(new Login(clientController)).start();
+		while (clientController.getActiveUser() == null)
+			;
+
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
 			public void run() {
-				
-				
+
 				setSystemLookAndFeel();
-				JFrame window = new JFrame(Eviro.APP_NAME + " " + Eviro.APP_VERSION);
-				window.addKeyListener(keyListener);
-				window.setFocusable(true);
+				JFrame window = new JFrame(Eviro.APP_NAME + " " + Eviro.APP_VERSION + " " + clientController.getActiveUser().getData()[1]);
+				// window.addKeyListener(keyListener);
+				// window.setFocusable(true);
 				JPanel pnlMain = new JPanel(new BorderLayout());
 				desktop = new JDesktopPane();
 
@@ -151,54 +153,54 @@ public class GUIController {
 		tool.moveToFront();
 	}
 
-	/**
-	 * Activates listener to a computer keyboard
-	 * @author nadiaelhaddaoui
-	 */
-	private class KeyPress implements KeyListener {
-		// Set<Character> pressed = new HashSet<Character>();
-
-		@Override
-		public synchronized void keyPressed(KeyEvent e) {
-			int keyCode = e.getKeyCode();
-
-			// pressed.add((char) e.getKeyCode());
-			switch (e.getKeyCode()) {
-			case KeyEvent.VK_F1: 
-				add(new CustomerTool(clientController, getGUIController()));
-				System.out.println("1. Du tryckte på F1");
-				break;
-			
-			case KeyEvent.VK_F2: 
-				add(new InvoiceTool(clientController, getGUIController()));
-				System.out.println("2. Du tryckte på F2");
-				break;
-			
-			case KeyEvent.VK_F3: 
-				add(new ArticleTool(clientController, getGUIController()));
-				System.out.println("3. Du tryckte på F3");
-				break;
-			
-			default: 
-				System.out.println("Annan knapp " + KeyEvent.getKeyText(keyCode));
-				e.consume();
-				break;
-			
-			}
-		}
-
-		@Override
-		public synchronized void keyReleased(KeyEvent e) {
-			e.consume();
-
-		}
-
-		@Override
-		public void keyTyped(KeyEvent e) {
-			e.consume();
-		}
-
-	}
+	// /**
+	// * Activates listener to a computer keyboard
+	// * @author nadiaelhaddaoui
+	// */
+	// private class KeyPress implements KeyListener {
+	// // Set<Character> pressed = new HashSet<Character>();
+	//
+	// @Override
+	// public synchronized void keyPressed(KeyEvent e) {
+	// int keyCode = e.getKeyCode();
+	//
+	// // pressed.add((char) e.getKeyCode());
+	// switch (e.getKeyCode()) {
+	// case KeyEvent.VK_F1:
+	// add(new CustomerTool(clientController, getGUIController()));
+	// System.out.println("1. Du tryckte på F1");
+	// break;
+	//
+	// case KeyEvent.VK_F2:
+	// add(new InvoiceTool(clientController, getGUIController()));
+	// System.out.println("2. Du tryckte på F2");
+	// break;
+	//
+	// case KeyEvent.VK_F3:
+	// add(new ArticleTool(clientController, getGUIController()));
+	// System.out.println("3. Du tryckte på F3");
+	// break;
+	//
+	// default:
+	// System.out.println("Annan knapp " + KeyEvent.getKeyText(keyCode));
+	// e.consume();
+	// break;
+	//
+	// }
+	// }
+	//
+	// @Override
+	// public synchronized void keyReleased(KeyEvent e) {
+	// e.consume();
+	//
+	// }
+	//
+	// @Override
+	// public void keyTyped(KeyEvent e) {
+	// e.consume();
+	// }
+	//
+	// }
 
 	/**
 	 * The sidebar.
@@ -223,8 +225,9 @@ public class GUIController {
 				new ActionJButton("Article", "tool_article") };
 
 		private JComponent bottom[] = new JComponent[] {
-				new ActionJButton("Forum", "tool_forum"),
-				new ActionJButton("Settings", "tool_settings"),
+				new ActionJButton("Admin", "tool_admin"),
+				new ActionJButton("Social", "tool_social"),
+			//	new ActionJButton("Settings", "tool_settings"),
 				new ActionJButton("Quit", "link_exit") };
 
 		public Sidebar() {
@@ -288,8 +291,17 @@ public class GUIController {
 				desktop.add(new InvoiceTool(clientController, getGUIController()));
 				break;
 
-			case "tool_forum":
-				desktop.add(new ForumTool(clientController, getGUIController()));
+			case "tool_social":
+				desktop.add(new SocialTool(clientController, getGUIController()));
+				break;
+
+			case "tool_admin": // LÖSENORDET ÄR "password"
+				String pass = JOptionPane.showInputDialog(desktop, "Enter admin password", "Admin Sign In", JOptionPane.DEFAULT_OPTION);
+				if (clientController.checkPassword("admin", pass)) {
+					desktop.add(new AdminTool(clientController, getGUIController()));
+				} else {
+					JOptionPane.showMessageDialog(desktop, "Wrong password, try again", "Admin Sign In", JOptionPane.ERROR_MESSAGE);
+				}
 				break;
 
 			default:

@@ -28,7 +28,7 @@ public class ServerGUI implements ActionListener {
 	public ServerGUI(ServerController serverController, Server server) {
 		this();
 		this.server = server;
-		serverController.setServerGUI(this);
+//		serverController.setServerGUI(this);
 	}
 
 	public ServerGUI() {
@@ -61,6 +61,8 @@ public class ServerGUI implements ActionListener {
 		btnDisconnect.setEnabled(false);
 		
 		// KOD SOM KANSKE SKA ÄNDRAS
+		
+		window.pack();
 	}
 
 	public void append(String text) {

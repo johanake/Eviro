@@ -3,51 +3,60 @@ package client;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 
+import enteties.User;
 import gui.GUIController;
+import gui.Login;
 
 /**
  * Handles all traffic to and from the server.
+ * 
  * @author Mattias Sundquist
  */
 public class Client extends Thread {
 
 	private ClientController clientController;
-	private String ip;
-	private int port;
-	private Socket socket;
+	private Socket socket = new Socket();
 	private ObjectInputStream objInput;
 	private ObjectOutputStream objOutput;
 
 	/**
 	 * Gives this client a GUI and connects it to the server.
-	 * @param ip The IP of the server.
-	 * @param port The port of the server.
+	 * 
+	 * @param clientController
+	 * @param ip
+	 *            The IP of the server.
+	 * @param port
+	 *            The port of the server.
 	 */
-	public Client(String ip, int port) {
-		this.ip = ip;
-		this.port = port;
-		connectToServer();
-		new GUIController(clientController = new ClientController(this));
-
-		
-
-		
+	public Client(ClientController clientController) {
+		this.clientController = clientController;
+		// connectToServer();
+		// new GUIController(clientController);
 	}
 
 	/**
 	 * Creates input and output streams and starts a new Thread.
 	 */
-	private void connectToServer() {
+	public boolean connectToServer() {
 
 		try {
-			socket = new Socket(ip, port);
+			System.out.println(clientController.getProperty("port"));
+			System.out.println(clientController.getProperty("ip"));
+
+			socket.connect(new InetSocketAddress(clientController.getProperty("ip"),
+					Integer.parseInt(clientController.getProperty("port"))), 1000);
+
 			objInput = new ObjectInputStream(socket.getInputStream());
 			objOutput = new ObjectOutputStream(socket.getOutputStream());
 			// start();
+			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
 
 	}
@@ -69,7 +78,9 @@ public class Client extends Thread {
 
 	/**
 	 * Streams a message object to the server.
-	 * @param o The object to be sent to the server.
+	 * 
+	 * @param o
+	 *            The object to be sent to the server.
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
@@ -98,7 +109,8 @@ public class Client extends Thread {
 	// }
 
 	/**
-	 * The run method for this clients thread. Calls the "waitForMessage()" method.
+	 * The run method for this clients thread. Calls the "waitForMessage()"
+	 * method.
 	 */
 	// public void run() {
 	//

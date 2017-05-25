@@ -1,11 +1,16 @@
 package client;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
+import enteties.Comment;
 import enteties.Customer;
 import enteties.Entity;
 import enteties.ForumMessage;
@@ -13,6 +18,7 @@ import enteties.Invoice;
 import enteties.Product;
 import enteties.Transaction;
 import enteties.User;
+import gui.GUIController;
 import gui.Tool;
 import shared.Eviro;
 
@@ -24,43 +30,80 @@ import shared.Eviro;
  */
 public class ClientController {
 	private StrongPasswordEncryptor passCryptor = new StrongPasswordEncryptor();
-
+	private FileReader reader;
+	private FileWriter writer;
+	private Properties properties = new Properties();
+	private User activeUser = null;
 	private Client client;
 
 	/**
 	 * Creates a ClientController object.
 	 * @param client the client of the system
 	 */
-	public ClientController(Client client) {
-		this.client = client;
-		boolean logIn = false;
-		while(logIn() == false){
+	public ClientController() {
+
+		try {
+			reader = new FileReader("clientConfig");
+			properties.load(reader);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		
+
+		this.client = new Client(this);
+
+		new GUIController(this);
+
 	}
 
-	public boolean logIn(){
-		String userInput = JOptionPane.showInputDialog(null, "Type username", "Client Login", JOptionPane.OK_OPTION);
-		String passInput = JOptionPane.showInputDialog(null, "Type password", "Client Login", JOptionPane.OK_OPTION);
-	
-		ArrayList<Entity> userList = search(new Object[] {"", userInput, ""}, Eviro.ENTITY_USER);
-		System.out.println(userList.size());
-		if(userList.isEmpty()){
+	public Client getClient() {
+		return this.client;
+	}
+
+	public boolean checkPassword(String user, String pass) {
+		ArrayList<Entity> userList = search(new Object[] { "", user, "" }, Eviro.ENTITY_USER);
+		if (userList.isEmpty()) {
 			return false;
-		} else 	if(passCryptor.checkPassword(passInput, (String) userList.get(0).getData()[2])){
+		} else if (passCryptor.checkPassword(pass, (String) userList.get(0).getData()[2])) {
+			if (activeUser == null) {
+				setActiveUser(userList.get(0).getData());
+				// activeUser.setOperation(Eviro.LOGIN);
+				// client.sendObject(activeUser);
+			}
 			return true;
-		} 
-		else{
+		} else {
 			return false;
 		}
 	}
+
+	public String getProperty(String property) {
+		return properties.getProperty(property);
+	}
+
+	public void setProperty(String property, String value) {
+		String oldProperty = getProperty(property);
+		properties.setProperty(property, value);
+		try {
+			properties.store(new FileWriter("clientConfig"), "Changed: " + property + " (old = " + value + ")");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public StrongPasswordEncryptor getPassCryptor() {
+		return passCryptor;
+	}
+
 	/**
 	 * Creates and sends a "update operation" object to the server.
 	 * @param data data to use when updating
 	 * @param entityType the type of entity to update
 	 */
 	public boolean update(String[] data, int entityType) {
-		return update(null, data, entityType);
+		return update(null, data, entityType, false);
+	}
+
+	public boolean update(Tool tool, String[] data, int entityType) {
+		return update(tool, data, entityType, false);
 	}
 
 	/**
@@ -69,7 +112,7 @@ public class ClientController {
 	 * @param data data to use when updating
 	 * @param entityType the type of entity to update
 	 */
-	public boolean update(Tool tool, String[] data, int entityType) {
+	public boolean update(Tool tool, String[] data, int entityType, boolean isSilent) {
 
 		if (!checkData(data))
 			return false;
@@ -91,16 +134,26 @@ public class ClientController {
 				oldData[i] = Integer.toString((int) oldData[i]);
 			}
 
+			System.out.println(oldData[i]);
+			System.out.println(data[i]);
+
 			if (!oldData[i].equals(data[i])) {
+
+				if (oldData[i].toString().trim().length() <= 0) {
+					oldData[i] = "Empty";
+				}
+
 				updates += oldData[i] + " -> " + data[i] + "\n";
 			}
 		}
 
 		// If there are differences, display confirm dialog.
 		if (updates.trim().length() > 0) {
-
-			int reply = JOptionPane.showConfirmDialog(tool, "Please review the following changes before proceeding:\n" + updates, "Update?",
-					JOptionPane.OK_CANCEL_OPTION);
+			int reply = JOptionPane.OK_OPTION;
+			if (!isSilent) {
+				reply = JOptionPane.showConfirmDialog(tool, "Please review the following changes before proceeding:\n" + updates, "Update?",
+						JOptionPane.OK_CANCEL_OPTION);
+			}
 
 			if (reply == JOptionPane.OK_OPTION) {
 
@@ -128,42 +181,28 @@ public class ClientController {
 	 * @param entityType the type of entity to create
 	 */
 	public void create(Object[] data, int entityType) {
-
-		create(data, entityType, false);
+		create(data, entityType, false, false);
 	}
 
-	/**
-	 * Creates and sends a "create operation" object to the server and then waits for response.
-	 * @param data data to use when creating
-	 * @param entityType the type of entity to create
-	 * @param returnId whether the method should return the id of the created database row or not
-	 * @return the search result from the server
-	 */
-	// public String create(Object[] data, int entityType, boolean returnId) {
-	//
-	// Entity object = createEntityByType(entityType);
-	// object.setData(data);
-	// object.setOperation(Eviro.DB_ADD);
-	// ArrayList<Entity> response = (ArrayList<Entity>) client.sendObject(object);
-	//
-	// if (returnId)
-	// return response.get(0).getData()[0].toString();
-	//
-	// return null;
-	// }
-
-	public ArrayList<Entity> create(Object[] data, int entityType, boolean returnData) {
+	public ArrayList<Entity> create(Object[] data, int entityType, boolean returnData, boolean allowDuplicates) {
 
 		ArrayList<Entity> response = new ArrayList<Entity>();
 
 		if (!checkData(data))
 			return response;
 
-		response = search(data, entityType);
+		if (!allowDuplicates)
+			response = search(data, entityType);
+
 		if (response.isEmpty()) {
 			Entity object = createEntityByType(entityType);
 			object.setData(data);
-			object.setOperation(Eviro.DB_ADD);
+
+			if (object instanceof Comment)
+				object.setOperation(Eviro.DB_ADD_COMMENT);
+			else
+				object.setOperation(Eviro.DB_ADD);
+
 			response = (ArrayList<Entity>) client.sendObject(object);
 		}
 		if (returnData)
@@ -189,12 +228,31 @@ public class ClientController {
 		Entity object = createEntityByType(entityType);//
 		// Populate
 		object.setData(data);
-		object.setOperation(Eviro.DB_SEARCH);
-		
-		System.out.println((String)object.getData()[1]);
 
+		if (object instanceof Comment)
+			object.setOperation(Eviro.DB_SEARCH_COMMENT);
+		else
+			object.setOperation(Eviro.DB_SEARCH);
 
 		// Get and return response
+		response = (ArrayList<Entity>) client.sendObject(object);
+		return response;
+
+	}
+
+	/**
+	 * Creates and sends a "get all" object to the server and then waits for response.
+	 * @param entityType the type of entity to get
+	 * @return the result returned from the server
+	 */
+	public ArrayList<Entity> getAllbyType(int entityType) {
+
+		ArrayList<Entity> response = new ArrayList<Entity>();
+
+		Entity object = createEntityByType(entityType);//
+
+		object.setOperation(Eviro.DB_GETALL);
+
 		response = (ArrayList<Entity>) client.sendObject(object);
 		return response;
 
@@ -207,10 +265,26 @@ public class ClientController {
 	 */
 	private boolean checkData(Object[] data) {
 
+		escape(data);
+
 		for (Object s : data) {
 
 			if (s != null && ((String) s).trim().length() > 0) {
 				return true;
+			}
+
+		}
+
+		return false;
+	}
+
+	private boolean escape(Object[] data) {
+
+		for (int i = 0; i < data.length; i++) {
+
+			if (data[i] != null && ((String) data[i]).trim().length() > 0) {
+				data[i] = ((String) data[i]).replace("'", "''");
+				data[i] = ((String) data[i]).replace("*", "%");
 			}
 
 		}
@@ -244,35 +318,26 @@ public class ClientController {
 		else if (entityType == Eviro.ENTITY_FORUMMESSAGE) {
 			return new ForumMessage();
 		}
-		
+
 		else if (entityType == Eviro.ENTITY_USER) {
 			return new User();
+		}
+
+		else if (entityType == Eviro.ENTITY_COMMENT) {
+			return new Comment();
 		}
 
 		return null;
 
 	}
 
-	public ArrayList<Entity> getAll(int entityType) {
-
-		ArrayList<Entity> response = new ArrayList<Entity>();
-
-		Entity object = createEntityByType(entityType);//
-
-		object.setOperation(Eviro.DB_GETALL);
-
-		response = (ArrayList<Entity>) client.sendObject(object);
-		return response;
-
+	public synchronized User getActiveUser() {
+		return activeUser;
 	}
 
-	// /**
-	// * Adds a new forum message to the database.
-	// * @param res the message to add.
-	// */
-	// public void addForumMessage(ForumMessage msg) {
-	// msg.setOperation(Eviro.DB_ADD);
-	// client.sendObject(msg);
-	// }
+	public synchronized void setActiveUser(Object[] data) {
+		this.activeUser = new User();
+		activeUser.setData(data);
+	}
 
 }
