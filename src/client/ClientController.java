@@ -23,12 +23,11 @@ import gui.Tool;
 import shared.Eviro;
 
 /**
- * Controller class for the client, handles communication within the system and
- * also creates and sends objects to the server.
- * 
+ * Controller class for the client, handles communication within the system and also creates and sends objects to the server.
  * @author Robin Overgaard
  * @author Johan Åkesson
  * @author Peter Sjögren
+ * @author nadiaelhaddaoui
  * @version 1.1
  */
 public class ClientController extends Thread {
@@ -40,8 +39,7 @@ public class ClientController extends Thread {
 	private Client client;
 
 	/**
-	 * Constructor that loads the properties that are stored in the
-	 * clientConfig.dat file.
+	 * Constructor that loads the properties that are stored in the clientConfig.dat file.
 	 */
 	public ClientController() {
 		try {
@@ -53,10 +51,9 @@ public class ClientController extends Thread {
 	}
 
 	/**
-	 * Run method that starts the Client class that handles connection with the
-	 * server and also the GUI controller that handles graphics in the system
-	 * 
+	 * Run method that starts the Client class that handles connection with the server and also the GUI controller that handles graphics in the system
 	 */
+	@Override
 	public void run() {
 
 		client = new Client(this);
@@ -66,11 +63,8 @@ public class ClientController extends Thread {
 
 	/**
 	 * Creates and sends a "update operation" object to the server.
-	 * 
-	 * @param data
-	 *            data to use when updating
-	 * @param entityType
-	 *            the type of entity to update
+	 * @param data data to use when updating
+	 * @param entityType the type of entity to update
 	 * @return whether the update was successfull or not
 	 */
 	public boolean update(String[] data, int entityType) {
@@ -79,12 +73,9 @@ public class ClientController extends Thread {
 
 	/**
 	 * Creates and sends a "update operation" object to the server.
-	 * 
 	 * @param tool
-	 * @param data
-	 *            data to use when updating
-	 * @param entityType
-	 *            the type of entity to update
+	 * @param data data to use when updating
+	 * @param entityType the type of entity to update
 	 * @return whether the update was successfull or not
 	 */
 	public boolean update(Tool tool, String[] data, int entityType) {
@@ -93,13 +84,9 @@ public class ClientController extends Thread {
 
 	/**
 	 * Creates and sends a "update operation" object to the server.
-	 * 
-	 * @param tool
-	 *            frame to display popup relative to
-	 * @param data
-	 *            data to use when updating
-	 * @param entityType
-	 *            the type of entity to update
+	 * @param tool frame to display popup relative to
+	 * @param data data to use when updating
+	 * @param entityType the type of entity to update
 	 */
 	public boolean update(Tool tool, String[] data, int entityType, boolean isSilent) {
 
@@ -161,11 +148,8 @@ public class ClientController extends Thread {
 
 	/**
 	 * Creates and sends a "create operation" object to the server.
-	 * 
-	 * @param data
-	 *            data to use when creating
-	 * @param entityType
-	 *            the type of entity to create
+	 * @param data data to use when creating
+	 * @param entityType the type of entity to create
 	 */
 	public void create(Object[] data, int entityType) {
 		create(data, entityType, false, false);
@@ -173,15 +157,10 @@ public class ClientController extends Thread {
 
 	/**
 	 * Creates and sends a "create operation" object to the server.
-	 * 
-	 * @param data
-	 *            data to use when creating
-	 * @param entityType
-	 *            the type of entity to create
-	 * @param returnData
-	 *            whether to return data or not
-	 * @param allowDuplicates
-	 *            whether to allow duplicates in the db or not
+	 * @param data data to use when creating
+	 * @param entityType the type of entity to create
+	 * @param returnData whether to return data or not
+	 * @param allowDuplicates whether to allow duplicates in the db or not
 	 * @return the created resource
 	 */
 	public ArrayList<Entity> create(Object[] data, int entityType, boolean returnData, boolean allowDuplicates) {
@@ -212,13 +191,9 @@ public class ClientController extends Thread {
 	}
 
 	/**
-	 * Creates and sends a "search operation" object to the server and then
-	 * waits for response.
-	 * 
-	 * @param data
-	 *            data to use when searching
-	 * @param entityType
-	 *            the type of entity to search for
+	 * Creates and sends a "search operation" object to the server and then waits for response.
+	 * @param data data to use when searching
+	 * @param entityType the type of entity to search for
 	 * @return the search result from the server
 	 */
 	public ArrayList<Entity> search(Object[] data, int entityType) {
@@ -245,11 +220,8 @@ public class ClientController extends Thread {
 	}
 
 	/**
-	 * Creates and sends a "get all" object to the server and then waits for
-	 * response.
-	 * 
-	 * @param entityType
-	 *            the type of entity to get
+	 * Creates and sends a "get all" object to the server and then waits for response.
+	 * @param entityType the type of entity to get
 	 * @return the result returned from the server
 	 */
 	public ArrayList<Entity> getAllbyType(int entityType) {
@@ -266,12 +238,8 @@ public class ClientController extends Thread {
 	}
 
 	/**
-	 * Checks an array of objects so that 1. it contains atleast 1 object that
-	 * is not null and 2. it contains atleast 1 string with a trimmed lenght of
-	 * more than 0.
-	 * 
-	 * @param data
-	 *            the arrays of strings to check
+	 * Checks an array of objects so that 1. it contains atleast 1 object that is not null and 2. it contains atleast 1 string with a trimmed lenght of more than 0.
+	 * @param data the arrays of strings to check
 	 * @return whether the controll was successful or not
 	 */
 	private boolean checkData(Object[] data) {
@@ -289,9 +257,7 @@ public class ClientController extends Thread {
 
 	/**
 	 * Escapes potentionally dangerous chars from data.
-	 * 
-	 * @param data
-	 *            the arrays of strings to check
+	 * @param data the arrays of strings to check
 	 */
 	private void escape(Object[] data) {
 
@@ -307,11 +273,8 @@ public class ClientController extends Thread {
 	}
 
 	/**
-	 * Instantiates and returns an empty Entity implementation of the specified
-	 * entityType.
-	 * 
-	 * @param entityType
-	 *            the type of entity to instantiate
+	 * Instantiates and returns an empty Entity implementation of the specified entityType.
+	 * @param entityType the type of entity to instantiate
 	 * @return the entity that was instantiated
 	 */
 	private Entity createEntityByType(int entityType) {
@@ -349,13 +312,9 @@ public class ClientController extends Thread {
 	}
 
 	/**
-	 * Method for controll of user passwords that are stored encrypted in the
-	 * database.
-	 * 
-	 * @param user
-	 *            The user that are trying to login
-	 * @param pass
-	 *            The password that the user has given as input
+	 * Method for controll of user passwords that are stored encrypted in the database.
+	 * @param user The user that are trying to login
+	 * @param pass The password that the user has given as input
 	 * @return Boolean if the password was true or false.
 	 */
 	public boolean checkPassword(String user, String pass) {
@@ -375,9 +334,7 @@ public class ClientController extends Thread {
 
 	/**
 	 * Method for finding properties from the clientConfig.dat file
-	 * 
-	 * @param property
-	 *            Name of the property
+	 * @param property Name of the property
 	 * @return value of the property, in most cases an encrypted value.
 	 */
 	public String getProperty(String property) {
@@ -387,11 +344,8 @@ public class ClientController extends Thread {
 
 	/**
 	 * Method to change properties that are stored in the clientConfig.dat file.
-	 * 
-	 * @param property
-	 *            Name of the property
-	 * @param value
-	 *            New value to be stored
+	 * @param property Name of the property
+	 * @param value New value to be stored
 	 */
 	public void setProperty(String property, String value) {
 
@@ -405,7 +359,6 @@ public class ClientController extends Thread {
 
 	/**
 	 * Get Method the password encryptor
-	 * 
 	 * @return StrongPasswordEncryptor passCryptor
 	 */
 	public StrongPasswordEncryptor getPassCryptor() {
@@ -415,7 +368,6 @@ public class ClientController extends Thread {
 
 	/**
 	 * Get method for the user that is currently logged in to the system
-	 * 
 	 * @return User activeUser
 	 */
 	public synchronized User getActiveUser() {
@@ -425,7 +377,6 @@ public class ClientController extends Thread {
 
 	/**
 	 * Set method for the user that is currently logged in to the system
-	 * 
 	 * @param data
 	 */
 	public synchronized void setActiveUser(Object[] data) {
@@ -436,7 +387,6 @@ public class ClientController extends Thread {
 
 	/**
 	 * Get method for the Client
-	 * 
 	 * @return Client client
 	 */
 	public Client getClient() {

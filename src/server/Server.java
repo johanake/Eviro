@@ -1,22 +1,19 @@
 package server;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 
 import enteties.Entity;
-import enteties.User;
 
 /**
  * Server class that handles all client conncections.
- * 
  * @author Mattias Sundquist
  * @author Peter Sjögren
- *
+ * @author Robin Overgaard
+ * @author nadiaelhaddaoui
  */
 public class Server {
 
@@ -25,8 +22,7 @@ public class Server {
 	private Thread listenerThread = null;
 
 	/**
-	 * Constructor that creates the ServerController, which handles most of the
-	 * communication and logic in the server system.
+	 * Constructor that creates the ServerController, which handles most of the communication and logic in the server system.
 	 */
 	public Server() {
 
@@ -58,11 +54,8 @@ public class Server {
 	}
 
 	/**
-	 * Method for changing the server port and saving the incoming value in the
-	 * serverConfig.dat file.
-	 * 
-	 * @param port
-	 *            New port
+	 * Method for changing the server port and saving the incoming value in the serverConfig.dat file.
+	 * @param port New port
 	 * @return true if the change was succesfall, false otherwise.
 	 */
 	public boolean setPort(String port) {
@@ -72,7 +65,6 @@ public class Server {
 
 	/**
 	 * Method for checking if a ClientListener is online or not
-	 * 
 	 * @return true or false pending on the status of the listenerThread.
 	 */
 	public synchronized boolean isOnline() {
@@ -84,11 +76,8 @@ public class Server {
 	}
 
 	/**
-	 * Listener class that listens for incoming client connections and creates a
-	 * separate ClientConnection for every client that connects.
-	 * 
+	 * Listener class that listens for incoming client connections and creates a separate ClientConnection for every client that connects.
 	 * @author Peter Sjögren
-	 *
 	 */
 	private class ClientListener implements Runnable {
 
@@ -115,11 +104,8 @@ public class Server {
 	}
 
 	/**
-	 * Handles all logic for the clients connected to this server. Each client
-	 * gets its own instance of ClientConnection.
-	 * 
+	 * Handles all logic for the clients connected to this server. Each client gets its own instance of ClientConnection.
 	 * @author Mattias Sundquist
-	 *
 	 */
 	private class ClientConnection extends Thread {
 
@@ -129,9 +115,7 @@ public class Server {
 
 		/**
 		 * Sets up input and output streams and starts a new Thread.
-		 * 
-		 * @param socket
-		 *            The client which connected to the server.
+		 * @param socket The client which connected to the server.
 		 */
 		public ClientConnection(Socket socket) {
 
@@ -148,8 +132,7 @@ public class Server {
 		}
 
 		/**
-		 * Disconnects the client from the server. Closes all streams and
-		 * threads.
+		 * Disconnects the client from the server. Closes all streams and threads.
 		 */
 		private void disconnect() {
 
@@ -166,9 +149,9 @@ public class Server {
 		}
 
 		/**
-		 * The run method for this clients thread. Listens for incoming messages
-		 * and sends them to the ServerController.
+		 * The run method for this clients thread. Listens for incoming messages and sends them to the ServerController.
 		 */
+		@Override
 		public void run() {
 
 			while (!interrupted()) {

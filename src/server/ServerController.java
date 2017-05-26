@@ -1,11 +1,5 @@
 package server;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -14,22 +8,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.jasypt.util.text.BasicTextEncryptor;
+
 import enteties.Comment;
 import enteties.Customer;
 import enteties.Entity;
@@ -39,13 +26,13 @@ import enteties.Product;
 import enteties.Transaction;
 import enteties.User;
 import shared.Eviro;
-import tools.AdminTool;
 
 /**
- * Controller class for the server system. Handles most of the logic between the
- * server and the database. Also logs traffic to and from database.
- * 
- * @author Mattias Sundquist, Peter Sjögren
+ * Controller class for the server system. Handles most of the logic between the server and the database. Also logs traffic to and from database.
+ * @author Mattias Sundquist,
+ * @author Peter Sjögren
+ * @author Robin Overgaard
+ * @author nadiaelhaddaoui
  */
 public class ServerController {
 
@@ -61,9 +48,7 @@ public class ServerController {
 	private StrongPasswordEncryptor passCryptor = new StrongPasswordEncryptor();
 
 	/**
-	 * Constructor that loads information from the config file for later use by
-	 * the system. Starts the ServerGUI class and starts the logger.
-	 * 
+	 * Constructor that loads information from the config file for later use by the system. Starts the ServerGUI class and starts the logger.
 	 * @param server
 	 */
 	public ServerController(Server server) {
@@ -82,8 +67,7 @@ public class ServerController {
 	}
 
 	/**
-	 * Login method that checks if the password is OK, starts the ConnectDB
-	 * class and tells the Server class to start the ClientListener
+	 * Login method that checks if the password is OK, starts the ConnectDB class and tells the Server class to start the ClientListener
 	 */
 	protected boolean login(String pass) {
 
@@ -101,9 +85,7 @@ public class ServerController {
 
 	/**
 	 * Method for decrypting properties from the serverConfig.dat file.
-	 * 
-	 * @param property
-	 *            Name of the property to be decrypted
+	 * @param property Name of the property to be decrypted
 	 * @return String the value of the decrypted property.
 	 */
 	public String decrypt(String property) {
@@ -113,9 +95,7 @@ public class ServerController {
 
 	/**
 	 * Method for finding properties from the serverConfig.dat file
-	 * 
-	 * @param property
-	 *            Name of the property
+	 * @param property Name of the property
 	 * @return value of the property, in most cases an encrypted value.
 	 */
 	public String getProperty(String property) {
@@ -125,11 +105,8 @@ public class ServerController {
 
 	/**
 	 * Method to change properties that are stored in the serverConfig.dat file.
-	 * 
-	 * @param property
-	 *            Name of the property
-	 * @param value
-	 *            New value to be stored
+	 * @param property Name of the property
+	 * @param value New value to be stored
 	 */
 	public boolean setProperty(String property, String value) {
 
@@ -162,9 +139,7 @@ public class ServerController {
 
 	/**
 	 * Adds a new info message in the logger.
-	 * 
-	 * @param msg
-	 *            the message to insert into the logger
+	 * @param msg the message to insert into the logger
 	 */
 	public void logAppend(String msg) {
 
@@ -173,12 +148,8 @@ public class ServerController {
 	}
 
 	/**
-	 * Handles Entity-objects coming from the server. Finds out what operation
-	 * to perform based on the getOperation method in the Entity Interface,
-	 * builds a query and sends the query to the database to execute.
-	 * 
-	 * @param ei
-	 *            The Entity Interface coming from the server.
+	 * Handles Entity-objects coming from the server. Finds out what operation to perform based on the getOperation method in the Entity Interface, builds a query and sends the query to the database to execute.
+	 * @param ei The Entity Interface coming from the server.
 	 */
 	public ArrayList<Entity> operationHandler(Entity ei) {
 
@@ -214,11 +185,8 @@ public class ServerController {
 	}
 
 	/**
-	 * Checks which Object the Entity Interface is an instance of and returns
-	 * that objects table name.
-	 * 
-	 * @param ei
-	 *            The EntityInterface to check instance of.
+	 * Checks which Object the Entity Interface is an instance of and returns that objects table name.
+	 * @param ei The EntityInterface to check instance of.
 	 * @return A String with the Objects table name.
 	 */
 	private String getTableName(Entity ei) {
@@ -243,14 +211,9 @@ public class ServerController {
 	}
 
 	/**
-	 * Asks the database for the tables column names with the MySql command
-	 * "DESCRIBE table_name". The name of the table itself is provided by the
-	 * getTableName method.
-	 * 
-	 * @param ei
-	 *            The Entity Interface you want the column names from.
-	 * @param tableName
-	 *            The name of the Entity Interface table
+	 * Asks the database for the tables column names with the MySql command "DESCRIBE table_name". The name of the table itself is provided by the getTableName method.
+	 * @param ei The Entity Interface you want the column names from.
+	 * @param tableName The name of the Entity Interface table
 	 * @return A String array with all the column names of that table.
 	 */
 	private String[] getColNames(Entity ei, String tableName) {
@@ -276,9 +239,7 @@ public class ServerController {
 
 	/**
 	 * Builds a "get all" for the Entity Interface given in the parameter.
-	 * 
-	 * @param ei
-	 *            The Entity Interface to build the get all query around.
+	 * @param ei The Entity Interface to build the get all query around.
 	 * @return
 	 */
 	private String buildGetAllQuery(Entity ei) {
@@ -291,8 +252,7 @@ public class ServerController {
 	}
 
 	/**
-	 * @param ei
-	 *            The EntityInterface to build the search-query around.
+	 * @param ei The EntityInterface to build the search-query around.
 	 */
 	private void buildAndExecuteInsertCommentQuery(Entity ei) {
 
@@ -313,8 +273,7 @@ public class ServerController {
 	}
 
 	/**
-	 * @param ei
-	 *            The EntityInterface to build the search-query around.
+	 * @param ei The EntityInterface to build the search-query around.
 	 * @return A String-query ready to be executed by the database.
 	 */
 	private String buildGetCommentQuery(Entity ei) {
@@ -334,11 +293,8 @@ public class ServerController {
 	}
 
 	/**
-	 * Builds a search-query based on information in the Entity Interface given
-	 * in the parameter.
-	 * 
-	 * @param ei
-	 *            The Entity Interface to build the search query around.
+	 * Builds a search-query based on information in the Entity Interface given in the parameter.
+	 * @param ei The Entity Interface to build the search query around.
 	 * @return A query ready to be executed by the database.
 	 */
 	private String buildSearchQuery(Entity ei) {
@@ -362,11 +318,8 @@ public class ServerController {
 	}
 
 	/**
-	 * Builds an insert query based on information in the Entity Interface given
-	 * in the parameter.
-	 * 
-	 * @param ei
-	 *            The Entity Interface to build the insert query around.
+	 * Builds an insert query based on information in the Entity Interface given in the parameter.
+	 * @param ei The Entity Interface to build the insert query around.
 	 * @return A query ready to be executed by the database.
 	 */
 	private String buildInsertQuery(Entity ei) {
@@ -394,11 +347,8 @@ public class ServerController {
 	}
 
 	/**
-	 * Builds an update query based on information in the Entity Interface given
-	 * in the parameter. Expects that the EntityInterface id is specified.
-	 * 
-	 * @param ei
-	 *            The Entity Interface to build the update query around.
+	 * Builds an update query based on information in the Entity Interface given in the parameter. Expects that the EntityInterface id is specified.
+	 * @param ei The Entity Interface to build the update query around.
 	 * @return A query ready to be executed by the database.
 	 */
 	private String buildUpdateQuery(Entity ei) {
@@ -420,11 +370,8 @@ public class ServerController {
 	}
 
 	/**
-	 * Build a delete query based on the information in the Entity Interface
-	 * given in the parameter. Expects that the EntityInterface id is specified.
-	 * 
-	 * @param ei
-	 *            The Entity Interface to build the update query around.
+	 * Build a delete query based on the information in the Entity Interface given in the parameter. Expects that the EntityInterface id is specified.
+	 * @param ei The Entity Interface to build the update query around.
 	 * @return A query ready to be executed by the database.
 	 */
 	private String buildDeleteQuery(Entity ei) {
@@ -439,13 +386,9 @@ public class ServerController {
 	}
 
 	/**
-	 * Builds an Arraylist of Entity Interfaces based on the resultset given in
-	 * the parameter.
-	 * 
-	 * @param rs
-	 *            The resultset to build the Arraylist on.
-	 * @return An ArrayList of Entity Interfaces containing the Entity
-	 *         Interfaces from the resultset.
+	 * Builds an Arraylist of Entity Interfaces based on the resultset given in the parameter.
+	 * @param rs The resultset to build the Arraylist on.
+	 * @return An ArrayList of Entity Interfaces containing the Entity Interfaces from the resultset.
 	 */
 	private ArrayList<Entity> createList(ResultSet rs) {
 
@@ -457,22 +400,47 @@ public class ServerController {
 					ei.add(new Comment(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3) }));
 
 				} else if (rs.getMetaData().toString().contains("tableName=customer")) {
-					ei.add(new Customer(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3),
-							rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8),
+					ei.add(new Customer(new Object[] {
+							rs.getString(1),
+							rs.getString(2),
+							rs.getString(3),
+							rs.getString(4),
+							rs.getString(5),
+							rs.getString(6),
+							rs.getString(7),
+							rs.getString(8),
 							rs.getInt(9) }));
 
 				} else if (rs.getMetaData().toString().contains("tableName=invoice")) {
-					ei.add(new Invoice(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3),
-							rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8) }));
+					ei.add(new Invoice(new Object[] {
+							rs.getString(1),
+							rs.getString(2),
+							rs.getString(3),
+							rs.getString(4),
+							rs.getString(5),
+							rs.getString(6),
+							rs.getString(7),
+							rs.getString(8) }));
 
 				} else if (rs.getMetaData().toString().contains("tableName=product")) {
-					ei.add(new Product(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3),
-							rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8),
+					ei.add(new Product(new Object[] {
+							rs.getString(1),
+							rs.getString(2),
+							rs.getString(3),
+							rs.getString(4),
+							rs.getString(5),
+							rs.getString(6),
+							rs.getString(7),
+							rs.getString(8),
 							rs.getInt(9) }));
 
 				} else if (rs.getMetaData().toString().contains("tableName=transaction")) {
-					ei.add(new Transaction(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3),
-							rs.getString(4), rs.getString(5) }));
+					ei.add(new Transaction(new Object[] {
+							rs.getString(1),
+							rs.getString(2),
+							rs.getString(3),
+							rs.getString(4),
+							rs.getString(5) }));
 
 				} else if (rs.getMetaData().toString().contains("tableName=forummessage")) {
 					ei.add(new ForumMessage(

@@ -8,9 +8,10 @@ import java.net.Socket;
 
 /**
  * Handles all traffic to and from the server.
- * 
  * @author Mattias Sundquist
  * @author Peter Sjögren
+ * @author Robin Overgaard
+ * @author nadiaelhaddaoui
  */
 public class Client extends Thread {
 
@@ -24,7 +25,7 @@ public class Client extends Thread {
 	 * @param clientController
 	 */
 	public Client(ClientController clientController) {
-		
+
 		this.clientController = clientController;
 	}
 
@@ -65,14 +66,12 @@ public class Client extends Thread {
 
 	/**
 	 * Streams a message object to the server.
-	 * 
-	 * @param o
-	 *            The object to be sent to the server.
+	 * @param o The object to be sent to the server.
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
 	public Object sendObject(Object o) {
-		
+
 		try {
 			objOutput.writeObject(o);
 			return objInput.readObject();
