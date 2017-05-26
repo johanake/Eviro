@@ -29,7 +29,6 @@ import shared.Eviro;
 
 public class ArticleTool extends Tool implements Updatable {
 
-	// private ButtonListener buttonListener;
 	private Table tblComments;
 	private Table tblSales = new Table(new Object[] { "Transaction No", "Invoice No", "Quantity", "Sum" }, false);
 
