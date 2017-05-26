@@ -5,11 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
-
-import enteties.User;
-import gui.GUIController;
-import gui.Login;
 
 /**
  * Handles all traffic to and from the server.
@@ -25,15 +20,11 @@ public class Client extends Thread {
 	private ObjectOutputStream objOutput;
 
 	/**
-	 * Gives this client a GUI and connects it to the server.
-	 * 
+	 * Simple constructor
 	 * @param clientController
-	 * @param ip
-	 *            The IP of the server.
-	 * @param port
-	 *            The port of the server.
 	 */
 	public Client(ClientController clientController) {
+		
 		this.clientController = clientController;
 	}
 
@@ -81,6 +72,7 @@ public class Client extends Thread {
 	 * @throws ClassNotFoundException
 	 */
 	public Object sendObject(Object o) {
+		
 		try {
 			objOutput.writeObject(o);
 			return objInput.readObject();

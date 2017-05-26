@@ -42,13 +42,13 @@ import shared.Eviro;
 import tools.AdminTool;
 
 /**
- * Handles most of the logic between the server and the database. Also logs
- * traffic to and from database.
+ * Controller class for the server system. Handles most of the logic between the
+ * server and the database. Also logs traffic to and from database.
  * 
  * @author Mattias Sundquist, Peter Sjögren
  */
 public class ServerController {
-	
+
 	private Server server;
 	private ConnectDB connectDB;
 	private ServerGUI serverGUI;
@@ -61,67 +61,78 @@ public class ServerController {
 	private StrongPasswordEncryptor passCryptor = new StrongPasswordEncryptor();
 
 	/**
-	 * Gets an instance of the ConnectDB class
+	 * Constructor that loads information from the config file for later use by
+	 * the system. Starts the ServerGUI class and starts the logger.
 	 * 
 	 * @param server
 	 */
 	public ServerController(Server server) {
-		
+
 		this.server = server;
-		
+
 		try {
 			properties.load(reader = new FileReader("config/serverConfig.dat"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		serverGUI = new ServerGUI(this, server);
 		setUpLogger();
 
 	}
 
 	/**
-	 * 
+	 * Login method that checks if the password is OK, starts the ConnectDB
+	 * class and tells the Server class to start the ClientListener
 	 */
 	protected boolean login(String pass) {
 
 		if (passCryptor.checkPassword(pass, properties.getProperty("admin"))) {
-			
+
 			textCryptor.setPassword(pass);
-			
+
 			connectDB = new ConnectDB(this);
 			server.connect();
-			
+
 			return true;
 		}
 		return false;
 	}
 
 	/**
+	 * Method for decrypting properties from the serverConfig.dat file.
+	 * 
 	 * @param property
-	 * @return
+	 *            Name of the property to be decrypted
+	 * @return String the value of the decrypted property.
 	 */
 	public String decrypt(String property) {
 
-		return textCryptor.decrypt(properties.getProperty(property));
+		return textCryptor.decrypt(getProperty(property));
 	}
-	
+
 	/**
-	 * 
-	 * @param key
-	 * @return
-	 */
-	public String getProperty(String key) {
-		
-		return properties.getProperty(key);
-	}
-	
-	/**
+	 * Method for finding properties from the serverConfig.dat file
 	 * 
 	 * @param property
+	 *            Name of the property
+	 * @return value of the property, in most cases an encrypted value.
+	 */
+	public String getProperty(String property) {
+
+		return properties.getProperty(property);
+	}
+
+	/**
+	 * Method to change properties that are stored in the serverConfig.dat file.
+	 * 
+	 * @param property
+	 *            Name of the property
 	 * @param value
+	 *            New value to be stored
 	 */
 	public boolean setProperty(String property, String value) {
+
 		properties.setProperty(property, value);
 		try {
 			properties.store(new FileWriter("clientConfig"), "Changed: " + property + " (old = " + value + ")");

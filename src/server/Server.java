@@ -12,44 +12,43 @@ import enteties.Entity;
 import enteties.User;
 
 /**
- * Handles all Client.
+ * Server class that handles all client conncections.
  * 
  * @author Mattias Sundquist
  * @author Peter Sjögren
  *
  */
 public class Server {
-	
+
 	private ServerController serverController;
 	private ServerSocket serverSocket = null;
 	private Thread listenerThread = null;
 
 	/**
-	 * Starts the server.
-	 * 
-	 * @param port The port to which the server will be listening
+	 * Constructor that creates the ServerController, which handles most of the
+	 * communication and logic in the server system.
 	 */
 	public Server() {
-		
+
 		serverController = new ServerController(this);
-		
+
 	}
-	
+
 	/**
-	 * Starts the server
+	 * Creates a new ClientListener and gives the commando to start listening.
 	 */
 	public void connect() {
-		
+
 		listenerThread = new Thread(new ClientListener(Integer.parseInt(serverController.getProperty("port"))));
 		listenerThread.start();
 
 	}
-	
+
 	/**
 	 * Disconnects the server
 	 */
 	public void disconnect() {
-		
+
 		listenerThread.interrupt();
 		try {
 			serverSocket.close();
@@ -57,40 +56,50 @@ public class Server {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
+	 * Method for changing the server port and saving the incoming value in the
+	 * serverConfig.dat file.
 	 * 
 	 * @param port
-	 * @return 
+	 *            New port
+	 * @return true if the change was succesfall, false otherwise.
 	 */
-	public boolean setPort(String port){
-		return serverController.setProperty("port", port); 
-	}
-	
-	
-	public synchronized boolean isOnline(){
-				if (listenerThread != null) {
-					return listenerThread.isAlive();
-				}
-			return false;
+	public boolean setPort(String port) {
+
+		return serverController.setProperty("port", port);
 	}
 
 	/**
-	 * 	
-	 * Listens for incoming clients and sends them to the ClientConnection class
-	 * @author peter
+	 * Method for checking if a ClientListener is online or not
+	 * 
+	 * @return true or false pending on the status of the listenerThread.
+	 */
+	public synchronized boolean isOnline() {
+
+		if (listenerThread != null) {
+			return listenerThread.isAlive();
+		}
+		return false;
+	}
+
+	/**
+	 * Listener class that listens for incoming client connections and creates a
+	 * separate ClientConnection for every client that connects.
+	 * 
+	 * @author Peter Sjögren
 	 *
 	 */
-	private class ClientListener implements Runnable{
-		
-		public ClientListener(int port){
+	private class ClientListener implements Runnable {
+
+		public ClientListener(int port) {
 			try {
 				serverSocket = new ServerSocket(port);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		@Override
 		public void run() {
 			serverController.logAppend("Server running!");
@@ -103,17 +112,11 @@ public class Server {
 			}
 			serverController.logAppend("Server closed!");
 		}
-		
 	}
 
-
-
-
-
-
 	/**
-	 * Handles all logic for the clients connected to this server. Each client gets its own instance of
-	 * ClientConnection.
+	 * Handles all logic for the clients connected to this server. Each client
+	 * gets its own instance of ClientConnection.
 	 * 
 	 * @author Mattias Sundquist
 	 *
@@ -127,13 +130,14 @@ public class Server {
 		/**
 		 * Sets up input and output streams and starts a new Thread.
 		 * 
-		 * @param socket The client which connected to the server.
+		 * @param socket
+		 *            The client which connected to the server.
 		 */
 		public ClientConnection(Socket socket) {
-			
+
 			this.socket = socket;
 			serverController.logAppend("Client " + socket.getInetAddress() + " connected!");
-			
+
 			try {
 				objOutput = new ObjectOutputStream(socket.getOutputStream());
 				objInput = new ObjectInputStream(socket.getInputStream());
@@ -144,7 +148,8 @@ public class Server {
 		}
 
 		/**
-		 * Disconnects the client from the server. Closes all streams and threads.
+		 * Disconnects the client from the server. Closes all streams and
+		 * threads.
 		 */
 		private void disconnect() {
 
@@ -157,12 +162,12 @@ public class Server {
 			} catch (IOException e) {
 				e.printStackTrace();
 				this.interrupt();
-
 			}
 		}
 
 		/**
-		 * The run method for this clients thread. Listens for incoming messages and sends them to the ServerController.
+		 * The run method for this clients thread. Listens for incoming messages
+		 * and sends them to the ServerController.
 		 */
 		public void run() {
 
@@ -173,8 +178,6 @@ public class Server {
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
 					disconnect();
-					
-					
 				}
 			}
 			disconnect();

@@ -3,14 +3,11 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.jar.JarInputStream;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultDesktopManager;
@@ -24,7 +21,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -252,21 +248,8 @@ public class GUIController {
 				desktop.add(new SocialTool(clientController, getGUIController()));
 				break;
 
-			case "tool_admin": // LÖSENORDET ÄR "password"
+			case "tool_admin":
 				new PasswordFrame(desktop.getSize());
-				// String pass;
-				// pass = JOptionPane.showInputDialog(desktop, "Enter admin
-				// password", "Admin Sign In",
-				// JOptionPane.DEFAULT_OPTION);
-				// if (clientController.checkPassword("admin", pass)) {
-				// desktop.add(new AdminTool(clientController,
-				// getGUIController()));
-				// } else {
-				// JOptionPane.showMessageDialog(desktop, "Wrong password, try
-				// again", "Admin Sign In",
-				// JOptionPane.ERROR_MESSAGE);
-				// }
-				// pass = null;
 				break;
 
 			default:
@@ -275,7 +258,15 @@ public class GUIController {
 			}
 		}
 
+		/**
+		 * 
+		 * Frame for easy and safe password controll of the AdminTool
+		 * 
+		 * @author Peter Sjögren
+		 *
+		 */
 		private class PasswordFrame extends JFrame implements ActionListener {
+
 			private JPasswordField passField = new JPasswordField();
 			private JLabel label = new JLabel("Enter admin password:  ");
 			private JPanel fieldPanel = new JPanel(new GridLayout(1, 2));
@@ -284,7 +275,14 @@ public class GUIController {
 			private JButton abortButton = new JButton("Cancel");
 			private BorderLayout layout = new BorderLayout();
 
+			/**
+			 * Constructor that builds up the graphics
+			 * 
+			 * @param dimension
+			 *            Current size of the desktop window.
+			 */
 			public PasswordFrame(Dimension dimension) {
+
 				setTitle("Admin Sign In");
 				setLayout(layout);
 				setSize(new Dimension(300, 80));
@@ -309,8 +307,13 @@ public class GUIController {
 
 			}
 
+			/**
+			 * case: "Log In" checks if the admin password is correct and starts
+			 * the AdminTool
+			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				switch (e.getActionCommand()) {
 
 				case "Log In":
@@ -363,7 +366,6 @@ public class GUIController {
 				super(text);
 				this.setActionCommand(action);
 			}
-
 		}
 	}
 }

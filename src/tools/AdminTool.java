@@ -77,7 +77,7 @@ public class AdminTool extends Tool implements Updatable {
 	}
 
 	/**
-	 * ActionListener implementatrion that listens for gui button clicks.
+	 * ActionListener implementation that listens for gui button clicks.
 	 * 
 	 * @author Robin Overgaard
 	 * @version 1.0

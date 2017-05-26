@@ -20,6 +20,7 @@ public class ConnectDB {
 	 * @param serverController
 	 */
 	public ConnectDB(ServerController sc) {
+		
 		try {
 			connection = DriverManager.getConnection(sc.decrypt("url"), sc.decrypt("user"), sc.decrypt("password"));
 			stmt = connection.createStatement();
@@ -33,6 +34,7 @@ public class ConnectDB {
 	 * @param query The information to add to the database.
 	 */
 	public synchronized void executeInsertOrDeleteQuery(String query) {
+		
 		try {
 			stmt.execute(query);
 		} catch (SQLException e) {
@@ -40,7 +42,13 @@ public class ConnectDB {
 		}
 	}
 
+	/**
+	 * 
+	 * @param query
+	 * @return
+	 */
 	public synchronized ResultSet executeGetQuery(String query) {
+		
 		ResultSet rs = null;
 		try {
 			rs = stmt.executeQuery(query);
@@ -50,7 +58,12 @@ public class ConnectDB {
 		return rs;
 	}
 
+	/**
+	 * 
+	 * @param query
+	 */
 	public synchronized void executeUpdateQuery(String query) {
+		
 		try {
 			stmt.executeUpdate(query);
 		} catch (SQLException e) {
@@ -58,6 +71,11 @@ public class ConnectDB {
 		}
 	}
 
+	/**
+	 * 
+	 * @param query
+	 * @return
+	 */
 	public synchronized String executeUpdateQueryAndReturnGeneratedId(String query) {
 
 		try {
@@ -74,7 +92,5 @@ public class ConnectDB {
 			e.printStackTrace();
 		}
 		return null;
-
 	}
-
 }

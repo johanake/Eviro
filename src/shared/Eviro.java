@@ -7,7 +7,7 @@ import server.Server;
 
 /**
  * Contains constants and code to setup and start the system.
- * @author Robin Overgaard
+ * @author Robin Overgaard, Peter Sjögren
  * @version 1.0
  */
 public class Eviro {
@@ -38,6 +38,7 @@ public class Eviro {
 
 	/**
 	 * Instantiate the main component(s) of the system.
+	 * Waits for the Server to start listening for clients before the client is started.
 	 */
 	private void start() {
 
@@ -49,8 +50,6 @@ public class Eviro {
 
 		clientThread.start();
 		
-		
-
 	}
 
 	/**
@@ -87,6 +86,10 @@ public class Eviro {
 
 	}
 
+	/**
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
 		Eviro app = new Eviro();

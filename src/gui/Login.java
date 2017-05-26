@@ -28,11 +28,15 @@ import tools.AdminTool;
 
 /**
  * 
- * @author peter
+ * GUI class for the Login window with password controll that starts the client.
+ * Also gives an admin the possibility to change the server ip and port that are
+ * stored in the clientConfig.dat file.
+ * 
+ * @author Peter Sjögren
  *
  */
 public class Login extends JFrame implements ActionListener, Runnable {
-	
+
 	private ClientController clientController;
 	private JLabel userLabel = new JLabel("Username");
 	private JLabel passLabel = new JLabel("Password");
@@ -50,13 +54,24 @@ public class Login extends JFrame implements ActionListener, Runnable {
 	private Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
 	private BorderLayout layout = new BorderLayout();
 
+	/**
+	 * Simple constructor.
+	 * 
+	 * @param clientController
+	 *            ClientController gives access to the checkPassword method
+	 *            as well as connectToServer method.
+	 */
 	public Login(ClientController clientController) {
 		this.clientController = clientController;
 	}
 
+	/**
+	 * Run-method that builds the graphic components, show the Login-window and
+	 * starts listening for input.
+	 */
 	@Override
 	public void run() {
-		
+
 		setTitle("Eviro Enterprise System - Sign In");
 		setSize(new Dimension(300, 130));
 		setResizable(false);
@@ -89,9 +104,13 @@ public class Login extends JFrame implements ActionListener, Runnable {
 		setVisible(true);
 	}
 
+	/**
+	 * case "Login" checks the given password and connects to the server if it is correct.
+	 * case "Admin" starts the password controll for the AdminFrame
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-	
+
 		switch (e.getActionCommand()) {
 
 		case "Login":
@@ -117,8 +136,12 @@ public class Login extends JFrame implements ActionListener, Runnable {
 		}
 	}
 
+	/**
+	 * Password Frame for safe input and handling of server password
+	 * @author Peter Sjögren
+	 */
 	private class PasswordFrame extends JFrame implements ActionListener {
-		
+
 		private JPasswordField passField = new JPasswordField();
 		private JLabel label = new JLabel("Enter admin password:  ");
 		private JPanel fieldPanel = new JPanel(new GridLayout(1, 2));
@@ -127,8 +150,12 @@ public class Login extends JFrame implements ActionListener, Runnable {
 		private JButton abortButton = new JButton("Cancel");
 		private BorderLayout layout = new BorderLayout();
 
+		/**
+		 * Constructor that builds the graphic in the frame
+		 * @param serverController ServerController for acces to login()-method.
+		 */
 		public PasswordFrame(Dimension dimension) {
-			
+
 			setTitle("Admin Sign In");
 			setLayout(layout);
 			setSize(new Dimension(300, 80));
@@ -153,9 +180,12 @@ public class Login extends JFrame implements ActionListener, Runnable {
 
 		}
 
+		/**
+		 * case: "Log In" checks the admin password and starts the AdminFrame if it is correct.
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+
 			switch (e.getActionCommand()) {
 
 			case "Log In":
@@ -177,8 +207,12 @@ public class Login extends JFrame implements ActionListener, Runnable {
 		}
 	}
 
+	/**
+	 * GUI class for changing the server and port that are stored in the clientConfig.dat file.
+	 * @author Peter Sjögren
+	 */
 	private class AdminFrame extends JFrame implements ActionListener {
-		
+
 		private JLabel ipLabel = new JLabel("Server IP");
 		private JLabel portLabel = new JLabel("Server Port");
 		private JTextField ipField = new JTextField();
@@ -189,8 +223,11 @@ public class Login extends JFrame implements ActionListener, Runnable {
 		private JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
 		private BorderLayout layout = new BorderLayout();
 
+		/**
+		 * Constructor that builds up the graphics and starts listening for input.
+		 */
 		public AdminFrame() {
-			
+
 			setTitle("Eviro Enterprise System - Admin");
 			setSize(new Dimension(300, 150));
 			setResizable(false);
@@ -222,9 +259,12 @@ public class Login extends JFrame implements ActionListener, Runnable {
 			setVisible(true);
 		}
 
+		/**
+		 * case: "Save" stores the current information in the fields to the clientConfig.dat file.
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+
 			switch (e.getActionCommand()) {
 			case "Edit":
 				ipField.setEditable(true);
@@ -243,9 +283,5 @@ public class Login extends JFrame implements ActionListener, Runnable {
 				break;
 			}
 		}
-	}
-
-	public void main(String[] args) {
-
 	}
 }
