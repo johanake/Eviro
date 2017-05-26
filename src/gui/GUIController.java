@@ -37,9 +37,9 @@ import tools.SocialTool;
 
 /**
  * Handles client side gui operations of the system.
- * 
  * @author Robin Overgaard
  * @author Peter Sjögren
+ * @author nadiaelhaddaoui
  * @version 1.0
  */
 
@@ -50,9 +50,7 @@ public class GUIController {
 
 	/**
 	 * Constructs the client, instantiates a new main workspace window.
-	 * 
-	 * @param clientController
-	 *            controller for communication with the client
+	 * @param clientController controller for communication with the client
 	 */
 	public GUIController(ClientController clientController) {
 
@@ -141,9 +139,7 @@ public class GUIController {
 
 	/**
 	 * Adds a new toolbox to the desktop
-	 * 
-	 * @param tool
-	 *            the tool to open
+	 * @param tool the tool to open
 	 */
 	public void add(JInternalFrame tool) {
 		desktop.add(tool);
@@ -152,7 +148,6 @@ public class GUIController {
 
 	/**
 	 * The sidebar.
-	 * 
 	 * @author Robin Overgaard
 	 * @version 1.0
 	 */
@@ -161,10 +156,13 @@ public class GUIController {
 		private JPanel pnlSideNorth = new JPanel();
 		private JPanel pnlSideSouth = new JPanel();
 
-		private JComponent top[] = new JComponent[] { new ActionJButton("Invoice", "tool_invoice"),
-				new ActionJButton("Customer", "tool_customer"), new ActionJButton("Article", "tool_article") };
+		private JComponent top[] = new JComponent[] {
+				new ActionJButton("Invoice", "tool_invoice"),
+				new ActionJButton("Customer", "tool_customer"),
+				new ActionJButton("Article", "tool_article") };
 
-		private JComponent bottom[] = new JComponent[] { new ActionJButton("Admin", "tool_admin"),
+		private JComponent bottom[] = new JComponent[] {
+				new ActionJButton("Admin", "tool_admin"),
 				new ActionJButton("Social", "tool_social"),
 				// new ActionJButton("Settings", "tool_settings"),
 				new ActionJButton("Quit", "link_exit") };
@@ -190,11 +188,8 @@ public class GUIController {
 
 		/**
 		 * Creates a styled panel for groups in the sidebar.
-		 * 
-		 * @param objects
-		 *            the group of component to build a panel of
-		 * @param title
-		 *            the title displayed on top of the panel
+		 * @param objects the group of component to build a panel of
+		 * @param title the title displayed on top of the panel
 		 * @return the created panel
 		 */
 		private JPanel createComponentPanel(JComponent[] objects, String title) {
@@ -219,9 +214,7 @@ public class GUIController {
 
 		/*
 		 * (non-Javadoc)
-		 * 
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
-		 * ActionEvent)
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event. ActionEvent)
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -259,11 +252,8 @@ public class GUIController {
 		}
 
 		/**
-		 * 
 		 * Frame for easy and safe password controll of the AdminTool
-		 * 
 		 * @author Peter Sjögren
-		 *
 		 */
 		private class PasswordFrame extends JFrame implements ActionListener {
 
@@ -277,9 +267,7 @@ public class GUIController {
 
 			/**
 			 * Constructor that builds up the graphics
-			 * 
-			 * @param dimension
-			 *            Current size of the desktop window.
+			 * @param dimension Current size of the desktop window.
 			 */
 			public PasswordFrame(Dimension dimension) {
 
@@ -308,8 +296,7 @@ public class GUIController {
 			}
 
 			/**
-			 * case: "Log In" checks if the admin password is correct and starts
-			 * the AdminTool
+			 * case: "Log In" checks if the admin password is correct and starts the AdminTool
 			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -335,9 +322,7 @@ public class GUIController {
 		}
 
 		/**
-		 * Customization of JButton that takes it's ActionCommand as a parameter
-		 * in the constructor.
-		 * 
+		 * Customization of JButton that takes it's ActionCommand as a parameter in the constructor.
 		 * @author Robin Overgaard
 		 * @version 1.0
 		 */
@@ -345,9 +330,7 @@ public class GUIController {
 
 			/**
 			 * Constructor.
-			 * 
-			 * @param text
-			 *            the text to display on this button
+			 * @param text the text to display on this button
 			 */
 			public ActionJButton(String text) {
 				super(text);
@@ -356,11 +339,8 @@ public class GUIController {
 
 			/**
 			 * Constructor.
-			 * 
-			 * @param text
-			 *            the text to display on this button
-			 * @param action
-			 *            the action command for this button
+			 * @param text the text to display on this button
+			 * @param action the action command for this button
 			 */
 			public ActionJButton(String text, String action) {
 				super(text);

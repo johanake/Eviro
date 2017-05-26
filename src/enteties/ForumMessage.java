@@ -2,13 +2,14 @@ package enteties;
 
 import java.io.Serializable;
 
+/**
+ * ForumMessage represents a forummessage entity in the system.
+ * @author Matthias Sundqvist
+ * @version 1.0
+ */
+
 public class ForumMessage implements Serializable, Entity {
 
-	/**
-	 * ForumMessage represents a forummessage entity in the system. 
-	 * @Matthias Sundqvist
-	 * @Version 1.0
-	 */
 	private int operation;
 	private Object[] data;
 
