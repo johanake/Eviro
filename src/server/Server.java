@@ -14,6 +14,7 @@ import enteties.Entity;
  * @author Peter Sjögren
  * @author Robin Overgaard
  * @author nadiaelhaddaoui
+ * @author Johan Åkesson
  */
 public class Server {
 
