@@ -16,13 +16,24 @@ import javax.swing.table.DefaultTableModel;
 import enteties.Entity;
 import gui.Table;
 import gui.Updatable;
-
+		/**
+		 * SearchResult represents a search result that happens in the program. 
+		 * @author Johan Åkersson
+		 * @author Robin Overgaard
+		 *
+		 */
 public class SearchResult extends JInternalFrame {
 
 	private Table table;
 	private DefaultTableModel model;
 	private JScrollPane scrollPane;
 
+	/**
+	 * Creats a search results.
+	 * @param obj containing column headers
+	 * @param gui sends the data to the gui
+	 * @param list list of search results
+	 */
 	public SearchResult(Object[] obj, Updatable gui, ArrayList<Entity> list) {
 		super("Search Result", true, true, false, true);
 		setLayout(new BorderLayout());
@@ -38,7 +49,9 @@ public class SearchResult extends JInternalFrame {
 
 		table.addMouseListener(new MouseAdapter() {
 
-			@Override
+			/* (non-Javadoc)
+			 * @see java.awt.event.MouseAdapter#mousePressed(java.awt.event.MouseEvent)
+			 */
 			public void mousePressed(MouseEvent me) {
 				JTable table = (JTable) me.getSource();
 				Point p = me.getPoint();
