@@ -41,12 +41,12 @@ public class Eviro {
 	 */
 	private void start() {
 
-		Thread serverThread = new Server();
+		Server server = new Server();
 		
 		Thread clientThread = new ClientController();
 		
-		while(!serverThread.isAlive());
-		
+		while ( !server.isOnline() ) {};
+
 		clientThread.start();
 		
 		

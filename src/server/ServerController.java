@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -76,6 +77,7 @@ public class ServerController {
 		
 		serverGUI = new ServerGUI(this, server);
 		setUpLogger();
+
 	}
 
 	/**
@@ -86,8 +88,9 @@ public class ServerController {
 		if (passCryptor.checkPassword(pass, properties.getProperty("admin"))) {
 			
 			textCryptor.setPassword(pass);
+			
 			connectDB = new ConnectDB(this);
-			server.connect(Integer.parseInt(properties.getProperty("port")));
+			server.connect();
 			
 			return true;
 		}
@@ -101,6 +104,32 @@ public class ServerController {
 	public String decrypt(String property) {
 
 		return textCryptor.decrypt(properties.getProperty(property));
+	}
+	
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public String getProperty(String key) {
+		
+		return properties.getProperty(key);
+	}
+	
+	/**
+	 * 
+	 * @param property
+	 * @param value
+	 */
+	public boolean setProperty(String property, String value) {
+		properties.setProperty(property, value);
+		try {
+			properties.store(new FileWriter("clientConfig"), "Changed: " + property + " (old = " + value + ")");
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	/**

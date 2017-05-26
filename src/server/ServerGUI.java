@@ -31,17 +31,20 @@ public class ServerGUI implements ActionListener {
 	private Server server;
 	private JFrame window = new JFrame(Eviro.APP_NAME + " Server");
 	private JPanel pnlMain = new JPanel(new BorderLayout());
-	private JPanel pnlSouth = new JPanel(new FlowLayout());
+	private JPanel pnlSouth = new JPanel(new GridLayout(1, 3));
 	private JTextArea txtArea = new JTextArea();
 	private JScrollPane scrollPane = new JScrollPane(txtArea);
 	private Font font = new Font("Monospaced", Font.BOLD, 15);
-	private JButton btnDisconnect = new JButton("Disconnect & Close Server");
+	private JButton btnDisconnect = new JButton("Disconnect");
+	private JButton btnConnect = new JButton("Connect");
+	private JButton btnPort = new JButton("Change Port");
+
 
 	public ServerGUI(ServerController serverController, Server server) {
-
 		this();
 		this.server = server;
 		new PasswordFrame(serverController);
+
 	}
 
 	public ServerGUI() {
@@ -55,17 +58,26 @@ public class ServerGUI implements ActionListener {
 		pnlMain.setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlMain.add(scrollPane, BorderLayout.CENTER);
 		pnlMain.add(pnlSouth, BorderLayout.SOUTH);
-		pnlSouth.add(btnDisconnect, BorderLayout.CENTER);
+
+		pnlSouth.add(btnDisconnect);
+		pnlSouth.add(btnPort);
+		pnlSouth.add(btnConnect);
+
 		window.setMinimumSize(new Dimension(600, 400));
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
 		window.setContentPane(pnlMain);
 
-		btnDisconnect.setForeground(Color.red);
+		btnPort.setEnabled(true);
 		btnDisconnect.setEnabled(false);
-		btnDisconnect.addActionListener(this);
+		btnConnect.setEnabled(false);
+
+		btnDisconnect.addActionListener(this);		
+		btnConnect.addActionListener(this);
+		btnPort.addActionListener(this);
 
 		window.pack();
+			
 	}
 
 	public void append(String text) {
@@ -90,9 +102,34 @@ public class ServerGUI implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if (e.getSource() == btnDisconnect)
-			server.disconnect();
-		window.dispose();
+		switch (e.getActionCommand()){
+			
+			case "Disconnect":
+				server.disconnect();
+				btnConnect.setEnabled(true);
+				btnDisconnect.setEnabled(false);
+				break;
+			
+			case "Connect":
+				server.connect();
+				btnConnect.setEnabled(false);
+				btnDisconnect.setEnabled(true);
+				break;
+			
+			case "Change Port":
+				String port = JOptionPane.showInputDialog("Choose new server port");
+				
+				if ( port != null && server.setPort(port) ){
+					server.disconnect();
+					btnConnect.setEnabled(true);
+					btnDisconnect.setEnabled(false);
+					JOptionPane.showMessageDialog(null, "Server port changed to: " + port + "\nPress connect to start server with new port");
+				}	
+				else {
+					JOptionPane.showMessageDialog(null, "Port change failed, server still running on old port.");
+				}
+				break;
+		}
 	}
 
 	/**
@@ -147,7 +184,6 @@ public class ServerGUI implements ActionListener {
 
 			case "Log In":
 				if (sc.login(new String(passField.getPassword()))) {
-					btnDisconnect.setBorder(BorderFactory.createSoftBevelBorder(BevelBorder.RAISED));
 					btnDisconnect.setEnabled(true);
 					dispose();
 				} else {

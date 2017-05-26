@@ -18,10 +18,11 @@ import enteties.User;
  * @author Peter Sjögren
  *
  */
-public class Server extends Thread {
-
-	private ServerSocket serverSocket;
+public class Server {
+	
 	private ServerController serverController;
+	private ServerSocket serverSocket = null;
+	private Thread listenerThread = null;
 
 	/**
 	 * Starts the server.
@@ -33,48 +34,82 @@ public class Server extends Thread {
 		serverController = new ServerController(this);
 		
 	}
-
+	
 	/**
 	 * Starts the server
 	 */
-	public void connect(int port) {
+	public void connect() {
 		
-		try {
-			serverSocket = new ServerSocket(port);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		start();
-	}
+		listenerThread = new Thread(new ClientListener(Integer.parseInt(serverController.getProperty("port"))));
+		listenerThread.start();
 
+	}
+	
 	/**
 	 * Disconnects the server
 	 */
 	public void disconnect() {
 		
-		interrupt();
+		listenerThread.interrupt();
 		try {
 			serverSocket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 
+	 * @param port
+	 * @return 
+	 */
+	public boolean setPort(String port){
+		return serverController.setProperty("port", port); 
+	}
+	
+	
+	public synchronized boolean isOnline(){
+				if (listenerThread != null) {
+					return listenerThread.isAlive();
+				}
+			return false;
+	}
 
 	/**
-	 * Listens for incoming clients and sends them to the ClientConnection class.
+	 * 	
+	 * Listens for incoming clients and sends them to the ClientConnection class
+	 * @author peter
+	 *
 	 */
-	public void run() {
-
-		serverController.logAppend("Server running!");
-		while (!interrupted()) {
+	private class ClientListener implements Runnable{
+		
+		public ClientListener(int port){
 			try {
-				new ClientConnection(serverSocket.accept());
+				serverSocket = new ServerSocket(port);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		serverController.logAppend("Server closed!");
+		
+		@Override
+		public void run() {
+			serverController.logAppend("Server running!");
+			while (!listenerThread.interrupted()) {
+				try {
+					new ClientConnection(serverSocket.accept());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			serverController.logAppend("Server closed!");
+		}
+		
 	}
+
+
+
+
+
 
 	/**
 	 * Handles all logic for the clients connected to this server. Each client gets its own instance of
