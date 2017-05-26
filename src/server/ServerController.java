@@ -71,7 +71,7 @@ public class ServerController {
 		this.server = server;
 
 		try {
-			properties.load(reader = new FileReader("config/serverConfig.dat"));
+			properties.load(reader = new FileReader("properties/serverConfig.properties"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -135,7 +135,7 @@ public class ServerController {
 
 		properties.setProperty(property, value);
 		try {
-			properties.store(new FileWriter("clientConfig"), "Changed: " + property + " (old = " + value + ")");
+			properties.store(new FileWriter("properties/serverConfig.properties"), "Changed: " + property + " (old = " + value + ")");
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -8,6 +8,8 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -85,9 +87,13 @@ public class ServerGUI implements ActionListener {
 		window.setVisible(true);
 		window.setContentPane(pnlMain);
 
-		btnPort.setEnabled(true);
+		btnPort.setEnabled(false);
 		btnDisconnect.setEnabled(false);
 		btnConnect.setEnabled(false);
+		
+		btnPort.setBorder(BorderFactory.createEtchedBorder());
+		btnConnect.setBorder(BorderFactory.createEtchedBorder());
+		btnDisconnect.setBorder(BorderFactory.createEtchedBorder());
 
 		btnDisconnect.addActionListener(this);
 		btnConnect.addActionListener(this);
@@ -134,24 +140,27 @@ public class ServerGUI implements ActionListener {
 			server.disconnect();
 			btnConnect.setEnabled(true);
 			btnDisconnect.setEnabled(false);
+			btnPort.setEnabled(true);
 			break;
 
 		case "Connect":
 			server.connect();
 			btnConnect.setEnabled(false);
 			btnDisconnect.setEnabled(true);
+			btnPort.setEnabled(false);
+
 			break;
 
 		case "Change Port":
 			String port = JOptionPane.showInputDialog("Choose new server port");
 
 			if (port != null && server.setPort(port)) {
-				server.disconnect();
 				btnConnect.setEnabled(true);
 				btnDisconnect.setEnabled(false);
 				JOptionPane.showMessageDialog(null,
 						"Server port changed to: " + port + "\nPress connect to start server with new port");
 			} else {
+				
 				JOptionPane.showMessageDialog(null, "Port change failed, server still running on old port.");
 			}
 			break;
@@ -160,6 +169,7 @@ public class ServerGUI implements ActionListener {
 
 	/**
 	 * Password Frame for safe input and handling of server password
+	 * 
 	 * @author Peter Sjögren
 	 */
 	private class PasswordFrame extends JFrame implements ActionListener {
@@ -176,7 +186,9 @@ public class ServerGUI implements ActionListener {
 
 		/**
 		 * Constructor that builds the graphic in the frame
-		 * @param serverController ServerController for acces to login()-method.
+		 * 
+		 * @param serverController
+		 *            ServerController for acces to login()-method.
 		 */
 		public PasswordFrame(ServerController serverController) {
 
@@ -213,9 +225,12 @@ public class ServerGUI implements ActionListener {
 
 			case "Log In":
 				if (sc.login(new String(passField.getPassword()))) {
+
 					btnDisconnect.setEnabled(true);
 					dispose();
+
 				} else {
+
 					passField.setText("");
 					JOptionPane.showMessageDialog(null, "Wrong password, try again", "Admin Sign In",
 							JOptionPane.ERROR_MESSAGE);

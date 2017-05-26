@@ -45,7 +45,7 @@ public class ClientController extends Thread {
 	 */
 	public ClientController() {
 		try {
-			reader = new FileReader("config/clientConfig.dat");
+			reader = new FileReader("properties/clientConfig.properties");
 			properties.load(reader);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -397,7 +397,7 @@ public class ClientController extends Thread {
 
 		properties.setProperty(property, value);
 		try {
-			properties.store(new FileWriter("clientConfig"), "Changed: " + property + " (old = " + value + ")");
+			properties.store(new FileWriter("properties/clientConfig.properties"), "Changed: " + property + " (old = " + value + ")");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

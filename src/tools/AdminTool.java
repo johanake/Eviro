@@ -21,7 +21,7 @@ import shared.Eviro;
 public class AdminTool extends Tool implements Updatable {
 
 	private ButtonListener buttonListener;
-	private Tab[] tabs = new Tab[] { new Tab("Users"), new Tab("Network") };
+	private Tab[] tabs = new Tab[] { new Tab("Users") };
 
 	private LabledTextField ltfUserID = new LabledTextField("User ID");
 	private LabledTextField ltfUserName = new LabledTextField("User Name");
