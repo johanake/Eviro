@@ -26,6 +26,13 @@ import gui.Tool;
 import gui.Updatable;
 import shared.Eviro;
 
+/**
+ * Tool created for handling invoices, GUI through Tool(super) with functions to create, search and alter information
+ * @author Robin Overgaard
+ * @author Johan Åkesson
+ * @author nadiaelhaddaoui 
+ * @version 1.1
+ */
 public class InvoiceTool extends Tool implements Updatable {
 	
 	public static final String INVOICE_OPEN = "Open"; 
@@ -67,6 +74,13 @@ public class InvoiceTool extends Tool implements Updatable {
 	private ClientController clientController;
 	private Updatable temp;
 
+	/**
+	 * Constructs and sets the content for InvoiceTool
+	 * @param customerGUI instance of customerGUI
+	 * @param clientController instance of clientController
+	 * @param guiController instance of guiController
+	 * @param customer customerNumber
+	 */
 	public InvoiceTool(CustomerTool customerGUI, ClientController clientController, GUIController guiController, String customer) {
 
 		super("Invoice", clientController, guiController);
@@ -111,6 +125,11 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Construtcs and sets the content for InvoiceTool
+	 * @param clientController instance of clientController
+	 * @param guiController instance of guiController
+	 */
 	public InvoiceTool(ClientController clientController, GUIController guiController) {
 
 		super("Invoice", clientController, guiController);
@@ -122,6 +141,12 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Sets the total price
+	 * @param table instance of table
+	 * @param row row
+	 * @param col column
+	 */
 	public void calculate(Table table, int row, int col) {
 
 		if (col == 0) {
@@ -176,6 +201,9 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Creates button shortcuts
+	 */
 	private void setupButtonShortcuts() {
 
 		btnNew.setMnemonic(KeyEvent.VK_N);
@@ -188,6 +216,9 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Sets the content
+	 */
 	public void setup() {
 
 		super.setMaximizable(true);
@@ -202,16 +233,27 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Searches for specific invoice
+	 * @param invoiceNo invoiceId
+	 */
 	public void search(String invoiceNo) {
 
 		ltfInvNo.setText(invoiceNo);
 		search(getThis(), ltfAll, Eviro.ENTITY_INVOICE);
 	}
 
+	/**
+	 * Updates invoice status
+	 * @param status status
+	 */
 	public void updateStatus(String status) {
 		ltfStatus.setText(status);
 	}
 
+	/**
+	 * Method to invert an invoice and
+	 */
 	public void credit() {
 
 		ltfCreated.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
@@ -252,6 +294,9 @@ public class InvoiceTool extends Tool implements Updatable {
 		setTotalPrice();
 	}
 
+	/**
+	 * Creates an credit invoice
+	 */
 	private void createCreditInvoice() {
 		ltfInvNo.setText(null);
 		// update(new , Eviro.ENTITY_INVOICE);
@@ -260,6 +305,9 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Method to print invoice
+	 */
 	public void print() {
 
 		PrinterJob pj = PrinterJob.getPrinterJob();
@@ -274,6 +322,11 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Adds article to table
+	 * @param articleno article number
+	 * @param row row
+	 */
 	public void getArticle(String articleno, int row) {
 
 		ArrayList<Entity> response = clientCtrlr.search(
@@ -298,12 +351,12 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Creates transactions with products for a specific invoice
+	 * @param invoiceNbr invoiceNbr
+	 * @return
+	 */
 	private boolean createTransactions(String invoiceNbr) {
-
-		// if (articles.getValueAt(0, 0) == null) {
-		// popupMessage("Please add row(s) to invoice before creating.");
-		// return false;
-		// }
 
 		for (int i = 0; i < articles.getModel().getRowCount(); i++) {
 
@@ -324,6 +377,10 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Returns transactions for a specific invoice
+	 * @param invoiceNbr invoice number
+	 */
 	private void getTransactions(String invoiceNbr) {
 
 		ArrayList<Entity> transaction = clientCtrlr.search(new Object[] { null, invoiceNbr, null, null, null },
@@ -357,6 +414,9 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Sets the total price
+	 */
 	public void setTotalPrice() {
 
 		Double sum = 0.00;
@@ -373,6 +433,10 @@ public class InvoiceTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Adds specific article(s) to table
+	 * @param values
+	 */
 	public void addArticle(String[] values) {
 
 		int rowCount = articles.getRowCount();
@@ -386,6 +450,10 @@ public class InvoiceTool extends Tool implements Updatable {
 		calculate(articles, rowCount, 3);
 	}
 
+	/**
+	 * Returns an instance of InvoiceTool
+	 * @return instance of InvoiceTool
+	 */
 	public InvoiceTool getThisTool() {
 		return this;
 	}

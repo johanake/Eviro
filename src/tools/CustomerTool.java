@@ -26,6 +26,13 @@ import gui.Tool;
 import gui.Updatable;
 import shared.Eviro;
 
+/**
+ * Tool created for handling customers, GUI through Tool(super) with functions to create, search and alter information
+ * @author Robin Overgaard
+ * @author Johan Åkesson
+ * @author nadiaelhaddaoui 
+ * @version 1.1
+ */
 public class CustomerTool extends Tool implements Updatable {
 
 	private ButtonListener buttonListener;
@@ -62,6 +69,11 @@ public class CustomerTool extends Tool implements Updatable {
 	private JButton[] lookingButtons = { btnReset, btnEdit, btnInvoice };
 	private JButton[] editingButtons = { btnReset, btnUpdate };
 
+	/**
+	 * Constructs and sets the content for CustomerTool
+	 * @param clientController instance of clientController
+	 * @param guiController instance of guiController
+	 */
 	public CustomerTool(ClientController clientController, GUIController guiController) {
 		super("Customer", clientController, guiController);
 		buttonListener = new ButtonListener();
@@ -80,6 +92,10 @@ public class CustomerTool extends Tool implements Updatable {
 		btnReset.setMnemonic(KeyEvent.VK_R);
 	}
 
+	/**
+	 * Creates a table with custoemr comments
+	 * @param editable boolean to enable or disable the tables edit-function
+	 */
 	private void createCommentsTable(boolean editable) {
 
 		tabComments.removeAll();
@@ -118,6 +134,9 @@ public class CustomerTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Creates table for customer invoices
+	 */
 	private void createInvoiceTable() {
 
 		tblInvoices = new Table(new Object[] { "Created", "Invoice-No", "Buyer", "Total" }, false);
@@ -147,6 +166,10 @@ public class CustomerTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Gets the comments for a specific customer
+	 * @param customerNo customers id
+	 */
 	public void getComments(String customerNo) {
 
 		ArrayList<Entity> comments = clientCtrlr.search(new Object[] { customerNo, "customer", null },
@@ -164,6 +187,10 @@ public class CustomerTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Gets the invoices for a specific customer
+	 * @param customerNo customer id
+	 */
 	public void getInvoices(String customerNo) {
 
 		ArrayList<Entity> invoices = clientCtrlr.search(new Object[] { null, customerNo, null, null, null, null, null, null }, Eviro.ENTITY_INVOICE);
@@ -188,6 +215,9 @@ public class CustomerTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Validates an invoice and creates upon approval
+	 */
 	private void invoice() {
 
 		Double balance = Double.parseDouble(ltfBalance.getText());
@@ -215,6 +245,10 @@ public class CustomerTool extends Tool implements Updatable {
 		}
 	}
 
+	/**
+	 * Returns this instance of CustomerTool
+	 * @return CustomerTool
+	 */
 	private CustomerTool getThisTool() {
 		return this;
 	}

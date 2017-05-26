@@ -27,6 +27,13 @@ import gui.Tool;
 import gui.Updatable;
 import shared.Eviro;
 
+/**
+ * Tool created for handling products, GUI through Tool(super) with functions to create, search and alter information
+ * @author Robin Overgaard
+ * @author Johan Åkesson
+ * @author nadiaelhaddaoui 
+ * @version 1.1
+ */
 public class ArticleTool extends Tool implements Updatable {
 
 	private Table tblComments;
@@ -82,6 +89,11 @@ public class ArticleTool extends Tool implements Updatable {
 	private boolean sendingToInvoice;
 	private InvoiceTool invoiceGUI;
 
+	/**
+	 * Constructs ArticleTool and sets the tools content (GUI). 
+	 * @param clientController instance of clientController
+	 * @param guiController	instance of clientController
+	 */
 	public ArticleTool(ClientController clientController, GUIController guiController) {
 		super("Article", clientController, guiController);
 		new ButtonListener();
@@ -127,6 +139,12 @@ public class ArticleTool extends Tool implements Updatable {
 		btnReset.setMnemonic(KeyEvent.VK_R);
 	}
 
+	/**
+	 * Constructs specific ArticleTool and sets the tools content (GUI). 
+	 * @param invoiceGUI instance of invoiceGUI
+	 * @param clientCtrlr instance of clientController
+	 * @param guiCtrlr instance of guiCtrlr
+	 */
 	public ArticleTool(InvoiceTool invoiceGUI, ClientController clientCtrlr, GUIController guiCtrlr) {
 		this(clientCtrlr, guiCtrlr);
 		this.invoiceGUI = invoiceGUI;
@@ -134,6 +152,10 @@ public class ArticleTool extends Tool implements Updatable {
 		sendingToInvoice = true;
 	}
 
+	/**
+	 * Returns sales information for a specific article
+	 * @param articleNo
+	 */
 	private void getSales(String articleNo) {
 
 		ArrayList<Entity> sales = clientCtrlr.search(new Object[] { null, null, articleNo, null, null }, Eviro.ENTITY_TRANSACTION);
@@ -200,6 +222,10 @@ public class ArticleTool extends Tool implements Updatable {
 
 	}
 
+	/**
+	 * Creates a comment table for a specific article
+	 * @param editable boolean to enable or disable the tables edit-function
+	 */
 	private void createCommentsTable(boolean editable) {
 
 		tabComments.removeAll();
@@ -238,9 +264,13 @@ public class ArticleTool extends Tool implements Updatable {
 
 	}
 
-	public void getComments(String customerNo) {
+	/**
+	 * Get comments for specific article
+	 * @param customerNo
+	 */
+	public void getComments(String productId) {
 
-		ArrayList<Entity> comments = clientCtrlr.search(new Object[] { customerNo, "product", null },
+		ArrayList<Entity> comments = clientCtrlr.search(new Object[] { productId, "product", null },
 				Eviro.ENTITY_COMMENT);
 
 		for (int i = 0; i < comments.size(); i++) {
