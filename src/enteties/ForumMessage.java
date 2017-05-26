@@ -4,12 +4,24 @@ import java.io.Serializable;
 
 public class ForumMessage implements Serializable, Entity {
 
+	/**
+	 * ForumMessage represents a forummessage entity in the system. 
+	 * @Matthias Sundqvist
+	 * @Version 1.0
+	 */
 	private int operation;
 	private Object[] data;
 
+	/**
+	 * Creats a empty forummessage object
+	 */
 	public ForumMessage() {
 	}
 
+	/**
+	 * Creats a formmussage with input data
+	 * @param data a message/text
+	 */
 	public ForumMessage(Object[] data) {
 		this.data = data;
 	}
