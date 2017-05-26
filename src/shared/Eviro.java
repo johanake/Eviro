@@ -14,7 +14,7 @@ public class Eviro {
 
 	// Constants
 	public static final String APP_NAME = "Eviro Enterprise System";
-	public static final String APP_VERSION = "(Demo)";
+	public static final String APP_VERSION = "Alpha 1.0";
 	public static final String APP_ICON = "images/eviro_icon.png";
 
 	public static final int DB_ADD = 1;
